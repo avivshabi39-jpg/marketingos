@@ -1,0 +1,939 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Tenants / Clients ────────────────────────────────────────────────────────
+
+model Client {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  email        String
+  phone        String?
+  logoUrl      String?
+  primaryColor String   @default("#2563eb")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Business & billing
+  industry        ClientIndustry?
+  plan            ClientPlan      @default(BASIC)
+  monthlyBudget   Float?
+
+  // Reporting
+  reportEmail     String?
+  reportFrequency ReportFrequency @default(WEEKLY)
+
+  // Client portal
+  portalPassword  String?    // bcrypt hash — for /client/* dashboard
+
+  // Integrations
+  whatsappNumber      String?
+  n8nWebhookUrl       String?
+  facebookPixelId     String?
+  facebookPageId      String?
+  facebookAccessToken String?
+  googleAdsId         String?
+  googleAnalyticsId   String?
+  googleBusinessUrl   String?
+
+  // Landing page (per-client public page at /[slug])
+  landingPageTitle    String?
+  landingPageSubtitle String?
+  landingPageCta      String?
+  landingPageColor    String?
+  landingPageLogo     String?
+  landingPageActive   Boolean @default(true)
+
+  // Page builder
+  pageBlocks     Json?
+  pagePublished  Boolean @default(false)
+
+  // A/B testing
+  abTestEnabled  Boolean @default(false)
+  pageBlocksB    Json?
+  pagePublishedB Boolean @default(false)
+
+  // WhatsApp auto-reply
+  whatsappTemplate  String?
+  autoReplyActive   Boolean @default(false)
+
+  // Green API — direct WhatsApp integration (no n8n needed)
+  greenApiInstanceId String?
+  greenApiToken      String?
+
+  // Real estate agent fields
+  agentPhone      String?
+  agentBio        String?  @db.Text
+  agentPhoto      String?
+  agentCity       String?
+  agentExperience Int?
+  maxProperties   Int      @default(20)
+
+  // Office membership
+  officeId String?
+  office   Office? @relation(fields: [officeId], references: [id])
+
+  // Auto subdomain (e.g. guy-roofing → guy-roofing.marketingos.co.il)
+  subdomain String? @unique
+
+  // AI Agent
+  aiAgentEnabled  Boolean @default(true)
+  aiAgentHistory  Json?
+
+  // AI Chatbot (24/7)
+  chatbotEnabled   Boolean @default(false)
+  chatbotGreeting  String? @default("שלום! איך אוכל לעזור?")
+  chatbotFAQ       Json?   // [{q, a}]
+  chatbotSchedule  Json?   // {start: "09:00", end: "22:00"}
+  chatbotAutoReply Boolean @default(true)
+
+  // White-label
+  brandName           String?
+  brandLogo           String?
+  brandPrimaryColor   String?
+  brandSecondaryColor String?
+  customDomain        String?
+  whitelabelEnabled   Boolean @default(false)
+  portalTitle         String?
+  portalWelcome       String?
+  portalFooter        String?
+
+  // SaaS: which admin user owns/created this client
+  ownerId String?
+  owner   User?   @relation("OwnedClients", fields: [ownerId], references: [id])
+
+  leads          Lead[]
+  landingPages   LandingPage[]
+  users          User[]          @relation("ScopedUsers")
+  intakeForms    IntakeForm[]
+  leadForms      LeadForm[]
+  workflows      Workflow[]
+  reports        Report[]
+  automations    Automation[]
+  properties     Property[]
+  campaignImages  CampaignImage[]
+  pageViews       PageView[]
+  propertyAlerts  PropertyAlert[]
+  broadcastLogs   BroadcastLog[]
+  appointments    Appointment[]
+  socialPosts     SocialPost[]
+  abTestEvents    AbTestEvent[]
+  aiConversations AiConversation[]
+  aiSuggestions   AiSuggestion[]
+  emailSequences  EmailSequence[]
+
+  @@index([ownerId])
+  @@map("clients")
+}
+
+enum ClientIndustry {
+  ROOFING
+  ALUMINUM
+  COSMETICS
+  CLEANING
+  REAL_ESTATE
+  AVIATION
+  TOURISM
+  FINANCE
+  LEGAL
+  MEDICAL
+  FOOD
+  FITNESS
+  EDUCATION
+  GENERAL
+  OTHER
+}
+
+enum ClientPlan {
+  BASIC
+  PRO
+  AGENCY
+}
+
+enum ReportFrequency {
+  WEEKLY
+  MONTHLY
+  BOTH
+}
+
+// ─── Admin Users ──────────────────────────────────────────────────────────────
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         UserRole  @default(AGENT)
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // SaaS plan for this admin/agency
+  agencyPlan          ClientPlan @default(BASIC)
+  onboardingCompleted Boolean    @default(false)
+
+  // null = super-admin (access to all clients), set = scoped to one client
+  clientId String?
+  client   Client? @relation("ScopedUsers", fields: [clientId], references: [id])
+
+  // Clients this user owns/created
+  ownedClients Client[] @relation("OwnedClients")
+
+  passwordResetTokens PasswordResetToken[]
+  refreshTokens       RefreshToken[]
+  twoFactorSecret     TwoFactorSecret?
+  systemSettings      SystemSettings?
+  messageTemplates    MessageTemplate[]
+  offices             Office[]
+  subscription        Subscription?
+  aiUsages            AiUsage[]
+  emailTemplates      EmailTemplate[]     @relation("OwnedTemplates")
+
+  @@map("users")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("password_reset_tokens")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  AGENT
+}
+
+// ─── Leads ────────────────────────────────────────────────────────────────────
+
+model Lead {
+  id          String     @id @default(cuid())
+  firstName   String
+  lastName    String
+  email       String?
+  phone       String?
+  source      String?    // e.g. "facebook", "google", "organic", "manual"
+  status      LeadStatus @default(NEW)
+  notes       String?
+  leadScore   Int        @default(0)
+  followUpAt  DateTime?
+  closedAt    DateTime?
+  value       Float?     // deal value in ILS
+
+  // UTM tracking
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmContent  String?
+  utmTerm     String?
+
+  metadata    Json?      // extra fields from landing page forms
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  clientId    String
+  client      Client @relation(fields: [clientId], references: [id])
+
+  landingPageId String?
+  landingPage   LandingPage? @relation(fields: [landingPageId], references: [id])
+
+  // Direct relation: lead came from a specific property page
+  propertyId  String?
+  property    Property? @relation("DirectPropertyLead", fields: [propertyId], references: [id])
+
+  propertyLeads  PropertyLead[]
+  activities     LeadActivity[]
+  appointments   Appointment[]
+
+  @@index([clientId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([leadScore])
+  @@index([source])
+  @@map("leads")
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL
+  WON
+  LOST
+}
+
+// ─── Client Intake Forms ──────────────────────────────────────────────────────
+
+enum FormType {
+  CLIENT_ONBOARDING
+  LANDING_PAGE
+}
+
+model IntakeForm {
+  id                 String   @id @default(cuid())
+  // Form metadata
+  formType           FormType @default(CLIENT_ONBOARDING)
+  formName           String?
+  isActive           Boolean  @default(true)
+  thankYouMessage    String?
+  redirectUrl        String?
+  formDescription    String?  @db.Text
+  // Submission data
+  fullName           String
+  businessName       String
+  phone              String?
+  email              String
+  businessType       String?
+  targetAudience     String?  @db.Text
+  uniqueSellingPoint String?  @db.Text
+  operatingAreas     String?
+  projectType        String?
+  mainGoal           String?
+  description        String?  @db.Text
+  painPoints         String?  @db.Text
+  marketingChannels  String?
+  budgetRange        String?
+  preferredContact   String?
+  goals              String?  @db.Text
+  notes              String?  @db.Text
+  // Extra 25-question answers stored as JSON
+  extraData          Json?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+
+  @@index([clientId])
+  @@map("intake_forms")
+}
+
+// ─── Workflows ────────────────────────────────────────────────────────────────
+
+model Workflow {
+  id          String         @id @default(cuid())
+  name        String
+  type        WorkflowType
+  status      WorkflowStatus @default(DRAFT)
+  trigger     String?
+  destination String?
+  webhookUrl  String?
+  lastRunAt   DateTime?
+  notes       String?        @db.Text
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+
+  @@index([clientId])
+  @@map("workflows")
+}
+
+enum WorkflowType {
+  EMAIL
+  SMS
+  WEBHOOK
+  NOTIFICATION
+  OTHER
+}
+
+enum WorkflowStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ERROR
+}
+
+// ─── Reports ──────────────────────────────────────────────────────────────────
+
+model Report {
+  id             String     @id @default(cuid())
+  type           ReportType
+  period         String     // e.g. "2024-W01" or "2024-01"
+  totalLeads     Int        @default(0)
+  wonLeads       Int        @default(0)
+  lostLeads      Int        @default(0)
+  conversionRate Float      @default(0)
+  topSource      String?
+  revenue        Float?
+  createdAt      DateTime   @default(now())
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+
+  @@index([clientId])
+  @@map("reports")
+}
+
+enum ReportType {
+  WEEKLY
+  MONTHLY
+}
+
+// ─── Automations ──────────────────────────────────────────────────────────────
+
+model Automation {
+  id              String          @id @default(cuid())
+  trigger         AutomationTrigger
+  action          String
+  isActive        Boolean         @default(true)
+  lastTriggeredAt DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+
+  @@index([clientId])
+  @@map("automations")
+}
+
+enum AutomationTrigger {
+  NEW_LEAD
+  LEAD_STATUS_CHANGE
+  REPORT_READY
+}
+
+// ─── Landing Page Templates ───────────────────────────────────────────────────
+
+model Template {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  thumbnailUrl String?
+  htmlContent  String   @db.Text
+  cssContent   String?  @db.Text
+  variables    Json     @default("[]")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  landingPages LandingPage[]
+
+  @@map("templates")
+}
+
+// ─── Landing Pages (per-client instances of templates) ───────────────────────
+
+model LandingPage {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String
+  isPublished     Boolean  @default(false)
+  customVars      Json     @default("{}")
+  metaTitle       String?
+  metaDescription String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  clientId   String
+  client     Client @relation(fields: [clientId], references: [id])
+  templateId String
+  template   Template @relation(fields: [templateId], references: [id])
+
+  leads Lead[]
+
+  @@unique([clientId, slug])
+  @@map("landing_pages")
+}
+
+// ─── Real Estate Module ───────────────────────────────────────────────────────
+
+model Property {
+  id           String         @id @default(cuid())
+  title        String
+  description  String?        @db.Text
+  price        Float
+  rooms        Float?
+  floor        Int?
+  totalFloors  Int?
+  area         Float?         // square meters
+  city         String
+  neighborhood String?
+  street       String?
+  propertyType PropertyType   @default(APARTMENT)
+  status       PropertyStatus @default(AVAILABLE)
+  images       String[]       @default([])
+  features     String[]       @default([])
+  isExclusive  Boolean        @default(false)
+  isFeatured   Boolean        @default(false)
+  slug         String         @unique
+  views        Int            @default(0)
+  waClicks     Int            @default(0)
+  soldAt        DateTime?
+  published     Boolean        @default(false)
+  privateNotes  String?        @db.Text
+  marketingLog  Json           @default("[]")
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+
+  // Direct leads from property pages
+  directLeads   Lead[]       @relation("DirectPropertyLead")
+  // ML-matched leads
+  propertyLeads PropertyLead[]
+  appointments  Appointment[]
+
+  @@index([clientId])
+  @@index([status])
+  @@index([city])
+  @@map("properties")
+}
+
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  PENTHOUSE
+  GARDEN_APARTMENT
+  DUPLEX
+  STUDIO
+  COMMERCIAL
+  LAND
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  UNDER_CONTRACT
+  SOLD
+  OFF_MARKET
+}
+
+model PropertyLead {
+  id          String   @id @default(cuid())
+  matchScore  Float    @default(0)
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+
+  leadId     String
+  lead       Lead     @relation(fields: [leadId], references: [id])
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id])
+
+  @@unique([leadId, propertyId])
+  @@map("property_leads")
+}
+
+// ─── Real Estate Office ───────────────────────────────────────────────────────
+
+model Office {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  ownerId String
+  owner   User     @relation(fields: [ownerId], references: [id])
+  agents  Client[]
+
+  @@map("offices")
+}
+
+// ─── Lead Forms (form definitions — separate from submissions) ────────────────
+
+model LeadForm {
+  id              String   @id @default(cuid())
+  name            String
+  slug            String
+  formType        FormType @default(LANDING_PAGE)
+  thankYouMessage String?
+  redirectUrl     String?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
+
+  @@unique([clientId, slug])
+  @@index([clientId])
+  @@map("lead_forms")
+}
+
+// ─── System Settings (per admin user) ────────────────────────────────────────
+
+model SystemSettings {
+  id            String  @id @default(cuid())
+  resendKey     String?
+  twilioSid     String?
+  twilioToken   String?
+  twilioFrom    String?
+  n8nDefaultUrl    String?
+  workflowSettings Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("system_settings")
+}
+
+// ─── Message Templates ────────────────────────────────────────────────────────
+
+model MessageTemplate {
+  id        String   @id @default(cuid())
+  type      String   // WHATSAPP_NEW_LEAD | SMS_NEW_LEAD | EMAIL_REPORT
+  content   String   @db.Text
+  subject   String?  // for email templates
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId, type])
+  @@map("message_templates")
+}
+
+// ─── Audit Log ────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String   // e.g. "login", "client.create", "lead.delete"
+  entityId  String?  // ID of the affected resource
+  meta      Json?    // extra context (IP, changes, etc.)
+  createdAt DateTime @default(now())
+
+  userId String?
+  // no FK — keep log even if user is deleted
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ─── Webhook Logs (retry support) ────────────────────────────────────────────
+
+model WebhookLog {
+  id          String   @id @default(cuid())
+  clientId    String
+  event       String
+  url         String
+  statusCode  Int?
+  attempts    Int      @default(1)
+  success     Boolean  @default(false)
+  lastError   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([clientId])
+  @@index([success])
+  @@map("webhook_logs")
+}
+
+// ─── Lead Activity Timeline ───────────────────────────────────────────────────
+
+model LeadActivity {
+  id        String   @id @default(cuid())
+  leadId    String
+  type      String   // "status_change" | "note" | "call" | "email" | "created"
+  content   String?
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId])
+  @@map("lead_activities")
+}
+
+// ─── Stripe Billing ────────────────────────────────────────────────────────────
+
+model Subscription {
+  id                   String     @id @default(cuid())
+  stripeCustomerId     String?    @unique
+  stripeSubscriptionId String?    @unique
+  stripePriceId        String?
+  status               String     @default("inactive") // active | inactive | past_due | canceled | trialing
+  plan                 ClientPlan @default(BASIC)
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean    @default(false)
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("subscriptions")
+}
+
+// ─── Page View Tracking ───────────────────────────────────────────────────────
+
+model PageView {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  page      String   // "landing" | "property:{slug}" | "intake"
+  source    String?  // utmSource or referrer-based
+  createdAt DateTime @default(now())
+
+  @@index([clientId, createdAt])
+  @@index([page])
+  @@map("page_views")
+}
+
+// ─── Campaign Images ──────────────────────────────────────────────────────────
+
+model CampaignImage {
+  id           String   @id @default(cuid())
+  clientId     String
+  client       Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  imageType    String   // facebook_post | instagram_post | instagram_story | whatsapp
+  template     String   // real_estate | cosmetics | cleaning | roofing | general
+  headline     String
+  imageUrl     String   // Cloudinary URL (SVG/PNG)
+  settingsJson Json?    // full data blob for regeneration
+  createdAt    DateTime @default(now())
+
+  @@index([clientId, createdAt])
+  @@map("campaign_images")
+}
+
+model AiUsage {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // landing-page | whatsapp | property-description | weekly-report | seo-meta | social-post | followup
+  tokens    Int      @default(0)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+  @@map("ai_usages")
+}
+
+// ─── Property Alerts ──────────────────────────────────────────────────────────
+
+model PropertyAlert {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  name      String
+  phone     String
+  budget    Float?
+  rooms     Float?
+  city      String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([clientId])
+  @@map("property_alerts")
+}
+
+// ─── Email Templates ──────────────────────────────────────────────────────────
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  ownerId   String
+  owner     User     @relation("OwnedTemplates", fields: [ownerId], references: [id])
+  name      String
+  subject   String
+  bodyHtml  String   @db.Text
+  type      String   // welcome | followup | report | property-alert | custom
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerId])
+  @@map("email_templates")
+}
+
+// ─── WhatsApp Broadcast ───────────────────────────────────────────────────────
+
+model BroadcastLog {
+  id         String   @id @default(cuid())
+  clientId   String
+  client     Client   @relation(fields: [clientId], references: [id])
+  message    String   @db.Text
+  totalCount Int
+  sentCount  Int      @default(0)
+  failCount  Int      @default(0)
+  status     String   @default("pending") // pending | running | done | failed
+  createdAt  DateTime @default(now())
+  completedAt DateTime?
+
+  @@index([clientId])
+  @@map("broadcast_logs")
+}
+
+// ─── Refresh Tokens ───────────────────────────────────────────────────────────
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+// ─── Appointments ─────────────────────────────────────────────────────────────
+
+model Appointment {
+  id          String   @id @default(cuid())
+  clientId    String
+  client      Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  leadId      String?
+  lead        Lead?    @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  name        String
+  phone       String?
+  email       String?
+  notes       String?  @db.Text
+  scheduledAt DateTime
+  status      String   @default("PENDING") // PENDING | CONFIRMED | DONE | CANCELLED
+  propertyId  String?
+  property    Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([clientId, scheduledAt])
+  @@index([leadId])
+  @@map("appointments")
+}
+
+// ─── Two-Factor Auth (schema prep — not yet activated) ────────────────────────
+
+model TwoFactorSecret {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  secret    String
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("two_factor_secrets")
+}
+
+// ─── Social Posts ─────────────────────────────────────────────────────────────
+
+model SocialPost {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  platform  String   // facebook | instagram | linkedin | twitter | whatsapp
+  status    String   @default("draft") // draft | published | scheduled
+  imageUrl  String?
+  scheduledAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId, createdAt])
+  @@map("social_posts")
+}
+
+// ─── Inbox Events (persistent notifications) ─────────────────────────────────
+
+model InboxEvent {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String   // "lead" | "form" | "appointment" | "broadcast"
+  title       String
+  description String?
+  clientId    String?
+  phone       String?
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([userId, isRead])
+  @@map("inbox_events")
+}
+
+// ─── AI Conversation History ──────────────────────────────────────────────────
+
+model AiConversation {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  role      String   // "user" | "assistant"
+  content   String   @db.Text
+  action    String?  // BUILD_PAGE | UPDATE_HERO | UPDATE_COLOR | etc.
+  createdAt DateTime @default(now())
+
+  @@index([clientId, createdAt])
+  @@map("ai_conversations")
+}
+
+// ─── AI Proactive Suggestions ─────────────────────────────────────────────────
+
+model AiSuggestion {
+  id         String   @id @default(cuid())
+  clientId   String
+  client     Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  suggestion String
+  type       String   // "improve_title" | "change_cta" | "add_ab_test" | "general"
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([clientId, isRead])
+  @@map("ai_suggestions")
+}
+
+// ─── A/B Test Events ──────────────────────────────────────────────────────────
+
+model AbTestEvent {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  version   String   // "A" or "B"
+  event     String   // "view" or "submit"
+  createdAt DateTime @default(now())
+
+  @@index([clientId, createdAt])
+  @@map("ab_test_events")
+}
+
+// ─── Email Sequences ──────────────────────────────────────────────────────────
+
+model EmailSequence {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  name      String
+  isActive  Boolean  @default(false)
+  trigger   String   // new_lead | won_lead | no_reply_3days
+  steps     Json     // [{delay_days, subject, body}]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  logs EmailSequenceLog[]
+
+  @@index([clientId])
+  @@map("email_sequences")
+}
+
+model EmailSequenceLog {
+  id         String        @id @default(cuid())
+  sequenceId String
+  sequence   EmailSequence @relation(fields: [sequenceId], references: [id], onDelete: Cascade)
+  leadId     String
+  step       Int
+  sentAt     DateTime      @default(now())
+  status     String        // sent | failed | opened
+
+  @@index([sequenceId])
+  @@index([leadId])
+  @@map("email_sequence_logs")
+}

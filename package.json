@@ -1,0 +1,31 @@
+{
+  "name": "marketing-system",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "db:generate": "turbo run db:generate",
+    "db:migrate": "turbo run db:migrate",
+    "db:studio": "turbo run db:studio",
+    "postinstall": "cd packages/db && npx prisma generate"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "npm@10.0.0",
+  "dependencies": {
+    "@react-pdf/renderer": "^4.3.2",
+    "@stripe/stripe-js": "^9.0.0",
+    "stripe": "^21.0.1",
+    "xlsx": "^0.18.5"
+  }
+}

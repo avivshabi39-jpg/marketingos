@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/reports",
+      "schedule": "0 8 * * 1"
+    },
+    {
+      "path": "/api/cron/followups",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/overnight-optimizer",
+      "schedule": "0 2 * * *"
+    }
+  ]
+}
