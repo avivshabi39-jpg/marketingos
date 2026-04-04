@@ -243,6 +243,22 @@ export default function BroadcastPage() {
           </div>
 
           <div>
+            <button
+              onClick={async () => {
+                try {
+                  const res = await fetch("/api/social-posts/generate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ clientId: selectedClientId, topic: "שידור וואצאפ ללידים", platform: "whatsapp", style: "fun" }),
+                  });
+                  const data = (await res.json()) as { post?: string };
+                  if (data.post) setMessage(data.post);
+                } catch { /* ignore */ }
+              }}
+              className="mb-2 px-4 py-2 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded-lg text-xs font-medium hover:bg-indigo-100 transition-colors"
+            >
+              ✨ הצע הודעה עם AI
+            </button>
             <textarea
               rows={6}
               value={message}

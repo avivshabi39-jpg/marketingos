@@ -169,13 +169,20 @@ export async function POST(req: NextRequest) {
 
         let parsed: ParsedResponse | null = null;
 
-        // Try multiple cleaning strategies
+        // Bulletproof JSON extraction — try multiple strategies
         const cleanStrategies = [
+          // 1. Raw text
           fullText.trim(),
-          fullText.replace(/^```json?\s*/i, "").replace(/```\s*$/, "").trim(),
-          // Extract JSON from inside any text
+          // 2. Strip markdown code blocks
+          fullText.replace(/^```json?\s*/i, "").replace(/```\s*$/g, "").trim(),
+          // 3. Extract outermost JSON with "message" key
           (() => {
             const match = fullText.match(/\{[\s\S]*"message"[\s\S]*\}/);
+            return match ? match[0] : "";
+          })(),
+          // 4. Extract outermost JSON with "action" key
+          (() => {
+            const match = fullText.match(/\{[\s\S]*"action"[\s\S]*\}/);
             return match ? match[0] : "";
           })(),
         ];
@@ -184,10 +191,28 @@ export async function POST(req: NextRequest) {
           if (!cleaned) continue;
           try {
             parsed = JSON.parse(cleaned);
-            if (parsed?.message) break;
+            if (parsed?.message || parsed?.action) break;
           } catch {
             parsed = null;
           }
+        }
+
+        // 5. Fallback: check for [ACTION:TYPE] tags in plain text
+        if (!parsed?.action || parsed.action === "NONE") {
+          const actionTag = fullText.match(/\[ACTION:(\w+)(?::([^\]]*))?\]/);
+          if (actionTag) {
+            parsed = {
+              ...(parsed ?? {}),
+              message: parsed?.message ?? fullText.replace(/\[ACTION:[^\]]+\]/g, "").trim(),
+              action: actionTag[1],
+              updates: actionTag[2] ? { value: actionTag[2] } : (parsed?.updates ?? {}),
+            };
+          }
+        }
+
+        // 6. If still no message, use raw text
+        if (!parsed?.message && fullText.trim()) {
+          parsed = { ...(parsed ?? {}), message: fullText.trim(), action: parsed?.action ?? "NONE" };
         }
 
         if (parsed?.pageBlocks?.length) {
