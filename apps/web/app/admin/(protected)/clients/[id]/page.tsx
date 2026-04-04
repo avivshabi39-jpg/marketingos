@@ -262,10 +262,10 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
                   15 שאלות פשוטות → AI בונה דף מקצועי מושלם
                 </p>
                 <Link
-                  href={`/admin/clients/${client.id}/builder/wizard`}
+                  href={`/admin/page-builder/${client.id}`}
                   className="inline-flex items-center gap-2 bg-gradient-to-l from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl px-8 py-4 text-lg transition-all shadow-lg shadow-indigo-500/20"
                 >
-                  🚀 התחל לבנות את הדף
+                  🧙 בנה דף נחיתה מקצועי
                 </Link>
                 <p className="text-xs text-gray-400 mt-3">לוקח כ-5 דקות</p>
               </div>

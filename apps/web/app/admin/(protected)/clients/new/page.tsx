@@ -65,7 +65,7 @@ function SetupSuccessOverlay({ clientId, clientName, setupActions, slug }: {
           </div>
         </div>
         <a
-          href={`/admin/clients/${clientId}/builder/wizard`}
+          href={`/admin/page-builder/${clientId}`}
           className="block w-full bg-gradient-to-l from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-center font-bold py-3.5 rounded-xl transition-colors shadow-lg shadow-indigo-500/20"
         >
           🧙 בנה דף נחיתה עכשיו →

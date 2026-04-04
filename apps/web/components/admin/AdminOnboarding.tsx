@@ -71,7 +71,7 @@ export function AdminOnboarding({ userName }: { userName: string }) {
   function finish() {
     localStorage.setItem("admin_onboarding_done", "1");
     setVisible(false);
-    if (created?.id) router.push(`/admin/clients/${created.id}/builder/wizard`);
+    if (created?.id) router.push(`/admin/page-builder/${created.id}`);
   }
 
   if (!visible) return null;
