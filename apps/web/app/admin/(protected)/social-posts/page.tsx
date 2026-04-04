@@ -22,6 +22,7 @@ const STYLES = [
   { id: "fun", label: "😄 שנוי" },
   { id: "sales", label: "💰 מכירתי" },
   { id: "inspiring", label: "⭐ מעורר השראה" },
+  { id: "urgent", label: "🔥 דחיפות" },
 ] as const;
 
 const PLATFORMS = [
@@ -31,8 +32,15 @@ const PLATFORMS = [
   { id: "whatsapp", label: "WhatsApp", icon: "💬" },
 ] as const;
 
+const LANGUAGES = [
+  { id: "hebrew", label: "עברית" },
+  { id: "arabic", label: "العربية" },
+  { id: "english", label: "English" },
+] as const;
+
 type StyleId = (typeof STYLES)[number]["id"];
 type PlatformId = (typeof PLATFORMS)[number]["id"];
+type LanguageId = (typeof LANGUAGES)[number]["id"];
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -62,6 +70,7 @@ export default function SocialPostsPage() {
     imagePreview: string;
     style: StyleId;
     platform: PlatformId;
+    language: LanguageId;
     clientId: string;
   }>({
     topic: "",
@@ -70,6 +79,7 @@ export default function SocialPostsPage() {
     imagePreview: "",
     style: "professional",
     platform: "facebook",
+    language: "hebrew",
     clientId: "",
   });
 
@@ -133,6 +143,7 @@ export default function SocialPostsPage() {
           imageUrl: form.imageUrl || (form.imagePreview ? "image_attached" : ""),
           style: form.style,
           platform: form.platform,
+          language: form.language,
         }),
       });
       if (!res.ok) {
@@ -352,6 +363,28 @@ export default function SocialPostsPage() {
                     }`}
                   >
                     {p.icon} {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Language */}
+            <div>
+              <label className="text-xs font-medium text-gray-600 block mb-2">
+                5. שפה
+              </label>
+              <div className="flex gap-2">
+                {LANGUAGES.map((l) => (
+                  <button
+                    key={l.id}
+                    onClick={() => setForm((f) => ({ ...f, language: l.id }))}
+                    className={`flex-1 px-3 py-1.5 text-sm rounded-full border transition-all ${
+                      form.language === l.id
+                        ? "border-indigo-500 bg-indigo-50 text-indigo-700 font-medium"
+                        : "border-gray-200 text-gray-600 hover:border-gray-300"
+                    }`}
+                  >
+                    {l.label}
                   </button>
                 ))}
               </div>
