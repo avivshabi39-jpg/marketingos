@@ -16,6 +16,9 @@ export default function FormBlock({
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [gender, setGender] = useState("");
+  const [ageRange, setAgeRange] = useState("");
+  const [city, setCity] = useState("");
   const { title, button, buttonColor, successMessage } = block.content;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -29,6 +32,9 @@ export default function FormBlock({
       email: formData.get("email") as string || undefined,
       businessName: formData.get("fullName") as string,
       description: formData.get("message") as string || undefined,
+      gender: gender || undefined,
+      ageRange: ageRange || undefined,
+      city: city || undefined,
     };
     try {
       await fetch(`/api/intake/${clientSlug}`, {
@@ -87,6 +93,52 @@ export default function FormBlock({
               rows={3}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none resize-none"
             />
+            {/* Optional demographics */}
+            <div className="border-t border-gray-200 pt-3 space-y-3">
+              <p className="text-xs text-gray-400">פרטים נוספים (לא חובה)</p>
+              <div className="flex gap-2">
+                {[
+                  { id: "male", label: "👨 זכר" },
+                  { id: "female", label: "👩 נקבה" },
+                  { id: "other", label: "🧑 אחר" },
+                ].map((g) => (
+                  <button
+                    key={g.id}
+                    type="button"
+                    onClick={() => setGender(gender === g.id ? "" : g.id)}
+                    className={`flex-1 py-1.5 rounded-lg text-xs font-medium border-2 transition-all ${
+                      gender === g.id
+                        ? "border-blue-500 bg-blue-50 text-blue-700"
+                        : "border-gray-200 text-gray-500"
+                    }`}
+                  >
+                    {g.label}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-2">
+                {["18-25", "25-35", "35-50", "50+"].map((a) => (
+                  <button
+                    key={a}
+                    type="button"
+                    onClick={() => setAgeRange(ageRange === a ? "" : a)}
+                    className={`flex-1 py-1.5 rounded-lg text-xs font-medium border-2 transition-all ${
+                      ageRange === a
+                        ? "border-blue-500 bg-blue-50 text-blue-700"
+                        : "border-gray-200 text-gray-500"
+                    }`}
+                  >
+                    {a}
+                  </button>
+                ))}
+              </div>
+              <input
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="עיר מגורים"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-300 outline-none"
+              />
+            </div>
             <button
               type="submit"
               disabled={loading}

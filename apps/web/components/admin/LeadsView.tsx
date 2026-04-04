@@ -27,6 +27,9 @@ type Lead = {
   utmSource: string | null;
   utmMedium: string | null;
   utmCampaign: string | null;
+  gender: string | null;
+  ageRange: string | null;
+  city: string | null;
   createdAt: Date;
   client: { name: string; primaryColor: string; id: string };
 };
@@ -582,6 +585,26 @@ function KanbanCard({
         </div>
         <SourceBadge source={lead.source} />
       </div>
+      {/* Demographics badges */}
+      {(lead.gender || lead.ageRange || lead.city) && (
+        <div className="flex gap-1 flex-wrap">
+          {lead.gender && (
+            <span className="text-[10px] px-1.5 py-0.5 bg-purple-50 text-purple-600 rounded-full">
+              {lead.gender === "male" ? "👨" : lead.gender === "female" ? "👩" : "🧑"}
+            </span>
+          )}
+          {lead.ageRange && (
+            <span className="text-[10px] px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded-full">
+              {lead.ageRange}
+            </span>
+          )}
+          {lead.city && (
+            <span className="text-[10px] px-1.5 py-0.5 bg-green-50 text-green-600 rounded-full">
+              📍{lead.city}
+            </span>
+          )}
+        </div>
+      )}
       {lead.phone && (
         <div className="flex items-center gap-1.5">
           <span className="flex items-center gap-1 text-xs text-gray-500 flex-1 min-w-0 truncate">

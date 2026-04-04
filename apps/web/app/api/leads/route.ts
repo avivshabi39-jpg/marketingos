@@ -34,6 +34,9 @@ const createSchema = z.object({
   notes:        z.string().max(5000).transform((v) => v.trim()).optional(),
   value:        z.number().optional(),
   leadScore:    z.number().int().min(0).max(100).optional(),
+  gender:       z.enum(["male", "female", "other"]).optional(),
+  ageRange:     z.string().max(20).optional(),
+  city:         z.string().max(100).transform((v) => v.trim()).optional(),
 });
 
 // GET /api/leads

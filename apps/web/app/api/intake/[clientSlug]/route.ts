@@ -29,6 +29,11 @@ const schema = z.object({
   goals:              z.string().optional(),
   notes:              z.string().optional(),
 
+  // Demographics (optional, from landing page form)
+  gender:     z.enum(["male", "female", "other"]).optional(),
+  ageRange:   z.string().max(20).optional(),
+  city:       z.string().max(100).optional(),
+
   // UTM tracking (from body — e.g. Facebook Lead Forms)
   utm_source:   z.string().optional(),
   utm_medium:   z.string().optional(),
@@ -137,6 +142,9 @@ export async function POST(
       utmCampaign,
       utmContent,
       utmTerm,
+      gender: intakeData.gender ?? null,
+      ageRange: intakeData.ageRange ?? null,
+      city: intakeData.city ?? null,
       clientId: client.id,
       metadata: {
         fromIntakeForm: true,
