@@ -243,6 +243,12 @@ model Lead {
   utmContent  String?
   utmTerm     String?
 
+  // Demographics (optional)
+  gender      String?
+  ageRange    String?
+  city        String?
+  autoReplied Boolean    @default(false)
+
   metadata    Json?      // extra fields from landing page forms
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
