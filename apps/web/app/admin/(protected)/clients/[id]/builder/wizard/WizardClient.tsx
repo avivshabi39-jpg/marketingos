@@ -92,8 +92,65 @@ export function WizardClient({ client, appUrl }: Props) {
   const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  const [sectionError, setSectionError] = useState("");
+
+  const qualityChecks = [
+    businessDescription.length > 30,
+    mainService.length > 20,
+    uniqueValue.length > 10,
+    targetAudience.length > 0,
+    mainProblem.length > 20,
+    priceRange !== "",
+    nextAction !== "",
+    responseTime !== "",
+  ];
+  const filledCount = qualityChecks.filter(Boolean).length;
+  const quality: "weak" | "ok" | "good" | "excellent" =
+    filledCount <= 3 ? "weak" : filledCount <= 5 ? "ok" : filledCount <= 7 ? "good" : "excellent";
+
+  const QUALITY_CFG = {
+    weak: { label: "מעט מידע — הדף יהיה גנרי", color: "#ef4444", emoji: "😐" },
+    ok: { label: "בינוני — אפשר לשפר", color: "#f59e0b", emoji: "🙂" },
+    good: { label: "טוב — הדף יהיה מקצועי", color: "#3b82f6", emoji: "😊" },
+    excellent: { label: "מצוין — הדף יהיה מושלם!", color: "#22c55e", emoji: "🤩" },
+  };
+
   const answeredCount = [businessDescription, mainService, uniqueValue, targetAudience.length > 0 ? "y" : "", targetGender, targetAge, targetCity, mainProblem, solution, priceRange, urgency, nextAction, responseTime, testimonial, yearsInBusiness].filter(Boolean).length;
-  const canBuild = businessDescription.trim() && mainService.trim() && mainProblem.trim();
+
+  const THINKING_PROMPTS = [
+    "💭 תאר את העסק כאילו אתה מסביר לחבר. ככל שתפרט יותר — הדף יהיה ממוקד יותר.",
+    "💭 דמיין את הלקוח האידיאלי. מה הוא חושב כשהוא מחפש את השירות שלך?",
+    '💭 מה הכאב האמיתי? לא "רוצים שירות" אלא הצורך העמוק מאחורי זה.',
+    "💭 לקוח שמשאיר פרטים — מחקרים מראים שמענה תוך שעה = פי 7 יותר המרות!",
+    "💭 המלצה אמיתית מלקוח שווה יותר מכל פרסומת. יש לך כזו?",
+  ];
+
+  function validateSection(idx: number): string | null {
+    switch (idx) {
+      case 0:
+        if (businessDescription.length < 30) return "אנא תאר את העסק בלפחות 30 תווים";
+        if (mainService.length < 20) return "תאר את השירות הראשי בצורה ברורה יותר";
+        return null;
+      case 1:
+        if (targetAudience.length === 0) return "בחר לפחות קהל יעד אחד";
+        return null;
+      case 2:
+        if (mainProblem.length < 20) return "תאר את הבעיה בצורה ברורה יותר";
+        return null;
+      case 3:
+        if (!nextAction) return "בחר מה קורה אחרי שלקוח משאיר פרטים";
+        return null;
+      default:
+        return null;
+    }
+  }
+
+  function goNext() {
+    const err = validateSection(section);
+    if (err) { setSectionError(err); return; }
+    setSectionError("");
+    setSection(section + 1);
+  }
 
   function toggleTarget(opt: string) {
     setTargetAudience((p) => p.includes(opt) ? p.filter((x) => x !== opt) : [...p, opt]);
@@ -255,21 +312,47 @@ export function WizardClient({ client, appUrl }: Props) {
         {/* Briefing sections */}
         {isBriefing && (
           <div>
-            <div className="mb-8 text-center">
+            {/* Thinking prompt */}
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-5 text-xs text-amber-800 leading-relaxed">
+              {THINKING_PROMPTS[section]}
+            </div>
+            <div className="mb-6 text-center">
               <div className="text-4xl mb-2">{SECTIONS[section].icon}</div>
               <h2 className="text-xl font-bold text-gray-900">{SECTIONS[section].label}</h2>
             </div>
             {sectionContent[section]}
-            <div className="flex gap-3 mt-8">
+
+            {/* Section error */}
+            {sectionError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-2.5 mt-4 text-sm text-red-600">
+                ⚠️ {sectionError}
+              </div>
+            )}
+
+            {/* Quality indicator (show from section 2+) */}
+            {section >= 2 && (
+              <div className="bg-gray-50 rounded-xl p-3 mt-6 mb-2">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs font-semibold text-gray-600">{QUALITY_CFG[quality].emoji} איכות האיפיון</span>
+                  <span className="text-xs font-semibold" style={{ color: QUALITY_CFG[quality].color }}>{QUALITY_CFG[quality].label}</span>
+                </div>
+                <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-full rounded-full transition-all duration-500" style={{ width: `${(filledCount / 8) * 100}%`, background: QUALITY_CFG[quality].color }} />
+                </div>
+                <p className="text-[10px] text-gray-400 mt-1.5">{filledCount}/8 שדות מלאים — מלא יותר לדף טוב יותר</p>
+              </div>
+            )}
+
+            <div className="flex gap-3 mt-6">
               {section > 0 && (
-                <button onClick={() => setSection(section - 1)} className="px-4 py-3 text-sm text-gray-600 hover:text-gray-800">← הקודם</button>
+                <button onClick={() => { setSectionError(""); setSection(section - 1); }} className="px-4 py-3 text-sm text-gray-600 hover:text-gray-800">← הקודם</button>
               )}
               {section < 4 ? (
-                <button onClick={() => setSection(section + 1)} className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl py-3 text-sm transition-colors">
+                <button onClick={goNext} className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl py-3 text-sm transition-colors">
                   הבא →
                 </button>
               ) : (
-                <button onClick={() => setSection(5)} disabled={!canBuild} className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold transition-all disabled:opacity-40 bg-gradient-to-l from-indigo-600 to-purple-600 text-white shadow-lg">
+                <button onClick={() => { setSectionError(""); setSection(5); }} disabled={filledCount < 4} className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl text-sm font-bold transition-all disabled:opacity-40 bg-gradient-to-l from-indigo-600 to-purple-600 text-white shadow-lg">
                   <Sparkles size={16} /> בנה לי דף מנצח!
                 </button>
               )}
