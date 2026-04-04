@@ -305,8 +305,31 @@ export function WizardClient({ client, appUrl }: Props) {
 
         {/* Preview */}
         {section === 6 && (
-          <div className="space-y-6">
+          <div className="space-y-5">
             <div className="text-center"><h2 className="text-2xl font-bold text-gray-900">👀 הנה הדף שלך!</h2><p className="text-gray-500 mt-1">אפשר לשנות כל דבר</p></div>
+
+            {/* AI Agent comment */}
+            <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 rounded-xl p-4">
+              <div className="flex gap-3 items-start">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-sm flex-shrink-0">🤖</div>
+                <div className="text-sm text-gray-700 leading-relaxed">
+                  <span className="font-semibold text-gray-900">הסוכן AI:</span>{" "}
+                  הדף נראה מצוין! כותרת חזקה ו-CTA ברור. רוצה לשפר משהו לפני הפרסום?
+                </div>
+              </div>
+              <div className="flex gap-1.5 mt-3 flex-wrap mr-11">
+                {[
+                  { label: "✏️ שנה כותרת", action: () => { const t = prompt("כותרת חדשה:"); if (t) { setPageTitle(t); saveQuickEdit("landingPageTitle", t); } } },
+                  { label: "🎨 שנה צבע", action: () => document.querySelector<HTMLInputElement>('input[type="color"]')?.click() },
+                  { label: "🔄 בנה מחדש", action: () => { setBuildError(""); setSection(5); } },
+                ].map((c) => (
+                  <button key={c.label} onClick={c.action} className="px-3 py-1 rounded-full bg-white border border-indigo-200 text-indigo-600 text-xs font-medium hover:bg-indigo-50 transition-colors">
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
               <div className="h-[350px] overflow-hidden relative bg-gray-100">
                 <iframe src={`${pageUrl}?t=${Date.now()}`} className="border-none pointer-events-none" style={{ width: "250%", height: "250%", transform: "scale(0.4)", transformOrigin: "top right" }} title="preview" />
@@ -325,7 +348,7 @@ export function WizardClient({ client, appUrl }: Props) {
               </div>
               <Link href={`/admin/clients/${client.id}/builder`} className="text-indigo-600 text-sm font-medium">רוצה שינויים גדולים? → בונה מתקדם</Link>
             </div>
-            <button onClick={() => setSection(7)} className="w-full flex items-center justify-center gap-2 bg-green-600 text-white font-bold rounded-xl py-3.5 text-sm"><Check size={16} /> זה מושלם! המשך</button>
+            <button onClick={() => setSection(7)} className="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl py-3.5 text-sm transition-colors"><Check size={16} /> זה מושלם! פרסם ↗</button>
           </div>
         )}
 
