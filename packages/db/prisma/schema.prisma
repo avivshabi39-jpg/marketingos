@@ -39,6 +39,8 @@ model Client {
   n8nWebhookUrl       String?
   facebookPixelId     String?
   facebookPageId      String?
+  googleReviewLink    String?
+  facebookReviewLink  String?
   facebookAccessToken String?
   googleAdsId         String?
   googleAnalyticsId   String?
@@ -197,6 +199,8 @@ model User {
   offices             Office[]
   subscription        Subscription?
   pushSubscription    PushSubscription?
+  teamOwned           TeamMember[]       @relation("TeamOwner")
+  teamMemberships     TeamMember[]       @relation("TeamMember")
   aiUsages            AiUsage[]
   emailTemplates      EmailTemplate[]     @relation("OwnedTemplates")
 
@@ -957,4 +961,19 @@ model PushSubscription {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("push_subscriptions")
+}
+
+// ─── Team Members ─────────────────────────────────────────────────────────────
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  ownerId   String
+  memberId  String
+  role      String   @default("AGENT")
+  createdAt DateTime @default(now())
+  owner     User     @relation("TeamOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  member    User     @relation("TeamMember", fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([ownerId, memberId])
+  @@map("team_members")
 }
