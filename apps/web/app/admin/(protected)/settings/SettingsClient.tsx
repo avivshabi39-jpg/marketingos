@@ -31,6 +31,7 @@ const TABS = [
   { key: "integrations", label: "אינטגרציות",     icon: Zap },
   { key: "templates",    label: "תבניות הודעות",  icon: MessageSquare },
   { key: "ai",           label: "שימוש AI",       icon: Sparkles },
+  { key: "team",          label: "צוות ו-Webhook", icon: Users },
   { key: "users",        label: "משתמשים",        icon: Users },
   { key: "audit",        label: "יומן פעילות",    icon: ScrollText },
 ] as const;
@@ -919,6 +920,79 @@ function TemplatesTabDB({ initial }: { initial: TemplateRow[] }) {
 
 type AuditEntry = { id: string; action: string; entityId?: string | null; meta: Record<string, unknown> | null; createdAt: string; userId?: string | null };
 
+function TeamWebhookTab({ userId }: { userId: string }) {
+  const [members, setMembers] = useState<{ id: string; role: string; member: { id: string; name: string | null; email: string } }[]>([]);
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("AGENT");
+  const [msg, setMsg] = useState("");
+
+  useEffect(() => {
+    fetch("/api/team").then((r) => r.json()).then((d) => setMembers(d.members ?? [])).catch(() => {});
+  }, []);
+
+  async function invite() {
+    const res = await fetch("/api/team", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, role }) });
+    const data = (await res.json()) as { ok?: boolean; invited?: boolean; message?: string };
+    setMsg(data.invited ? "📧 הזמנה נשלחה!" : data.ok ? "✅ חבר נוסף!" : "שגיאה");
+    setEmail("");
+    fetch("/api/team").then((r) => r.json()).then((d) => setMembers(d.members ?? []));
+    setTimeout(() => setMsg(""), 3000);
+  }
+
+  async function remove(memberId: string) {
+    await fetch("/api/team", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ memberId }) });
+    setMembers((p) => p.filter((m) => m.member.id !== memberId));
+  }
+
+  const appUrl = typeof window !== "undefined" ? window.location.origin : "";
+  const webhookUrl = `${appUrl}/api/webhooks/incoming/${userId}`;
+
+  return (
+    <div className="space-y-6" dir="rtl">
+      {/* Team */}
+      <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <h3 className="font-bold text-base mb-1">👥 חברי צוות</h3>
+        <p className="text-xs text-gray-500 mb-4">הוסף סוכנים שיוכלו לנהל לקוחות</p>
+        <div className="flex gap-2 mb-3">
+          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="אימייל חבר הצוות" className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-indigo-400" />
+          <select value={role} onChange={(e) => setRole(e.target.value)} className="border border-gray-200 rounded-lg px-2 py-2 text-sm">
+            <option value="AGENT">סוכן</option>
+            <option value="MANAGER">מנהל</option>
+          </select>
+          <button onClick={invite} disabled={!email} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold disabled:opacity-40">+ הזמן</button>
+        </div>
+        {msg && <div className="text-sm text-green-600 font-medium mb-2">{msg}</div>}
+        {members.length === 0 ? (
+          <p className="text-sm text-gray-400 text-center py-4">אין חברי צוות עדיין</p>
+        ) : (
+          <div className="space-y-2">
+            {members.map((m) => (
+              <div key={m.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2.5">
+                <div>
+                  <p className="font-semibold text-sm">{m.member.name ?? m.member.email}</p>
+                  <p className="text-xs text-gray-500">{m.member.email}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full font-semibold">{m.role === "MANAGER" ? "מנהל" : "סוכן"}</span>
+                  <button onClick={() => remove(m.member.id)} className="text-red-400 hover:text-red-600 text-lg leading-none">×</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Webhook */}
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
+        <h4 className="font-bold text-sm mb-1">🔗 Zapier / Make.com Webhook</h4>
+        <p className="text-xs text-gray-600 mb-3">חבר כלים חיצוניים — לידים מגיעים אוטומטית</p>
+        <div className="bg-white border border-blue-200 rounded-lg px-3 py-2 font-mono text-[11px] text-gray-600 break-all mb-2">{webhookUrl}</div>
+        <button onClick={() => navigator.clipboard.writeText(webhookUrl)} className="px-4 py-1.5 bg-blue-500 text-white rounded-lg text-xs font-semibold">📋 העתק URL</button>
+      </div>
+    </div>
+  );
+}
+
 function AuditLogTab() {
   const [logs, setLogs]     = useState<AuditEntry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -1188,6 +1262,7 @@ export function SettingsClient({
         {activeTab === "integrations" && <IntegrationsTabDB initial={initialSettings} />}
         {activeTab === "templates"    && <TemplatesTabDB initial={initialTemplates} />}
         {activeTab === "ai"           && <AiUsageTab />}
+        {activeTab === "team"          && <TeamWebhookTab userId={currentUserId} />}
         {activeTab === "users"        && isSuperAdmin && (
           <UsersTab initialUsers={users} clients={clients} currentUserId={currentUserId} />
         )}

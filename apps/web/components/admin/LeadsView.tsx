@@ -242,6 +242,23 @@ function LeadPanel({
                   >
                     💬 וואצאפ
                   </a>
+                  {(lead.status === "WON" || lead.status === "CLOSED") && (
+                    <button
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        try {
+                          await fetch(`/api/leads/${lead.id}/request-review`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ platform: "google" }),
+                          });
+                        } catch { /* ignore */ }
+                      }}
+                      className="bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 text-xs font-semibold px-2 py-1.5 rounded-lg transition-colors"
+                    >
+                      ⭐ ביקורת
+                    </button>
+                  )}
                 </div>
               </div>
             )}
