@@ -61,7 +61,7 @@ export default function BroadcastPage() {
   useEffect(() => {
     fetch("/api/clients?page=1&limit=100")
       .then((r) => r.json())
-      .then((d) => setClients((d.clients ?? []).filter((c: Client) => c.greenApiInstanceId)));
+      .then((d) => setClients(d.clients ?? []));
     fetchLogs();
   }, []);
 
@@ -180,10 +180,14 @@ export default function BroadcastPage() {
           {clients.length === 0 ? (
             <div className="flex items-center gap-3 p-4 bg-amber-50 text-amber-700 rounded-xl text-sm">
               <AlertCircle size={16} />
-              <span>אין לקוחות עם Green API מוגדר. הגדר את Green API בהגדרות הלקוח.</span>
+              <span>אין לקוחות עדיין. צור לקוח ראשון כדי לשלוח שידור.</span>
             </div>
           ) : (
             <>
+              <div className="flex items-start gap-2.5 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
+                <span className="mt-0.5">💡</span>
+                <span>השידור יישלח מהוואצאפ המחובר למערכת. כל לקוח יכול לחבר וואצאפ משלו בהגדרות.</span>
+              </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1.5">לקוח</label>
                 <select
