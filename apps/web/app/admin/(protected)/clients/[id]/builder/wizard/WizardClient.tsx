@@ -330,24 +330,69 @@ export function WizardClient({ client, appUrl }: Props) {
         )}
 
         {/* Live */}
-        {section === 7 && (
-          <div className="text-center py-8 space-y-8">
-            <div className="text-7xl">🎉</div>
-            <h2 className="text-3xl font-bold text-gray-900">הדף שלך חי!</h2>
-            <p className="text-gray-500">שתף את הקישור והתחל לקבל לידים</p>
-            <div className="bg-white border rounded-xl p-4 flex items-center gap-3 max-w-lg mx-auto">
-              <p className="text-sm font-mono text-gray-600 flex-1 truncate text-left" dir="ltr">{pageUrl}</p>
-              <button onClick={copyUrl} className="flex items-center gap-1 bg-indigo-600 text-white rounded-lg px-3 py-2 text-xs font-medium">{copied ? <Check size={14} /> : <Copy size={14} />}{copied ? "הועתק!" : "העתק"}</button>
+        {section === 7 && (() => {
+          const portalUrl = `${appUrl}/client/${client.slug}`;
+          const portalPass = "portal123";
+          const sendMsg = `שלום! הדף שלך מוכן 🎉\n\nצפה בדף:\n${pageUrl}\n\nכניסה לפורטל:\n${portalUrl}\nסיסמה: ${portalPass}`;
+          return (
+            <div className="text-center py-8 space-y-6">
+              <div className="text-7xl">🎉</div>
+              <h2 className="text-3xl font-bold text-gray-900">הדף שלך חי!</h2>
+              <p className="text-gray-500">שתף את הקישור והתחל לקבל לידים</p>
+
+              {/* Page URL */}
+              <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-3 max-w-lg mx-auto">
+                <div className="flex-1 min-w-0 text-right">
+                  <p className="text-xs text-gray-400 mb-0.5">🌐 דף הנחיתה</p>
+                  <p className="text-sm font-mono text-gray-600 truncate text-left" dir="ltr">{pageUrl}</p>
+                </div>
+                <button onClick={copyUrl} className="flex items-center gap-1 bg-indigo-600 text-white rounded-lg px-3 py-2 text-xs font-medium flex-shrink-0">
+                  {copied ? <Check size={14} /> : <Copy size={14} />}{copied ? "הועתק!" : "העתק"}
+                </button>
+              </div>
+
+              {/* Portal credentials */}
+              <div className="bg-green-50 border border-green-200 rounded-xl p-5 max-w-lg mx-auto text-right" dir="rtl">
+                <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2 justify-center">🔑 פרטי כניסה לפורטל הלקוח</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2">
+                    <span className="text-gray-500">כתובת:</span>
+                    <span className="font-mono text-indigo-600 text-xs" dir="ltr">/client/{client.slug}</span>
+                  </div>
+                  <div className="flex items-center justify-between bg-white rounded-lg px-3 py-2">
+                    <span className="text-gray-500">סיסמה:</span>
+                    <span className="font-mono font-bold">{portalPass}</span>
+                  </div>
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <button
+                    onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(sendMsg)}`, "_blank")}
+                    className="flex-1 flex items-center justify-center gap-1 bg-green-600 hover:bg-green-500 text-white font-semibold rounded-lg py-2.5 text-xs transition-colors"
+                  >
+                    💬 שלח ללקוח בוואצאפ
+                  </button>
+                  <button
+                    onClick={() => { navigator.clipboard.writeText(`כניסה: ${portalUrl}\nסיסמה: ${portalPass}`); }}
+                    className="flex-1 flex items-center justify-center gap-1 bg-white border border-gray-200 text-gray-700 font-medium rounded-lg py-2.5 text-xs hover:bg-gray-50 transition-colors"
+                  >
+                    📋 העתק פרטים
+                  </button>
+                </div>
+              </div>
+
+              {/* Share buttons */}
+              <div className="flex justify-center gap-3">
+                <a href={`https://wa.me/?text=${encodeURIComponent(`בואו לראות: ${pageUrl}`)}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-green-600 text-white rounded-xl px-5 py-2.5 text-sm font-medium"><Share2 size={14} /> שתף בוואצאפ</a>
+                <a href={pageUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-gray-100 text-gray-700 rounded-xl px-5 py-2.5 text-sm font-medium"><ExternalLink size={14} /> צפה בדף</a>
+              </div>
+
+              {/* Dashboard link */}
+              <div className="flex flex-col gap-3 max-w-sm mx-auto">
+                <Link href={`/admin/clients/${client.id}`} className="flex items-center justify-center bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl py-3 text-sm transition-colors">פתח לוח בקרה</Link>
+              </div>
             </div>
-            <div className="flex justify-center gap-3">
-              <a href={`https://wa.me/?text=${encodeURIComponent(`בואו לראות: ${pageUrl}`)}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-green-600 text-white rounded-xl px-5 py-2.5 text-sm font-medium"><Share2 size={14} /> שתף בוואצאפ</a>
-              <a href={pageUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-gray-100 text-gray-700 rounded-xl px-5 py-2.5 text-sm font-medium"><ExternalLink size={14} /> צפה בדף</a>
-            </div>
-            <div className="flex flex-col gap-3 max-w-sm mx-auto">
-              <Link href={`/admin/clients/${client.id}`} className="flex items-center justify-center bg-indigo-600 text-white font-semibold rounded-xl py-3 text-sm">פתח לוח בקרה</Link>
-            </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
     </div>
   );
