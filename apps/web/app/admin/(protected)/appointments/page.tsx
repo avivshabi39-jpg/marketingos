@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { HDate } from "@hebcal/core";
+import { HDate, HebrewCalendar } from "@hebcal/core";
 
 type EventType = "appointment" | "task" | "reminder";
 type CalView = "month" | "list";
@@ -40,74 +40,94 @@ function getHebrewMonthRange(date: Date): string {
 
 interface HebrewHoliday { name: string; emoji: string; type: "holiday" | "fast" | "national" | "memorial"; color: string }
 
+const HOLIDAY_MAP: Record<string, HebrewHoliday> = {
+  "Rosh Hashana": { name: "ראש השנה", emoji: "🍎", type: "holiday", color: "#f59e0b" },
+  "Yom Kippur": { name: "יום כיפור", emoji: "🕍", type: "fast", color: "#7c3aed" },
+  "Sukkot": { name: "סוכות", emoji: "🌿", type: "holiday", color: "#22c55e" },
+  "Shmini Atzeret": { name: "שמיני עצרת", emoji: "✡️", type: "holiday", color: "#f59e0b" },
+  "Simchat Torah": { name: "שמחת תורה", emoji: "📜", type: "holiday", color: "#f59e0b" },
+  "Pesach": { name: "פסח", emoji: "🍷", type: "holiday", color: "#f59e0b" },
+  "Shavuot": { name: "שבועות", emoji: "📜", type: "holiday", color: "#f59e0b" },
+  "Purim": { name: "פורים", emoji: "🎭", type: "holiday", color: "#ec4899" },
+  "Yom HaShoah": { name: "יום השואה", emoji: "🕯️", type: "memorial", color: "#1e293b" },
+  "Yom HaZikaron": { name: "יום הזיכרון", emoji: "🕯️", type: "memorial", color: "#374151" },
+  "Yom HaAtzma'ut": { name: "יום העצמאות", emoji: "🇮🇱", type: "national", color: "#3b82f6" },
+  "Lag BaOmer": { name: 'ל״ג בעומר', emoji: "🔥", type: "holiday", color: "#f97316" },
+  "Yom Yerushalayim": { name: "יום ירושלים", emoji: "🏛️", type: "national", color: "#3b82f6" },
+  "Tu B'Av": { name: 'ט״ו באב', emoji: "❤️", type: "holiday", color: "#ec4899" },
+  "Tu BiShvat": { name: 'ט״ו בשבט', emoji: "🌳", type: "holiday", color: "#22c55e" },
+  "Tish'a B'Av": { name: "תשעה באב", emoji: "🕍", type: "fast", color: "#7c3aed" },
+};
+
+function mapHebcalEvent(desc: string): HebrewHoliday | null {
+  if (HOLIDAY_MAP[desc]) return HOLIDAY_MAP[desc];
+  for (const [key, val] of Object.entries(HOLIDAY_MAP)) {
+    if (desc.includes(key)) return val;
+  }
+  if (desc.startsWith("Rosh Chodesh")) return { name: "ראש חודש", emoji: "🌙", type: "holiday", color: "#6366f1" };
+  if (desc.includes("Chanukah")) return { name: "חנוכה", emoji: "🕎", type: "holiday", color: "#3b82f6" };
+  if (desc.includes("Pesach")) return { name: desc.includes("CH''M") ? "חוה״מ פסח" : "פסח", emoji: "🍷", type: "holiday", color: desc.includes("CH''M") ? "#fcd34d" : "#f59e0b" };
+  if (desc.includes("Sukkot") && desc.includes("CH''M")) return { name: "חוה״מ סוכות", emoji: "🌿", type: "holiday", color: "#86efac" };
+  if (desc.includes("Hoshana")) return { name: "הושענא רבה", emoji: "🌿", type: "holiday", color: "#22c55e" };
+  if (desc.includes("Shushan")) return { name: "שושן פורים", emoji: "🎭", type: "holiday", color: "#ec4899" };
+  if (desc.includes("Esther")) return { name: "תענית אסתר", emoji: "✡️", type: "fast", color: "#6b7280" };
+  if (desc.includes("Tammuz")) return { name: 'צום י״ז בתמוז', emoji: "✡️", type: "fast", color: "#6b7280" };
+  if (desc.includes("Gedaliah")) return { name: "צום גדליה", emoji: "✡️", type: "fast", color: "#6b7280" };
+  if (desc.includes("Tevet")) return { name: "צום י׳ בטבת", emoji: "✡️", type: "fast", color: "#6b7280" };
+  return null;
+}
+
+// Cache calendar events per Hebrew year
+const calendarCache = new Map<number, { desc: string; greg: Date }[]>();
+
+function getCalendarEvents(hYear: number): { desc: string; greg: Date }[] {
+  if (calendarCache.has(hYear)) return calendarCache.get(hYear)!;
+  try {
+    const events = HebrewCalendar.calendar({ year: hYear, isHebrewYear: true, il: true });
+    const mapped = events.map((ev) => ({ desc: ev.getDesc(), greg: ev.getDate().greg() }));
+    calendarCache.set(hYear, mapped);
+    return mapped;
+  } catch { return []; }
+}
+
 function getHolidaysForDate(date: Date): HebrewHoliday[] {
   try {
     const hd = new HDate(date);
-    const d = hd.getDate(), m = hd.getMonth();
-    const h: HebrewHoliday[] = [];
-    // Tishrei (1)
-    if (m===1) {
-      if (d===1||d===2) h.push({name:"ראש השנה",emoji:"🍎",type:"holiday",color:"#f59e0b"});
-      if (d===3) h.push({name:"צום גדליה",emoji:"✡️",type:"fast",color:"#6b7280"});
-      if (d===10) h.push({name:"יום כיפור",emoji:"🕍",type:"fast",color:"#7c3aed"});
-      if (d===15) h.push({name:"סוכות",emoji:"🌿",type:"holiday",color:"#22c55e"});
-      if (d>=16&&d<=20) h.push({name:"חוה״מ סוכות",emoji:"🌿",type:"holiday",color:"#86efac"});
-      if (d===21) h.push({name:"הושענא רבה",emoji:"🌿",type:"holiday",color:"#22c55e"});
-      if (d===22) h.push({name:"שמיני עצרת",emoji:"✡️",type:"holiday",color:"#f59e0b"});
-      if (d===23) h.push({name:"שמחת תורה",emoji:"📜",type:"holiday",color:"#f59e0b"});
+    const events = getCalendarEvents(hd.getFullYear());
+    const dateStr = date.toDateString();
+    const results: HebrewHoliday[] = [];
+    const seen = new Set<string>();
+    for (const ev of events) {
+      if (ev.greg.toDateString() === dateStr) {
+        const mapped = mapHebcalEvent(ev.desc);
+        if (mapped && !seen.has(mapped.name)) {
+          results.push(mapped);
+          seen.add(mapped.name);
+        }
+      }
     }
-    // Kislev (3)
-    if (m===3&&d>=25) h.push({name:"חנוכה",emoji:"🕎",type:"holiday",color:"#3b82f6"});
-    // Tevet (4)
-    if (m===4) {
-      if (d<=3) h.push({name:"חנוכה",emoji:"🕎",type:"holiday",color:"#3b82f6"});
-      if (d===10) h.push({name:"צום י׳ בטבת",emoji:"✡️",type:"fast",color:"#6b7280"});
-    }
-    // Shvat (5)
-    if (m===5&&d===15) h.push({name:'ט״ו בשבט',emoji:"🌳",type:"holiday",color:"#22c55e"});
-    // Adar (6/7)
-    if (m===6||m===7) {
-      if (d===13) h.push({name:"תענית אסתר",emoji:"✡️",type:"fast",color:"#6b7280"});
-      if (d===14) h.push({name:"פורים",emoji:"🎭",type:"holiday",color:"#ec4899"});
-      if (d===15) h.push({name:"שושן פורים",emoji:"🎭",type:"holiday",color:"#ec4899"});
-    }
-    // Nisan (7 or 8 depending on @hebcal mapping)
-    if (m===8) {
-      if (d===15) h.push({name:"פסח",emoji:"🍷",type:"holiday",color:"#f59e0b"});
-      if (d>=16&&d<=20) h.push({name:"חוה״מ פסח",emoji:"🍷",type:"holiday",color:"#fcd34d"});
-      if (d===21) h.push({name:"שביעי של פסח",emoji:"🌊",type:"holiday",color:"#f59e0b"});
-      if (d===27) h.push({name:"יום השואה",emoji:"🕯️",type:"memorial",color:"#1e293b"});
-    }
-    // Iyar (9)
-    if (m===9) {
-      if (d===4) h.push({name:"יום הזיכרון",emoji:"🕯️",type:"memorial",color:"#374151"});
-      if (d===5) h.push({name:"יום העצמאות",emoji:"🇮🇱",type:"national",color:"#3b82f6"});
-      if (d===18) h.push({name:'ל״ג בעומר',emoji:"🔥",type:"holiday",color:"#f97316"});
-      if (d===28) h.push({name:"יום ירושלים",emoji:"🏛️",type:"national",color:"#3b82f6"});
-    }
-    // Sivan (10)
-    if (m===10&&(d===6||d===7)) h.push({name:"שבועות",emoji:"📜",type:"holiday",color:"#f59e0b"});
-    // Tammuz (11)
-    if (m===11&&d===17) h.push({name:'צום י״ז בתמוז',emoji:"✡️",type:"fast",color:"#6b7280"});
-    // Av (12)
-    if (m===12) {
-      if (d===9) h.push({name:"תשעה באב",emoji:"🕍",type:"fast",color:"#7c3aed"});
-      if (d===15) h.push({name:'ט״ו באב',emoji:"❤️",type:"holiday",color:"#ec4899"});
-    }
-    return h;
+    return results;
   } catch { return []; }
 }
 
 function getUpcomingHolidays(days: number) {
   const upcoming: { date: Date; holiday: HebrewHoliday; hebrew: ReturnType<typeof getHebrewDate> }[] = [];
   const today = new Date();
-  for (let i = 0; i < days; i++) {
-    const date = new Date(today); date.setDate(today.getDate() + i);
-    for (const holiday of getHolidaysForDate(date)) {
-      upcoming.push({ date, holiday, hebrew: getHebrewDate(date) });
+  const hYear = new HDate(today).getFullYear();
+  const events = [...getCalendarEvents(hYear), ...getCalendarEvents(hYear + 1)];
+  const seen = new Set<string>();
+  for (const ev of events) {
+    const diff = Math.floor((ev.greg.getTime() - today.getTime()) / 86400000);
+    if (diff >= 0 && diff <= days) {
+      const mapped = mapHebcalEvent(ev.desc);
+      const key = `${ev.greg.toDateString()}-${mapped?.name}`;
+      if (mapped && !seen.has(key)) {
+        seen.add(key);
+        upcoming.push({ date: ev.greg, holiday: mapped, hebrew: getHebrewDate(ev.greg) });
+      }
     }
   }
-  return upcoming.slice(0, 8);
+  return upcoming.sort((a, b) => a.date.getTime() - b.date.getTime()).slice(0, 10);
 }
 
 interface CalEvent {
