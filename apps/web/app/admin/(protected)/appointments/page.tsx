@@ -1,9 +1,42 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { HDate } from "@hebcal/core";
 
 type EventType = "appointment" | "task" | "reminder";
 type CalView = "month" | "list";
+
+const HEBREW_MONTHS = ["תשרי", "חשון", "כסלו", "טבת", "שבט", "אדר", "אדר א׳", "אדר ב׳", "ניסן", "אייר", "סיון", "תמוז", "אב", "אלול"];
+
+function toGematria(num: number): string {
+  if (num === 15) return 'ט״ו';
+  if (num === 16) return 'ט״ז';
+  const ones = ["", "א", "ב", "ג", "ד", "ה", "ו", "ז", "ח", "ט"];
+  const tens = ["", "י", "כ", "ל"];
+  let r = "";
+  if (num >= 10) { r += tens[Math.floor(num / 10)]; num %= 10; }
+  if (num > 0) r += ones[num];
+  return r.length === 1 ? r + "׳" : r.slice(0, -1) + "״" + r.slice(-1);
+}
+
+function getHebrewDate(date: Date) {
+  try {
+    const hd = new HDate(date);
+    return { day: toGematria(hd.getDate()), month: HEBREW_MONTHS[hd.getMonth() - 1] ?? "", isRC: hd.getDate() === 1 };
+  } catch {
+    return { day: "", month: "", isRC: false };
+  }
+}
+
+function getHebrewMonthRange(date: Date): string {
+  try {
+    const f = new HDate(new Date(date.getFullYear(), date.getMonth(), 1));
+    const l = new HDate(new Date(date.getFullYear(), date.getMonth() + 1, 0));
+    const fm = HEBREW_MONTHS[f.getMonth() - 1] ?? "";
+    const lm = HEBREW_MONTHS[l.getMonth() - 1] ?? "";
+    return fm === lm ? fm : `${fm} - ${lm}`;
+  } catch { return ""; }
+}
 
 interface CalEvent {
   id: string;
@@ -146,7 +179,10 @@ export default function AppointmentsPage() {
       <div className="bg-white rounded-xl border border-gray-200 px-5 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button onClick={() => setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1))} className="px-3 py-1.5 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">→</button>
-          <h2 className="text-lg font-bold text-gray-900 min-w-[140px] text-center">{MONTHS[currentDate.getMonth()]} {currentDate.getFullYear()}</h2>
+          <h2 className="text-lg font-bold text-gray-900 min-w-[180px] text-center">
+            {MONTHS[currentDate.getMonth()]} {currentDate.getFullYear()}
+            <span className="text-xs font-normal text-gray-400 mr-2">{getHebrewMonthRange(currentDate)}</span>
+          </h2>
           <button onClick={() => setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1))} className="px-3 py-1.5 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">←</button>
           <button onClick={() => setCurrentDate(new Date())} className="px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-semibold hover:bg-indigo-100">היום</button>
         </div>
@@ -174,15 +210,24 @@ export default function AppointmentsPage() {
               const dayEvents = getEventsForDay(day);
               const sameMonth = day.getMonth() === currentDate.getMonth();
               const today = isToday(day);
+              const heb = getHebrewDate(day);
               return (
                 <div
                   key={i}
                   onClick={() => openAddModal(day)}
                   className={`min-h-[100px] p-1.5 cursor-pointer transition-colors border-b border-r border-gray-100 last:border-r-0 ${today ? "bg-indigo-50" : "hover:bg-gray-50"} ${!sameMonth ? "opacity-40" : ""}`}
                 >
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs mb-1 ${today ? "bg-indigo-600 text-white font-bold" : "text-gray-700"}`}>
-                    {day.getDate()}
+                  <div className="flex items-start justify-between mb-1">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${today ? "bg-indigo-600 text-white font-bold" : "text-gray-700"}`}>
+                      {day.getDate()}
+                    </div>
+                    <span className={`text-[10px] leading-none ${heb.isRC ? "text-indigo-600 font-bold" : "text-gray-300"}`}>
+                      {heb.day}
+                    </span>
                   </div>
+                  {heb.isRC && (
+                    <div className="text-[8px] text-indigo-500 font-semibold bg-indigo-50 rounded px-1 py-0.5 mb-0.5 inline-block">🌙 ר״ח {heb.month}</div>
+                  )}
                   {dayEvents.slice(0, 3).map((ev) => (
                     <div
                       key={ev.id}
