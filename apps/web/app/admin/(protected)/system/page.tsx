@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { StorageDashboard } from "./StorageDashboard";
 import {
   CheckCircle2, AlertTriangle, XCircle,
   RefreshCw, Database, Mail, Lock, Shield, MessageSquare, Users, TrendingUp,
@@ -147,6 +148,11 @@ export default function SystemHealthPage() {
           </div>
         </>
       )}
+
+      {/* Storage & Cost Dashboard */}
+      <div className="mt-8 pt-6 border-t border-gray-200">
+        <StorageDashboard />
+      </div>
     </div>
   );
 }
