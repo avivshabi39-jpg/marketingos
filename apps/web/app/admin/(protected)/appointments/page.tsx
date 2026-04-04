@@ -38,6 +38,78 @@ function getHebrewMonthRange(date: Date): string {
   } catch { return ""; }
 }
 
+interface HebrewHoliday { name: string; emoji: string; type: "holiday" | "fast" | "national" | "memorial"; color: string }
+
+function getHolidaysForDate(date: Date): HebrewHoliday[] {
+  try {
+    const hd = new HDate(date);
+    const d = hd.getDate(), m = hd.getMonth();
+    const h: HebrewHoliday[] = [];
+    // Tishrei (1)
+    if (m===1) {
+      if (d===1||d===2) h.push({name:"ראש השנה",emoji:"🍎",type:"holiday",color:"#f59e0b"});
+      if (d===3) h.push({name:"צום גדליה",emoji:"✡️",type:"fast",color:"#6b7280"});
+      if (d===10) h.push({name:"יום כיפור",emoji:"🕍",type:"fast",color:"#7c3aed"});
+      if (d===15) h.push({name:"סוכות",emoji:"🌿",type:"holiday",color:"#22c55e"});
+      if (d>=16&&d<=20) h.push({name:"חוה״מ סוכות",emoji:"🌿",type:"holiday",color:"#86efac"});
+      if (d===21) h.push({name:"הושענא רבה",emoji:"🌿",type:"holiday",color:"#22c55e"});
+      if (d===22) h.push({name:"שמיני עצרת",emoji:"✡️",type:"holiday",color:"#f59e0b"});
+      if (d===23) h.push({name:"שמחת תורה",emoji:"📜",type:"holiday",color:"#f59e0b"});
+    }
+    // Kislev (3)
+    if (m===3&&d>=25) h.push({name:"חנוכה",emoji:"🕎",type:"holiday",color:"#3b82f6"});
+    // Tevet (4)
+    if (m===4) {
+      if (d<=3) h.push({name:"חנוכה",emoji:"🕎",type:"holiday",color:"#3b82f6"});
+      if (d===10) h.push({name:"צום י׳ בטבת",emoji:"✡️",type:"fast",color:"#6b7280"});
+    }
+    // Shvat (5)
+    if (m===5&&d===15) h.push({name:'ט״ו בשבט',emoji:"🌳",type:"holiday",color:"#22c55e"});
+    // Adar (6/7)
+    if (m===6||m===7) {
+      if (d===13) h.push({name:"תענית אסתר",emoji:"✡️",type:"fast",color:"#6b7280"});
+      if (d===14) h.push({name:"פורים",emoji:"🎭",type:"holiday",color:"#ec4899"});
+      if (d===15) h.push({name:"שושן פורים",emoji:"🎭",type:"holiday",color:"#ec4899"});
+    }
+    // Nisan (7 or 8 depending on @hebcal mapping)
+    if (m===8) {
+      if (d===15) h.push({name:"פסח",emoji:"🍷",type:"holiday",color:"#f59e0b"});
+      if (d>=16&&d<=20) h.push({name:"חוה״מ פסח",emoji:"🍷",type:"holiday",color:"#fcd34d"});
+      if (d===21) h.push({name:"שביעי של פסח",emoji:"🌊",type:"holiday",color:"#f59e0b"});
+      if (d===27) h.push({name:"יום השואה",emoji:"🕯️",type:"memorial",color:"#1e293b"});
+    }
+    // Iyar (9)
+    if (m===9) {
+      if (d===4) h.push({name:"יום הזיכרון",emoji:"🕯️",type:"memorial",color:"#374151"});
+      if (d===5) h.push({name:"יום העצמאות",emoji:"🇮🇱",type:"national",color:"#3b82f6"});
+      if (d===18) h.push({name:'ל״ג בעומר',emoji:"🔥",type:"holiday",color:"#f97316"});
+      if (d===28) h.push({name:"יום ירושלים",emoji:"🏛️",type:"national",color:"#3b82f6"});
+    }
+    // Sivan (10)
+    if (m===10&&(d===6||d===7)) h.push({name:"שבועות",emoji:"📜",type:"holiday",color:"#f59e0b"});
+    // Tammuz (11)
+    if (m===11&&d===17) h.push({name:'צום י״ז בתמוז',emoji:"✡️",type:"fast",color:"#6b7280"});
+    // Av (12)
+    if (m===12) {
+      if (d===9) h.push({name:"תשעה באב",emoji:"🕍",type:"fast",color:"#7c3aed"});
+      if (d===15) h.push({name:'ט״ו באב',emoji:"❤️",type:"holiday",color:"#ec4899"});
+    }
+    return h;
+  } catch { return []; }
+}
+
+function getUpcomingHolidays(days: number) {
+  const upcoming: { date: Date; holiday: HebrewHoliday; hebrew: ReturnType<typeof getHebrewDate> }[] = [];
+  const today = new Date();
+  for (let i = 0; i < days; i++) {
+    const date = new Date(today); date.setDate(today.getDate() + i);
+    for (const holiday of getHolidaysForDate(date)) {
+      upcoming.push({ date, holiday, hebrew: getHebrewDate(date) });
+    }
+  }
+  return upcoming.slice(0, 8);
+}
+
 interface CalEvent {
   id: string;
   name: string;
@@ -211,11 +283,14 @@ export default function AppointmentsPage() {
               const sameMonth = day.getMonth() === currentDate.getMonth();
               const today = isToday(day);
               const heb = getHebrewDate(day);
+              const hols = getHolidaysForDate(day);
+              const holBg = hols.length > 0 ? (hols[0].type === "fast" ? "#f5f3ff" : hols[0].type === "memorial" ? "#f1f5f9" : hols[0].type === "national" ? "#eff6ff" : "#fffbeb") : "";
               return (
                 <div
                   key={i}
                   onClick={() => openAddModal(day)}
-                  className={`min-h-[100px] p-1.5 cursor-pointer transition-colors border-b border-r border-gray-100 last:border-r-0 ${today ? "bg-indigo-50" : "hover:bg-gray-50"} ${!sameMonth ? "opacity-40" : ""}`}
+                  className={`min-h-[100px] p-1.5 cursor-pointer transition-colors border-b border-r border-gray-100 last:border-r-0 ${!sameMonth ? "opacity-40" : ""}`}
+                  style={{ background: today ? "#eef2ff" : holBg || undefined }}
                 >
                   <div className="flex items-start justify-between mb-1">
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${today ? "bg-indigo-600 text-white font-bold" : "text-gray-700"}`}>
@@ -228,7 +303,12 @@ export default function AppointmentsPage() {
                   {heb.isRC && (
                     <div className="text-[8px] text-indigo-500 font-semibold bg-indigo-50 rounded px-1 py-0.5 mb-0.5 inline-block">🌙 ר״ח {heb.month}</div>
                   )}
-                  {dayEvents.slice(0, 3).map((ev) => (
+                  {hols.map((ho, hi) => (
+                    <div key={hi} className="text-[9px] font-semibold mb-0.5 truncate rounded px-1 py-0.5" dir="rtl" style={{ background: ho.color + "20", color: ho.color, borderRight: `2px solid ${ho.color}` }}>
+                      {ho.emoji} {ho.name}
+                    </div>
+                  ))}
+                  {dayEvents.slice(0, hols.length > 0 ? 2 : 3).map((ev) => (
                     <div
                       key={ev.id}
                       onClick={(e) => { e.stopPropagation(); setSelectedEvent(ev); }}
@@ -278,6 +358,48 @@ export default function AppointmentsPage() {
           )}
         </div>
       )}
+
+      {/* Legend */}
+      <div className="bg-white rounded-xl border border-gray-200 px-5 py-3 flex items-center gap-5 flex-wrap" dir="rtl">
+        <span className="text-xs font-semibold text-gray-500">📅 מקרא:</span>
+        {[
+          { l: "חג", c: "#f59e0b", e: "✡️" },
+          { l: "צום", c: "#7c3aed", e: "🕍" },
+          { l: "לאומי", c: "#3b82f6", e: "🇮🇱" },
+          { l: "זיכרון", c: "#374151", e: "🕯️" },
+          { l: "ר״ח", c: "#6366f1", e: "🌙" },
+        ].map((x) => (
+          <div key={x.l} className="flex items-center gap-1.5 text-xs text-gray-600">
+            <div className="w-2.5 h-2.5 rounded" style={{ background: x.c }} />
+            {x.e} {x.l}
+          </div>
+        ))}
+      </div>
+
+      {/* Upcoming holidays */}
+      {(() => {
+        const upcoming = getUpcomingHolidays(60);
+        if (upcoming.length === 0) return null;
+        return (
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4" dir="rtl">
+            <p className="font-semibold text-sm text-amber-900 mb-2">✡️ חגים קרובים</p>
+            <div className="space-y-1.5">
+              {upcoming.map((u, i) => (
+                <div key={i} className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">{u.holiday.emoji}</span>
+                    <span className="font-medium text-gray-800">{u.holiday.name}</span>
+                    <span className="text-[10px] text-gray-400">{u.hebrew.day} {u.hebrew.month}</span>
+                  </div>
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-lg" style={{ background: u.holiday.color + "15", color: u.holiday.color }}>
+                    {u.date.toLocaleDateString("he-IL", { day: "numeric", month: "short" })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Event detail popup */}
       {selectedEvent && (
