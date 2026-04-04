@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { compare } from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { signToken, signRefreshToken } from "@/lib/auth";
+import { signToken, signRefreshToken, createTempToken } from "@/lib/auth";
 import { rateLimit, getIp } from "@/lib/rateLimit";
 import { audit } from "@/lib/audit";
 import { recordFailedAttempt, isLocked, clearAttempts } from "@/lib/loginAttempts";
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 
   const user = await prisma.user.findUnique({
     where: { email },
-    include: { subscription: { select: { status: true } } },
+    include: { subscription: { select: { status: true } }, twoFactorSecret: { select: { verified: true } } },
   });
 
   // Always run bcrypt regardless of whether user exists — prevents timing-based enumeration
@@ -63,6 +63,12 @@ export async function POST(req: NextRequest) {
   });
 
   audit("login.success", { userId: user.id, meta: { ip } });
+
+  // 2FA check — if enabled, return temp token instead of full session
+  if (user.twoFactorEnabled) {
+    const tempToken = await createTempToken(user.id);
+    return NextResponse.json({ ok: false, requiresTwoFactor: true, tempToken });
+  }
 
   const tokenPayload = {
     userId:              user.id,

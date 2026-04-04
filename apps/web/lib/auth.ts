@@ -70,3 +70,24 @@ export async function getSession(): Promise<JWTPayload | null> {
 export function isSuperAdmin(session: JWTPayload): boolean {
   return session.role === "SUPER_ADMIN";
 }
+
+export async function createTempToken(userId: string): Promise<string> {
+  const { SignJWT } = await import("jose");
+  const secret = new TextEncoder().encode(process.env.JWT_SECRET ?? "dev-secret");
+  return new SignJWT({ userId, _type: "2fa_temp" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("5m")
+    .sign(secret);
+}
+
+export async function verifyTempToken(token: string): Promise<string | null> {
+  try {
+    const { jwtVerify } = await import("jose");
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET ?? "dev-secret");
+    const { payload } = await jwtVerify(token, secret);
+    if (payload._type !== "2fa_temp") return null;
+    return payload.userId as string;
+  } catch {
+    return null;
+  }
+}
