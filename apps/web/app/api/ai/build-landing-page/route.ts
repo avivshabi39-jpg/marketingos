@@ -7,11 +7,18 @@ interface WizardData {
   businessName?: string;
   industry?: string;
   city?: string;
+  // Briefing fields
+  services?: string;
+  targetAudience?: string;
+  problemSolved?: string;
+  priceRange?: string;
+  nextAction?: string;
+  testimonial?: string;
+  // Legacy fields
   description?: string;
   uniqueValue?: string;
   targetAge?: string;
   problem?: string;
-  priceRange?: string;
   cta?: string;
 }
 
@@ -48,13 +55,32 @@ export async function POST(req: NextRequest) {
     businessName = client.name,
     industry = client.industry ?? "כללי",
     city = "",
+    // Briefing fields
+    services = "",
+    targetAudience = "",
+    problemSolved = "",
+    priceRange = "",
+    nextAction = "call",
+    testimonial = "",
+    // Legacy fields (backward compat)
     description = "",
     uniqueValue = "",
     targetAge = "",
     problem = "",
-    priceRange = "",
     cta = "שלח פרטים",
   } = wizardData;
+
+  const ACTION_LABELS: Record<string, string> = {
+    call: "אתקשר אליו",
+    whatsapp: "אשלח לו וואצאפ",
+    meeting: "יקבע פגישה",
+    email: "יקבל מייל",
+  };
+
+  const ctaText = cta !== "שלח פרטים" ? cta :
+    nextAction === "meeting" ? "קבע פגישה" :
+    nextAction === "whatsapp" ? "דבר איתנו בוואצאפ" :
+    nextAction === "email" ? "קבל פרטים במייל" : "שלח פרטים";
 
   const prompt = `אתה מומחה שיווק ישראלי מנוסה. בנה דף נחיתה מקצועי ומשכנע בעברית.
 
@@ -62,27 +88,29 @@ export async function POST(req: NextRequest) {
 - שם: ${businessName}
 - ענף: ${industry}
 - עיר: ${city}
-- תיאור: ${description}
-- מה מיוחד בעסק: ${uniqueValue}
+- מה מוכרים/נותנים: ${services || description}
+- מה מיוחד: ${uniqueValue}
 
 הלקוח המטרה:
-- גיל: ${targetAge}
-- בעיה שפותרים: ${problem}
+- קהל יעד: ${targetAudience || targetAge}
+- הבעיה שפותרים: ${problemSolved || problem}
 - טווח מחירים: ${priceRange}
-- קריאה לפעולה: ${cta}
+- מה קורה אחרי ליד: ${ACTION_LABELS[nextAction] ?? nextAction}
+${testimonial ? `- המלצת לקוח: "${testimonial}"` : ""}
+- קריאה לפעולה: ${ctaText}
 
 החזר JSON בלבד (ללא markdown):
 {
   "landingPageTitle": "כותרת ראשית חזקה ומשכנעת",
   "landingPageSubtitle": "כותרת משנה שמסבירה את הערך",
-  "landingPageCta": "${cta}",
+  "landingPageCta": "${ctaText}",
   "landingPageColor": "#xxxxxx",
   "whatsappTemplate": "הודעת ברכה עם {name}",
   "blocks": [
-    { "type": "hero", "content": { "title": "...", "subtitle": "...", "cta": "${cta}" }, "settings": { "backgroundColor": "#1a1a2e", "textColor": "#ffffff", "padding": "lg", "alignment": "center" } },
+    { "type": "hero", "content": { "title": "...", "subtitle": "...", "cta": "${ctaText}" }, "settings": { "backgroundColor": "#1a1a2e", "textColor": "#ffffff", "padding": "lg", "alignment": "center" } },
     { "type": "features", "content": { "title": "למה לבחור בנו?", "item1Title": "...", "item1Desc": "...", "item2Title": "...", "item2Desc": "...", "item3Title": "...", "item3Desc": "..." }, "settings": { "backgroundColor": "#f8fafc", "textColor": "#111827", "padding": "md", "alignment": "center" } },
-    { "type": "testimonial", "content": { "quote": "ביקורת חיובית משכנעת", "author": "שם", "role": "תפקיד" }, "settings": { "backgroundColor": "#ffffff", "textColor": "#111827", "padding": "md", "alignment": "center" } },
-    { "type": "form", "content": { "title": "צור קשר", "subtitle": "השאר פרטים ונחזור אליך", "button": "${cta}" }, "settings": { "backgroundColor": "#ffffff", "textColor": "#111827", "padding": "md", "alignment": "center" } },
+    { "type": "testimonial", "content": { "quote": "${testimonial || "ביקורת חיובית משכנעת מלקוח"}", "author": "שם הלקוח", "role": "תפקיד" }, "settings": { "backgroundColor": "#ffffff", "textColor": "#111827", "padding": "md", "alignment": "center" } },
+    { "type": "form", "content": { "title": "צור קשר", "subtitle": "השאר פרטים ונחזור אליך", "button": "${ctaText}" }, "settings": { "backgroundColor": "#ffffff", "textColor": "#111827", "padding": "md", "alignment": "center" } },
     { "type": "whatsapp", "content": { "text": "דבר איתנו עכשיו בוואצאפ", "phone": "${client.whatsappNumber ?? ""}" }, "settings": { "backgroundColor": "#25d366", "textColor": "#ffffff", "padding": "sm", "alignment": "center" } }
   ]
 }
