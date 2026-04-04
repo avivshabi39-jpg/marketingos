@@ -168,6 +168,8 @@ export default function AppointmentsPage() {
   const [clients, setClients] = useState<ClientOption[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalEvent | null>(null);
+  const [clientLeads, setClientLeads] = useState<{ id: string; firstName: string; lastName: string; phone: string | null; status: string }[]>([]);
+  const [notification, setNotification] = useState("");
 
   const [newEvent, setNewEvent] = useState({
     title: "",
@@ -175,8 +177,13 @@ export default function AppointmentsPage() {
     time: "09:00",
     type: "appointment" as EventType,
     clientId: "",
+    leadId: "",
+    leadPhone: "",
+    leadName: "",
     notes: "",
     notify: false,
+    notifyLead: false,
+    leadMessage: "",
   });
 
   useEffect(() => {
@@ -189,6 +196,18 @@ export default function AppointmentsPage() {
       .then((d) => setClients(d.clients ?? []))
       .catch(() => {});
   }, []);
+
+  // Load leads when client changes
+  useEffect(() => {
+    if (newEvent.clientId) {
+      fetch(`/api/leads?clientId=${newEvent.clientId}`)
+        .then((r) => r.json())
+        .then((d) => setClientLeads(d.leads ?? []))
+        .catch(() => setClientLeads([]));
+    } else {
+      setClientLeads([]);
+    }
+  }, [newEvent.clientId]);
 
   const calDays = getDaysInMonth(currentDate);
 
@@ -215,6 +234,7 @@ export default function AppointmentsPage() {
         name: newEvent.title,
         scheduledAt,
         clientId: newEvent.clientId || undefined,
+        leadId: newEvent.leadId || undefined,
         notes: newEvent.notes || undefined,
         type: newEvent.type,
       }),
@@ -223,7 +243,25 @@ export default function AppointmentsPage() {
     if (data.appointment) {
       setEvents((prev) => [...prev, { ...data.appointment!, client: clientName ? { name: clientName } : null }]);
     }
+
+    // Send WhatsApp reminder to lead
+    if (newEvent.notifyLead && newEvent.leadPhone && newEvent.leadMessage) {
+      try {
+        await fetch("/api/whatsapp/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ phone: newEvent.leadPhone, message: newEvent.leadMessage, clientId: newEvent.clientId }),
+        });
+        setNotification("✅ תזכורת נשלחה ללקוח בוואצאפ!");
+      } catch {
+        setNotification("⚠️ הפגישה נשמרה אך שליחת הוואצאפ נכשלה");
+      }
+      setTimeout(() => setNotification(""), 4000);
+    }
+
     setShowModal(false);
+    setNewEvent({ title: "", date: new Date().toISOString().split("T")[0], time: "09:00", type: "appointment", clientId: "", leadId: "", leadPhone: "", leadName: "", notes: "", notify: false, notifyLead: false, leadMessage: "" });
+    setClientLeads([]);
   }
 
   async function deleteEvent(id: string) {
@@ -236,6 +274,12 @@ export default function AppointmentsPage() {
 
   return (
     <div className="space-y-5 max-w-6xl" dir="rtl">
+      {/* Notification */}
+      {notification && (
+        <div className="fixed top-5 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl text-white font-semibold text-sm shadow-lg" style={{ background: notification.startsWith("✅") ? "#22c55e" : "#f59e0b" }}>
+          {notification}
+        </div>
+      )}
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -443,16 +487,81 @@ export default function AppointmentsPage() {
               <input type="time" value={newEvent.time} onChange={(e) => setNewEvent((ev) => ({ ...ev, time: e.target.value }))} className="flex-1 border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-indigo-400" />
             </div>
 
-            <select value={newEvent.clientId} onChange={(e) => setNewEvent((ev) => ({ ...ev, clientId: e.target.value }))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm mb-3 outline-none focus:border-indigo-400">
+            <select value={newEvent.clientId} onChange={(e) => setNewEvent((ev) => ({ ...ev, clientId: e.target.value, leadId: "", leadPhone: "", leadName: "" }))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm mb-3 outline-none focus:border-indigo-400">
               <option value="">בחר לקוח (אופציונלי)</option>
               {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
 
+            {/* Lead selector */}
+            {clientLeads.length > 0 && (
+              <select
+                value={newEvent.leadId}
+                onChange={(e) => {
+                  const lead = clientLeads.find((l) => l.id === e.target.value);
+                  setNewEvent((ev) => ({
+                    ...ev,
+                    leadId: e.target.value,
+                    leadPhone: lead?.phone ?? "",
+                    leadName: lead ? `${lead.firstName} ${lead.lastName}` : "",
+                    title: ev.title || (lead ? `פגישה עם ${lead.firstName} ${lead.lastName}` : ev.title),
+                  }));
+                }}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm mb-3 outline-none focus:border-indigo-400"
+              >
+                <option value="">🎯 קשר לליד...</option>
+                {clientLeads.map((l) => (
+                  <option key={l.id} value={l.id}>
+                    {l.firstName} {l.lastName}{l.phone ? ` — ${l.phone}` : ""}
+                  </option>
+                ))}
+              </select>
+            )}
+
             <textarea placeholder="הערות..." value={newEvent.notes} onChange={(e) => setNewEvent((ev) => ({ ...ev, notes: e.target.value }))} rows={3} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm mb-3 outline-none focus:border-indigo-400 resize-none" />
+
+            {/* Lead WhatsApp reminder */}
+            {newEvent.leadId && newEvent.leadPhone && (
+              <div className="bg-green-50 border border-green-200 rounded-xl p-3 mb-3" dir="rtl">
+                <label className="flex items-center gap-2 text-sm font-semibold text-green-800 cursor-pointer">
+                  <input type="checkbox" checked={newEvent.notifyLead} onChange={(e) => {
+                    const checked = e.target.checked;
+                    setNewEvent((ev) => ({
+                      ...ev,
+                      notifyLead: checked,
+                      leadMessage: checked && !ev.leadMessage
+                        ? `שלום ${ev.leadName}! 👋\n\nרוצה להזכיר שיש לנו פגישה ב-${new Date(ev.date).toLocaleDateString("he-IL")} בשעה ${ev.time}.\n\nמצפים לראותך! 😊`
+                        : ev.leadMessage,
+                    }));
+                  }} />
+                  💬 שלח תזכורת ל{newEvent.leadName} בוואצאפ
+                </label>
+                {newEvent.notifyLead && (
+                  <div className="mt-2">
+                    <p className="text-[11px] text-gray-500 mb-1">📱 ישלח ל: {newEvent.leadPhone}</p>
+                    <textarea
+                      value={newEvent.leadMessage}
+                      onChange={(e) => setNewEvent((ev) => ({ ...ev, leadMessage: e.target.value }))}
+                      rows={3}
+                      className="w-full border border-green-200 rounded-lg px-2.5 py-2 text-xs bg-white resize-none outline-none"
+                    />
+                    <div className="flex gap-1 mt-1.5 flex-wrap">
+                      {[
+                        { l: "📅 תזכורת", m: `שלום ${newEvent.leadName}! 👋\n\nתזכורת — יש לנו פגישה ב-${new Date(newEvent.date).toLocaleDateString("he-IL")} בשעה ${newEvent.time}.\n\nנשמח לראותך! 😊` },
+                        { l: "✅ אישור", m: `שלום ${newEvent.leadName}! ✅\n\nפגישתנו מאושרת ל-${new Date(newEvent.date).toLocaleDateString("he-IL")} בשעה ${newEvent.time}.\n\nאם יש שינוי — עדכן מראש. תודה! 🙏` },
+                      ].map((t) => (
+                        <button key={t.l} onClick={() => setNewEvent((ev) => ({ ...ev, leadMessage: t.m }))} className="px-2 py-1 bg-white border border-green-200 rounded text-[10px] text-green-700 font-medium">
+                          {t.l}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             <label className="flex items-center gap-2 mb-4 text-sm">
               <input type="checkbox" checked={newEvent.notify} onChange={(e) => setNewEvent((ev) => ({ ...ev, notify: e.target.checked }))} />
-              🔔 שלח תזכורת בוואצאפ
+              🔔 תזכורת לעצמי
             </label>
 
             <div className="flex gap-2">
