@@ -195,6 +195,7 @@ model User {
   messageTemplates    MessageTemplate[]
   offices             Office[]
   subscription        Subscription?
+  pushSubscription    PushSubscription?
   aiUsages            AiUsage[]
   emailTemplates      EmailTemplate[]     @relation("OwnedTemplates")
 
@@ -942,4 +943,17 @@ model EmailSequenceLog {
   @@index([sequenceId])
   @@index([leadId])
   @@map("email_sequence_logs")
+}
+
+// ─── Push Notifications ──────────────────────────────────────────────────────
+
+model PushSubscription {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  endpoint     String
+  subscription String   @db.Text
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("push_subscriptions")
 }

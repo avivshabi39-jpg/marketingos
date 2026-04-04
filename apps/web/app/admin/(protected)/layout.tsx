@@ -2,6 +2,7 @@ import { Sidebar } from "@/components/admin/Sidebar";
 import { KeyboardShortcuts } from "@/components/admin/KeyboardShortcuts";
 import { TopBar } from "@/components/admin/TopBar";
 import { AdminOnboarding } from "@/components/admin/AdminOnboarding";
+import { PushPermission } from "@/components/admin/PushPermission";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -53,6 +54,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       </div>
       <KeyboardShortcuts />
       <AdminOnboarding userName="משתמש חדש" />
+      <PushPermission />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { triggerN8nWebhook } from "@/lib/webhooks";
 import { rateLimit, getIp } from "@/lib/rateLimit";
+import { sendPushNotification } from "@/lib/push";
 import { sendAutoReply } from "@/lib/autoReply";
 import { sanitizeText } from "@/lib/sanitize";
 
@@ -65,7 +66,7 @@ export async function POST(
   const client = await prisma.client.findUnique({
     where: { slug: params.clientSlug },
     select: {
-      id: true, isActive: true, name: true,
+      id: true, isActive: true, name: true, ownerId: true,
       whatsappNumber: true, agentPhone: true,
       greenApiInstanceId: true, greenApiToken: true,
       autoReplyActive: true, whatsappTemplate: true,
@@ -173,6 +174,15 @@ export async function POST(
     { firstName, lastName, phone: phone ?? null, source: detectedSource, utmSource },
     client
   ).catch(() => {});
+
+  // Push notification to admin
+  if (client.ownerId) {
+    sendPushNotification(client.ownerId, {
+      title: "🎯 ליד חדש הגיע!",
+      body: `${firstName} ${lastName} — ${client.name}`,
+      url: "/admin/leads",
+    }).catch(() => {});
+  }
 
   return NextResponse.json({ intake, lead, clientName: client.name }, { status: 201 });
 }
