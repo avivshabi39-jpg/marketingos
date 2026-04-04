@@ -302,19 +302,22 @@ function ClientsTable({ clients }: { clients: ClientType[] }) {
                 <td style={{ padding: "12px 16px", fontSize: "12px", color: "#9ca3af", whiteSpace: "nowrap" }}>
                   {joined}
                 </td>
-                {/* Action */}
-                <td style={{ padding: "12px 16px", textAlign: "left" }}>
-                  <a
-                    href={`/admin/clients/${c.id}`}
-                    onClick={(e) => e.stopPropagation()}
-                    style={{
-                      fontSize: "12px", color: "#6366f1",
-                      fontWeight: 600, textDecoration: "none",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    פתח ↗
-                  </a>
+                {/* Actions */}
+                <td style={{ padding: "12px 16px" }}>
+                  <div style={{ display: "flex", gap: "4px", justifyContent: "flex-end" }} onClick={(e) => e.stopPropagation()}>
+                    {c.pagePublished ? (
+                      <a href={`/${c.slug}`} target="_blank" rel="noopener noreferrer" style={{ padding: "3px 8px", background: "#f0fdf4", color: "#166534", border: "1px solid #bbf7d0", borderRadius: "6px", fontSize: "11px", textDecoration: "none", fontWeight: 500 }}>
+                        👁 דף
+                      </a>
+                    ) : (
+                      <a href={`/admin/page-builder/${c.id}`} style={{ padding: "3px 8px", background: "#eef2ff", color: "#6366f1", border: "1px solid #c7d2fe", borderRadius: "6px", fontSize: "11px", textDecoration: "none", fontWeight: 500 }}>
+                        🧙 בנה
+                      </a>
+                    )}
+                    <a href={`/admin/clients/${c.id}`} style={{ padding: "3px 8px", background: "#f9fafb", color: "#374151", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "11px", textDecoration: "none" }}>
+                      פתח ↗
+                    </a>
+                  </div>
                 </td>
               </tr>
             );
