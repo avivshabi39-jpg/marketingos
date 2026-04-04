@@ -65,10 +65,16 @@ function SetupSuccessOverlay({ clientId, clientName, setupActions, slug }: {
           </div>
         </div>
         <a
-          href={`/admin/clients/${clientId}`}
-          className="block w-full bg-indigo-600 hover:bg-indigo-700 text-white text-center font-semibold py-3 rounded-xl transition-colors"
+          href={`/admin/clients/${clientId}/builder/wizard`}
+          className="block w-full bg-gradient-to-l from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-center font-bold py-3.5 rounded-xl transition-colors shadow-lg shadow-indigo-500/20"
         >
-          פתח את הלקוח →
+          🧙 בנה דף נחיתה עכשיו →
+        </a>
+        <a
+          href={`/admin/clients/${clientId}`}
+          className="block w-full text-center text-sm text-gray-400 hover:text-gray-600 mt-2 py-2"
+        >
+          דלג — אבנה אחר כך
         </a>
       </div>
     </div>

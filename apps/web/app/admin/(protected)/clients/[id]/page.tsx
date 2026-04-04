@@ -255,18 +255,19 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
         "landing": (
           <>
             {!client.pagePublished && (
-              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 rounded-2xl p-8 text-center mb-6">
-                <div className="text-4xl mb-3">🧙</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">בנה דף נחיתה עם אשף AI</h3>
-                <p className="text-gray-500 text-sm mb-5 max-w-md mx-auto">
-                  ענה על כמה שאלות פשוטות וה-AI יבנה לך דף נחיתה מקצועי תוך דקה
+              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 rounded-2xl py-14 px-8 text-center mb-6">
+                <div className="text-6xl mb-4">🧙</div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">בוא נבנה את הדף שלך!</h3>
+                <p className="text-gray-500 text-sm mb-6 max-w-md mx-auto">
+                  15 שאלות פשוטות → AI בונה דף מקצועי מושלם
                 </p>
                 <Link
                   href={`/admin/clients/${client.id}/builder/wizard`}
-                  className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl px-6 py-3 text-sm transition-colors shadow-lg shadow-indigo-500/20"
+                  className="inline-flex items-center gap-2 bg-gradient-to-l from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl px-8 py-4 text-lg transition-all shadow-lg shadow-indigo-500/20"
                 >
-                  ✨ התחל באשף
+                  🚀 התחל לבנות את הדף
                 </Link>
+                <p className="text-xs text-gray-400 mt-3">לוקח כ-5 דקות</p>
               </div>
             )}
             <AbTestResults clientId={client.id} />
