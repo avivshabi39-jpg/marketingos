@@ -173,6 +173,53 @@ const SNAPSHOT_PREVIEWS: Record<string, { color: string; title: string; subtitle
   fitness_trainer:  { color: "#e65100", title: "תגיע לגוף שתמיד רצית",              subtitle: "מאמן אישי מוסמך — תוצאות מהירות",           cta: "אימון ניסיון חינם",   features: ["✓ תוכנית אישית",     "✓ מעקב שבועי",         "✓ ייעוץ תזונה"] },
 };
 
+function SnapMockup({ snapKey, icon }: { snapKey: string; icon: string }) {
+  const MOCKUPS: Record<string, React.ReactNode> = {
+    cleaning: (
+      <div className="flex gap-1 mt-7"><div className="flex-1 h-14 bg-gray-400/40 rounded-l flex items-center justify-center text-[9px] text-white font-bold">לפני</div><div className="flex-1 h-14 bg-green-500/60 rounded-r flex items-center justify-center text-[9px] text-white font-bold">אחרי</div></div>
+    ),
+    cleaning_pro: (
+      <div className="flex gap-1 mt-7"><div className="flex-1 h-14 bg-gray-400/40 rounded-l flex items-center justify-center text-[9px] text-white font-bold">לפני</div><div className="flex-1 h-14 bg-teal-500/60 rounded-r flex items-center justify-center text-[9px] text-white font-bold">אחרי</div></div>
+    ),
+    roofing: (
+      <div className="flex gap-1 mt-7"><div className="flex-1 h-14 bg-gray-400/40 rounded-l flex items-center justify-center text-[9px] text-white font-bold">לפני</div><div className="flex-1 h-14 bg-orange-500/60 rounded-r flex items-center justify-center text-[9px] text-white font-bold">אחרי</div></div>
+    ),
+    construction: (
+      <div className="flex gap-1 mt-7"><div className="flex-1 h-14 bg-gray-400/40 rounded-l flex items-center justify-center text-[9px] text-white font-bold">לפני</div><div className="flex-1 h-14 bg-gray-700/60 rounded-r flex items-center justify-center text-[9px] text-white font-bold">אחרי</div></div>
+    ),
+    cosmetics: (
+      <div className="grid grid-cols-3 gap-1 mt-7">{[0.9,0.6,0.8,0.5,0.9,0.7].map((op,i) => <div key={i} className="h-6 rounded bg-pink-500" style={{ opacity: op }} />)}</div>
+    ),
+    real_estate: (
+      <div className="flex gap-1 mt-7">{[1,2,3].map(i => <div key={i} className="flex-1 rounded border-2 border-blue-400 overflow-hidden"><div className="h-7 bg-blue-400/50" /><div className="p-1"><div className="h-1.5 bg-blue-500 rounded mb-1 w-3/4" /><div className="h-1 bg-gray-200 rounded" /></div></div>)}</div>
+    ),
+    agent_personal: (
+      <div className="flex gap-1 mt-7"><div className="flex-[2] h-16 bg-indigo-500/50 rounded" /><div className="flex-1 flex flex-col gap-1"><div className="flex-1 bg-indigo-300/40 rounded" /><div className="flex-1 bg-indigo-400/40 rounded" /></div></div>
+    ),
+    realestate_office: (
+      <div className="mt-7"><div className="h-4 bg-slate-700 rounded w-3/4 mb-2" /><div className="h-2.5 bg-slate-400/60 rounded w-full mb-1" /><div className="h-2.5 bg-slate-400/40 rounded w-2/3 mb-2" /><div className="h-5 bg-slate-600 rounded w-2/5" /></div>
+    ),
+    fitness_trainer: (
+      <div className="flex gap-1.5 mt-7">{[{n:"500+",l:"לקוחות"},{n:"98%",l:"הצלחה"},{n:"10+",l:"שנים"}].map(s => <div key={s.n} className="flex-1 text-center bg-orange-500/20 rounded-lg py-1.5"><div className="text-xs font-extrabold text-orange-600">{s.n}</div><div className="text-[7px] text-gray-500">{s.l}</div></div>)}</div>
+    ),
+    finance_pro: (
+      <div className="mt-7"><div className="h-4 bg-emerald-800 rounded w-3/4 mb-2" /><div className="h-2.5 bg-emerald-400/50 rounded w-full mb-1" /><div className="h-2.5 bg-emerald-400/30 rounded w-2/3 mb-2" /><div className="h-5 bg-emerald-600 rounded w-2/5" /></div>
+    ),
+  };
+
+  return (
+    <div className="h-[120px] relative overflow-hidden px-3 pt-0" style={{ background: "linear-gradient(160deg, rgba(99,102,241,0.06), rgba(99,102,241,0.15))" }}>
+      <div className="absolute top-0 right-0 left-0 h-6 bg-gray-800 flex items-center gap-1.5 px-2.5">
+        <span className="text-xs">{icon}</span>
+        <div className="h-1.5 w-12 bg-white/40 rounded" />
+      </div>
+      {MOCKUPS[snapKey] ?? (
+        <div className="flex gap-1 mt-7"><div className="flex-[2] h-16 bg-indigo-400/40 rounded" /><div className="flex-1 flex flex-col gap-1"><div className="flex-1 bg-gray-200 rounded" /><div className="flex-1 bg-gray-200 rounded" /></div></div>
+      )}
+    </div>
+  );
+}
+
 function SnapshotPreviewModal({ snap, onClose }: { snap: (typeof SNAPSHOTS)[number]; onClose: () => void }) {
   const preview = SNAPSHOT_PREVIEWS[snap.key];
   if (!preview) return null;
@@ -383,19 +430,23 @@ export default function SnapshotsPage() {
         {filteredSnaps.map((snap) => (
           <div
             key={snap.key}
-            className={`rounded-2xl border-2 p-6 ${snap.color} hover:shadow-md transition-shadow relative`}
+            className={`rounded-2xl border-2 overflow-hidden ${snap.color} hover:shadow-lg hover:-translate-y-1 transition-all relative`}
           >
+            {/* Mini mockup preview */}
+            <SnapMockup snapKey={snap.key} icon={snap.icon} />
+
+            <div className="p-5">
             {/* Industry badge */}
-            <span className={`absolute top-3 left-3 text-xs font-medium px-2 py-0.5 rounded-full ${snap.badgeColor}`}>
+            <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${snap.badgeColor}`}>
               {snap.industry}
             </span>
 
-            <div className="flex items-start gap-4 mb-5">
-              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl ${snap.iconBg}`}>
+            <div className="flex items-start gap-3 mt-3 mb-4">
+              <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-2xl ${snap.iconBg}`}>
                 {snap.icon}
               </div>
-              <div className="flex-1 pt-1">
-                <h3 className="font-bold text-gray-900 text-lg leading-tight">{snap.title}</h3>
+              <div className="flex-1 pt-0.5">
+                <h3 className="font-bold text-gray-900 text-base leading-tight">{snap.title}</h3>
                 {applied.has(snap.key) && (
                   <div className="flex items-center gap-2 mt-1">
                     <span className="text-xs text-green-600 font-medium flex items-center gap-1">
@@ -441,6 +492,7 @@ export default function SnapshotsPage() {
                 {clients.length === 0 ? "טוען..." : "החל על לקוח"}
               </button>
             </div>
+          </div>{/* close p-5 */}
           </div>
         ))}
       </div>

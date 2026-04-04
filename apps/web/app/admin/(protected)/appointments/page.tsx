@@ -1,455 +1,300 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Calendar, Plus, Phone, User, Home, CheckCircle2, XCircle, Clock, Trash2 } from "lucide-react";
 
-type Appointment = {
+type EventType = "appointment" | "task" | "reminder";
+type CalView = "month" | "list";
+
+interface CalEvent {
   id: string;
   name: string;
   phone: string | null;
-  email: string | null;
   notes: string | null;
   scheduledAt: string;
   status: string;
-  client: { name: string; slug: string };
-  lead: { firstName: string; lastName: string } | null;
-  property: { title: string; slug: string } | null;
-};
+  client: { name: string } | null;
+}
 
-type FilterType = "today" | "week" | "all";
+interface ClientOption {
+  id: string;
+  name: string;
+}
 
-const STATUS_LABELS: Record<string, string> = {
-  PENDING: "ממתין",
-  CONFIRMED: "מאושר",
-  DONE: "בוצע",
-  CANCELLED: "בוטל",
-};
-
+const MONTHS = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
+const WEEKDAYS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
 const STATUS_COLORS: Record<string, string> = {
-  PENDING:   "bg-yellow-100 text-yellow-800",
-  CONFIRMED: "bg-green-100 text-green-800",
-  DONE:      "bg-blue-100 text-blue-800",
-  CANCELLED: "bg-red-100 text-red-700",
+  PENDING: "#f59e0b",
+  CONFIRMED: "#22c55e",
+  DONE: "#3b82f6",
+  CANCELLED: "#ef4444",
 };
 
-function startOfDay(d: Date) {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+function getColor(event: CalEvent): string {
+  return STATUS_COLORS[event.status] ?? "#6366f1";
 }
 
-function isToday(d: Date) {
-  return startOfDay(d).getTime() === startOfDay(new Date()).getTime();
-}
+function getDaysInMonth(date: Date): Date[] {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const days: Date[] = [];
 
-function isTomorrow(d: Date) {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  return startOfDay(d).getTime() === startOfDay(tomorrow).getTime();
-}
-
-function formatGroupHeader(date: Date): string {
-  if (isToday(date)) {
-    return `📅 היום — ${date.toLocaleDateString("he-IL", { weekday: "long", day: "numeric", month: "numeric" })}`;
+  for (let i = firstDay.getDay() - 1; i >= 0; i--) {
+    days.push(new Date(year, month, -i));
   }
-  if (isTomorrow(date)) {
-    return `📅 מחר — ${date.toLocaleDateString("he-IL", { weekday: "long", day: "numeric", month: "numeric" })}`;
+  for (let d = 1; d <= lastDay.getDate(); d++) {
+    days.push(new Date(year, month, d));
   }
-  return `📅 ${date.toLocaleDateString("he-IL", { weekday: "long", day: "numeric", month: "numeric", year: "numeric" })}`;
+  while (days.length % 7 !== 0) {
+    days.push(new Date(year, month + 1, days.length - lastDay.getDate() - firstDay.getDay() + 1));
+  }
+  return days;
 }
 
-function groupByDate(appointments: Appointment[]): { dateKey: string; label: string; items: Appointment[] }[] {
-  const map = new Map<string, { label: string; items: Appointment[] }>();
-  for (const appt of appointments) {
-    const d = new Date(appt.scheduledAt);
-    const key = startOfDay(d).toISOString();
-    if (!map.has(key)) {
-      map.set(key, { label: formatGroupHeader(d), items: [] });
-    }
-    map.get(key)!.items.push(appt);
-  }
-  return Array.from(map.entries())
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([dateKey, val]) => ({ dateKey, ...val }));
-}
-
-function filterAppointments(appointments: Appointment[], filter: FilterType): Appointment[] {
-  const now = new Date();
-  const todayStart = startOfDay(now);
-  const weekEnd = new Date(todayStart);
-  weekEnd.setDate(weekEnd.getDate() + 7);
-
-  return appointments.filter((appt) => {
-    const d = new Date(appt.scheduledAt);
-    if (filter === "today") return startOfDay(d).getTime() === todayStart.getTime();
-    if (filter === "week") return d >= todayStart && d < weekEnd;
-    return true;
-  });
+function isToday(d: Date): boolean {
+  return d.toDateString() === new Date().toDateString();
 }
 
 export default function AppointmentsPage() {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState<string | null>(null);
-  const [filter, setFilter] = useState<FilterType>("week");
-  const [showForm, setShowForm] = useState(false);
-  const [clients, setClients] = useState<{ id: string; name: string }[]>([]);
-  const [form, setForm] = useState({
-    clientId: "", name: "", phone: "", email: "", notes: "", scheduledAt: "",
+  const [view, setView] = useState<CalView>("month");
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [events, setEvents] = useState<CalEvent[]>([]);
+  const [clients, setClients] = useState<ClientOption[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<CalEvent | null>(null);
+
+  const [newEvent, setNewEvent] = useState({
+    title: "",
+    date: new Date().toISOString().split("T")[0],
+    time: "09:00",
+    type: "appointment" as EventType,
+    clientId: "",
+    notes: "",
+    notify: false,
   });
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch("/api/appointments")
       .then((r) => r.json())
-      .then((d) => setAppointments(d.appointments ?? []))
-      .finally(() => setLoading(false));
-
-    fetch("/api/clients?limit=200")
+      .then((d) => setEvents(d.appointments ?? []))
+      .catch(() => {});
+    fetch("/api/clients?limit=100")
       .then((r) => r.json())
-      .then((d) => setClients(d.clients ?? []));
+      .then((d) => setClients(d.clients ?? []))
+      .catch(() => {});
   }, []);
 
-  async function updateStatus(id: string, status: string) {
-    setUpdating(id);
-    const res = await fetch(`/api/appointments/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
-    });
-    if (res.ok) {
-      const { appointment } = await res.json();
-      setAppointments((prev) => prev.map((a) => a.id === id ? { ...a, status: appointment.status } : a));
-    }
-    setUpdating(null);
+  const calDays = getDaysInMonth(currentDate);
+
+  function getEventsForDay(day: Date): CalEvent[] {
+    const ds = day.toISOString().split("T")[0];
+    return events.filter((e) => e.scheduledAt?.startsWith(ds)).sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt));
   }
 
-  async function deleteAppointment(id: string) {
-    if (!confirm("למחוק את הביקור?")) return;
-    await fetch(`/api/appointments/${id}`, { method: "DELETE" });
-    setAppointments((prev) => prev.filter((a) => a.id !== id));
+  function openAddModal(day?: Date) {
+    setNewEvent((e) => ({ ...e, date: (day ?? new Date()).toISOString().split("T")[0], title: "", notes: "", clientId: "" }));
+    setSelectedEvent(null);
+    setShowModal(true);
   }
 
-  async function handleCreate(e: React.FormEvent) {
-    e.preventDefault();
-    if (!form.clientId || !form.name || !form.scheduledAt) {
-      setError("נא למלא לקוח, שם ותאריך");
-      return;
-    }
-    setSaving(true);
-    setError("");
+  async function saveEvent() {
+    if (!newEvent.title) return;
+    const scheduledAt = `${newEvent.date}T${newEvent.time}:00.000Z`;
+    const clientName = clients.find((c) => c.id === newEvent.clientId)?.name;
+
     const res = await fetch("/api/appointments", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, scheduledAt: new Date(form.scheduledAt).toISOString() }),
+      body: JSON.stringify({
+        name: newEvent.title,
+        scheduledAt,
+        clientId: newEvent.clientId || undefined,
+        notes: newEvent.notes || undefined,
+        type: newEvent.type,
+      }),
     });
-    if (res.ok) {
-      const refreshed = await fetch("/api/appointments").then((r) => r.json());
-      setAppointments(refreshed.appointments ?? []);
-      setShowForm(false);
-      setForm({ clientId: "", name: "", phone: "", email: "", notes: "", scheduledAt: "" });
-    } else {
-      setError("שגיאה בשמירה");
+    const data = (await res.json()) as { appointment?: CalEvent };
+    if (data.appointment) {
+      setEvents((prev) => [...prev, { ...data.appointment!, client: clientName ? { name: clientName } : null }]);
     }
-    setSaving(false);
+    setShowModal(false);
   }
 
-  const todayCount = appointments.filter((a) => {
-    const d = new Date(a.scheduledAt);
-    return isToday(d) && a.status !== "CANCELLED" && a.status !== "DONE";
-  }).length;
+  async function deleteEvent(id: string) {
+    await fetch(`/api/appointments/${id}`, { method: "DELETE" });
+    setEvents((prev) => prev.filter((e) => e.id !== id));
+    setSelectedEvent(null);
+  }
 
-  const filtered = filterAppointments(appointments, filter);
-  const groups = groupByDate(filtered);
-
-  const FILTERS: { key: FilterType; label: string }[] = [
-    { key: "today", label: "היום" },
-    { key: "week",  label: "השבוע" },
-    { key: "all",   label: "הכל"   },
-  ];
+  const todayEvents = getEventsForDay(new Date());
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6" dir="rtl">
+    <div className="space-y-5 max-w-6xl" dir="rtl">
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Calendar size={24} className="text-blue-600" /> ניהול תורים
-          </h1>
-          {todayCount > 0 && (
-            <p className="text-sm text-blue-600 font-medium mt-0.5">
-              {todayCount} תורים היום
-            </p>
-          )}
+          <h1 className="text-2xl font-bold text-gray-900">📅 לוח תורים ומשימות</h1>
+          {todayEvents.length > 0 && <p className="text-sm text-gray-500 mt-0.5">היום יש {todayEvents.length} אירועים</p>}
         </div>
-        <div className="flex items-center gap-3">
-          {/* Filter buttons */}
-          <div className="flex bg-gray-100 rounded-lg p-1 gap-1">
-            {FILTERS.map((f) => (
-              <button
-                key={f.key}
-                onClick={() => setFilter(f.key)}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                  filter === f.key
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-          <button
-            onClick={() => setShowForm((v) => !v)}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-          >
-            <Plus size={16} /> ביקור חדש
-          </button>
-        </div>
-      </div>
-
-      {/* Create form */}
-      {showForm && (
-        <form onSubmit={handleCreate} className="bg-white border border-gray-200 rounded-xl p-5 space-y-4 shadow-sm">
-          <h2 className="font-semibold text-gray-800">קביעת ביקור חדש</h2>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-medium text-gray-600 block mb-1">לקוח *</label>
-              <select
-                value={form.clientId}
-                onChange={(e) => setForm({ ...form, clientId: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="">בחר לקוח</option>
-                {clients.map((c) => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-600 block mb-1">שם לקוח *</label>
-              <input
-                type="text"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="ישראל ישראלי"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-600 block mb-1">טלפון</label>
-              <input
-                type="tel"
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                placeholder="050-0000000"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-gray-600 block mb-1">תאריך ושעה *</label>
-              <input
-                type="datetime-local"
-                value={form.scheduledAt}
-                onChange={(e) => setForm({ ...form, scheduledAt: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-            <div className="sm:col-span-2">
-              <label className="text-xs font-medium text-gray-600 block mb-1">הערות</label>
-              <textarea
-                value={form.notes}
-                onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                rows={3}
-                placeholder="פרטים נוספים..."
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              />
-            </div>
-          </div>
-          <div className="flex gap-3 justify-end">
-            <button
-              type="button"
-              onClick={() => setShowForm(false)}
-              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
-            >
-              ביטול
-            </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg disabled:opacity-50"
-            >
-              {saving ? "שומר..." : "שמור ביקור"}
-            </button>
-          </div>
-        </form>
-      )}
-
-      {/* Content */}
-      {loading ? (
-        <div className="text-center py-16 text-gray-400">טוען ביקורים...</div>
-      ) : groups.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
-          <Calendar size={48} className="mx-auto text-gray-300 mb-3" />
-          <p className="text-gray-500 font-medium">
-            {filter === "today" ? "אין ביקורים היום" : filter === "week" ? "אין ביקורים השבוע" : "אין ביקורים עדיין"}
-          </p>
-          <p className="text-gray-400 text-sm mt-1">קבע ביקור ראשון למעלה</p>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {groups.map(({ dateKey, label, items }) => {
-            const groupDate = new Date(dateKey);
-            const isTodayGroup = isToday(groupDate);
-            return (
-              <section key={dateKey}>
-                <h2 className={`text-sm font-semibold mb-3 ${isTodayGroup ? "text-blue-700" : "text-gray-500"}`}>
-                  {label}
-                  {isTodayGroup && (
-                    <span className="mr-2 text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">
-                      היום
-                    </span>
-                  )}
-                </h2>
-                <div className="space-y-2">
-                  {items.map((appt) => (
-                    <AppointmentCard
-                      key={appt.id}
-                      appt={appt}
-                      updating={updating}
-                      isToday={isTodayGroup}
-                      onStatus={updateStatus}
-                      onDelete={deleteAppointment}
-                    />
-                  ))}
-                </div>
-              </section>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function AppointmentCard({
-  appt,
-  updating,
-  isToday: isTodayCard,
-  onStatus,
-  onDelete,
-}: {
-  appt: Appointment;
-  updating: string | null;
-  isToday: boolean;
-  onStatus: (id: string, status: string) => void;
-  onDelete: (id: string) => void;
-}) {
-  const date = new Date(appt.scheduledAt);
-  const isDisabled = updating === appt.id;
-
-  return (
-    <div
-      className={`bg-white border rounded-xl p-4 flex flex-col sm:flex-row sm:items-center gap-4 shadow-sm transition-colors ${
-        isTodayCard && appt.status === "PENDING"
-          ? "border-blue-200 ring-1 ring-blue-100"
-          : "border-gray-200"
-      }`}
-    >
-      {/* Time badge */}
-      <div className={`flex-shrink-0 w-14 text-center rounded-lg py-2 ${isTodayCard ? "bg-blue-50" : "bg-gray-50"}`}>
-        <p className={`text-sm font-bold leading-tight ${isTodayCard ? "text-blue-700" : "text-gray-700"}`}>
-          {date.toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" })}
-        </p>
-      </div>
-
-      <div className="flex-1 space-y-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLORS[appt.status] ?? "bg-gray-100 text-gray-600"}`}>
-            {STATUS_LABELS[appt.status] ?? appt.status}
-          </span>
-          <span className="text-sm font-semibold text-gray-900 flex items-center gap-1">
-            <User size={13} className="text-gray-400" /> {appt.name}
-          </span>
-        </div>
-        <div className="flex items-center gap-4 text-xs text-gray-500 flex-wrap">
-          {appt.phone && (
-            <a href={`tel:${appt.phone}`} className="flex items-center gap-1 hover:text-blue-600">
-              <Phone size={12} /> {appt.phone}
-            </a>
-          )}
-          {appt.property && (
-            <span className="flex items-center gap-1">
-              <Home size={12} /> {appt.property.title}
-            </span>
-          )}
-          <span className="text-gray-400">{appt.client.name}</span>
-        </div>
-        {appt.notes && (
-          <p className="text-xs text-gray-500 bg-gray-50 rounded px-2 py-1 mt-1 line-clamp-2">{appt.notes}</p>
-        )}
-      </div>
-
-      <div className="flex items-center gap-2 shrink-0">
-        {appt.status === "PENDING" && (
-          <>
-            <button
-              onClick={() => onStatus(appt.id, "CONFIRMED")}
-              disabled={isDisabled}
-              className="flex items-center gap-1 text-xs bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-lg font-medium transition-colors disabled:opacity-50"
-            >
-              <CheckCircle2 size={13} /> אשר
-            </button>
-            <button
-              onClick={() => onStatus(appt.id, "CANCELLED")}
-              disabled={isDisabled}
-              className="flex items-center gap-1 text-xs bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg font-medium transition-colors disabled:opacity-50"
-            >
-              <XCircle size={13} /> בטל
-            </button>
-          </>
-        )}
-        {appt.status === "CONFIRMED" && (
-          <>
-            <span className="text-xs font-semibold text-green-600 flex items-center gap-1">
-              <CheckCircle2 size={13} /> אושר
-            </span>
-            <button
-              onClick={() => onStatus(appt.id, "DONE")}
-              disabled={isDisabled}
-              className="flex items-center gap-1 text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 px-2 py-1.5 rounded-lg font-medium transition-colors disabled:opacity-50"
-            >
-              בוצע
-            </button>
-            <button
-              onClick={() => onStatus(appt.id, "CANCELLED")}
-              disabled={isDisabled}
-              className="flex items-center gap-1 text-xs bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1.5 rounded-lg font-medium transition-colors disabled:opacity-50"
-            >
-              <XCircle size={13} /> בטל
-            </button>
-          </>
-        )}
-        {appt.status === "CANCELLED" && (
-          <span className="text-xs font-semibold text-red-500 flex items-center gap-1">
-            <XCircle size={13} /> בוטל
-          </span>
-        )}
-        {appt.status === "DONE" && (
-          <span className="text-xs font-semibold text-blue-600 flex items-center gap-1">
-            <CheckCircle2 size={13} /> בוצע
-          </span>
-        )}
-        <button
-          onClick={() => onDelete(appt.id)}
-          className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-        >
-          <Trash2 size={14} />
+        <button onClick={() => openAddModal()} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl px-5 py-2.5 text-sm transition-colors">
+          + הוסף תור / משימה
         </button>
       </div>
+
+      {/* Nav bar */}
+      <div className="bg-white rounded-xl border border-gray-200 px-5 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <button onClick={() => setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1))} className="px-3 py-1.5 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">→</button>
+          <h2 className="text-lg font-bold text-gray-900 min-w-[140px] text-center">{MONTHS[currentDate.getMonth()]} {currentDate.getFullYear()}</h2>
+          <button onClick={() => setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1))} className="px-3 py-1.5 bg-gray-100 rounded-lg text-sm hover:bg-gray-200">←</button>
+          <button onClick={() => setCurrentDate(new Date())} className="px-3 py-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-semibold hover:bg-indigo-100">היום</button>
+        </div>
+        <div className="flex gap-1">
+          {(["month", "list"] as CalView[]).map((v) => (
+            <button key={v} onClick={() => setView(v)} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${view === v ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}>
+              {v === "month" ? "📅 חודש" : "📋 רשימה"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Month View */}
+      {view === "month" && (
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          {/* Weekday headers */}
+          <div className="grid grid-cols-7">
+            {WEEKDAYS.map((d) => (
+              <div key={d} className="px-2 py-2.5 text-center text-xs font-semibold text-gray-500 bg-gray-50 border-b border-gray-200">{d}</div>
+            ))}
+          </div>
+          {/* Day cells */}
+          <div className="grid grid-cols-7">
+            {calDays.map((day, i) => {
+              const dayEvents = getEventsForDay(day);
+              const sameMonth = day.getMonth() === currentDate.getMonth();
+              const today = isToday(day);
+              return (
+                <div
+                  key={i}
+                  onClick={() => openAddModal(day)}
+                  className={`min-h-[100px] p-1.5 cursor-pointer transition-colors border-b border-r border-gray-100 last:border-r-0 ${today ? "bg-indigo-50" : "hover:bg-gray-50"} ${!sameMonth ? "opacity-40" : ""}`}
+                >
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs mb-1 ${today ? "bg-indigo-600 text-white font-bold" : "text-gray-700"}`}>
+                    {day.getDate()}
+                  </div>
+                  {dayEvents.slice(0, 3).map((ev) => (
+                    <div
+                      key={ev.id}
+                      onClick={(e) => { e.stopPropagation(); setSelectedEvent(ev); }}
+                      className="px-1.5 py-0.5 rounded text-[10px] font-medium mb-0.5 truncate cursor-pointer"
+                      style={{ background: getColor(ev) + "20", color: getColor(ev), borderRight: `3px solid ${getColor(ev)}` }}
+                    >
+                      {ev.scheduledAt?.slice(11, 16)} {ev.name}
+                    </div>
+                  ))}
+                  {dayEvents.length > 3 && <div className="text-[10px] text-gray-400">+{dayEvents.length - 3} עוד</div>}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* List View */}
+      {view === "list" && (
+        <div className="space-y-2">
+          {events.length === 0 ? (
+            <div className="bg-white rounded-xl border border-gray-200 p-16 text-center text-gray-400">
+              <div className="text-5xl mb-3">📅</div>
+              <p>אין תורים עדיין</p>
+            </div>
+          ) : (
+            events
+              .sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt))
+              .map((ev) => (
+                <div key={ev.id} onClick={() => setSelectedEvent(ev)} className="bg-white rounded-xl border border-gray-200 p-3.5 flex items-center gap-3 cursor-pointer hover:border-indigo-200 transition-colors" style={{ borderRightWidth: "4px", borderRightColor: getColor(ev) }}>
+                  <div className="text-center min-w-[44px]">
+                    <div className="text-lg font-extrabold" style={{ color: getColor(ev) }}>{new Date(ev.scheduledAt).getDate()}</div>
+                    <div className="text-[10px] text-gray-500">{MONTHS[new Date(ev.scheduledAt).getMonth()]}</div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-sm text-gray-900 truncate">{ev.name}</p>
+                    {ev.client && <p className="text-xs text-gray-500">👤 {ev.client.name}</p>}
+                    {ev.notes && <p className="text-xs text-gray-400 truncate">📝 {ev.notes}</p>}
+                  </div>
+                  {ev.scheduledAt && (
+                    <div className="text-xs font-semibold px-2.5 py-1 rounded-lg" style={{ background: getColor(ev) + "15", color: getColor(ev) }}>
+                      ⏰ {ev.scheduledAt.slice(11, 16)}
+                    </div>
+                  )}
+                </div>
+              ))
+          )}
+        </div>
+      )}
+
+      {/* Event detail popup */}
+      {selectedEvent && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setSelectedEvent(null)}>
+          <div className="bg-white rounded-2xl p-6 w-full max-w-sm" dir="rtl" onClick={(e) => e.stopPropagation()}>
+            <h3 className="font-bold text-lg mb-3">{selectedEvent.name}</h3>
+            <div className="space-y-2 text-sm text-gray-600 mb-4">
+              <p>📅 {new Date(selectedEvent.scheduledAt).toLocaleDateString("he-IL")} ⏰ {selectedEvent.scheduledAt?.slice(11, 16)}</p>
+              {selectedEvent.client && <p>👤 {selectedEvent.client.name}</p>}
+              {selectedEvent.phone && <p>📞 {selectedEvent.phone}</p>}
+              {selectedEvent.notes && <p>📝 {selectedEvent.notes}</p>}
+              <p>סטטוס: <span className="font-semibold" style={{ color: getColor(selectedEvent) }}>{selectedEvent.status}</span></p>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => setSelectedEvent(null)} className="flex-1 py-2.5 bg-gray-100 rounded-xl text-sm font-medium">סגור</button>
+              <button onClick={() => deleteEvent(selectedEvent.id)} className="py-2.5 px-4 bg-red-50 text-red-600 rounded-xl text-sm font-medium hover:bg-red-100">🗑️ מחק</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModal(false)}>
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto" dir="rtl" onClick={(e) => e.stopPropagation()}>
+            <h3 className="font-bold text-lg mb-4">➕ הוסף תור / משימה</h3>
+
+            {/* Type */}
+            <div className="flex gap-2 mb-4">
+              {([{ v: "appointment", l: "📅 תור" }, { v: "task", l: "✅ משימה" }, { v: "reminder", l: "🔔 תזכורת" }] as const).map((t) => (
+                <button key={t.v} onClick={() => setNewEvent((e) => ({ ...e, type: t.v }))} className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors ${newEvent.type === t.v ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-600"}`}>
+                  {t.l}
+                </button>
+              ))}
+            </div>
+
+            <input placeholder="כותרת *" value={newEvent.title} onChange={(e) => setNewEvent((ev) => ({ ...ev, title: e.target.value }))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm mb-3 outline-none focus:border-indigo-400" />
+
+            <div className="flex gap-2 mb-3">
+              <input type="date" value={newEvent.date} onChange={(e) => setNewEvent((ev) => ({ ...ev, date: e.target.value }))} className="flex-[2] border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-indigo-400" />
+              <input type="time" value={newEvent.time} onChange={(e) => setNewEvent((ev) => ({ ...ev, time: e.target.value }))} className="flex-1 border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-indigo-400" />
+            </div>
+
+            <select value={newEvent.clientId} onChange={(e) => setNewEvent((ev) => ({ ...ev, clientId: e.target.value }))} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm mb-3 outline-none focus:border-indigo-400">
+              <option value="">בחר לקוח (אופציונלי)</option>
+              {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
+
+            <textarea placeholder="הערות..." value={newEvent.notes} onChange={(e) => setNewEvent((ev) => ({ ...ev, notes: e.target.value }))} rows={3} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm mb-3 outline-none focus:border-indigo-400 resize-none" />
+
+            <label className="flex items-center gap-2 mb-4 text-sm">
+              <input type="checkbox" checked={newEvent.notify} onChange={(e) => setNewEvent((ev) => ({ ...ev, notify: e.target.checked }))} />
+              🔔 שלח תזכורת בוואצאפ
+            </label>
+
+            <div className="flex gap-2">
+              <button onClick={saveEvent} disabled={!newEvent.title} className="flex-[2] py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-sm disabled:opacity-40 transition-colors">💾 שמור</button>
+              <button onClick={() => setShowModal(false)} className="flex-1 py-3 bg-gray-100 text-gray-600 rounded-xl text-sm">ביטול</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
