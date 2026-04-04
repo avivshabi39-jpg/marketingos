@@ -7,17 +7,24 @@ interface WizardData {
   businessName?: string;
   industry?: string;
   city?: string;
-  // Briefing fields
-  services?: string;
-  targetAudience?: string;
-  problemSolved?: string;
-  priceRange?: string;
-  nextAction?: string;
-  testimonial?: string;
-  // Legacy fields
-  description?: string;
+  // 15-question briefing fields
+  businessDescription?: string;
+  mainService?: string;
   uniqueValue?: string;
+  targetAudience?: string;
+  targetGender?: string;
   targetAge?: string;
+  problemSolved?: string;
+  solution?: string;
+  priceRange?: string;
+  urgency?: string;
+  nextAction?: string;
+  responseTime?: string;
+  testimonial?: string;
+  yearsInBusiness?: string;
+  // Legacy fields
+  services?: string;
+  description?: string;
   problem?: string;
   cta?: string;
 }
@@ -55,48 +62,62 @@ export async function POST(req: NextRequest) {
     businessName = client.name,
     industry = client.industry ?? "כללי",
     city = "",
-    // Briefing fields
-    services = "",
-    targetAudience = "",
-    problemSolved = "",
-    priceRange = "",
-    nextAction = "call",
-    testimonial = "",
-    // Legacy fields (backward compat)
-    description = "",
+    // 15-question fields
+    businessDescription = "",
+    mainService = "",
     uniqueValue = "",
+    targetAudience = "",
+    targetGender = "",
     targetAge = "",
+    problemSolved = "",
+    solution = "",
+    priceRange = "",
+    urgency = "",
+    nextAction = "",
+    responseTime = "",
+    testimonial = "",
+    yearsInBusiness = "",
+    // Legacy
+    services = "",
+    description = "",
     problem = "",
-    cta = "שלח פרטים",
+    cta = "",
   } = wizardData;
 
-  const ACTION_LABELS: Record<string, string> = {
-    call: "אתקשר אליו",
-    whatsapp: "אשלח לו וואצאפ",
-    meeting: "יקבע פגישה",
-    email: "יקבל מייל",
-  };
+  const ctaText = cta || (
+    nextAction.includes("פגישה") ? "קבע פגישה" :
+    nextAction.includes("וואצאפ") ? "דבר איתנו בוואצאפ" :
+    nextAction.includes("מייל") ? "קבל פרטים במייל" :
+    nextAction.includes("הצעת מחיר") ? "קבל הצעת מחיר" : "שלח פרטים"
+  );
 
-  const ctaText = cta !== "שלח פרטים" ? cta :
-    nextAction === "meeting" ? "קבע פגישה" :
-    nextAction === "whatsapp" ? "דבר איתנו בוואצאפ" :
-    nextAction === "email" ? "קבל פרטים במייל" : "שלח פרטים";
+  const prompt = `בנה דף נחיתה מקצועי ומשכנע ברמה הכי גבוהה בעברית.
 
-  const prompt = `אתה מומחה שיווק ישראלי מנוסה. בנה דף נחיתה מקצועי ומשכנע בעברית.
+=== פרטי העסק ===
+שם: ${businessName}
+ענף: ${industry}
+עיר: ${city}
+תיאור: ${businessDescription || services || description}
+שירות ראשי: ${mainService}
+ייחוד: ${uniqueValue}
+${yearsInBusiness ? `ניסיון: ${yearsInBusiness}` : ""}
 
-פרטי העסק:
-- שם: ${businessName}
-- ענף: ${industry}
-- עיר: ${city}
-- מה מוכרים/נותנים: ${services || description}
-- מה מיוחד: ${uniqueValue}
+=== קהל היעד ===
+סוג: ${targetAudience || "כללי"}
+מגדר: ${targetGender || "מעורב"}
+גיל: ${targetAge || "כל הגילאים"}
+אזור: ${city || "ישראל"}
 
-הלקוח המטרה:
-- קהל יעד: ${targetAudience || targetAge}
-- הבעיה שפותרים: ${problemSolved || problem}
-- טווח מחירים: ${priceRange}
-- מה קורה אחרי ליד: ${ACTION_LABELS[nextAction] ?? nextAction}
-${testimonial ? `- המלצת לקוח: "${testimonial}"` : ""}
+=== הבעיה והפתרון ===
+בעיה: ${problemSolved || problem}
+פתרון: ${solution || ""}
+
+=== תהליך ===
+מחיר: ${priceRange || "לפי הצעת מחיר"}
+דחיפות: ${urgency || ""}
+אחרי ליד: ${nextAction || "חזרה טלפונית"}
+זמן תגובה: ${responseTime || ""}
+${testimonial ? `\n=== המלצת לקוח ===\n"${testimonial}"` : ""}
 - קריאה לפעולה: ${ctaText}
 
 החזר JSON בלבד (ללא markdown):
@@ -116,11 +137,13 @@ ${testimonial ? `- המלצת לקוח: "${testimonial}"` : ""}
 }
 
 חוקים:
-- עברית בלבד, שפה שיווקית חמה ומקצועית
-- כותרת ראשית קצרה (עד 8 מילים), חזקה ומעוררת פעולה
-- 3 יתרונות ספציפיים ומשכנעים לעסק הזה
+- עברית שיווקית ברמה גבוהה, חמה ומקצועית
+- כותרת שפוגעת בדיוק בכאב של הקהל (${targetGender || "מעורב"}, ${targetAge || "כל הגילאים"})
+- 3 יתרונות שמדגישים את הייחוד: "${uniqueValue}"
+${urgency ? `- יצירת תחושת דחיפות: "${urgency}"` : ""}
+${responseTime ? `- הדגשת זמן תגובה: "${responseTime}"` : ""}
+${yearsInBusiness ? `- בניית אמון עם ניסיון: "${yearsInBusiness}"` : ""}
 - צבע מתאים לענף ${industry}
-- ביקורת ריאליסטית ומשכנעת
 - כל בלוק חייב לכלול id ייחודי`;
 
   let result;
