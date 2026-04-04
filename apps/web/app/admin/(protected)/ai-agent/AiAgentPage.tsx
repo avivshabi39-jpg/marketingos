@@ -90,6 +90,49 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  // Clarifying questions
+  const [pendingAction, setPendingAction] = useState<{
+    originalMsg: string;
+    title: string;
+    questions: string[];
+    answers: string[];
+    currentQ: number;
+  } | null>(null);
+  const [currentAnswer, setCurrentAnswer] = useState("");
+
+  const ACTION_QUESTIONS: Record<string, { title: string; questions: string[] }> = {
+    "פוסט": { title: "📱 פוסט לסושיאל", questions: ["מה מטרת הפוסט? (לידים / מיתוג / מבצע)", "מה הטון? (מקצועי / כיפי / דחוף)", "לאיזו פלטפורמה? (פייסבוק / אינסטגרם / לינקדאין)"] },
+    "שידור": { title: "📢 שידור וואצאפ", questions: ["לאיזה לקוח?", "לאיזה קהל? (כולם / חדשים / לא נסגרו)", "מה נושא השידור?"] },
+    "דוח": { title: "📊 דוח ביצועים", questions: ["לאיזה לקוח? (או כולם)", "על איזה תקופה? (שבוע / חודש / 30 יום)", "מה הכי חשוב? (לידים / המרות / הכל)"] },
+    "דף נחיתה": { title: "🌐 בניית דף", questions: ["לאיזה לקוח?", "מה הכי חשוב בדף? (לידים / מיתוג / מכירה)", "יש דגשים מיוחדים?"] },
+    "קמפיין": { title: "🎯 קמפיין שיווקי", questions: ["לאיזה לקוח?", "מה המטרה? (לידים / מכירות / מיתוג)", "מה התקציב? (ללא / עד ₪1000 / פתוח)"] },
+  };
+
+  function handleSidebarAction(msg: string) {
+    const key = Object.keys(ACTION_QUESTIONS).find((k) => msg.includes(k));
+    if (key) {
+      const config = ACTION_QUESTIONS[key];
+      setPendingAction({ originalMsg: msg, title: config.title, questions: config.questions, answers: [], currentQ: 0 });
+      setCurrentAnswer("");
+    } else {
+      sendMessage(msg);
+    }
+  }
+
+  function submitAnswer() {
+    if (!currentAnswer.trim() || !pendingAction) return;
+    const newAnswers = [...pendingAction.answers, currentAnswer];
+    if (pendingAction.currentQ < pendingAction.questions.length - 1) {
+      setPendingAction({ ...pendingAction, answers: newAnswers, currentQ: pendingAction.currentQ + 1 });
+      setCurrentAnswer("");
+    } else {
+      const finalMsg = `${pendingAction.originalMsg}\n\nפרטים:\n${pendingAction.questions.map((q, i) => `• ${q}: ${newAnswers[i]}`).join("\n")}`;
+      setPendingAction(null);
+      setCurrentAnswer("");
+      sendMessage(finalMsg);
+    }
+  }
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -179,7 +222,7 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
               {cat.items.map((item) => (
                 <button
                   key={item.label}
-                  onClick={() => sendMessage(item.msg)}
+                  onClick={() => handleSidebarAction(item.msg)}
                   className="w-full text-right px-2.5 py-1.5 mb-0.5 text-xs text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg border border-transparent hover:border-indigo-200 transition-all"
                 >
                   {item.label}
@@ -274,6 +317,52 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
               )}
             </div>
           ))}
+          {/* Clarifying questions */}
+          {pendingAction && (
+            <div className="bg-white border border-indigo-200 rounded-2xl p-5 shadow-sm" dir="rtl">
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-sm">🤖</div>
+                <div>
+                  <p className="font-bold text-sm text-gray-900">{pendingAction.title}</p>
+                  <p className="text-[11px] text-gray-400">שאלה {pendingAction.currentQ + 1} מתוך {pendingAction.questions.length}</p>
+                </div>
+              </div>
+              {/* Previous answers */}
+              {pendingAction.answers.map((a, i) => (
+                <div key={i} className="text-xs text-gray-500 mb-1 flex items-center gap-1.5">
+                  <span className="text-green-500">✅</span>
+                  {pendingAction.questions[i]}: <strong className="text-gray-700">{a}</strong>
+                </div>
+              ))}
+              {/* Current question */}
+              <div className="bg-gray-50 rounded-xl p-3 text-sm font-medium text-gray-800 mb-3 mt-2 leading-relaxed">
+                {pendingAction.questions[pendingAction.currentQ]}
+              </div>
+              <div className="flex gap-2">
+                <input
+                  autoFocus
+                  value={currentAnswer}
+                  onChange={(e) => setCurrentAnswer(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") submitAnswer(); }}
+                  placeholder="כתוב את תשובתך..."
+                  className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                />
+                <button
+                  onClick={submitAnswer}
+                  disabled={!currentAnswer.trim()}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold disabled:opacity-40 transition-colors hover:bg-indigo-500"
+                >
+                  {pendingAction.currentQ < pendingAction.questions.length - 1 ? "הבא →" : "✨ צור!"}
+                </button>
+                <button
+                  onClick={() => { setPendingAction(null); setCurrentAnswer(""); }}
+                  className="px-3 py-2 border border-gray-200 rounded-lg text-xs text-gray-500 hover:bg-gray-50"
+                >
+                  ביטול
+                </button>
+              </div>
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
 

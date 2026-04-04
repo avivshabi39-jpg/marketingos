@@ -540,9 +540,8 @@ export default function SocialPostsPage() {
                         </button>
                       </div>
                     </div>
-                    <p className="text-xs text-gray-600 line-clamp-3 whitespace-pre-wrap">
-                      {post.content.slice(0, 100)}
-                      {post.content.length > 100 ? "..." : ""}
+                    <p className="text-xs text-gray-600 whitespace-pre-wrap break-words">
+                      {post.content}
                     </p>
                     <p className="text-[10px] text-gray-400 mt-1">
                       {new Date(post.createdAt).toLocaleDateString("he-IL")}
