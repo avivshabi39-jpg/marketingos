@@ -12,6 +12,7 @@ import { ClientAnalyticsTab } from "@/components/admin/ClientAnalyticsTab";
 import { AbTestResults } from "@/components/admin/AbTestResults";
 import { ClientAiAgentWithPreview } from "@/components/admin/ClientAiAgent";
 import { QRCodePanel } from "@/components/admin/QRCodePanel";
+import { WhatsAppSetup } from "@/components/admin/WhatsAppSetup";
 
 const STATUS_COLORS: Record<string, string> = {
   NEW:       "bg-blue-100 text-blue-700",
@@ -45,7 +46,7 @@ const TABS = [
   { key: "reports",     label: "דוחות"      },
   { key: "landing",     label: "דף נחיתה"  },
   { key: "ai-agent",    label: "סוכן AI 🤖" },
-  { key: "chatbot",     label: "צ׳אטבוט 💬" },
+  { key: "chatbot",     label: "וואצאפ 💬" },
   { key: "settings",    label: "הגדרות"     },
 ];
 
@@ -295,14 +296,16 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
           />
         ),
         "chatbot": (
-          <div className="flex flex-col items-center justify-center py-12 gap-4">
-            <p className="text-gray-500 text-sm">הגדרות הצ׳אטבוט מנוהלות בדף ייעודי</p>
-            <Link
-              href={`/admin/clients/${client.id}/chatbot`}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
-            >
-              עבור להגדרות צ׳אטבוט 💬
-            </Link>
+          <div className="space-y-6">
+            <WhatsAppSetup clientId={client.id} />
+            <div className="border-t border-gray-200 pt-4">
+              <Link
+                href={`/admin/clients/${client.id}/chatbot`}
+                className="inline-flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+              >
+                הגדרות צ׳אטבוט מתקדמות →
+              </Link>
+            </div>
           </div>
         ),
         "settings": (
