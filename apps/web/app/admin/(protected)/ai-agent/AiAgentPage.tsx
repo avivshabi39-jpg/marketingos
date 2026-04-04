@@ -30,9 +30,9 @@ const SUGGESTED_ACTIONS = [
   {
     category: "🌐 דפי נחיתה",
     items: [
-      { label: "בנה דף ללקוח", msg: "בנה דף נחיתה מקצועי ללקוח" },
       { label: "שפר כותרת", msg: "שפר את הכותרת של דף הנחיתה" },
-      { label: "A/B testing", msg: "צור גרסת A/B לדף של הלקוח" },
+      { label: "שנה צבע ראשי", msg: "שנה את הצבע הראשי של הדף" },
+      { label: "ביצועי הדף", msg: "כמה צפיות ולידים מגיעים מהדף?" },
       { label: "פרסם דף", msg: "פרסם את דף הנחיתה של הלקוח" },
     ],
   },
@@ -75,7 +75,7 @@ const SUGGESTED_ACTIONS = [
 ];
 
 const QUICK_STARTS = [
-  "בנה דף נחיתה ללקוח שלי",
+  "מה הביצועים של הלקוחות שלי?",
   "מה הלידים החמים היום?",
   "שלח שידור וואצאפ",
   "צור דוח שבועי",
@@ -248,16 +248,25 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
               </p>
             </div>
           </div>
-          <select
-            value={selectedClientId}
-            onChange={(e) => setSelectedClientId(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:ring-2 focus:ring-indigo-200 outline-none"
-          >
-            <option value="">כל הלקוחות</option>
-            {clients.map((c) => (
+          <div className="flex items-center gap-2.5">
+            <a
+              href={selectedClientId ? `/admin/page-builder/${selectedClientId}` : "#"}
+              onClick={(e) => { if (!selectedClientId) { e.preventDefault(); alert("בחר לקוח תחילה"); } }}
+              className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-l from-indigo-600 to-purple-600 text-white rounded-lg text-xs font-bold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all whitespace-nowrap"
+            >
+              🧙 בנה דף נחיתה
+            </a>
+            <select
+              value={selectedClientId}
+              onChange={(e) => setSelectedClientId(e.target.value)}
+              className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:ring-2 focus:ring-indigo-200 outline-none min-w-[150px]"
+            >
+              <option value="">בחר לקוח...</option>
+              {clients.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>
+          </div>
         </div>
 
         {/* Messages */}

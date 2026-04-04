@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
 - בלוקים: ${currentBlocks}
 
 פעולות זמינות (השתמש בהן כשהמשתמש מבקש!):
-- BUILD_PAGE: בנה דף נחיתה חדש (צור pageBlocks)
+- BUILD_PAGE: אל תבנה דף ישירות! הגד למשתמש: "כדי לבנות דף נחיתה מקצועי, לחץ על כפתור 'בנה דף נחיתה' בראש הדף. האשף ישאל 15 שאלות ויבנה דף מושלם."
 - UPDATE_HERO: עדכן כותרת ראשית
 - UPDATE_COLOR: שנה צבע (updates: {color: "#hex"})
 - UPDATE_TITLE: שנה כותרת (updates: {title: "..."})
