@@ -31,29 +31,46 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+type NavGroup = {
+  title: string;
+  items: (typeof navItems)[number][];
+  collapsible?: boolean;
+};
+
 const navItems = [
   { label: "🏠 ראשי",             href: "/admin/dashboard",       icon: LayoutDashboard, tooltip: "סקירה כללית — נתונים, לקוחות ולידים" },
-  { label: "📬 הודעות נכנסות",    href: "/admin/inbox",           icon: MessageSquare,   tooltip: "הודעות וואצאפ ופניות נכנסות" },
   { label: "👥 הלקוחות שלי",      href: "/admin/clients",         icon: Building2,       tooltip: "ניהול כל הלקוחות ועסקים שלך" },
-  { label: "🏢 ניהול משרד",       href: "/admin/offices",         icon: Landmark,        tooltip: "ניהול משרדי נדל\"ן וסוכנים", reOnly: true },
-  { label: "🎯 לידים חדשים",      href: "/admin/leads",           icon: Users,           tooltip: "כל הפניות שהגיעו מדפי הנחיתה" },
-  { label: "🏆 לידים חמים",       href: "/admin/lead-scoring",    icon: Flame,           tooltip: "לידים עם ציון גבוה — הכי סביר לסגור" },
-  { label: "⚡ אוטומציות",        href: "/admin/automations",     icon: GitBranch,       tooltip: "תהליכים אוטומטיים — מיילים, הודעות ותזכורות" },
-  { label: "📋 טפסי לקוחות",     href: "/admin/intake-forms",    icon: ClipboardList,   tooltip: "טפסי קבלת מידע מלקוחות חדשים" },
-  { label: "🎨 מעצב AI",           href: "/admin/ai-designer",     icon: Megaphone,       tooltip: "צור תמונות שיווקיות מקצועיות עם AI" },
-  { label: "Facebook Ads",        href: "/admin/facebook-ads",    icon: Share2,          tooltip: "ניהול מודעות ממומנות בפייסבוק" },
-  { label: "📧 מיילים",            href: "/admin/email",           icon: Mail,            tooltip: "תבניות מייל ורצפי שיווק אוטומטיים" },
-  { label: "📱 פוסטים לסושיאל",  href: "/admin/social-posts",    icon: Share2,          tooltip: "יצירת תוכן לפייסבוק, אינסטגרם ועוד" },
-  { label: "📢 שידור וואצאפ",    href: "/admin/broadcast",       icon: Radio,           tooltip: "שלח הודעת וואצאפ לכל הלידים בבת אחת" },
-  { label: "📅 ניהול תורים",     href: "/admin/appointments",    icon: CalendarDays,    tooltip: "ניהול פגישות, תורים ולוח זמנים" },
-  { label: "📊 דוחות ביצועים",   href: "/admin/reports",         icon: BarChart3,       tooltip: "דוחות שבועיים וחודשיים לשליחה ללקוח" },
-  { label: "🏡 נכסי נדל\"ן",    href: "/admin/properties",      icon: Home,            tooltip: "ניהול נכסים, מחירים ותמונות", reOnly: true },
-  { label: "🚀 התחל מתבנית",     href: "/admin/snapshots",       icon: Layout,          tooltip: "הפעל לקוח חדש עם חבילה מוכנה לפי ענף" },
-  { label: "✨ בנה דף נחיתה",    href: "/admin/ai-agent",        icon: Wand2,           tooltip: "בנה דף נחיתה חדש בעזרת AI" },
-  { label: "💳 מנוי ותשלום",     href: "/admin/billing",         icon: CreditCard,      tooltip: "ניהול מנוי, חיובים וחשבוניות" },
-  { label: "🔧 מצב המערכת",      href: "/admin/system",          icon: ShieldCheck,     tooltip: "בדיקת תקינות כל חלקי המערכת" },
-  { label: "דוח מערכת",          href: "/admin/system-report",   icon: BarChart3,       tooltip: "דוח פנימי של פעילות המערכת" },
-  { label: "⚙️ הגדרות",         href: "/admin/settings",        icon: Settings,        tooltip: "הגדרות חשבון, צבעים ופרטי עסק" },
+  { label: "🎯 לידים",            href: "/admin/leads",           icon: Users,           tooltip: "כל הפניות שהגיעו מדפי הנחיתה" },
+  { label: "📬 הודעות",           href: "/admin/inbox",           icon: MessageSquare,   tooltip: "הודעות וואצאפ ופניות נכנסות" },
+  { label: "📅 תורים",            href: "/admin/appointments",    icon: CalendarDays,    tooltip: "ניהול פגישות, תורים ולוח זמנים" },
+];
+
+const marketingItems = [
+  { label: "🚀 תבניות",           href: "/admin/snapshots",       icon: Layout,          tooltip: "הפעל לקוח חדש עם חבילה מוכנה לפי ענף" },
+  { label: "📱 סושיאל",           href: "/admin/social-posts",    icon: Share2,          tooltip: "יצירת תוכן לפייסבוק, אינסטגרם ועוד" },
+  { label: "🎨 מעצב AI",          href: "/admin/ai-designer",     icon: Megaphone,       tooltip: "צור תמונות שיווקיות מקצועיות עם AI" },
+  { label: "📢 שידור",            href: "/admin/broadcast",       icon: Radio,           tooltip: "שלח הודעת וואצאפ לכל הלידים בבת אחת" },
+  { label: "📧 מיילים",           href: "/admin/email",           icon: Mail,            tooltip: "תבניות מייל ורצפי שיווק אוטומטיים" },
+];
+
+const analyticsItems = [
+  { label: "📊 דוחות",            href: "/admin/reports",         icon: BarChart3,       tooltip: "דוחות שבועיים וחודשיים לשליחה ללקוח" },
+  { label: "🏆 ציון לידים",       href: "/admin/lead-scoring",    icon: Flame,           tooltip: "לידים עם ציון גבוה — הכי סביר לסגור" },
+  { label: "✨ סוכן AI",          href: "/admin/ai-agent",        icon: Wand2,           tooltip: "בנה דף נחיתה חדש בעזרת AI" },
+];
+
+const settingsItems = [
+  { label: "⚙️ הגדרות",          href: "/admin/settings",        icon: Settings,        tooltip: "הגדרות חשבון, צבעים ופרטי עסק" },
+  { label: "🔧 מערכת",            href: "/admin/system",          icon: ShieldCheck,     tooltip: "בדיקת תקינות כל חלקי המערכת" },
+  { label: "💳 חיוב",             href: "/admin/billing",         icon: CreditCard,      tooltip: "ניהול מנוי, חיובים וחשבוניות" },
+  { label: "🏢 משרד",             href: "/admin/offices",         icon: Landmark,        tooltip: "ניהול משרדי נדל\"ן וסוכנים", reOnly: true },
+];
+
+const navGroups: NavGroup[] = [
+  { title: "הלקוחות שלי", items: navItems },
+  { title: "כלי שיווק", items: marketingItems },
+  { title: "דוחות ואנליטיקס", items: analyticsItems },
+  { title: "הגדרות", items: settingsItems, collapsible: true },
 ];
 
 function NavItem({
@@ -97,6 +114,61 @@ function NavItem({
         </span>
       ) : null}
     </Link>
+  );
+}
+
+function NavGroupSection({
+  group,
+  pathname,
+  hasRealEstate,
+  newLeadsCount,
+  inboxUnread,
+  onItemClick,
+}: {
+  group: NavGroup;
+  pathname: string;
+  hasRealEstate: boolean;
+  newLeadsCount: number;
+  inboxUnread: number;
+  onItemClick: () => void;
+}) {
+  const [collapsed, setCollapsed] = useState(group.collapsible ?? false);
+  const filteredItems = group.items.filter(
+    (item) => !("reOnly" in item && item.reOnly && !hasRealEstate)
+  );
+  if (filteredItems.length === 0) return null;
+
+  return (
+    <div className="mb-3">
+      <button
+        onClick={group.collapsible ? () => setCollapsed(!collapsed) : undefined}
+        className={cn(
+          "px-3 mb-1 text-xs font-medium text-gray-400 uppercase tracking-wider flex items-center gap-1 w-full text-right",
+          group.collapsible && "hover:text-gray-300 cursor-pointer"
+        )}
+      >
+        {group.title}
+        {group.collapsible && (
+          <span className="text-[10px]">{collapsed ? "▸" : "▾"}</span>
+        )}
+      </button>
+      {!collapsed &&
+        filteredItems.map((item) => (
+          <NavItem
+            key={item.href}
+            item={item}
+            active={pathname.startsWith(item.href)}
+            onClick={onItemClick}
+            badge={
+              item.href === "/admin/leads" && newLeadsCount > 0
+                ? newLeadsCount
+                : item.href === "/admin/inbox" && inboxUnread > 0
+                ? inboxUnread
+                : undefined
+            }
+          />
+        ))}
+    </div>
   );
 }
 
@@ -160,21 +232,16 @@ export function Sidebar({ hasRealEstate = false }: { hasRealEstate?: boolean }) 
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto" dir="rtl">
-        <p className="px-3 mb-2 text-xs font-medium text-gray-400 uppercase tracking-wider">
-          תפריט ראשי
-        </p>
-        {navItems.filter((item) => !("reOnly" in item && item.reOnly && !hasRealEstate)).map((item) => (
-          <NavItem
-            key={item.href}
-            item={item}
-            active={pathname.startsWith(item.href)}
-            onClick={() => setMobileOpen(false)}
-            badge={
-              item.href === "/admin/leads" && newLeadsCount > 0 ? newLeadsCount :
-              item.href === "/admin/inbox" && inboxUnread > 0 ? inboxUnread :
-              undefined
-            }
+      <nav className="flex-1 px-3 py-4 overflow-y-auto" dir="rtl">
+        {navGroups.map((group) => (
+          <NavGroupSection
+            key={group.title}
+            group={group}
+            pathname={pathname}
+            hasRealEstate={hasRealEstate}
+            newLeadsCount={newLeadsCount}
+            inboxUnread={inboxUnread}
+            onItemClick={() => setMobileOpen(false)}
           />
         ))}
       </nav>

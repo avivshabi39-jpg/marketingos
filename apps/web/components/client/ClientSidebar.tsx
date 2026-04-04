@@ -30,7 +30,7 @@ function buildNav(slug: string, isRealEstate: boolean): NavItem[] {
     { label: "🏠 הבית שלי",    href: `/client/${slug}`,            icon: LayoutDashboard },
     { label: "🎯 הלידים שלי",  href: `/client/${slug}/leads`,      icon: Users },
     { label: "📊 הדוחות שלי",  href: `/client/${slug}/reports`,    icon: FileBarChart },
-    { label: "🌐 הדף שלי",     href: `/client/${slug}/landing`,    icon: Globe },
+    { label: "🌐 הדף שלי",     href: `/client/${slug}/settings`,   icon: Globe },
     { label: "🤖 הסוכן שלי",   href: `/client/${slug}/ai-agent`,   icon: Bot },
     { label: "⚙️ הגדרות",     href: `/client/${slug}/settings`,   icon: Settings },
   ];
