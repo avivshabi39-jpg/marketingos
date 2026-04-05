@@ -42,11 +42,20 @@ export default async function TenantSlugPage({
   });
   if (!client || !client.isActive) return notFound();
 
-  // ── Try template-based LandingPage ──────────────────────────────────────────
-  const lp = await prisma.landingPage.findFirst({
-    where: { clientId: client.id, slug: params.slug, isPublished: true },
-    include: { template: true },
-  });
+  // ── Fetch landing page + form in parallel ────────────────────────────────────
+  const [lp, form] = await Promise.all([
+    prisma.landingPage.findFirst({
+      where: { clientId: client.id, slug: params.slug, isPublished: true },
+      include: { template: true },
+    }),
+    prisma.leadForm.findUnique({
+      where: { clientId_slug: { clientId: client.id, slug: params.slug } },
+      select: {
+        id: true, name: true, formType: true,
+        thankYouMessage: true, redirectUrl: true, isActive: true,
+      },
+    }),
+  ]);
 
   if (lp) {
     const templateVars = (lp.template.variables as { key: string; defaultValue: string }[]).reduce<
@@ -73,18 +82,7 @@ export default async function TenantSlugPage({
     );
   }
 
-  // ── Try dynamic LeadForm ─────────────────────────────────────────────────────
-  const form = await prisma.leadForm.findUnique({
-    where: { clientId_slug: { clientId: client.id, slug: params.slug } },
-    select: {
-      id: true,
-      name: true,
-      formType: true,
-      thankYouMessage: true,
-      redirectUrl: true,
-      isActive: true,
-    },
-  });
+  // ── Try dynamic LeadForm (already fetched in parallel above) ──────────────
   if (!form || !form.isActive) return notFound();
 
   const utmParams = {

@@ -10,20 +10,17 @@ export default async function ClientAnalyticsPage({ params }: { params: { slug: 
 
   const client = await prisma.client.findUnique({
     where: { slug: params.slug },
-    select: { id: true, isActive: true },
-  });
-  if (!client || !client.isActive) notFound();
-
-  // SEO score
-  const seoClient = await prisma.client.findUnique({
-    where: { id: client.id },
     select: {
+      id: true, isActive: true,
       name: true, slug: true, pagePublished: true, pageBlocks: true,
       landingPageTitle: true, seoDescription: true, seoKeywords: true,
       logoUrl: true, phone: true, email: true,
       customDomain: true, customDomainVerified: true,
     },
   });
+  if (!client || !client.isActive) notFound();
+
+  const seoClient = client;
 
   function computeSeo() {
     if (!seoClient) return null;
