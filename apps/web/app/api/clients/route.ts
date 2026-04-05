@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
     : { ownerId: session.userId };
 
   const cacheKey = `clients:${session.userId}:p${page}`;
-  const cached = cacheGet<{ clients: unknown[]; total: number; page: number; perPage: number }>(cacheKey);
+  const cached = await cacheGet<{ clients: unknown[]; total: number; page: number; perPage: number }>(cacheKey);
   if (cached) return NextResponse.json(cached);
 
   const [clients, total] = await Promise.all([

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getClientSession } from "@/lib/clientAuth";
 import { getSession } from "@/lib/auth";
 import { sanitizeText } from "@/lib/sanitize";
+import { cacheDelete, CacheKeys } from "@/lib/cache";
 
 const schema = z.object({
   name:               z.string().min(1).max(200).optional(),
@@ -78,6 +79,10 @@ export async function PUT(
     where: { id: params.id },
     data,
   });
+
+  // Invalidate caches
+  cacheDelete(CacheKeys.seoScore(params.id));
+  cacheDelete(CacheKeys.landingPage(updated.slug ?? params.id));
 
   return NextResponse.json({ ok: true, client: updated });
 }

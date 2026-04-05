@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { getClientSession } from "@/lib/clientAuth";
 import { prisma } from "@/lib/prisma";
+import { withCache, CacheKeys, CACHE_TTL } from "@/lib/cache";
 
 interface SeoCheck {
   name: string;
@@ -24,8 +25,18 @@ export async function GET(
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
+  const result = await withCache(
+    CacheKeys.seoScore(params.id),
+    CACHE_TTL.SEO_SCORE,
+    () => computeSeoScore(params.id)
+  );
+
+  return NextResponse.json(result);
+}
+
+async function computeSeoScore(clientId: string) {
   const client = await prisma.client.findUnique({
-    where: { id: params.id },
+    where: { id: clientId },
     select: {
       name: true,
       slug: true,
@@ -44,7 +55,7 @@ export async function GET(
   });
 
   if (!client) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return { score: 0, grade: "F", checks: [], topTips: [], totalLeads: 0 };
   }
 
   const blocks = Array.isArray(client.pageBlocks)
@@ -153,11 +164,11 @@ export async function GET(
     .slice(0, 3)
     .map((c) => c.tip);
 
-  return NextResponse.json({
+  return {
     score: percentage,
     grade,
     checks,
     topTips,
     totalLeads: client._count.leads,
-  });
+  };
 }
