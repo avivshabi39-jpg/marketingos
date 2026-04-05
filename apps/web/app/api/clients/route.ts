@@ -8,6 +8,7 @@ import { audit } from "@/lib/audit";
 import { cacheGet, cacheSet, cacheDelete } from "@/lib/cache";
 import { sanitizeText } from "@/lib/sanitize";
 import { autoSetupNewClient } from "@/lib/clientAutoSetup";
+import { sendWelcomeEmail } from "@/lib/email";
 
 const PLAN_LIMITS: Record<string, number> = {
   BASIC: 40,
@@ -154,6 +155,16 @@ export async function POST(req: NextRequest) {
     industry: client.industry,
     ownerId: session.userId,
   });
+
+  // Send welcome email to client
+  if (client.email && !client.email.endsWith("@placeholder.local")) {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "";
+    sendWelcomeEmail(client.email, {
+      clientName: client.name,
+      portalUrl: `${appUrl}/client/${client.slug}`,
+      portalPassword: rawPortalPassword,
+    }).catch(() => {});
+  }
 
   return NextResponse.json({ client, setupActions }, { status: 201 });
 }

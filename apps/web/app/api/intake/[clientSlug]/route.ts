@@ -5,6 +5,7 @@ import { triggerN8nWebhook } from "@/lib/webhooks";
 import { rateLimit, getIp } from "@/lib/rateLimit";
 import { sendPushNotification } from "@/lib/push";
 import { sendAutoReply } from "@/lib/autoReply";
+import { sendNewLeadEmail } from "@/lib/email";
 import { sanitizeText } from "@/lib/sanitize";
 
 const schema = z.object({
@@ -182,6 +183,21 @@ export async function POST(
       body: `${firstName} ${lastName} — ${client.name}`,
       url: "/admin/leads",
     }).catch(() => {});
+
+    // Email notification to admin
+    const adminUser = await prisma.user.findUnique({
+      where: { id: client.ownerId },
+      select: { email: true },
+    });
+    if (adminUser?.email) {
+      sendNewLeadEmail(adminUser.email, {
+        clientName: client.name,
+        leadName: `${firstName} ${lastName}`,
+        leadPhone: phone || "",
+        leadEmail: email || undefined,
+        source: detectedSource,
+      }).catch(() => {});
+    }
   }
 
   return NextResponse.json({ intake, lead, clientName: client.name }, { status: 201 });
