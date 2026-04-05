@@ -6,6 +6,9 @@ import { getSession } from "@/lib/auth";
 import { sanitizeText } from "@/lib/sanitize";
 
 const schema = z.object({
+  name:               z.string().min(1).max(200).optional(),
+  phone:              z.string().max(20).optional(),
+  email:              z.string().email().optional(),
   primaryColor:       z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
   landingPageTitle:   z.string().max(200).optional(),
   landingPageCta:     z.string().max(100).optional(),
@@ -15,6 +18,10 @@ const schema = z.object({
   googleReviewLink:   z.string().max(500).optional(),
   facebookReviewLink: z.string().max(500).optional(),
   pagePublished:      z.boolean().optional(),
+  seoDescription:     z.string().max(300).optional(),
+  seoKeywords:        z.string().max(300).optional(),
+  greenApiInstanceId: z.string().max(100).optional(),
+  greenApiToken:      z.string().max(200).optional(),
 });
 
 export async function PUT(
@@ -45,15 +52,23 @@ export async function PUT(
   }
 
   const data: Record<string, unknown> = {};
-  if (parsed.data.primaryColor)                      data.primaryColor      = parsed.data.primaryColor;
-  if (parsed.data.landingPageTitle !== undefined)     data.landingPageTitle  = sanitizeText(parsed.data.landingPageTitle, 200);
-  if (parsed.data.landingPageCta   !== undefined)     data.landingPageCta    = sanitizeText(parsed.data.landingPageCta, 100);
-  if (parsed.data.whatsappNumber   !== undefined)     data.whatsappNumber    = parsed.data.whatsappNumber;
-  if (parsed.data.autoReplyActive  !== undefined)     data.autoReplyActive   = parsed.data.autoReplyActive;
-  if (parsed.data.whatsappTemplate !== undefined)     data.whatsappTemplate  = sanitizeText(parsed.data.whatsappTemplate, 500);
-  if (parsed.data.googleReviewLink !== undefined)     data.googleReviewLink  = parsed.data.googleReviewLink;
-  if (parsed.data.facebookReviewLink !== undefined)   data.facebookReviewLink = parsed.data.facebookReviewLink;
-  if (parsed.data.pagePublished    !== undefined)     data.pagePublished     = parsed.data.pagePublished;
+  const d = parsed.data;
+  if (d.name !== undefined)               data.name               = sanitizeText(d.name, 200);
+  if (d.phone !== undefined)              data.phone              = d.phone;
+  if (d.email !== undefined)              data.email              = d.email;
+  if (d.primaryColor)                     data.primaryColor       = d.primaryColor;
+  if (d.landingPageTitle !== undefined)    data.landingPageTitle   = sanitizeText(d.landingPageTitle, 200);
+  if (d.landingPageCta !== undefined)      data.landingPageCta     = sanitizeText(d.landingPageCta, 100);
+  if (d.whatsappNumber !== undefined)      data.whatsappNumber     = d.whatsappNumber;
+  if (d.autoReplyActive !== undefined)     data.autoReplyActive    = d.autoReplyActive;
+  if (d.whatsappTemplate !== undefined)    data.whatsappTemplate   = sanitizeText(d.whatsappTemplate, 500);
+  if (d.googleReviewLink !== undefined)    data.googleReviewLink   = d.googleReviewLink;
+  if (d.facebookReviewLink !== undefined)  data.facebookReviewLink = d.facebookReviewLink;
+  if (d.pagePublished !== undefined)       data.pagePublished      = d.pagePublished;
+  if (d.seoDescription !== undefined)      data.seoDescription     = sanitizeText(d.seoDescription, 300);
+  if (d.seoKeywords !== undefined)         data.seoKeywords        = sanitizeText(d.seoKeywords, 300);
+  if (d.greenApiInstanceId !== undefined)  data.greenApiInstanceId = d.greenApiInstanceId;
+  if (d.greenApiToken !== undefined)       data.greenApiToken      = d.greenApiToken;
 
   if (Object.keys(data).length === 0) {
     return NextResponse.json({ error: "No valid fields" }, { status: 400 });
