@@ -34,6 +34,7 @@ function buildNav(slug: string, isRealEstate: boolean): NavItem[] {
     { label: "📢 שידור",       href: `/client/${slug}/broadcast`,    icon: FileBarChart },
     { label: "📱 פוסטים",      href: `/client/${slug}/social`,       icon: FileBarChart },
     { label: "✏️ ערוך דף",     href: `/client/${slug}/edit-page`,    icon: Globe },
+    { label: "⚡ אוטומציות",   href: `/client/${slug}/automations`,  icon: Settings },
     { label: "🤖 הסוכן שלי",   href: `/client/${slug}/ai-agent`,     icon: Bot },
     { label: "⚙️ הגדרות",     href: `/client/${slug}/settings`,     icon: Settings },
   ];
