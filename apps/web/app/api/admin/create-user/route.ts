@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { audit, auditInfo } from "@/lib/audit";
 
 // Protected by ADMIN_SECRET header — never expose to frontend
 export async function POST(req: NextRequest) {
@@ -46,6 +47,8 @@ export async function POST(req: NextRequest) {
     },
     select: { id: true, email: true, name: true, role: true },
   });
+
+  audit("user.created", { entityId: user.id, meta: { email }, ...auditInfo(req) });
 
   return NextResponse.json({ ok: true, user }, { status: 201 });
 }

@@ -644,9 +644,12 @@ model MessageTemplate {
 
 model AuditLog {
   id        String   @id @default(cuid())
-  action    String   // e.g. "login", "client.create", "lead.delete"
+  action    String   // e.g. "login.success", "client.create", "lead.delete"
   entityId  String?  // ID of the affected resource
-  meta      Json?    // extra context (IP, changes, etc.)
+  meta      Json?    // extra context (changes, reason, etc.)
+  ipAddress String?
+  userAgent String?
+  success   Boolean  @default(true)
   createdAt DateTime @default(now())
 
   userId String?

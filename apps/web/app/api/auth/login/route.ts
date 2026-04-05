@@ -4,7 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { signToken, signRefreshToken, createTempToken } from "@/lib/auth";
 import { rateLimit, getIp } from "@/lib/rateLimit";
-import { audit } from "@/lib/audit";
+import { audit, auditInfo } from "@/lib/audit";
 import { recordFailedAttempt, isLocked, clearAttempts } from "@/lib/loginAttempts";
 
 const schema = z.object({
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
   if (!user || !user.isActive || !valid) {
     recordFailedAttempt(email);
     recordFailedAttempt(ip);
-    audit("login.failed", { meta: { email, ip } });
+    audit("login.failed", { meta: { email, ip }, success: false, ...auditInfo(req) });
     return NextResponse.json({ error: "אימייל או סיסמה שגויים" }, { status: 401 });
   }
 
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
     data: { lastLoginAt: new Date() },
   });
 
-  audit("login.success", { userId: user.id, meta: { ip } });
+  audit("login.success", { userId: user.id, meta: { ip }, ...auditInfo(req) });
 
   // 2FA check — if enabled, return temp token instead of full session
   if (user.twoFactorEnabled) {

@@ -3,7 +3,7 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { getSession, isSuperAdmin } from "@/lib/auth";
-import { audit } from "@/lib/audit";
+import { audit, auditInfo } from "@/lib/audit";
 import { encrypt, decrypt, maskSensitive } from "@/lib/encrypt";
 import { cacheDelete } from "@/lib/cache";
 
@@ -152,7 +152,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
   const client = await prisma.client.update({ where: { id: params.id }, data });
   cacheDelete(`clients:`); // invalidate list caches
-  audit("client.update", { userId: session.userId, entityId: params.id });
+  audit("client.update", { userId: session.userId, entityId: params.id, ...auditInfo(req) });
   return NextResponse.json({ client: decryptClientForResponse(client as unknown as Record<string, unknown>) });
 }
 
@@ -162,13 +162,13 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 // DELETE /api/clients/:id
-export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   if (!isSuperAdmin(session)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   await prisma.client.delete({ where: { id: params.id } });
   cacheDelete(`clients:`);
-  audit("client.delete", { userId: session.userId, entityId: params.id });
+  audit("client.delete", { userId: session.userId, entityId: params.id, ...auditInfo(req) });
   return new NextResponse(null, { status: 204 });
 }

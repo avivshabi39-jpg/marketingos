@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { getSession, isSuperAdmin } from "@/lib/auth";
 import { slugify } from "@/lib/utils";
-import { audit } from "@/lib/audit";
+import { audit, auditInfo } from "@/lib/audit";
 import { cacheGet, cacheSet, cacheDelete } from "@/lib/cache";
 import { sanitizeText } from "@/lib/sanitize";
 import { autoSetupNewClient } from "@/lib/clientAutoSetup";
@@ -145,7 +145,7 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  audit("client.create", { userId: session.userId, entityId: client.id, meta: { name, slug: finalSlug } });
+  audit("client.create", { userId: session.userId, entityId: client.id, meta: { name, slug: finalSlug }, ...auditInfo(req) });
   cacheDelete(`clients:${session.userId}`); // invalidate list cache
 
   // Auto-setup: apply industry snapshot, WhatsApp template, inbox notification
