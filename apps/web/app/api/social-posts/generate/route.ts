@@ -4,6 +4,7 @@ import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { callClaude, checkAiRateLimit, trackAiUsage } from "@/lib/ai";
 import { rateLimit, getIp } from "@/lib/rateLimit";
+import { sanitizeText } from "@/lib/sanitize";
 
 const generateSchema = z.object({
   clientId: z.string().min(1, "clientId חובה"),
@@ -59,7 +60,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: first.message }, { status: 400 });
   }
 
-  const { clientId, topic, imageUrl, style, platform, language } = parsed.data;
+  const { clientId, imageUrl, style, platform, language } = parsed.data;
+  const topic = sanitizeText(parsed.data.topic || "", 200);
 
   const client = await prisma.client.findUnique({
     where: { id: clientId },

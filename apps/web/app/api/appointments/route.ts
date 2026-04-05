@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession, isSuperAdmin } from "@/lib/auth";
 import { getClientSession } from "@/lib/clientAuth";
+import { sanitizeText, sanitizePhone, sanitizeEmail } from "@/lib/sanitize";
 
 const createSchema = z.object({
   clientId:    z.string().min(1),
@@ -80,13 +81,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { clientId, scheduledAt, ...rest } = parsed.data;
+  const { clientId, scheduledAt, name: rawName, phone: rawPhone, email: rawEmail, notes: rawNotes, ...rest } = parsed.data;
+  const name = sanitizeText(rawName, 200);
+  const phone = rawPhone ? sanitizePhone(rawPhone) : undefined;
+  const email = rawEmail ? sanitizeEmail(rawEmail) : undefined;
+  const notes = rawNotes ? sanitizeText(rawNotes, 2000) : undefined;
 
   const appointment = await prisma.appointment.create({
     data: {
       clientId,
       scheduledAt: new Date(scheduledAt),
       ...rest,
+      name,
+      phone,
+      email,
+      notes,
     },
   });
 

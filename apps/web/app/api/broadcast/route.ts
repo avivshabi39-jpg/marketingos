@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { rateLimit, getIp } from "@/lib/rateLimit";
+import { sanitizeText } from "@/lib/sanitize";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +46,8 @@ export async function POST(req: NextRequest) {
   const parsed = createSchema.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
 
-  const { clientId, message, filter } = parsed.data;
+  const { clientId, filter } = parsed.data;
+  const message = sanitizeText(parsed.data.message, 4096);
 
   // Ownership check
   const client = await prisma.client.findFirst({

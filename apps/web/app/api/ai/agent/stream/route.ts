@@ -5,6 +5,7 @@ import { getClientSession } from "@/lib/clientAuth";
 import { prisma } from "@/lib/prisma";
 import { checkAiRateLimit } from "@/lib/ai";
 import { rateLimit, getIp } from "@/lib/rateLimit";
+import { sanitizeText } from "@/lib/sanitize";
 
 const INDUSTRY_HE: Record<string, string> = {
   ROOFING: "גגות", ALUMINUM: "אלומיניום", COSMETICS: "קוסמטיקה",
@@ -45,8 +46,9 @@ export async function POST(req: NextRequest) {
     message?: string;
     conversationHistory?: ConversationMessage[];
   };
-  const { clientId, message, conversationHistory = [] } = body;
-  if (!clientId || !message?.trim()) {
+  const { clientId, message: rawMessage, conversationHistory = [] } = body;
+  const message = sanitizeText(rawMessage || "", 2000);
+  if (!clientId || !message.trim()) {
     return new Response("חסרים פרמטרים", { status: 400 });
   }
 
