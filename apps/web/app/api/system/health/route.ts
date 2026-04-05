@@ -10,69 +10,74 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const checks: Record<string, { status: "ok" | "error" | "warn"; detail?: string }> = {};
+  const checks: Record<string, { status: "ok" | "warning" | "error"; message: string; latencyMs?: number }> = {};
 
-  // 1. Database (with 5s timeout)
+  // 1. Database
   try {
-    await Promise.race([
-      prisma.$queryRaw`SELECT 1`,
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error("DB timeout")), 5000)
-      ),
-    ]);
-    checks.database = { status: "ok" };
-  } catch (e) {
-    checks.database = { status: "error", detail: String(e) };
+    const start = Date.now();
+    await Promise.race([prisma.$queryRaw`SELECT 1`, new Promise<never>((_, r) => setTimeout(() => r(new Error("timeout")), 5000))]);
+    checks.database = { status: "ok", message: "מחובר ✅", latencyMs: Date.now() - start };
+  } catch {
+    checks.database = { status: "error", message: "לא מחובר ❌" };
   }
 
-  // 2. Stats
-  const [totalClients, activeClients, totalLeads, leadsThisMonth, totalAppointments] = await Promise.all([
+  // 2. AI
+  checks.ai = { status: process.env.ANTHROPIC_API_KEY && !process.env.ANTHROPIC_API_KEY.includes("placeholder") ? "ok" : "error", message: process.env.ANTHROPIC_API_KEY && !process.env.ANTHROPIC_API_KEY.includes("placeholder") ? "מפתח מוגדר ✅" : "מפתח חסר ❌" };
+
+  // 3. WhatsApp
+  const instanceId = process.env.GREEN_API_INSTANCE_ID;
+  const token = process.env.GREEN_API_TOKEN;
+  if (!instanceId || !token) {
+    checks.whatsapp = { status: "warning", message: "לא מוגדר" };
+  } else {
+    try {
+      const url = process.env.GREEN_API_URL ?? "https://api.green-api.com";
+      const res = await fetch(`${url}/waInstance${instanceId}/getStateInstance/${token}`, { signal: AbortSignal.timeout(5000) });
+      const data = (await res.json()) as { stateInstance?: string };
+      checks.whatsapp = { status: data.stateInstance === "authorized" ? "ok" : "warning", message: data.stateInstance === "authorized" ? "מחובר ✅" : `סטטוס: ${data.stateInstance}` };
+    } catch {
+      checks.whatsapp = { status: "warning", message: "לא נגיש" };
+    }
+  }
+
+  // 4. Email
+  checks.email = { status: process.env.RESEND_API_KEY ? "ok" : "warning", message: process.env.RESEND_API_KEY ? "מפתח מוגדר ✅" : "מפתח חסר" };
+
+  // 5. Cloudinary
+  checks.cloudinary = { status: process.env.CLOUDINARY_API_KEY ? "ok" : "warning", message: process.env.CLOUDINARY_API_KEY ? "מחובר ✅" : "לא מוגדר" };
+
+  // 6. Push
+  checks.push = { status: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ? "ok" : "warning", message: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ? "VAPID מוגדר ✅" : "לא מוגדר" };
+
+  // Stats
+  const [totalUsers, totalClients, totalLeads, todayLeads, totalAppointments, totalReports] = await Promise.all([
+    prisma.user.count(),
     prisma.client.count(),
-    prisma.client.count({ where: { isActive: true } }),
     prisma.lead.count(),
-    prisma.lead.count({
-      where: { createdAt: { gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1) } },
-    }),
+    prisma.lead.count({ where: { createdAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) } } }),
     prisma.appointment.count(),
+    prisma.report.count(),
   ]);
 
-  // 3. Green API — check if any clients have it configured
-  const greenApiClients = await prisma.client.count({
-    where: { greenApiInstanceId: { not: null }, greenApiToken: { not: null } },
-  });
+  // Monthly leads (6 months)
+  const MONTHS = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
+  const monthlyData = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(); d.setMonth(d.getMonth() - i);
+    const start = new Date(d.getFullYear(), d.getMonth(), 1);
+    const end = new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59, 59);
+    const count = await prisma.lead.count({ where: { createdAt: { gte: start, lte: end } } });
+    monthlyData.push({ month: MONTHS[d.getMonth()], leads: count });
+  }
 
-  checks.greenApi = greenApiClients > 0
-    ? { status: "ok", detail: `${greenApiClients} לקוחות מחוברים` }
-    : { status: "warn", detail: "אף לקוח לא מחובר ל-Green API" };
-
-  // 4. Resend (env var)
-  checks.resend = process.env.RESEND_API_KEY
-    ? { status: "ok" }
-    : { status: "warn", detail: "RESEND_API_KEY לא הוגדר" };
-
-  // 5. Encryption key
-  checks.encryption = process.env.ENCRYPTION_KEY
-    ? { status: "ok" }
-    : { status: "error", detail: "ENCRYPTION_KEY חסר — שדות רגישים לא מוגנים" };
-
-  // 6. JWT secret
-  checks.jwt = process.env.JWT_SECRET
-    ? { status: "ok" }
-    : { status: "error", detail: "JWT_SECRET חסר" };
-
-  const allOk = Object.values(checks).every((c) => c.status === "ok");
-  const hasErrors = Object.values(checks).some((c) => c.status === "error");
+  const hasError = Object.values(checks).some((c) => c.status === "error");
+  const hasWarning = Object.values(checks).some((c) => c.status === "warning");
 
   return NextResponse.json({
-    status: hasErrors ? "error" : allOk ? "ok" : "warn",
+    status: hasError ? "error" : hasWarning ? "warning" : "ok",
     checks,
-    stats: {
-      totalClients,
-      activeClients,
-      totalLeads,
-      leadsThisMonth,
-      totalAppointments,
-    },
+    stats: { totalUsers, totalClients, totalLeads, todayLeads, totalAppointments, totalReports },
+    monthlyData,
     timestamp: new Date().toISOString(),
   });
 }
