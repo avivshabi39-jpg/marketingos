@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PasswordChangeForm } from "./PasswordChangeForm";
 
 interface ClientData {
@@ -71,6 +71,26 @@ export function PortalSettingsClient({
     "connected" | "disconnected" | "error" | null
   >(null);
   const [checkingWa, setCheckingWa] = useState(false);
+
+  // Domain state
+  const [domainData, setDomainData] = useState<{
+    subdomain?: string;
+    customDomain?: string | null;
+    customDomainVerified?: boolean;
+    rootDomain?: string;
+  } | null>(null);
+  const [customDomainInput, setCustomDomainInput] = useState("");
+  const [domainSaving, setDomainSaving] = useState(false);
+  const [domainError, setDomainError] = useState("");
+
+  useEffect(() => {
+    if (activeTab === "page") {
+      fetch(`/api/clients/${client.id}/domain`)
+        .then((r) => r.json())
+        .then(setDomainData)
+        .catch(() => {});
+    }
+  }, [activeTab, client.id]);
 
   async function save(data: Record<string, unknown>) {
     setSaving(true);
@@ -730,6 +750,284 @@ export function PortalSettingsClient({
           </div>
 
           <SaveButton onClick={() => save(seo)} />
+
+          {/* Domain management */}
+          <div
+            style={{
+              marginTop: "20px",
+              paddingTop: "20px",
+              borderTop: "1px solid #f3f4f6",
+            }}
+          >
+            <h4
+              style={{
+                fontWeight: 700,
+                fontSize: "14px",
+                marginBottom: "12px",
+              }}
+            >
+              🌐 דומיינים
+            </h4>
+
+            {/* Subdomain (always active) */}
+            <div
+              style={{
+                background: "#f0fdf4",
+                border: "1px solid #bbf7d0",
+                borderRadius: "10px",
+                padding: "12px 14px",
+                marginBottom: "12px",
+              }}
+            >
+              <div
+                style={{
+                  fontWeight: 700,
+                  fontSize: "12px",
+                  color: "#166534",
+                  marginBottom: "4px",
+                }}
+              >
+                ✅ סאבדומיין (פעיל תמיד):
+              </div>
+              <div
+                style={{
+                  fontFamily: "monospace",
+                  fontSize: "13px",
+                  color: "#6366f1",
+                  fontWeight: 700,
+                  direction: "ltr",
+                  marginBottom: "6px",
+                }}
+              >
+                {domainData?.subdomain ||
+                  `${client.slug}.${domainData?.rootDomain || "marketingos.co.il"}`}
+              </div>
+              <button
+                onClick={() =>
+                  navigator.clipboard.writeText(
+                    domainData?.subdomain ||
+                      `${client.slug}.marketingos.co.il`
+                  )
+                }
+                style={{
+                  padding: "3px 10px",
+                  background: "#dcfce7",
+                  color: "#166534",
+                  border: "none",
+                  borderRadius: "6px",
+                  fontSize: "11px",
+                  cursor: "pointer",
+                }}
+              >
+                📋 העתק
+              </button>
+            </div>
+
+            {/* Custom domain */}
+            <div
+              style={{
+                background: "#f9fafb",
+                border: "1px solid #e5e7eb",
+                borderRadius: "10px",
+                padding: "12px 14px",
+              }}
+            >
+              <div
+                style={{
+                  fontWeight: 700,
+                  fontSize: "12px",
+                  marginBottom: "4px",
+                }}
+              >
+                🔗 דומיין מותאם אישית (אופציונלי):
+              </div>
+              <p
+                style={{
+                  fontSize: "11px",
+                  color: "#6b7280",
+                  marginBottom: "10px",
+                }}
+              >
+                חבר את הדומיין שלך (yosi.co.il)
+              </p>
+
+              {domainData?.customDomain ? (
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontFamily: "monospace",
+                        fontSize: "13px",
+                        color: "#6366f1",
+                      }}
+                    >
+                      {domainData.customDomain}
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        padding: "3px 10px",
+                        borderRadius: "10px",
+                        fontWeight: 600,
+                        background: domainData.customDomainVerified
+                          ? "#dcfce7"
+                          : "#fef9c3",
+                        color: domainData.customDomainVerified
+                          ? "#166534"
+                          : "#854d0e",
+                      }}
+                    >
+                      {domainData.customDomainVerified
+                        ? "✅ פעיל"
+                        : "⏳ ממתין"}
+                    </span>
+                  </div>
+
+                  {!domainData.customDomainVerified && (
+                    <div
+                      style={{
+                        background: "#fffbeb",
+                        border: "1px solid #fde68a",
+                        borderRadius: "8px",
+                        padding: "8px 10px",
+                        fontSize: "11px",
+                        color: "#92400e",
+                        lineHeight: 1.8,
+                        marginBottom: "8px",
+                        direction: "ltr",
+                      }}
+                    >
+                      <strong>DNS Instructions:</strong>
+                      <br />
+                      Type: CNAME | Name: @ | Value: cname.vercel-dns.com
+                    </div>
+                  )}
+
+                  <button
+                    onClick={async () => {
+                      await fetch(`/api/clients/${client.id}/domain`, {
+                        method: "DELETE",
+                      });
+                      setDomainData((d) =>
+                        d
+                          ? {
+                              ...d,
+                              customDomain: null,
+                              customDomainVerified: false,
+                            }
+                          : d
+                      );
+                    }}
+                    style={{
+                      padding: "5px 12px",
+                      background: "#fef2f2",
+                      color: "#dc2626",
+                      border: "1px solid #fecaca",
+                      borderRadius: "6px",
+                      fontSize: "11px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    🗑️ הסר דומיין
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <input
+                      value={customDomainInput}
+                      onChange={(e) => {
+                        setCustomDomainInput(e.target.value);
+                        setDomainError("");
+                      }}
+                      placeholder="yosi.co.il"
+                      style={{
+                        flex: 1,
+                        padding: "8px 10px",
+                        border: `2px solid ${domainError ? "#ef4444" : "#e5e7eb"}`,
+                        borderRadius: "8px",
+                        fontSize: "12px",
+                        fontFamily: "monospace",
+                        direction: "ltr",
+                        outline: "none",
+                      }}
+                    />
+                    <button
+                      onClick={async () => {
+                        if (!customDomainInput) return;
+                        setDomainSaving(true);
+                        try {
+                          const res = await fetch(
+                            `/api/clients/${client.id}/domain`,
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({
+                                customDomain: customDomainInput,
+                              }),
+                            }
+                          );
+                          const data = await res.json();
+                          if (data.ok) {
+                            setDomainData((d) =>
+                              d
+                                ? {
+                                    ...d,
+                                    customDomain: customDomainInput,
+                                    customDomainVerified: false,
+                                  }
+                                : d
+                            );
+                            setCustomDomainInput("");
+                          } else {
+                            setDomainError(data.error || "שגיאה");
+                          }
+                        } catch {
+                          setDomainError("שגיאה — נסה שוב");
+                        }
+                        setDomainSaving(false);
+                      }}
+                      disabled={!customDomainInput || domainSaving}
+                      style={{
+                        padding: "8px 14px",
+                        background: customDomainInput
+                          ? "#6366f1"
+                          : "#e5e7eb",
+                        color: customDomainInput ? "white" : "#9ca3af",
+                        border: "none",
+                        borderRadius: "8px",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        fontSize: "12px",
+                      }}
+                    >
+                      {domainSaving ? "⏳..." : "+ חבר"}
+                    </button>
+                  </div>
+                  {domainError && (
+                    <p
+                      style={{
+                        fontSize: "11px",
+                        color: "#ef4444",
+                        marginTop: "4px",
+                      }}
+                    >
+                      {domainError}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
 

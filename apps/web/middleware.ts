@@ -95,6 +95,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL(`/${subdomain}${pathname}`, request.url));
   }
 
+  // ── Custom domain → rewrite to __domain handler ────────────────────────────
+  const hostWithoutPort = host.split(":")[0];
+  const isKnownHost = ROOT_DOMAINS.some((d) => hostWithoutPort === d.split(":")[0] || hostWithoutPort.endsWith(`.${d.split(":")[0]}`))
+    || hostWithoutPort === "localhost"
+    || hostWithoutPort.endsWith(".vercel.app");
+  if (!isKnownHost && !subdomain && pathname === "/") {
+    const domainUrl = new URL("/__domain", request.url);
+    domainUrl.searchParams.set("domain", hostWithoutPort);
+    return NextResponse.rewrite(domainUrl);
+  }
+
   // ── Block suspicious patterns ────────────────────────────────────────────────
   // Check both raw and decoded URL to catch encoded and unencoded attacks
   const rawUrl = request.url.toLowerCase();

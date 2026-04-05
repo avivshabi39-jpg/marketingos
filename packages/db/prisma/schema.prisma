@@ -111,8 +111,10 @@ model Client {
   brandLogo           String?
   brandPrimaryColor   String?
   brandSecondaryColor String?
-  customDomain        String?
-  whitelabelEnabled   Boolean @default(false)
+  customDomain          String?  @unique
+  customDomainVerified  Boolean @default(false)
+  subdomainActive       Boolean @default(true)
+  whitelabelEnabled     Boolean @default(false)
   portalTitle         String?
   portalWelcome       String?
   portalFooter        String?
