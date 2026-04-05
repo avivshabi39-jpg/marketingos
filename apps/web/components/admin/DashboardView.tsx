@@ -257,7 +257,7 @@ function ClientsTable({ clients }: { clients: ClientType[] }) {
             return (
               <tr
                 key={c.id}
-                onClick={() => router.push(`/admin/clients/${c.id}`)}
+                onClick={() => router.push(`/admin/clients/${c.id}/overview`)}
                 style={{ cursor: "pointer", borderBottom: "1px solid #f9fafb" }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLTableRowElement).style.background = "#f9fafb";
