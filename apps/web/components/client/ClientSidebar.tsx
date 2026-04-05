@@ -18,6 +18,7 @@ import {
   Home,
   Mail,
   HelpCircle,
+  Palette,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -36,6 +37,7 @@ function buildNav(slug: string, isRealEstate: boolean): NavItem[] {
     { label: "📅 תורים",       href: `/client/${slug}/appointments`, icon: FileBarChart },
     { label: "📢 שידור",       href: `/client/${slug}/broadcast`,    icon: FileBarChart },
     { label: "📱 פוסטים",      href: `/client/${slug}/social`,       icon: FileBarChart },
+    { label: "🎨 עיצוב AI",    href: `/client/${slug}/ai-designer`,  icon: Palette },
     { label: "🧙 בנה דף",       href: `/client/${slug}/build-page`,   icon: Globe },
     { label: "✏️ ערוך דף",     href: `/client/${slug}/edit-page`,    icon: Globe },
     { label: "📧 מיילים",       href: `/client/${slug}/email`,        icon: Mail },

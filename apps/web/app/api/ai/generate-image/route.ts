@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession, isSuperAdmin } from "@/lib/auth";
+import { getClientSession } from "@/lib/clientAuth";
 import { callClaude, checkAiRateLimit, trackAiUsage } from "@/lib/ai";
 
 const SIZES: Record<string, { w: number; h: number }> = {
@@ -14,9 +15,10 @@ const SIZES: Record<string, { w: number; h: number }> = {
 // GET: list past AI-generated images
 export async function GET(req: NextRequest) {
   const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const clientSession = !session ? await getClientSession() : null;
+  if (!session && !clientSession) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const clientId = req.nextUrl.searchParams.get("clientId");
+  const clientId = clientSession?.clientId ?? req.nextUrl.searchParams.get("clientId");
   if (!clientId) return NextResponse.json({ error: "clientId required" }, { status: 400 });
 
   const thisMonth = new Date();
@@ -40,15 +42,18 @@ export async function GET(req: NextRequest) {
 // POST: generate a new AI image
 export async function POST(req: NextRequest) {
   const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const clientSession = !session ? await getClientSession() : null;
+  if (!session && !clientSession) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json({ error: "AI לא מוגדר" }, { status: 503 });
   }
 
-  const rate = await checkAiRateLimit(session.userId);
-  if (!rate.ok) {
-    return NextResponse.json({ error: `הגעת למגבלת ${rate.limit} קריאות AI ליום.` }, { status: 429 });
+  if (session) {
+    const rate = await checkAiRateLimit(session.userId);
+    if (!rate.ok) {
+      return NextResponse.json({ error: `הגעת למגבלת ${rate.limit} קריאות AI ליום.` }, { status: 429 });
+    }
   }
 
   const body = (await req.json().catch(() => ({}))) as {
@@ -69,7 +74,10 @@ export async function POST(req: NextRequest) {
     select: { id: true, name: true, industry: true, ownerId: true },
   });
   if (!client) return NextResponse.json({ error: "לקוח לא נמצא" }, { status: 404 });
-  if (!isSuperAdmin(session) && client.ownerId !== session.userId) {
+  if (clientSession && clientSession.clientId !== clientId) {
+    return NextResponse.json({ error: "אין הרשאה" }, { status: 403 });
+  }
+  if (session && !isSuperAdmin(session) && client.ownerId !== session.userId) {
     return NextResponse.json({ error: "אין הרשאה" }, { status: 403 });
   }
 
@@ -92,7 +100,9 @@ Do NOT include any text or words in the image.`;
   try {
     const result = await callClaude(enhancePrompt, 300);
     enhancedPrompt = result.text.trim();
-    await trackAiUsage(session.userId, "generate-image", result.inputTokens + result.outputTokens);
+    if (session) {
+      await trackAiUsage(session.userId, "generate-image", result.inputTokens + result.outputTokens);
+    }
   } catch {
     return NextResponse.json({ error: "שגיאת AI" }, { status: 502 });
   }
