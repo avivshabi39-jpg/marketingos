@@ -31,6 +31,18 @@ export default async function ClientReportsPage({
 
   if (!client || !client.isActive) notFound();
 
+  // Live stats
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000);
+  const [totalLeads, monthLeads, wonLeads, pageViews, byStatus, bySource] = await Promise.all([
+    prisma.lead.count({ where: { clientId: client.id } }),
+    prisma.lead.count({ where: { clientId: client.id, createdAt: { gte: thirtyDaysAgo } } }),
+    prisma.lead.count({ where: { clientId: client.id, status: "WON" } }),
+    prisma.pageView.count({ where: { clientId: client.id } }),
+    prisma.lead.groupBy({ by: ["status"], where: { clientId: client.id }, _count: { status: true } }),
+    prisma.lead.groupBy({ by: ["source"], where: { clientId: client.id, source: { not: null } }, _count: { source: true }, orderBy: { _count: { source: "desc" } }, take: 5 }),
+  ]);
+  const convRate = totalLeads > 0 ? Math.round((wonLeads / totalLeads) * 100) : 0;
+
   const reports = await prisma.report.findMany({
     where: { clientId: client.id },
     orderBy: { createdAt: "desc" },
@@ -51,11 +63,55 @@ export default async function ClientReportsPage({
 
   return (
     <div className="space-y-6" dir="rtl">
-      {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900">דוחות</h1>
-        <p className="text-gray-500 mt-0.5 text-sm">{reports.length} דוחות</p>
+        <h1 className="text-2xl font-bold text-gray-900">📊 הדוחות שלי</h1>
+        <p className="text-gray-500 mt-0.5 text-sm">נתונים בזמן אמת + דוחות שנוצרו</p>
       </div>
+
+      {/* Live stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { l: "לידים החודש", v: monthLeads, i: "🎯", c: "#6366f1" },
+          { l: "צפיות בדף", v: pageViews, i: "👁", c: "#3b82f6" },
+          { l: "עסקאות סגורות", v: wonLeads, i: "✅", c: "#22c55e" },
+          { l: "אחוז המרה", v: `${convRate}%`, i: "📈", c: "#f59e0b" },
+        ].map((s) => (
+          <div key={s.l} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 text-center">
+            <div className="text-xl mb-1">{s.i}</div>
+            <div className="text-2xl font-extrabold" style={{ color: s.c }}>{s.v}</div>
+            <div className="text-xs text-gray-500 mt-1">{s.l}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Status breakdown */}
+      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+        <h3 className="font-bold text-sm mb-3">📊 לידים לפי סטטוס</h3>
+        {(byStatus as { status: string; _count: { status: number } }[]).map((s) => {
+          const pct = totalLeads > 0 ? Math.round((s._count.status / totalLeads) * 100) : 0;
+          const colors: Record<string, string> = { NEW: "#3b82f6", CONTACTED: "#f59e0b", QUALIFIED: "#8b5cf6", PROPOSAL: "#f97316", WON: "#22c55e", LOST: "#ef4444" };
+          const labels: Record<string, string> = { NEW: "חדש", CONTACTED: "נוצר קשר", QUALIFIED: "מתאים", PROPOSAL: "הצעה", WON: "סגור", LOST: "לא רלוונטי" };
+          return (
+            <div key={s.status} className="mb-2">
+              <div className="flex justify-between text-xs mb-1"><span>{labels[s.status] ?? s.status}</span><span>{s._count.status} ({pct}%)</span></div>
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full rounded-full" style={{ width: `${pct}%`, background: colors[s.status] ?? "#6366f1" }} /></div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Top sources */}
+      {(bySource as { source: string | null; _count: { source: number } }[]).length > 0 && (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+          <h3 className="font-bold text-sm mb-3">🌐 מקורות לידים</h3>
+          {(bySource as { source: string | null; _count: { source: number } }[]).map((s) => (
+            <div key={s.source} className="flex justify-between py-1.5 border-b border-gray-50 text-sm last:border-0">
+              <span className="text-gray-700">{s.source ?? "ישיר"}</span>
+              <span className="font-bold text-indigo-600">{s._count.source}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Leads over time chart */}
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">

@@ -27,16 +27,15 @@ type NavItem = {
 
 function buildNav(slug: string, isRealEstate: boolean): NavItem[] {
   const items: NavItem[] = [
-    { label: "🏠 הבית שלי",    href: `/client/${slug}`,            icon: LayoutDashboard },
-    { label: "🎯 הלידים שלי",  href: `/client/${slug}/leads`,      icon: Users },
-    { label: "📊 הדוחות שלי",  href: `/client/${slug}/reports`,    icon: FileBarChart },
-    { label: "📅 התורים שלי",  href: `/client/${slug}/appointments`, icon: FileBarChart },
+    { label: "🏠 ראשי",        href: `/client/${slug}`,              icon: LayoutDashboard },
+    { label: "🎯 לידים",       href: `/client/${slug}/leads`,        icon: Users },
+    { label: "📊 דוחות",       href: `/client/${slug}/reports`,      icon: FileBarChart },
+    { label: "📅 תורים",       href: `/client/${slug}/appointments`, icon: FileBarChart },
     { label: "📢 שידור",       href: `/client/${slug}/broadcast`,    icon: FileBarChart },
     { label: "📱 פוסטים",      href: `/client/${slug}/social`,       icon: FileBarChart },
-    { label: "🌐 הדף שלי",     href: `/client/${slug}/settings`,   icon: Globe },
-    { label: "✏️ ערוך דף",     href: `/client/${slug}/edit-page`,  icon: Globe },
-    { label: "🤖 הסוכן שלי",   href: `/client/${slug}/ai-agent`,   icon: Bot },
-    { label: "⚙️ הגדרות",     href: `/client/${slug}/settings`,   icon: Settings },
+    { label: "✏️ ערוך דף",     href: `/client/${slug}/edit-page`,    icon: Globe },
+    { label: "🤖 הסוכן שלי",   href: `/client/${slug}/ai-agent`,     icon: Bot },
+    { label: "⚙️ הגדרות",     href: `/client/${slug}/settings`,     icon: Settings },
   ];
   if (isRealEstate) {
     items.splice(2, 0, {
