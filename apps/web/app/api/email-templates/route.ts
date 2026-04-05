@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
   const templates = await prisma.emailTemplate.findMany({
     where: { ownerId: session.userId },
     orderBy: { updatedAt: "desc" },
+    take: 100,
   });
   return NextResponse.json({ templates });
 }

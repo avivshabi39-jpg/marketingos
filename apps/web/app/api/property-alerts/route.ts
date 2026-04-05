@@ -33,6 +33,7 @@ export async function GET(req: NextRequest) {
   const alerts = await prisma.propertyAlert.findMany({
     where: { clientId, isActive: true },
     orderBy: { createdAt: "desc" },
+    take: 100,
   });
   return NextResponse.json({ alerts });
 }

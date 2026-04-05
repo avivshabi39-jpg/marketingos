@@ -50,6 +50,7 @@ export async function GET(req: NextRequest) {
     where,
     orderBy: { createdAt: "desc" },
     include: { client: { select: { name: true } } },
+    take: 100,
   });
 
   return NextResponse.json({ workflows });

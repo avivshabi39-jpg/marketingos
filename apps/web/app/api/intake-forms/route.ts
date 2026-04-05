@@ -33,6 +33,7 @@ export async function GET(req: NextRequest) {
       isActive: true,
     },
     orderBy: { createdAt: "desc" },
+    take: 100,
     include: {
       client: { select: { id: true, name: true, slug: true, primaryColor: true } },
     },

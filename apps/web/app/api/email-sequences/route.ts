@@ -35,6 +35,7 @@ export async function GET(req: NextRequest) {
     where,
     include: { client: { select: { name: true, primaryColor: true } } },
     orderBy: { createdAt: "desc" },
+    take: 100,
   });
 
   return NextResponse.json({ sequences });

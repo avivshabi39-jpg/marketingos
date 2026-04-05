@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getSession, isSuperAdmin } from "@/lib/auth";
 import { getClientSession } from "@/lib/clientAuth";
 import { sanitizeText, sanitizePhone, sanitizeEmail } from "@/lib/sanitize";
+import { getPaginationParams, paginationMeta } from "@/lib/pagination";
 
 const createSchema = z.object({
   clientId:    z.string().min(1),
@@ -53,18 +54,24 @@ export async function GET(req: NextRequest) {
   }
 
   const where = clientIdFilter ? { clientId: clientIdFilter } : {};
+  const pg = getPaginationParams(req, 50, 200);
 
-  const appointments = await prisma.appointment.findMany({
-    where,
-    orderBy: { scheduledAt: "asc" },
-    include: {
-      client:   { select: { name: true, slug: true } },
-      lead:     { select: { firstName: true, lastName: true } },
-      property: { select: { title: true, slug: true } },
-    },
-  });
+  const [appointments, total] = await Promise.all([
+    prisma.appointment.findMany({
+      where,
+      orderBy: { scheduledAt: "asc" },
+      skip: pg.skip,
+      take: pg.limit,
+      include: {
+        client:   { select: { name: true, slug: true } },
+        lead:     { select: { firstName: true, lastName: true } },
+        property: { select: { title: true, slug: true } },
+      },
+    }),
+    prisma.appointment.count({ where }),
+  ]);
 
-  return NextResponse.json({ appointments });
+  return NextResponse.json({ appointments, ...paginationMeta(total, pg) });
 }
 
 // POST /api/appointments
