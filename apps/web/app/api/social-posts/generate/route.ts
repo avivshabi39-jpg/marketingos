@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { callClaude, checkAiRateLimit, trackAiUsage } from "@/lib/ai";
+
+const generateSchema = z.object({
+  clientId: z.string().min(1, "clientId חובה"),
+  topic: z.string().max(200).optional().default(""),
+  imageUrl: z.string().max(500).optional().default(""),
+  style: z.string().max(50).optional().default("professional"),
+  platform: z.enum(["facebook", "instagram", "linkedin", "whatsapp"]).optional().default("facebook"),
+  language: z.enum(["hebrew", "arabic", "english"]).optional().default("hebrew"),
+});
 
 const LANGUAGE_INSTRUCTION: Record<string, string> = {
   hebrew: "כתוב בעברית בלבד, שוטפת וטבעית",
@@ -36,27 +46,14 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const body = (await req.json().catch(() => ({}))) as {
-    clientId?: string;
-    topic?: string;
-    imageUrl?: string;
-    style?: string;
-    platform?: string;
-    language?: string;
-  };
-
-  const {
-    clientId,
-    topic = "",
-    imageUrl = "",
-    style = "professional",
-    platform = "facebook",
-    language = "hebrew",
-  } = body;
-
-  if (!clientId) {
-    return NextResponse.json({ error: "clientId חסר" }, { status: 400 });
+  const body = await req.json().catch(() => ({}));
+  const parsed = generateSchema.safeParse(body);
+  if (!parsed.success) {
+    const first = parsed.error.errors[0];
+    return NextResponse.json({ error: first.message }, { status: 400 });
   }
+
+  const { clientId, topic, imageUrl, style, platform, language } = parsed.data;
 
   const client = await prisma.client.findUnique({
     where: { id: clientId },
