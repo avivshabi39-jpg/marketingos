@@ -9,7 +9,13 @@ export default async function PortalAutomationsPage({ params }: { params: { slug
 
   const client = await prisma.client.findUnique({
     where: { slug: params.slug },
-    select: { id: true, name: true, autoReplyActive: true, whatsappTemplate: true },
+    select: {
+      id: true,
+      name: true,
+      autoReplyActive: true,
+      whatsappTemplate: true,
+      googleReviewLink: true,
+    },
   });
   if (!client) redirect("/");
 
@@ -18,5 +24,10 @@ export default async function PortalAutomationsPage({ params }: { params: { slug
     prisma.lead.count({ where: { clientId: client.id, status: "NEW" } }),
   ]);
 
-  return <PortalAutomationsClient clientId={client.id} clientName={client.name} autoReplyActive={client.autoReplyActive} autoReplyMessage={client.whatsappTemplate ?? ""} stats={{ totalLeads, newLeads }} />;
+  return (
+    <PortalAutomationsClient
+      client={client}
+      stats={{ totalLeads, newLeads }}
+    />
+  );
 }

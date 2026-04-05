@@ -2,106 +2,667 @@
 
 import { useState } from "react";
 
-interface Props {
-  clientId: string;
-  clientName: string;
+interface ClientData {
+  id: string;
+  name: string;
   autoReplyActive: boolean;
-  autoReplyMessage: string;
-  stats: { totalLeads: number; newLeads: number };
+  whatsappTemplate: string | null;
+  googleReviewLink: string | null;
 }
 
-const AUTOS = [
-  { id: "autoreply", icon: "💬", title: "חזרה אוטומטית ללידים", desc: "וואצאפ אוטומטי לכל ליד חדש תוך שניות", color: "#22c55e", editable: true },
-  { id: "followup", icon: "🔄", title: "followup אוטומטי", desc: "חזרה ללידים שלא ענו אחרי יום", color: "#3b82f6", editable: false },
-  { id: "report", icon: "📊", title: "דוח שבועי אוטומטי", desc: "דוח ביצועים כל שני בבוקר", color: "#8b5cf6", editable: false },
-  { id: "drip", icon: "📱", title: "רצף הודעות WhatsApp", desc: "יום 1 + יום 3 — followup אוטומטי", color: "#f59e0b", editable: false },
-];
+interface AutomationSettings {
+  autoReplyActive: boolean;
+  whatsappTemplate: string;
+  reviewRequestEnabled: boolean;
+  googleReviewLink: string;
+  weeklyReportEnabled: boolean;
+}
 
-export function PortalAutomationsClient({ clientId, clientName, autoReplyActive: initActive, autoReplyMessage: initMsg, stats }: Props) {
-  const [active, setActive] = useState(initActive);
-  const [message, setMessage] = useState(initMsg || "שלום! קיבלנו את פנייתך ונחזור אליך בהקדם 😊");
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+export function PortalAutomationsClient({
+  client,
+  stats,
+}: {
+  client: ClientData;
+  stats: { totalLeads: number; newLeads: number };
+}) {
+  const [settings, setSettings] = useState<AutomationSettings>({
+    autoReplyActive: client.autoReplyActive,
+    whatsappTemplate:
+      client.whatsappTemplate ||
+      `שלום! קיבלנו את פנייתך ל${client.name} ונחזור אליך בהקדם 😊`,
+    reviewRequestEnabled: !!client.googleReviewLink,
+    googleReviewLink: client.googleReviewLink || "",
+    weeklyReportEnabled: true,
+  });
 
-  async function save() {
-    setSaving(true);
-    await fetch(`/api/clients/${clientId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ autoReplyActive: active, whatsappTemplate: message }),
-    });
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  const [saving, setSaving] = useState<string | null>(null);
+  const [saved, setSaved] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<string | null>(
+    "autoreply"
+  );
+
+  async function saveSetting(
+    key: string,
+    updates: Partial<AutomationSettings>
+  ) {
+    setSaving(key);
+    try {
+      const apiData: Record<string, unknown> = {};
+      if (updates.autoReplyActive !== undefined)
+        apiData.autoReplyActive = updates.autoReplyActive;
+      if (updates.whatsappTemplate !== undefined)
+        apiData.whatsappTemplate = updates.whatsappTemplate;
+      if (updates.googleReviewLink !== undefined)
+        apiData.googleReviewLink = updates.googleReviewLink;
+
+      await fetch(`/api/clients/${client.id}/quick-update`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(apiData),
+      });
+      setSettings((prev) => ({ ...prev, ...updates }));
+      setSaved(key);
+      setTimeout(() => setSaved(null), 2500);
+    } catch {
+      alert("שגיאה בשמירה — נסה שוב");
+    }
+    setSaving(null);
   }
 
+  const activeCount = [
+    settings.autoReplyActive,
+    true, // followup always on
+    settings.reviewRequestEnabled,
+    settings.weeklyReportEnabled,
+    true, // drip always on
+  ].filter(Boolean).length;
+
   return (
-    <div className="max-w-lg mx-auto space-y-5" dir="rtl">
-      <div>
-        <h1 className="text-xl font-bold">⚙️ האוטומציות שלי</h1>
-        <p className="text-sm text-gray-500">המערכת עובדת בשבילך גם כשאתה ישן 😴</p>
+    <div style={{ padding: "16px", direction: "rtl", maxWidth: "700px" }}>
+      {/* Header */}
+      <div style={{ marginBottom: "20px" }}>
+        <h1 style={{ fontSize: "20px", fontWeight: 800, margin: 0 }}>
+          ⚡ האוטומציות שלי
+        </h1>
+        <p style={{ fontSize: "13px", color: "#6b7280", margin: "4px 0 0" }}>
+          המערכת עובדת בשבילך 24/7 גם כשאתה ישן 💤
+        </p>
       </div>
 
-      {/* Stats */}
-      <div className="bg-gradient-to-l from-indigo-600 to-purple-600 rounded-2xl p-5 text-white flex justify-between items-center">
-        <div>
-          <p className="text-xs opacity-80">הודעות אוטומטיות שנשלחו</p>
-          <p className="text-3xl font-extrabold">{stats.totalLeads}</p>
+      {/* Stats banner */}
+      <div
+        style={{
+          background: "linear-gradient(135deg, #1e293b, #334155)",
+          borderRadius: "14px",
+          padding: "16px 20px",
+          color: "white",
+          marginBottom: "20px",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        {[
+          { label: "לידים שקיבלו תגובה", value: stats.totalLeads, icon: "💬" },
+          { label: "לידים חדשים", value: stats.newLeads, icon: "🆕" },
+          {
+            label: "אוטומציות פעילות",
+            value: activeCount,
+            icon: "⚡",
+          },
+        ].map((s) => (
+          <div key={s.label} style={{ textAlign: "center" }}>
+            <div style={{ fontSize: "24px", marginBottom: "2px" }}>
+              {s.icon}
+            </div>
+            <div style={{ fontSize: "22px", fontWeight: 800 }}>{s.value}</div>
+            <div style={{ fontSize: "11px", opacity: 0.75 }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* AUTOMATION 1 — Auto Reply */}
+      <AutoCard
+        id="autoreply"
+        icon="💬"
+        title="חזרה אוטומטית ללידים"
+        description="וואצאפ אוטומטי לכל ליד חדש תוך שניות"
+        enabled={settings.autoReplyActive}
+        color="#22c55e"
+        badge="שולח מיידית"
+        activeSection={activeSection}
+        onSectionToggle={setActiveSection}
+        onToggle={() =>
+          saveSetting("autoreply", {
+            autoReplyActive: !settings.autoReplyActive,
+          })
+        }
+      >
+        <div style={{ marginBottom: "10px" }}>
+          <label
+            style={{
+              fontSize: "12px",
+              fontWeight: 700,
+              color: "#6b7280",
+              display: "block",
+              marginBottom: "6px",
+            }}
+          >
+            ✏️ הודעת הברכה:
+          </label>
+          <textarea
+            value={settings.whatsappTemplate}
+            onChange={(e) =>
+              setSettings((s) => ({ ...s, whatsappTemplate: e.target.value }))
+            }
+            rows={3}
+            style={{
+              width: "100%",
+              padding: "10px 12px",
+              border: "2px solid #e5e7eb",
+              borderRadius: "10px",
+              fontSize: "13px",
+              resize: "none",
+              direction: "rtl",
+              fontFamily: "inherit",
+              outline: "none",
+              lineHeight: 1.6,
+            }}
+          />
         </div>
-        <span className="text-4xl">🚀</span>
-      </div>
 
-      {/* Automations list */}
-      {AUTOS.map((auto) => (
-        <div key={auto.id} className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex justify-between items-start">
-            <div className="flex gap-3 items-start">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0" style={{ background: auto.color + "15" }}>{auto.icon}</div>
+        {/* Quick templates */}
+        <div style={{ marginBottom: "12px" }}>
+          <div
+            style={{ fontSize: "11px", color: "#9ca3af", marginBottom: "6px" }}
+          >
+            תבניות מוכנות:
+          </div>
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+            {[
+              `שלום! קיבלנו את פנייתך ל${client.name}. נחזור אליך בהקדם 😊`,
+              `תודה שפנית! אנחנו ${client.name} ונצור קשר תוך שעה ⚡`,
+              `שלום! שמחנו לקבל את פנייתך. נחזור אליך עוד מעט 🙏`,
+            ].map((tmpl, i) => (
+              <button
+                key={i}
+                onClick={() =>
+                  setSettings((s) => ({ ...s, whatsappTemplate: tmpl }))
+                }
+                style={{
+                  padding: "4px 10px",
+                  background: "#f0fdf4",
+                  color: "#166534",
+                  border: "1px solid #bbf7d0",
+                  borderRadius: "8px",
+                  fontSize: "11px",
+                  cursor: "pointer",
+                }}
+              >
+                תבנית {i + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <button
+          onClick={() =>
+            saveSetting("autoreply", {
+              autoReplyActive: settings.autoReplyActive,
+              whatsappTemplate: settings.whatsappTemplate,
+            })
+          }
+          disabled={saving === "autoreply"}
+          style={{
+            padding: "10px 20px",
+            background:
+              saved === "autoreply"
+                ? "#22c55e"
+                : saving === "autoreply"
+                  ? "#e5e7eb"
+                  : "#6366f1",
+            color: saving === "autoreply" ? "#9ca3af" : "white",
+            border: "none",
+            borderRadius: "10px",
+            fontWeight: 700,
+            cursor: "pointer",
+            fontSize: "13px",
+          }}
+        >
+          {saving === "autoreply"
+            ? "⏳ שומר..."
+            : saved === "autoreply"
+              ? "✅ נשמר!"
+              : "💾 שמור הודעה"}
+        </button>
+      </AutoCard>
+
+      {/* AUTOMATION 2 — Follow-up */}
+      <AutoCard
+        id="followup"
+        icon="🔄"
+        title="followup אוטומטי"
+        description="חזרה ללידים שלא ענו — ביום הראשון ושלישי"
+        enabled={true}
+        color="#3b82f6"
+        badge="פועל אוטומטי"
+        activeSection={activeSection}
+        onSectionToggle={setActiveSection}
+        onToggle={() => {}}
+      >
+        <div
+          style={{
+            background: "#eff6ff",
+            border: "1px solid #bfdbfe",
+            borderRadius: "10px",
+            padding: "12px 14px",
+            fontSize: "13px",
+            color: "#1d4ed8",
+            lineHeight: 1.7,
+          }}
+        >
+          🤖 <strong>אוטומטי לחלוטין:</strong>
+          <br />
+          • יום 1: &quot;שלום! ראינו שפנית אלינו. מתי נוח לדבר?&quot;
+          <br />
+          • יום 3: &quot;שלום! רצינו לוודא שקיבלת את מענינו 🙏&quot;
+          <br />
+          <br />
+          <span style={{ fontSize: "11px", color: "#3b82f6" }}>
+            * ההודעות נשלחות רק ללידים שלא ענו
+          </span>
+        </div>
+      </AutoCard>
+
+      {/* AUTOMATION 3 — Review Request */}
+      <AutoCard
+        id="review"
+        icon="⭐"
+        title="בקשת ביקורת אוטומטית"
+        description="שלח בקשת ביקורת גוגל ללידים שנסגרו בהצלחה"
+        enabled={settings.reviewRequestEnabled}
+        color="#f59e0b"
+        badge="לאחר סגירה"
+        activeSection={activeSection}
+        onSectionToggle={setActiveSection}
+        onToggle={() =>
+          setSettings((s) => ({
+            ...s,
+            reviewRequestEnabled: !s.reviewRequestEnabled,
+          }))
+        }
+      >
+        <div style={{ marginBottom: "12px" }}>
+          <label
+            style={{
+              fontSize: "12px",
+              fontWeight: 700,
+              color: "#6b7280",
+              display: "block",
+              marginBottom: "6px",
+            }}
+          >
+            🔗 קישור לביקורת גוגל שלך:
+          </label>
+          <input
+            value={settings.googleReviewLink}
+            onChange={(e) =>
+              setSettings((s) => ({ ...s, googleReviewLink: e.target.value }))
+            }
+            placeholder="https://g.page/r/..."
+            style={{
+              width: "100%",
+              padding: "10px 12px",
+              border: "2px solid #e5e7eb",
+              borderRadius: "10px",
+              fontSize: "13px",
+              direction: "ltr",
+              fontFamily: "monospace",
+              outline: "none",
+            }}
+          />
+          <p
+            style={{ fontSize: "11px", color: "#9ca3af", marginTop: "4px" }}
+          >
+            מצא ב: Google Maps → העסק שלך → שתף → העתק קישור
+          </p>
+        </div>
+
+        <button
+          onClick={() =>
+            saveSetting("review", {
+              googleReviewLink: settings.googleReviewLink,
+            })
+          }
+          disabled={!settings.googleReviewLink || saving === "review"}
+          style={{
+            padding: "10px 20px",
+            background:
+              saved === "review"
+                ? "#f59e0b"
+                : !settings.googleReviewLink
+                  ? "#e5e7eb"
+                  : "#6366f1",
+            color: !settings.googleReviewLink ? "#9ca3af" : "white",
+            border: "none",
+            borderRadius: "10px",
+            fontWeight: 700,
+            cursor: "pointer",
+            fontSize: "13px",
+          }}
+        >
+          {saved === "review" ? "✅ נשמר!" : "💾 שמור קישור"}
+        </button>
+      </AutoCard>
+
+      {/* AUTOMATION 4 — Weekly Report */}
+      <AutoCard
+        id="report"
+        icon="📊"
+        title="דוח שבועי אוטומטי"
+        description="קבל סיכום ביצועים כל שני בבוקר בשעה 8:00"
+        enabled={settings.weeklyReportEnabled}
+        color="#8b5cf6"
+        badge="כל שני 8:00"
+        activeSection={activeSection}
+        onSectionToggle={setActiveSection}
+        onToggle={() =>
+          setSettings((s) => ({
+            ...s,
+            weeklyReportEnabled: !s.weeklyReportEnabled,
+          }))
+        }
+      >
+        <div
+          style={{
+            background: "#f5f3ff",
+            border: "1px solid #ddd6fe",
+            borderRadius: "10px",
+            padding: "12px 14px",
+            fontSize: "13px",
+            color: "#6b7280",
+            lineHeight: 1.7,
+          }}
+        >
+          📋 <strong>הדוח כולל:</strong>
+          <br />
+          • מספר לידים החודש
+          <br />
+          • אחוזי המרה
+          <br />
+          • לידים שמחכים לטיפול
+          <br />• המלצות AI לשיפור
+        </div>
+      </AutoCard>
+
+      {/* AUTOMATION 5 — WhatsApp Drip */}
+      <AutoCard
+        id="drip"
+        icon="📱"
+        title="רצף הודעות WhatsApp"
+        description="סדרת הודעות ממוקדת ללידים חדשים"
+        enabled={true}
+        color="#ec4899"
+        badge="3 הודעות בשבוע"
+        activeSection={activeSection}
+        onSectionToggle={setActiveSection}
+        onToggle={() => {}}
+      >
+        <div
+          style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+        >
+          {[
+            {
+              day: "מיידי",
+              msg: "הודעת ברכה ראשונה",
+              icon: "💬",
+              color: "#22c55e",
+            },
+            {
+              day: "יום 1",
+              msg: "followup ראשון",
+              icon: "🔄",
+              color: "#3b82f6",
+            },
+            {
+              day: "יום 3",
+              msg: "followup שני",
+              icon: "📞",
+              color: "#f59e0b",
+            },
+          ].map((step, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                gap: "10px",
+                alignItems: "center",
+                padding: "10px 12px",
+                background: "#fdf4ff",
+                borderRadius: "8px",
+                border: "1px solid #f3e8ff",
+              }}
+            >
+              <div
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  flexShrink: 0,
+                  background: step.color + "20",
+                  borderRadius: "8px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "18px",
+                }}
+              >
+                {step.icon}
+              </div>
               <div>
-                <p className="font-bold text-sm">{auto.title}</p>
-                <p className="text-xs text-gray-500">{auto.desc}</p>
-                <span className="text-[10px] font-semibold mt-1 inline-block px-2 py-0.5 rounded-full" style={{ background: auto.color + "15", color: auto.color }}>
-                  {auto.id === "autoreply" ? (active ? `✅ פעיל — ${stats.newLeads} מחכים` : "⭕ כבוי") : "✅ פעיל — אוטומטי"}
-                </span>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    color: step.color,
+                    marginBottom: "2px",
+                  }}
+                >
+                  {step.day}
+                </div>
+                <div style={{ fontSize: "13px", color: "#374151" }}>
+                  {step.msg}
+                </div>
+              </div>
+              <div
+                style={{
+                  marginRight: "auto",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  color: "#22c55e",
+                }}
+              >
+                ✅ פעיל
               </div>
             </div>
-            {auto.editable ? (
-              <button onClick={() => setActive(!active)} className="relative w-12 h-6 rounded-full transition-colors flex-shrink-0" style={{ background: active ? auto.color : "#e5e7eb" }}>
-                <div className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all" style={{ right: active ? "2px" : "26px" }} />
-              </button>
-            ) : (
-              <span className="text-[10px] px-2.5 py-1 bg-green-50 text-green-700 rounded-full font-semibold flex-shrink-0">🔒 אוטו</span>
+          ))}
+        </div>
+      </AutoCard>
+
+      {/* Info box */}
+      <div
+        style={{
+          background: "#fffbeb",
+          border: "1px solid #fde68a",
+          borderRadius: "12px",
+          padding: "14px 16px",
+          fontSize: "12px",
+          color: "#92400e",
+          lineHeight: 1.7,
+          marginTop: "4px",
+        }}
+      >
+        💡 <strong>טיפ:</strong> הפעל את החזרה האוטומטית ללידים — לקוחות
+        שמקבלים תגובה תוך דקות נוטים לסגור פי 3 יותר עסקאות!
+      </div>
+    </div>
+  );
+}
+
+/* ─── AutoCard Component ─── */
+function AutoCard({
+  id,
+  icon,
+  title,
+  description,
+  enabled,
+  onToggle,
+  color,
+  badge,
+  activeSection,
+  onSectionToggle,
+  children,
+}: {
+  id: string;
+  icon: string;
+  title: string;
+  description: string;
+  enabled: boolean;
+  onToggle: () => void;
+  color: string;
+  badge?: string;
+  activeSection: string | null;
+  onSectionToggle: (id: string | null) => void;
+  children?: React.ReactNode;
+}) {
+  const isOpen = activeSection === id;
+
+  return (
+    <div
+      style={{
+        background: enabled ? color + "05" : "white",
+        borderRadius: "14px",
+        border: `2px solid ${enabled ? color + "40" : "#e5e7eb"}`,
+        marginBottom: "12px",
+        transition: "all 0.2s",
+      }}
+    >
+      {/* Header */}
+      <div
+        onClick={() => onSectionToggle(isOpen ? null : id)}
+        style={{
+          padding: "16px 18px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          cursor: "pointer",
+        }}
+      >
+        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          <div
+            style={{
+              width: "46px",
+              height: "46px",
+              flexShrink: 0,
+              background: color + "15",
+              borderRadius: "12px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "24px",
+            }}
+          >
+            {icon}
+          </div>
+          <div>
+            <div
+              style={{
+                fontWeight: 700,
+                fontSize: "15px",
+                color: "#111827",
+                marginBottom: "2px",
+              }}
+            >
+              {title}
+            </div>
+            <div style={{ fontSize: "12px", color: "#6b7280" }}>
+              {description}
+            </div>
+            {badge && (
+              <div
+                style={{
+                  display: "inline-block",
+                  marginTop: "4px",
+                  fontSize: "10px",
+                  fontWeight: 700,
+                  color: enabled ? color : "#9ca3af",
+                  background: enabled ? color + "15" : "#f3f4f6",
+                  padding: "2px 8px",
+                  borderRadius: "8px",
+                }}
+              >
+                {enabled ? `✅ ${badge}` : "⭕ כבוי"}
+              </div>
             )}
           </div>
-
-          {/* Auto-reply editor */}
-          {auto.id === "autoreply" && active && (
-            <div className="mt-4 pt-4 border-t border-gray-100 space-y-3">
-              <label className="text-xs font-bold text-gray-500">✏️ הודעה ללידים חדשים:</label>
-              <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={3} className="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm resize-none outline-none focus:border-green-400 leading-relaxed" />
-              <p className="text-[10px] text-gray-400">💡 הודעה קצרה וידידותית עם שם העסק עובדת הכי טוב</p>
-              <div className="flex gap-1.5 flex-wrap">
-                {[
-                  "שלום! קיבלנו את פנייתך ונחזור אליך בהקדם 😊",
-                  `שלום! אני ${clientName}, שמחתי לקבל פנייתך. נחזור בהקדם! 🙏`,
-                  "תודה שפנית! נחזור אליך תוך שעה ⚡",
-                ].map((t, i) => (
-                  <button key={i} onClick={() => setMessage(t)} className="px-2.5 py-1 bg-gray-50 border border-gray-200 rounded-lg text-[10px] text-gray-600 hover:bg-green-50 hover:border-green-200">תבנית {i + 1}</button>
-                ))}
-              </div>
-              <button onClick={save} disabled={saving} className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${saved ? "bg-green-500 text-white" : saving ? "bg-gray-200 text-gray-400" : "bg-indigo-600 text-white"}`}>
-                {saving ? "⏳" : saved ? "✅ נשמר!" : "💾 שמור"}
-              </button>
-            </div>
-          )}
         </div>
-      ))}
 
-      {/* Info */}
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800 leading-relaxed">
-        <strong>💡 איך זה עובד?</strong><br />
-        ליד חדש → וואצאפ אוטומטי. לא ענה? → followup ביום הבא. עדיין שקט? → עוד followup ביום 3. הכל אוטומטי! 🚀
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <span
+            style={{
+              fontSize: "12px",
+              color: "#9ca3af",
+              transition: "transform 0.2s",
+              transform: isOpen ? "rotate(180deg)" : "none",
+              display: "inline-block",
+            }}
+          >
+            ▼
+          </span>
+          {/* Toggle */}
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggle();
+            }}
+            style={{
+              width: "52px",
+              height: "28px",
+              borderRadius: "14px",
+              background: enabled ? color : "#e5e7eb",
+              cursor: "pointer",
+              position: "relative",
+              transition: "background 0.2s",
+              flexShrink: 0,
+            }}
+          >
+            <div
+              style={{
+                width: "22px",
+                height: "22px",
+                borderRadius: "50%",
+                background: "white",
+                position: "absolute",
+                top: "3px",
+                right: enabled ? "3px" : "27px",
+                transition: "right 0.2s",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+              }}
+            />
+          </div>
+        </div>
       </div>
+
+      {/* Expandable content */}
+      {isOpen && (
+        <div
+          style={{
+            padding: "0 18px 16px",
+            borderTop: "1px solid #f3f4f6",
+            paddingTop: "14px",
+          }}
+        >
+          {children}
+        </div>
+      )}
     </div>
   );
 }
