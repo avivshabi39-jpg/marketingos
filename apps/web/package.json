@@ -26,6 +26,7 @@
     "@vercel/kv": "^3.0.0",
     "bcryptjs": "^2.4.3",
     "clsx": "^2.1.0",
+    "inngest": "^4.1.2",
     "isomorphic-dompurify": "^3.7.1",
     "jose": "^5.4.0",
     "lucide-react": "^1.7.0",
