@@ -4,8 +4,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ─── Tenants / Clients ────────────────────────────────────────────────────────
@@ -728,6 +729,7 @@ model PageView {
 
   @@index([clientId, createdAt])
   @@index([page])
+  @@index([createdAt])
   @@map("page_views")
 }
 
@@ -961,6 +963,7 @@ model EmailSequence {
   logs EmailSequenceLog[]
 
   @@index([clientId])
+  @@index([clientId, isActive])
   @@map("email_sequences")
 }
 
