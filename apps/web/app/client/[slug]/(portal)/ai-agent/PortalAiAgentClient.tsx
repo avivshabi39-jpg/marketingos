@@ -33,6 +33,8 @@ const QUICK_ACTIONS = [
   { label: "📊 מה קורה אצלי?", message: "תראה לי את הביצועים שלי" },
   { label: "🎯 לידים חדשים", message: "מי הלידים החדשים שלי?" },
   { label: "📱 פוסט לפייסבוק", message: "כתוב לי פוסט שיווקי לפייסבוק" },
+  { label: "📞 סקריפט מכירה", message: "כתוב לי סקריפט מכירה טלפוני לעסק שלי" },
+  { label: "📊 ניתוח SWOT", message: "עשה לי ניתוח SWOT לעסק שלי" },
   { label: "🌐 פרסם את הדף", message: "פרסם את דף הנחיתה שלי" },
   { label: "✍️ שנה כותרת", message: "שנה את הכותרת הראשית" },
   { label: "📈 טיפים לשיפור", message: "תן לי 3 טיפים לשיפור העסק" },
@@ -45,7 +47,7 @@ function buildGreeting(
 ): string {
   const lines: string[] = [];
   lines.push(`שלום ${clientName}! 👋`);
-  lines.push("אני הסוכן הדיגיטלי שלך — אפשר לשאול אותי כל שאלה על העסק.");
+  lines.push("אני מיכאל — יועץ השיווק שלך עם 60 שנות ניסיון בשוק הישראלי.");
   lines.push("");
 
   if (!pagePublished) {
@@ -70,6 +72,20 @@ function buildGreeting(
   lines.push("איך אוכל לעזור?");
 
   return lines.join("\n");
+}
+
+function formatMessage(text: string) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/^## (.*)/gm, '<h3 style="font-weight:800;margin:12px 0 6px;font-size:15px">$1</h3>')
+    .replace(/^### (.*)/gm, '<h4 style="font-weight:700;margin:8px 0 4px;font-size:14px">$1</h4>')
+    .replace(/^- (.*)/gm, '<div style="margin:3px 0;padding-right:12px">• $1</div>')
+    .replace(/^(\d+)\. (.*)/gm, '<div style="margin:3px 0;padding-right:12px"><strong>$1.</strong> $2</div>')
+    .replace(/\n\n/g, "<br/><br/>")
+    .replace(/\n/g, "<br/>");
 }
 
 export function PortalAiAgentClient({ client, stats }: Props) {
@@ -223,16 +239,25 @@ export function PortalAiAgentClient({ client, stats }: Props) {
                 </div>
               )}
               <div
-                className={`rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap shadow-sm ${
+                className={`rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
                   msg.role === "user"
-                    ? "bg-indigo-600 text-white rounded-br-sm"
+                    ? "bg-indigo-600 text-white rounded-br-sm whitespace-pre-wrap"
                     : "bg-white text-gray-800 border border-gray-100 rounded-bl-sm"
                 }`}
               >
-                {msg.content || (
+                {msg.content ? (
+                  msg.role === "user" ? (
+                    msg.content
+                  ) : (
+                    <div
+                      dangerouslySetInnerHTML={{ __html: formatMessage(msg.content) }}
+                      style={{ lineHeight: 1.7, direction: "rtl" }}
+                    />
+                  )
+                ) : (
                   <div className="flex items-center gap-2 text-gray-400">
                     <Loader2 size={14} className="animate-spin" />
-                    <span>חושב...</span>
+                    <span>מיכאל חושב...</span>
                   </div>
                 )}
               </div>
