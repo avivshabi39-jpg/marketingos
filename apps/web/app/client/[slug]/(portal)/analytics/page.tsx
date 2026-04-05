@@ -14,6 +14,49 @@ export default async function ClientAnalyticsPage({ params }: { params: { slug: 
   });
   if (!client || !client.isActive) notFound();
 
+  // SEO score
+  const seoClient = await prisma.client.findUnique({
+    where: { id: client.id },
+    select: {
+      name: true, slug: true, pagePublished: true, pageBlocks: true,
+      landingPageTitle: true, seoDescription: true, seoKeywords: true,
+      logoUrl: true, phone: true, email: true,
+      customDomain: true, customDomainVerified: true,
+    },
+  });
+
+  function computeSeo() {
+    if (!seoClient) return null;
+    const blocks = Array.isArray(seoClient.pageBlocks)
+      ? (seoClient.pageBlocks as Record<string, unknown>[])
+      : [];
+    const heroBlock = blocks.find((b) => b.type === "hero") as Record<string, unknown> | undefined;
+    const heroContent = heroBlock?.content as Record<string, string> | undefined;
+    const testimonialCount = blocks.filter((b) => b.type === "testimonial" || b.type === "testimonials").length;
+    const hasForm = blocks.some((b) => b.type === "form" || b.type === "cta" || b.type === "whatsapp");
+
+    const checks = [
+      { name: "דף נחיתה פורסם", passed: !!seoClient.pagePublished, impact: "high" as const, tip: "פרסם את הדף שלך" },
+      { name: "כותרת SEO", passed: !!(seoClient.landingPageTitle && seoClient.landingPageTitle.length > 10), impact: "high" as const, tip: "הוסף כותרת SEO בהגדרות" },
+      { name: "תיאור Meta", passed: !!(seoClient.seoDescription && seoClient.seoDescription.length > 50), impact: "high" as const, tip: "הוסף תיאור Meta בהגדרות" },
+      { name: "כותרת Hero", passed: !!(heroContent?.title && heroContent.title.length > 5), impact: "high" as const, tip: "הוסף כותרת ראשית לדף" },
+      { name: "טלפון", passed: !!seoClient.phone, impact: "medium" as const, tip: "הוסף טלפון בהגדרות" },
+      { name: "המלצות", passed: testimonialCount >= 2, impact: "medium" as const, tip: "הוסף 2+ המלצות לקוחות" },
+      { name: "טופס", passed: hasForm, impact: "high" as const, tip: "הוסף טופס ליצירת קשר" },
+      { name: "לוגו", passed: !!seoClient.logoUrl, impact: "low" as const, tip: "הוסף לוגו לעסק" },
+      { name: "דומיין מותאם", passed: !!(seoClient.customDomain && seoClient.customDomainVerified), impact: "medium" as const, tip: "חבר דומיין משלך" },
+      { name: "מילות מפתח", passed: !!(seoClient.seoKeywords && seoClient.seoKeywords.length > 5), impact: "medium" as const, tip: "הוסף מילות מפתח" },
+    ];
+    const w: Record<string, number> = { high: 3, medium: 2, low: 1 };
+    const maxS = checks.reduce((s, c) => s + w[c.impact], 0);
+    const sc = checks.filter((c) => c.passed).reduce((s, c) => s + w[c.impact], 0);
+    const pct = Math.round((sc / maxS) * 100);
+    const grade = pct >= 90 ? "A" : pct >= 75 ? "B" : pct >= 60 ? "C" : pct >= 40 ? "D" : "F";
+    const tips = checks.filter((c) => !c.passed).sort((a, b) => w[b.impact] - w[a.impact]).slice(0, 3).map((c) => c.tip);
+    return { score: pct, grade, checks, topTips: tips };
+  }
+  const seo = computeSeo();
+
   const since = new Date();
   since.setDate(since.getDate() - 30);
 
@@ -134,6 +177,71 @@ export default async function ClientAnalyticsPage({ params }: { params: { slug: 
       {monthViews === 0 && (
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800">
           📊 <strong>הדף שלך טרם קיבל ביקורים.</strong> שתף את הקישור לדף הנחיתה שלך כדי להתחיל לצבור נתונים.
+        </div>
+      )}
+
+      {/* SEO Score */}
+      {seo && (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-bold text-gray-900 flex items-center gap-2">
+              🔍 ציון SEO שלך
+            </h3>
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center text-white font-black text-xl"
+              style={{
+                background: seo.score >= 75 ? "#22c55e" : seo.score >= 50 ? "#f59e0b" : "#ef4444",
+              }}
+            >
+              {seo.grade}
+            </div>
+          </div>
+
+          {/* Score bar */}
+          <div className="mb-4">
+            <div className="flex justify-between text-sm mb-1">
+              <span className="text-gray-600">ציון כולל</span>
+              <span className="font-bold">{seo.score}%</span>
+            </div>
+            <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-1000"
+                style={{
+                  width: `${seo.score}%`,
+                  background: seo.score >= 75 ? "#22c55e" : seo.score >= 50 ? "#f59e0b" : "#ef4444",
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Checks grid */}
+          <div className="grid grid-cols-2 gap-1.5 mb-4">
+            {seo.checks.map((check, i) => (
+              <div
+                key={i}
+                className={`flex gap-1.5 items-center text-xs px-2 py-1.5 rounded ${
+                  check.passed ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"
+                }`}
+              >
+                <span>{check.passed ? "✅" : "❌"}</span>
+                {check.name}
+              </div>
+            ))}
+          </div>
+
+          {/* Top tips */}
+          {seo.topTips.length > 0 && (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+              <p className="font-bold text-xs text-amber-800 mb-2">
+                💡 הצעדים הבאים לשיפור SEO:
+              </p>
+              {seo.topTips.map((tip, i) => (
+                <p key={i} className="text-xs text-amber-700 py-0.5 border-b border-amber-100 last:border-0">
+                  {i + 1}. {tip}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
