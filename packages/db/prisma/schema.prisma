@@ -114,6 +114,8 @@ model Client {
   customDomain          String?  @unique
   customDomainVerified  Boolean @default(false)
   subdomainActive       Boolean @default(true)
+  gscVerificationTag    String?
+  gscConnected          Boolean @default(false)
   whitelabelEnabled     Boolean @default(false)
   portalTitle         String?
   portalWelcome       String?

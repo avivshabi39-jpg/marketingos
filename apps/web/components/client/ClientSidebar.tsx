@@ -19,6 +19,7 @@ import {
   Mail,
   HelpCircle,
   Palette,
+  Search,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +35,7 @@ function buildNav(slug: string, isRealEstate: boolean): NavItem[] {
     { label: "🎯 לידים",       href: `/client/${slug}/leads`,        icon: Users },
     { label: "📊 דוחות",       href: `/client/${slug}/reports`,      icon: FileBarChart },
     { label: "📈 אנליטיקס",    href: `/client/${slug}/analytics`,    icon: FileBarChart },
+    { label: "🔍 SEO וגוגל",   href: `/client/${slug}/seo`,          icon: Search },
     { label: "📅 תורים",       href: `/client/${slug}/appointments`, icon: FileBarChart },
     { label: "📢 שידור",       href: `/client/${slug}/broadcast`,    icon: FileBarChart },
     { label: "📱 פוסטים",      href: `/client/${slug}/social`,       icon: FileBarChart },
