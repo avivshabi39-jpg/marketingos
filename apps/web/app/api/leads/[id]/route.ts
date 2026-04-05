@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { getSession } from "@/lib/auth";
+import { getSession, isSuperAdmin } from "@/lib/auth";
 import { triggerN8nWebhook } from "@/lib/webhooks";
+import { verifyLeadOwnership } from "@/lib/rls";
 
 const updateSchema = z.object({
   status:     z.enum(["NEW", "CONTACTED", "QUALIFIED", "PROPOSAL", "WON", "LOST"]).optional(),
@@ -26,7 +27,12 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
 
   if (!lead) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
+  // Scoped agent check
   if (session.clientId && lead.clientId !== session.clientId) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+  // Owner check (non-super-admin must own the lead's client)
+  if (!session.clientId && !(await verifyLeadOwnership(params.id, session.userId, isSuperAdmin(session)))) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -42,6 +48,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (!lead) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   if (session.clientId && lead.clientId !== session.clientId) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+  if (!session.clientId && !(await verifyLeadOwnership(params.id, session.userId, isSuperAdmin(session)))) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -98,6 +107,9 @@ export async function DELETE(_req: NextRequest, { params }: { params: { id: stri
   if (!lead) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   if (session.clientId && lead.clientId !== session.clientId) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+  if (!session.clientId && !(await verifyLeadOwnership(params.id, session.userId, isSuperAdmin(session)))) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
