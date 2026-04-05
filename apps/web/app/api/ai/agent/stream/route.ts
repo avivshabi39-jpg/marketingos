@@ -4,6 +4,7 @@ import { getSession, isSuperAdmin } from "@/lib/auth";
 import { getClientSession } from "@/lib/clientAuth";
 import { prisma } from "@/lib/prisma";
 import { checkAiRateLimit } from "@/lib/ai";
+import { rateLimit, getIp } from "@/lib/rateLimit";
 
 const INDUSTRY_HE: Record<string, string> = {
   ROOFING: "גגות", ALUMINUM: "אלומיניום", COSMETICS: "קוסמטיקה",
@@ -21,6 +22,11 @@ export async function POST(req: NextRequest) {
   const clientPortal = adminSession ? null : await getClientSession();
   if (!adminSession && !clientPortal) {
     return new Response("Unauthorized", { status: 401 });
+  }
+
+  const ipLimited = rateLimit(getIp(req), "ai");
+  if (ipLimited) {
+    return new Response("יותר מדי בקשות AI. המתן דקה.", { status: 429 });
   }
 
   if (adminSession) {

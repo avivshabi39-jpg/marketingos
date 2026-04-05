@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { callClaude, checkAiRateLimit, trackAiUsage } from "@/lib/ai";
+import { rateLimit, getIp } from "@/lib/rateLimit";
 
 const generateSchema = z.object({
   clientId: z.string().min(1, "clientId חובה"),
@@ -37,6 +38,11 @@ const PLATFORM_GUIDE: Record<string, string> = {
 export async function POST(req: NextRequest) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const ipLimited = rateLimit(getIp(req), "ai");
+  if (ipLimited) {
+    return NextResponse.json({ error: "יותר ��די בקשות AI. המתן דקה." }, { status: 429 });
+  }
 
   const rate = await checkAiRateLimit(session.userId);
   if (!rate.ok) {

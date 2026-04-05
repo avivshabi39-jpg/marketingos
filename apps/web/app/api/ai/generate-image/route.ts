@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getSession, isSuperAdmin } from "@/lib/auth";
 import { getClientSession } from "@/lib/clientAuth";
 import { callClaude, checkAiRateLimit, trackAiUsage } from "@/lib/ai";
+import { rateLimit, getIp } from "@/lib/rateLimit";
 
 const SIZES: Record<string, { w: number; h: number }> = {
   instagram: { w: 1080, h: 1080 },
@@ -44,6 +45,11 @@ export async function POST(req: NextRequest) {
   const session = await getSession();
   const clientSession = !session ? await getClientSession() : null;
   if (!session && !clientSession) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const ipLimited = rateLimit(getIp(req), "ai");
+  if (ipLimited) {
+    return NextResponse.json({ error: "יותר מדי בקשות AI. המתן דקה." }, { status: 429 });
+  }
 
   if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json({ error: "AI לא מוגדר" }, { status: 503 });

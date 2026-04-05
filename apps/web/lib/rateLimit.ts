@@ -34,6 +34,8 @@ const PRESETS: Record<string, RateLimitConfig> = {
   intake:    { max: 20,  windowMs: 60_000 },
   broadcast: { max: 3,   windowMs: 300_000 }, // 3 broadcasts per 5 min
   api:       { max: 120, windowMs: 60_000 },  // general API throttle
+  ai:        { max: 10,  windowMs: 60_000 },  // AI calls — expensive
+  whatsapp:  { max: 20,  windowMs: 60_000 },  // WhatsApp sends
 };
 
 /**
