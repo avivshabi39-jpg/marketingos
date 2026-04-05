@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { PortalDripClient } from "./PortalDripClient";
 
 interface ClientData {
   id: string;
@@ -8,6 +9,11 @@ interface ClientData {
   autoReplyActive: boolean;
   whatsappTemplate: string | null;
   googleReviewLink: string | null;
+  dripEnabled: boolean;
+  dripDay1Message: string | null;
+  dripDay1Delay: number | null;
+  dripDay3Message: string | null;
+  dripDay3Delay: number | null;
 }
 
 interface AutomationSettings {
@@ -400,91 +406,24 @@ export function PortalAutomationsClient({
         icon="📱"
         title="רצף הודעות WhatsApp"
         description="סדרת הודעות ממוקדת ללידים חדשים"
-        enabled={true}
+        enabled={client.dripEnabled}
         color="#ec4899"
-        badge="3 הודעות בשבוע"
+        badge="2 הודעות followup"
         activeSection={activeSection}
         onSectionToggle={setActiveSection}
         onToggle={() => {}}
       >
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "8px" }}
-        >
-          {[
-            {
-              day: "מיידי",
-              msg: "הודעת ברכה ראשונה",
-              icon: "💬",
-              color: "#22c55e",
-            },
-            {
-              day: "יום 1",
-              msg: "followup ראשון",
-              icon: "🔄",
-              color: "#3b82f6",
-            },
-            {
-              day: "יום 3",
-              msg: "followup שני",
-              icon: "📞",
-              color: "#f59e0b",
-            },
-          ].map((step, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                gap: "10px",
-                alignItems: "center",
-                padding: "10px 12px",
-                background: "#fdf4ff",
-                borderRadius: "8px",
-                border: "1px solid #f3e8ff",
-              }}
-            >
-              <div
-                style={{
-                  width: "36px",
-                  height: "36px",
-                  flexShrink: 0,
-                  background: step.color + "20",
-                  borderRadius: "8px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "18px",
-                }}
-              >
-                {step.icon}
-              </div>
-              <div>
-                <div
-                  style={{
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    color: step.color,
-                    marginBottom: "2px",
-                  }}
-                >
-                  {step.day}
-                </div>
-                <div style={{ fontSize: "13px", color: "#374151" }}>
-                  {step.msg}
-                </div>
-              </div>
-              <div
-                style={{
-                  marginRight: "auto",
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  color: "#22c55e",
-                }}
-              >
-                ✅ פעיל
-              </div>
-            </div>
-          ))}
-        </div>
+        <PortalDripClient
+          clientId={client.id}
+          clientName={client.name}
+          initialDrip={{
+            dripEnabled: client.dripEnabled,
+            dripDay1Message: client.dripDay1Message,
+            dripDay1Delay: client.dripDay1Delay,
+            dripDay3Message: client.dripDay3Message,
+            dripDay3Delay: client.dripDay3Delay,
+          }}
+        />
       </AutoCard>
 
       {/* Info box */}

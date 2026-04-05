@@ -15,6 +15,11 @@ export default async function PortalAutomationsPage({ params }: { params: { slug
       autoReplyActive: true,
       whatsappTemplate: true,
       googleReviewLink: true,
+      dripEnabled: true,
+      dripDay1Message: true,
+      dripDay1Delay: true,
+      dripDay3Message: true,
+      dripDay3Delay: true,
     },
   });
   if (!client) redirect("/");

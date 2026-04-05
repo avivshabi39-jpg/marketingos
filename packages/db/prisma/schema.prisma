@@ -69,6 +69,13 @@ model Client {
   whatsappTemplate  String?
   autoReplyActive   Boolean @default(false)
 
+  // WhatsApp drip sequence
+  dripEnabled       Boolean @default(false)
+  dripDay1Message   String?
+  dripDay1Delay     Int?    @default(24)
+  dripDay3Message   String?
+  dripDay3Delay     Int?    @default(72)
+
   // Green API — direct WhatsApp integration (no n8n needed)
   greenApiInstanceId String?
   greenApiToken      String?
