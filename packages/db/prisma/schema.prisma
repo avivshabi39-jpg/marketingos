@@ -278,6 +278,9 @@ model Lead {
   @@index([createdAt])
   @@index([leadScore])
   @@index([source])
+  @@index([clientId, status])
+  @@index([clientId, createdAt])
+  @@index([clientId, status, createdAt])
   @@map("leads")
 }
 
