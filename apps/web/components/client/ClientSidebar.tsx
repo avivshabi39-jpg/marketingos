@@ -17,6 +17,7 @@ import {
   Bot,
   Home,
   Mail,
+  HelpCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -40,6 +41,7 @@ function buildNav(slug: string, isRealEstate: boolean): NavItem[] {
     { label: "📧 מיילים",       href: `/client/${slug}/email`,        icon: Mail },
     { label: "⚡ אוטומציות",   href: `/client/${slug}/automations`,  icon: Settings },
     { label: "🤖 הסוכן שלי",   href: `/client/${slug}/ai-agent`,     icon: Bot },
+    { label: "💡 עזרה",        href: `/client/${slug}/help`,         icon: HelpCircle },
     { label: "⚙️ הגדרות",     href: `/client/${slug}/settings`,     icon: Settings },
   ];
   if (isRealEstate) {
