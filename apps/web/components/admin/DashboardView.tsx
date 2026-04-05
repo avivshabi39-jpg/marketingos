@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Circle } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -181,6 +182,13 @@ const QUICK_ACTIONS = [
 // ─── Clients Table ────────────────────────────────────────────────────────────
 function ClientsTable({ clients }: { clients: ClientType[] }) {
   const router = useRouter();
+  const [search, setSearch] = useState("");
+
+  const filtered = clients.filter((c) => {
+    if (!search) return true;
+    const q = search.toLowerCase();
+    return c.name.toLowerCase().includes(q) || c.slug?.toLowerCase().includes(q);
+  });
 
   if (clients.length === 0) {
     return (
@@ -208,6 +216,16 @@ function ClientsTable({ clients }: { clients: ClientType[] }) {
 
   return (
     <div className="overflow-x-auto">
+      {/* Search */}
+      <div className="px-4 py-3 border-b border-gray-100">
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="🔍 חפש לקוח..."
+          className="w-full max-w-xs border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-indigo-400"
+          dir="rtl"
+        />
+      </div>
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr style={{ borderBottom: "1px solid #f3f4f6" }}>
@@ -229,7 +247,7 @@ function ClientsTable({ clients }: { clients: ClientType[] }) {
           </tr>
         </thead>
         <tbody>
-          {clients.map((c) => {
+          {filtered.map((c) => {
             const emoji = INDUSTRY_EMOJI[c.industry ?? ""] ?? "🏢";
             const label = INDUSTRY_LABELS[c.industry ?? ""] ?? "כללי";
             const joined = new Date(c.createdAt).toLocaleDateString("he-IL", {
