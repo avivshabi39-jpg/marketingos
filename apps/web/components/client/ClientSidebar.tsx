@@ -16,6 +16,7 @@ import {
   Globe,
   Bot,
   Home,
+  Mail,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -36,6 +37,7 @@ function buildNav(slug: string, isRealEstate: boolean): NavItem[] {
     { label: "📱 פוסטים",      href: `/client/${slug}/social`,       icon: FileBarChart },
     { label: "🧙 בנה דף",       href: `/client/${slug}/build-page`,   icon: Globe },
     { label: "✏️ ערוך דף",     href: `/client/${slug}/edit-page`,    icon: Globe },
+    { label: "📧 מיילים",       href: `/client/${slug}/email`,        icon: Mail },
     { label: "⚡ אוטומציות",   href: `/client/${slug}/automations`,  icon: Settings },
     { label: "🤖 הסוכן שלי",   href: `/client/${slug}/ai-agent`,     icon: Bot },
     { label: "⚙️ הגדרות",     href: `/client/${slug}/settings`,     icon: Settings },

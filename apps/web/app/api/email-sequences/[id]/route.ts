@@ -1,31 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
+import { getClientSession } from "@/lib/clientAuth";
 import { prisma } from "@/lib/prisma";
 
-async function canAccess(session: Awaited<ReturnType<typeof getSession>>, sequenceId: string) {
-  if (!session) return null;
+async function canAccess(sequenceId: string) {
+  const session = await getSession();
+  const clientSession = !session ? await getClientSession() : null;
+  if (!session && !clientSession) return null;
+
   const sequence = await prisma.emailSequence.findUnique({
     where: { id: sequenceId },
     include: { client: { select: { ownerId: true } } },
   });
   if (!sequence) return null;
-  if (session.role === "SUPER_ADMIN") return sequence;
+
+  if (clientSession) {
+    return clientSession.clientId === sequence.clientId ? sequence : null;
+  }
+
+  if (session!.role === "SUPER_ADMIN") return sequence;
   const allowed =
-    sequence.client.ownerId === session.userId ||
-    session.clientId === sequence.clientId;
-  if (!allowed) return null;
-  return sequence;
+    sequence.client.ownerId === session!.userId ||
+    session!.clientId === sequence.clientId;
+  return allowed ? sequence : null;
 }
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
   const { id } = await params;
-  const sequence = await canAccess(session, id);
+  const sequence = await canAccess(id);
   if (!sequence) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   return NextResponse.json({ sequence });
@@ -35,11 +40,8 @@ export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
   const { id } = await params;
-  const existing = await canAccess(session, id);
+  const existing = await canAccess(id);
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const body = await req.json().catch(() => null);
@@ -67,11 +69,8 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
   const { id } = await params;
-  const existing = await canAccess(session, id);
+  const existing = await canAccess(id);
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   await prisma.emailSequence.delete({ where: { id } });
