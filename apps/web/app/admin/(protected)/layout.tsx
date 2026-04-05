@@ -4,6 +4,7 @@ import { TopBar } from "@/components/admin/TopBar";
 import { AdminOnboarding } from "@/components/admin/AdminOnboarding";
 import { PushPermission } from "@/components/admin/PushPermission";
 import { PwaInstallBanner } from "@/components/admin/PwaInstallBanner";
+import { InactivityGuard } from "@/components/admin/InactivityGuard";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -57,6 +58,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <AdminOnboarding userName="משתמש חדש" />
       <PushPermission />
       <PwaInstallBanner />
+      <InactivityGuard />
     </div>
   );
 }
