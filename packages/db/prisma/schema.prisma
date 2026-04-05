@@ -52,6 +52,8 @@ model Client {
   landingPageCta      String?
   landingPageColor    String?
   landingPageLogo     String?
+  seoDescription      String?
+  seoKeywords         String?
   landingPageActive   Boolean @default(true)
 
   // Page builder

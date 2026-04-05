@@ -17,24 +17,27 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const client = await prisma.client.findUnique({
     where: { slug: params.tenant },
-    select: { name: true, landingPageTitle: true, landingPageSubtitle: true, landingPageLogo: true },
+    select: { name: true, slug: true, landingPageTitle: true, landingPageSubtitle: true, landingPageLogo: true, primaryColor: true, seoDescription: true, seoKeywords: true, industry: true },
   });
   if (!client) return {};
+
   const title = client.landingPageTitle ?? client.name;
-  const description = client.landingPageSubtitle ?? `${client.name} — שירותים מקצועיים`;
+  const description = (client.seoDescription ?? client.landingPageSubtitle ?? `${client.name} — שירותים מקצועיים`).slice(0, 160);
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
+  const pageUrl = `${appUrl}/${client.slug}`;
+  const ogImage = client.landingPageLogo ?? `${appUrl}/api/og?name=${encodeURIComponent(client.name)}&color=${encodeURIComponent(client.primaryColor ?? "#6366f1")}&sub=${encodeURIComponent(description.slice(0, 60))}`;
+
   return {
-    title: `${title} | ${client.name}`,
+    title,
     description,
+    keywords: client.seoKeywords ?? [client.name, client.industry, "ישראל"].filter(Boolean).join(", "),
+    alternates: { canonical: pageUrl },
+    robots: { index: true, follow: true },
     openGraph: {
-      title: `${title} | ${client.name}`,
-      description,
-      images: client.landingPageLogo ? [{ url: client.landingPageLogo }] : undefined,
+      title, description, url: pageUrl, siteName: client.name, locale: "he_IL", type: "website",
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
     },
-    twitter: {
-      card: "summary",
-      title: `${title} | ${client.name}`,
-      description,
-    },
+    twitter: { card: "summary_large_image", title, description, images: [ogImage] },
   };
 }
 
