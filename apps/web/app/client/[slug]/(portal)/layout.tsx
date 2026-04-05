@@ -2,6 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import { getClientSession } from "@/lib/clientAuth";
 import { prisma } from "@/lib/prisma";
 import { ClientSidebar } from "@/components/client/ClientSidebar";
+import { getWhitelabelConfig } from "@/lib/whitelabel";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -45,6 +46,7 @@ export default async function ClientPortalLayout({
       primaryColor: true,
       isActive: true,
       industry: true,
+      ownerId: true,
       brandName: true,
       brandLogo: true,
       brandPrimaryColor: true,
@@ -57,13 +59,26 @@ export default async function ClientPortalLayout({
 
   if (!client || !client.isActive) notFound();
 
-  // White-label: override display name and color when enabled
-  const displayName  = client.whitelabelEnabled && client.brandName
+  // Owner-level white label (agency branding)
+  const ownerBrand = await getWhitelabelConfig(client.ownerId);
+
+  // Merge: client-level WL overrides owner-level, owner-level overrides defaults
+  const displayName = client.whitelabelEnabled && client.brandName
     ? client.brandName
-    : client.name;
+    : ownerBrand.enabled
+      ? ownerBrand.name
+      : client.name;
   const primaryColor = client.whitelabelEnabled && client.brandPrimaryColor
     ? client.brandPrimaryColor
-    : client.primaryColor;
+    : ownerBrand.enabled
+      ? ownerBrand.color
+      : client.primaryColor;
+  const brandLogo = client.whitelabelEnabled && client.brandLogo
+    ? client.brandLogo
+    : ownerBrand.enabled
+      ? ownerBrand.logo
+      : null;
+  const hideFooter = ownerBrand.enabled && ownerBrand.hideFooter;
 
   return (
     <div className="flex min-h-screen bg-gray-50" dir="rtl">
@@ -81,17 +96,17 @@ export default async function ClientPortalLayout({
         slug={params.slug}
         clientName={displayName}
         primaryColor={primaryColor}
-        brandLogo={client.whitelabelEnabled ? (client.brandLogo ?? null) : null}
+        brandLogo={brandLogo}
         industry={client.industry ?? null}
       />
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="lg:hidden bg-white border-b border-gray-100 px-4 h-14 flex items-center">
           <div className="w-10" />
           {/* Show brand logo in mobile header when white-label is active */}
-          {client.whitelabelEnabled && client.brandLogo ? (
+          {brandLogo ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={client.brandLogo}
+              src={brandLogo}
               alt={displayName}
               className="h-7 object-contain mx-auto"
             />
@@ -107,11 +122,15 @@ export default async function ClientPortalLayout({
         )}
         <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">{children}</main>
         {/* Portal footer */}
-        {client.whitelabelEnabled && client.portalFooter && (
+        {client.whitelabelEnabled && client.portalFooter ? (
           <footer className="border-t border-gray-100 px-6 py-3 text-xs text-gray-400 text-center">
             {client.portalFooter}
           </footer>
-        )}
+        ) : !hideFooter ? (
+          <footer className="border-t border-gray-100 px-6 py-3 text-xs text-gray-400 text-center">
+            Powered by {ownerBrand.enabled ? ownerBrand.name : "MarketingOS"}
+          </footer>
+        ) : null}
       </div>
     </div>
   );

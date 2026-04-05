@@ -217,6 +217,15 @@ model User {
   aiUsages            AiUsage[]
   emailTemplates      EmailTemplate[]     @relation("OwnedTemplates")
 
+  // White Label
+  wlEnabled           Boolean @default(false)
+  wlName              String?
+  wlLogo              String?
+  wlColor             String?
+  wlDomain            String?
+  wlFromEmail         String?
+  wlHideFooter        Boolean @default(false)
+
   @@map("users")
 }
 

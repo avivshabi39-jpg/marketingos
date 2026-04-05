@@ -31,6 +31,7 @@ const TABS = [
   { key: "integrations", label: "אינטגרציות",     icon: Zap },
   { key: "templates",    label: "תבניות הודעות",  icon: MessageSquare },
   { key: "ai",           label: "שימוש AI",       icon: Sparkles },
+  { key: "whitelabel",   label: "White Label",    icon: Shield },
   { key: "team",          label: "צוות ו-Webhook", icon: Users },
   { key: "users",        label: "משתמשים",        icon: Users },
   { key: "audit",        label: "יומן פעילות",    icon: ScrollText },
@@ -993,6 +994,174 @@ function TeamWebhookTab({ userId }: { userId: string }) {
   );
 }
 
+function WhiteLabelTab() {
+  const [wl, setWl] = useState({
+    enabled: false,
+    name: "",
+    logo: "",
+    color: "#6366f1",
+    domain: "",
+    fromEmail: "",
+    hideFooter: false,
+  });
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/admin/whitelabel")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.whitelabel) {
+          setWl({
+            enabled: d.whitelabel.wlEnabled || false,
+            name: d.whitelabel.wlName || "",
+            logo: d.whitelabel.wlLogo || "",
+            color: d.whitelabel.wlColor || "#6366f1",
+            domain: d.whitelabel.wlDomain || "",
+            fromEmail: d.whitelabel.wlFromEmail || "",
+            hideFooter: d.whitelabel.wlHideFooter || false,
+          });
+        }
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  async function saveWhitelabel() {
+    setSaving(true);
+    await fetch("/api/admin/whitelabel", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        wlEnabled: wl.enabled,
+        wlName: wl.name,
+        wlLogo: wl.logo,
+        wlColor: wl.color,
+        wlDomain: wl.domain,
+        wlFromEmail: wl.fromEmail,
+        wlHideFooter: wl.hideFooter,
+      }),
+    }).catch(() => {});
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  }
+
+  if (loading) return <p className="text-center text-gray-400 py-8">טוען...</p>;
+
+  return (
+    <div className="space-y-6" dir="rtl">
+      <div>
+        <h2 className="font-bold text-lg">🏷️ White Label</h2>
+        <p className="text-sm text-gray-500">מכור MarketingOS תחת המותג שלך</p>
+      </div>
+
+      {/* Enable toggle */}
+      <div className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
+        <div>
+          <p className="font-bold text-sm">הפעל White Label</p>
+          <p className="text-xs text-gray-500">הלקוחות שלך יראו את המותג שלך</p>
+        </div>
+        <div
+          onClick={() => setWl((w) => ({ ...w, enabled: !w.enabled }))}
+          className="relative w-[52px] h-[28px] rounded-full cursor-pointer transition-colors flex-shrink-0"
+          style={{ background: wl.enabled ? "#6366f1" : "#e5e7eb" }}
+        >
+          <div
+            className="absolute top-[3px] w-[22px] h-[22px] rounded-full bg-white shadow transition-all"
+            style={{ right: wl.enabled ? "3px" : "27px" }}
+          />
+        </div>
+      </div>
+
+      {wl.enabled && (
+        <div className="space-y-4">
+          {([
+            { key: "name", label: "🏢 שם המותג", placeholder: "Agency Pro", dir: "rtl" },
+            { key: "logo", label: "🖼️ URL לוגו", placeholder: "https://...", dir: "ltr" },
+            { key: "domain", label: "🌐 דומיין", placeholder: "agency.co.il", dir: "ltr" },
+            { key: "fromEmail", label: "📧 מייל שולח", placeholder: "support@agency.co.il", dir: "ltr" },
+          ] as const).map((f) => (
+            <div key={f.key}>
+              <label className="block text-xs font-bold text-gray-500 mb-1.5">{f.label}</label>
+              <input
+                value={wl[f.key]}
+                onChange={(e) => setWl((w) => ({ ...w, [f.key]: e.target.value }))}
+                placeholder={f.placeholder}
+                dir={f.dir}
+                className="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
+              />
+            </div>
+          ))}
+
+          {/* Color picker */}
+          <div>
+            <label className="block text-xs font-bold text-gray-500 mb-1.5">🎨 צבע ראשי</label>
+            <div className="flex gap-2 items-center">
+              <input
+                type="color"
+                value={wl.color}
+                onChange={(e) => setWl((w) => ({ ...w, color: e.target.value }))}
+                className="w-10 h-10 rounded-lg border-none cursor-pointer"
+              />
+              <input
+                value={wl.color}
+                onChange={(e) => setWl((w) => ({ ...w, color: e.target.value }))}
+                className="border-2 border-gray-200 rounded-xl px-3 py-2 text-sm font-mono w-32 outline-none"
+                dir="ltr"
+              />
+              <div className="h-10 flex-1 rounded-lg" style={{ background: wl.color }} />
+            </div>
+          </div>
+
+          {/* Hide footer */}
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={wl.hideFooter}
+              onChange={(e) => setWl((w) => ({ ...w, hideFooter: e.target.checked }))}
+              className="w-4 h-4 rounded"
+            />
+            <span className="text-sm">הסתר &quot;Powered by&quot; בפורטל הלקוח</span>
+          </label>
+
+          {/* Preview */}
+          <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+            <p className="text-xs font-bold text-gray-400 mb-2">תצוגה מקדימה:</p>
+            <div className="flex items-center gap-3">
+              {wl.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={wl.logo} alt="" className="h-8 object-contain" />
+              ) : (
+                <div className="font-bold text-lg" style={{ color: wl.color }}>
+                  {wl.name || "Agency Pro"}
+                </div>
+              )}
+            </div>
+            {!wl.hideFooter && (
+              <p className="text-[10px] text-gray-400 mt-3">
+                Powered by {wl.name || "MarketingOS"}
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      <button
+        onClick={saveWhitelabel}
+        disabled={saving}
+        className={cn(
+          "px-6 py-2.5 rounded-xl font-bold text-sm transition-all",
+          saved ? "bg-green-500 text-white" : saving ? "bg-gray-200 text-gray-400" : "bg-indigo-600 text-white"
+        )}
+      >
+        {saving ? "⏳ שומר..." : saved ? "✅ נשמר!" : "💾 שמור"}
+      </button>
+    </div>
+  );
+}
+
 function AuditLogTab() {
   const [logs, setLogs]     = useState<AuditEntry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -1266,6 +1435,7 @@ export function SettingsClient({
         {activeTab === "users"        && isSuperAdmin && (
           <UsersTab initialUsers={users} clients={clients} currentUserId={currentUserId} />
         )}
+        {activeTab === "whitelabel" && <WhiteLabelTab />}
         {activeTab === "audit" && isSuperAdmin && <AuditLogTab />}
       </div>
     </div>
