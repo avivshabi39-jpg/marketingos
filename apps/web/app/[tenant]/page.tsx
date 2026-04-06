@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { LandingPageView } from "./LandingPageView";
 import { AgentPageView } from "./AgentPageView";
+
+export const revalidate = 60; // ISR — revalidate every 60 seconds
 import BlockRenderer from "@/components/builder/BlockRenderer";
 import type { Block } from "@/types/builder";
 import { GoogleAnalytics } from "@/components/GoogleAnalytics";

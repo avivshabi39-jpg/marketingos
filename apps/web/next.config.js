@@ -10,6 +10,16 @@ const nextConfig = {
     serverComponentsExternalPackages: ["@prisma/client", "bcryptjs", "@react-pdf/renderer"],
   },
 
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "image.pollinations.ai" },
+      { protocol: "https", hostname: "lh3.googleusercontent.com" },
+    ],
+    minimumCacheTTL: 31536000,
+    formats: ["image/avif", "image/webp"],
+  },
+
   async redirects() {
     return [
       {
@@ -26,7 +36,8 @@ const nextConfig = {
   },
 
   async headers() {
-    const headers = [
+    // Global security headers
+    const securityHeaders = [
       { key: "X-Content-Type-Options",           value: "nosniff" },
       { key: "X-Frame-Options",                   value: "DENY" },
       { key: "X-XSS-Protection",                  value: "1; mode=block" },
@@ -46,28 +57,94 @@ const nextConfig = {
           "default-src 'self'",
           "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
           "style-src 'self' 'unsafe-inline'",
-          "img-src 'self' data: blob: https://res.cloudinary.com https://api.qrserver.com https://www.google-analytics.com",
+          "img-src 'self' data: blob: https://res.cloudinary.com https://image.pollinations.ai https://api.qrserver.com https://www.google-analytics.com",
           "font-src 'self'",
-          "connect-src 'self' https://api.resend.com https://api.cloudinary.com https://api.green-api.com https://www.google-analytics.com https://analytics.google.com",
+          "connect-src 'self' https://api.resend.com https://api.cloudinary.com https://api.green-api.com https://api.anthropic.com https://app.inngest.com https://www.google-analytics.com https://analytics.google.com",
           "frame-src 'none'",
           "object-src 'none'",
           "base-uri 'self'",
           "form-action 'self'",
-          // Only force HTTPS upgrade in production — never in dev (causes redirect loops)
           ...(isProd ? ["upgrade-insecure-requests"] : []),
         ].join("; "),
       },
     ];
 
-    // HSTS must never be sent over HTTP — production only
     if (isProd) {
-      headers.push({
+      securityHeaders.push({
         key: "Strict-Transport-Security",
         value: "max-age=63072000; includeSubDomains; preload",
       });
     }
 
-    return [{ source: "/(.*)", headers }];
+    return [
+      // Global security headers
+      { source: "/(.*)", headers: securityHeaders },
+
+      // ── Static assets — cache forever ──────────────────
+      {
+        source: "/icons/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/manifest.json",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=86400" },
+        ],
+      },
+      {
+        source: "/sw.js",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
+          { key: "Service-Worker-Allowed", value: "/" },
+        ],
+      },
+
+      // ── OG images — cache 1 day at CDN ─────────────────
+      {
+        source: "/api/og",
+        headers: [
+          { key: "Cache-Control", value: "public, s-maxage=86400, stale-while-revalidate=3600" },
+        ],
+      },
+
+      // ── Sitemap + robots — cache 1 hour at CDN ─────────
+      {
+        source: "/sitemap.xml",
+        headers: [
+          { key: "Cache-Control", value: "public, s-maxage=3600, stale-while-revalidate=600" },
+        ],
+      },
+      {
+        source: "/robots.txt",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=86400" },
+        ],
+      },
+
+      // ── API — no cache ─────────────────────────────────
+      {
+        source: "/api/:path*",
+        headers: [
+          { key: "Cache-Control", value: "no-store, no-cache" },
+        ],
+      },
+
+      // ── Admin/portal — private, no cache ───────────────
+      {
+        source: "/admin/:path*",
+        headers: [
+          { key: "Cache-Control", value: "private, no-store" },
+        ],
+      },
+      {
+        source: "/client/:path*",
+        headers: [
+          { key: "Cache-Control", value: "private, no-store" },
+        ],
+      },
+    ];
   },
 };
 
