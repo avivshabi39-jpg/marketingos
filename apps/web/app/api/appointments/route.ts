@@ -5,6 +5,7 @@ import { getSession, isSuperAdmin } from "@/lib/auth";
 import { getClientSession } from "@/lib/clientAuth";
 import { sanitizeText, sanitizePhone, sanitizeEmail } from "@/lib/sanitize";
 import { getPaginationParams, paginationMeta } from "@/lib/pagination";
+import { triggerN8nWebhook as triggerN8nDirect } from "@/lib/n8n";
 
 const createSchema = z.object({
   clientId:    z.string().min(1),
@@ -105,6 +106,18 @@ export async function POST(req: NextRequest) {
       notes,
     },
   });
+
+  // Fire n8n appointment reminder webhook
+  triggerN8nDirect("appointment-reminder", {
+    appointmentId: appointment.id,
+    clientId: appointment.clientId,
+    leadId: appointment.leadId ?? null,
+    leadName: appointment.name,
+    leadPhone: appointment.phone ?? "",
+    scheduledAt: appointment.scheduledAt.toISOString(),
+    notes: appointment.notes ?? "",
+    action: "created",
+  }).catch(() => {});
 
   return NextResponse.json({ appointment }, { status: 201 });
 }
