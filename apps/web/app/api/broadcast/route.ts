@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { rateLimit, getIp } from "@/lib/rateLimit";
 import { sanitizeText } from "@/lib/sanitize";
+import { triggerN8nWebhook as triggerN8nDirect } from "@/lib/n8n";
 
 export const dynamic = "force-dynamic";
 
@@ -90,6 +91,16 @@ export async function POST(req: NextRequest) {
       status: "pending",
     },
   });
+
+  // Fire n8n Railway direct webhook
+  triggerN8nDirect("broadcast", {
+    broadcastId: log.id,
+    clientId,
+    message,
+    totalLeads: phones.length,
+    phones,
+    createdAt: log.createdAt.toISOString(),
+  }).catch(() => {});
 
   return NextResponse.json({ broadcastId: log.id, totalCount: phones.length }, { status: 201 });
 }
