@@ -77,6 +77,22 @@ export function PortalSettingsClient({
   const [fb, setFb] = useState({ enabled: false, pageId: "", token: "", verifyToken: "" });
   const [fbSaving, setFbSaving] = useState(false);
   const [fbSaved, setFbSaved] = useState(false);
+  const [tokenStatus, setTokenStatus] = useState<{
+    hasToken?: boolean;
+    isValid?: boolean;
+    status?: string;
+    daysUntilExpiry?: number | null;
+    needsRefresh?: boolean;
+  } | null>(null);
+
+  useEffect(() => {
+    if (activeTab === "facebook") {
+      fetch(`/api/clients/${client.id}/meta-token`)
+        .then((r) => r.json())
+        .then(setTokenStatus)
+        .catch(() => {});
+    }
+  }, [activeTab, client.id]);
 
   // Domain state
   const [domainData, setDomainData] = useState<{
@@ -1042,6 +1058,15 @@ export function PortalSettingsClient({
         <div style={{ background: "white", borderRadius: "14px", border: "1px solid #e5e7eb", padding: "20px" }}>
           <h3 style={{ fontWeight: 700, fontSize: "15px", marginBottom: "6px" }}>📘 Facebook Lead Ads</h3>
           <p style={{ fontSize: "13px", color: "#6b7280", marginBottom: "16px" }}>קבל לידים מפייסבוק ישירות למערכת</p>
+
+          {tokenStatus?.hasToken && (
+            <div style={{ padding: "10px 14px", borderRadius: "10px", background: tokenStatus.isValid ? "#f0fdf4" : "#fef2f2", border: `1px solid ${tokenStatus.isValid ? "#bbf7d0" : "#fecaca"}`, marginBottom: "14px", fontSize: "13px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span><strong>טוקן:</strong> {tokenStatus.status}{tokenStatus.daysUntilExpiry != null ? ` (${tokenStatus.daysUntilExpiry} ימים)` : ""}</span>
+              {tokenStatus.needsRefresh && (
+                <button onClick={async () => { const r = await fetch(`/api/clients/${client.id}/meta-token`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "refresh" }) }); const d = await r.json(); if (d.ok) { setTokenStatus((s) => s ? { ...s, status: "✅ רוענן!", needsRefresh: false } : s); } }} style={{ padding: "4px 12px", background: "#f59e0b", color: "white", border: "none", borderRadius: "6px", cursor: "pointer", fontSize: "12px" }}>🔄 רענן</button>
+              )}
+            </div>
+          )}
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px", background: "#f9fafb", borderRadius: "10px", marginBottom: "14px" }}>
             <div>
