@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { triggerN8nWebhook } from "@/lib/webhooks";
+import { triggerN8nWebhook as triggerN8nDirect } from "@/lib/n8n";
 import { matchLeadToProperties } from "@/lib/propertyMatcher";
 import { decrypt } from "@/lib/encrypt";
 import { sendAutoReply } from "@/lib/autoReply";
@@ -216,6 +217,16 @@ async function processEntries(entries: FbEntry[]) {
           utmCampaign: change.value.adgroup_id,
         },
         fromFacebook: true,
+      }).catch(() => {});
+
+      // Fire n8n Railway direct webhook
+      triggerN8nDirect("new-lead", {
+        leadId: lead.id,
+        clientId: lead.clientId,
+        name: `${firstName} ${lastName}`.trim() || "Facebook Lead",
+        phone: phone ?? "",
+        source: "facebook",
+        createdAt: lead.createdAt.toISOString(),
       }).catch(() => {});
 
       // Auto-reply via WhatsApp
