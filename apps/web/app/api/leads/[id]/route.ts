@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession, isSuperAdmin } from "@/lib/auth";
 import { triggerN8nWebhook } from "@/lib/webhooks";
+import { triggerN8nWebhook as triggerN8nDirect } from "@/lib/n8n";
 import { verifyLeadOwnership } from "@/lib/rls";
 
 const updateSchema = z.object({
@@ -92,6 +93,17 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         oldStatus: lead.status,
         newStatus: parsed.data.status,
       },
+    }).catch(() => {});
+
+    // Fire n8n Railway direct webhook
+    triggerN8nDirect("lead-status-change", {
+      leadId: updated.id,
+      clientId: updated.clientId,
+      name: `${lead.firstName} ${lead.lastName}`,
+      phone: lead.phone ?? "",
+      oldStatus: lead.status,
+      newStatus: parsed.data.status,
+      updatedAt: updated.updatedAt.toISOString(),
     }).catch(() => {});
   }
 
