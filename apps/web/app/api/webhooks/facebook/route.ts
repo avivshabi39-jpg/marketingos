@@ -4,6 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { triggerN8nWebhook } from "@/lib/webhooks";
 import { matchLeadToProperties } from "@/lib/propertyMatcher";
 import { decrypt } from "@/lib/encrypt";
+import { sendAutoReply } from "@/lib/autoReply";
+import { sendNewLeadEmail } from "@/lib/email";
+import { sendPushNotification } from "@/lib/push";
 
 // Facebook field name → our Lead field mapping
 const FB_FIELD_MAP: Record<string, string> = {
@@ -146,7 +149,14 @@ async function processEntries(entries: FbEntry[]) {
           id: true,
           name: true,
           industry: true,
+          ownerId: true,
           facebookAccessToken: true,
+          whatsappNumber: true,
+          agentPhone: true,
+          autoReplyActive: true,
+          whatsappTemplate: true,
+          greenApiInstanceId: true,
+          greenApiToken: true,
         },
       });
 
@@ -207,6 +217,36 @@ async function processEntries(entries: FbEntry[]) {
         },
         fromFacebook: true,
       }).catch(() => {});
+
+      // Auto-reply via WhatsApp
+      sendAutoReply(
+        { firstName, lastName, phone, source: "facebook", utmSource: "facebook" },
+        client as Parameters<typeof sendAutoReply>[1]
+      ).catch(() => {});
+
+      // Push notification to admin
+      if (client.ownerId) {
+        sendPushNotification(client.ownerId, {
+          title: "🎯 ליד חדש מפייסבוק!",
+          body: `${firstName} ${lastName} — ${client.name}`,
+          url: "/admin/leads",
+        }).catch(() => {});
+
+        // Email notification
+        const adminUser = await prisma.user.findUnique({
+          where: { id: client.ownerId },
+          select: { email: true },
+        });
+        if (adminUser?.email) {
+          sendNewLeadEmail(adminUser.email, {
+            clientName: client.name,
+            leadName: `${firstName} ${lastName}`,
+            leadPhone: phone || "",
+            leadEmail: email || undefined,
+            source: "Facebook Lead Ads",
+          }).catch(() => {});
+        }
+      }
 
       // For real estate clients, match to properties
       if (client.industry === "REAL_ESTATE") {

@@ -43,6 +43,7 @@ model Client {
   googleReviewLink    String?
   facebookReviewLink  String?
   facebookAccessToken String?
+  facebookLeadsEnabled Boolean @default(false)
   googleAdsId         String?
   googleAnalyticsId   String?
   googleBusinessUrl   String?

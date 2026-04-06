@@ -18,6 +18,8 @@ const schema = z.object({
   whatsappTemplate:   z.string().max(500).optional(),
   googleReviewLink:   z.string().max(500).optional(),
   facebookReviewLink: z.string().max(500).optional(),
+  facebookPageId:     z.string().max(100).optional(),
+  facebookLeadsEnabled: z.boolean().optional(),
   pagePublished:      z.boolean().optional(),
   seoDescription:     z.string().max(300).optional(),
   seoKeywords:        z.string().max(300).optional(),
@@ -65,6 +67,8 @@ export async function PUT(
   if (d.whatsappTemplate !== undefined)    data.whatsappTemplate   = sanitizeText(d.whatsappTemplate, 500);
   if (d.googleReviewLink !== undefined)    data.googleReviewLink   = d.googleReviewLink;
   if (d.facebookReviewLink !== undefined)  data.facebookReviewLink = d.facebookReviewLink;
+  if (d.facebookPageId !== undefined)      data.facebookPageId     = d.facebookPageId;
+  if (d.facebookLeadsEnabled !== undefined) data.facebookLeadsEnabled = d.facebookLeadsEnabled;
   if (d.pagePublished !== undefined)       data.pagePublished      = d.pagePublished;
   if (d.seoDescription !== undefined)      data.seoDescription     = sanitizeText(d.seoDescription, 300);
   if (d.seoKeywords !== undefined)         data.seoKeywords        = sanitizeText(d.seoKeywords, 300);

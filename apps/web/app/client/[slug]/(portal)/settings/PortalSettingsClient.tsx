@@ -25,6 +25,7 @@ interface ClientData {
 const TABS = [
   { id: "business", icon: "🏢", label: "פרטי העסק" },
   { id: "whatsapp", icon: "💬", label: "WhatsApp" },
+  { id: "facebook", icon: "📘", label: "פייסבוק" },
   { id: "design", icon: "🎨", label: "עיצוב" },
   { id: "page", icon: "🌐", label: "הדף שלי" },
   { id: "notifications", icon: "🔔", label: "התראות" },
@@ -71,6 +72,11 @@ export function PortalSettingsClient({
     "connected" | "disconnected" | "error" | null
   >(null);
   const [checkingWa, setCheckingWa] = useState(false);
+
+  // Facebook state
+  const [fb, setFb] = useState({ enabled: false, pageId: "", token: "", verifyToken: "" });
+  const [fbSaving, setFbSaving] = useState(false);
+  const [fbSaved, setFbSaved] = useState(false);
 
   // Domain state
   const [domainData, setDomainData] = useState<{
@@ -1028,6 +1034,63 @@ export function PortalSettingsClient({
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* TAB — Facebook */}
+      {activeTab === "facebook" && (
+        <div style={{ background: "white", borderRadius: "14px", border: "1px solid #e5e7eb", padding: "20px" }}>
+          <h3 style={{ fontWeight: 700, fontSize: "15px", marginBottom: "6px" }}>📘 Facebook Lead Ads</h3>
+          <p style={{ fontSize: "13px", color: "#6b7280", marginBottom: "16px" }}>קבל לידים מפייסבוק ישירות למערכת</p>
+
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px", background: "#f9fafb", borderRadius: "10px", marginBottom: "14px" }}>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: "14px" }}>הפעל Facebook Leads</div>
+              <div style={{ fontSize: "12px", color: "#6b7280" }}>לידים מפייסבוק יכנסו אוטומטית</div>
+            </div>
+            <div onClick={() => setFb((s) => ({ ...s, enabled: !s.enabled }))} style={{ width: "48px", height: "26px", borderRadius: "13px", background: fb.enabled ? "#1877f2" : "#e5e7eb", cursor: "pointer", position: "relative", transition: "background 0.2s" }}>
+              <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "white", position: "absolute", top: "3px", right: fb.enabled ? "3px" : "25px", transition: "right 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }} />
+            </div>
+          </div>
+
+          {fb.enabled && (
+            <div>
+              <div style={{ marginBottom: "12px" }}>
+                <label style={{ fontSize: "12px", fontWeight: 700, color: "#6b7280", display: "block", marginBottom: "5px" }}>🔗 Webhook URL</label>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <input readOnly value={`${appUrl}/api/webhooks/facebook`} style={{ flex: 1, padding: "8px 12px", border: "1px solid #e5e7eb", borderRadius: "8px", fontSize: "12px", background: "#f9fafb", fontFamily: "monospace", direction: "ltr" }} />
+                  <button onClick={() => navigator.clipboard.writeText(`${appUrl}/api/webhooks/facebook`)} style={{ padding: "8px 12px", background: "#6366f1", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", fontSize: "12px" }}>העתק</button>
+                </div>
+              </div>
+              {([
+                { key: "pageId", label: "📄 Facebook Page ID", ph: "123456789" },
+                { key: "token", label: "🔑 Access Token", ph: "EAAxxxxx...", type: "password" },
+                { key: "verifyToken", label: "🛡️ Verify Token", ph: "my-secret-token" },
+              ] as const).map((f) => (
+                <div key={f.key} style={{ marginBottom: "12px" }}>
+                  <label style={{ fontSize: "12px", fontWeight: 700, color: "#6b7280", display: "block", marginBottom: "5px" }}>{f.label}</label>
+                  <input type={"type" in f ? f.type : "text"} value={fb[f.key]} onChange={(e) => setFb((s) => ({ ...s, [f.key]: e.target.value }))} placeholder={f.ph} dir="ltr" style={{ width: "100%", padding: "10px 12px", border: "2px solid #e5e7eb", borderRadius: "10px", fontSize: "13px", outline: "none" }} />
+                </div>
+              ))}
+              <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: "10px", padding: "14px", fontSize: "12px", color: "#1e40af", lineHeight: 1.7 }}>
+                <strong>📖 הוראות:</strong><br />
+                1. פתח business.facebook.com → הגדרות → Webhooks<br />
+                2. הכנס Webhook URL + Verify Token<br />
+                3. הירשם לאירוע: leadgen<br />
+                4. צור Lead Ad → לידים יכנסו אוטומטית!
+              </div>
+            </div>
+          )}
+
+          <button onClick={async () => {
+            setFbSaving(true);
+            await fetch(`/api/clients/${client.id}/quick-update`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ facebookLeadsEnabled: fb.enabled, facebookPageId: fb.pageId || undefined }) }).catch(() => {});
+            setFbSaving(false);
+            setFbSaved(true);
+            setTimeout(() => setFbSaved(false), 2500);
+          }} disabled={fbSaving} style={{ marginTop: "14px", padding: "10px 24px", background: fbSaved ? "#22c55e" : "#1877f2", color: "white", border: "none", borderRadius: "10px", fontWeight: 700, cursor: "pointer", fontSize: "14px" }}>
+            {fbSaving ? "⏳..." : fbSaved ? "✅ נשמר!" : "💾 שמור"}
+          </button>
         </div>
       )}
 
