@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getSession, isSuperAdmin } from "@/lib/auth";
 import { getClientSession } from "@/lib/clientAuth";
 import { triggerN8nWebhook } from "@/lib/webhooks";
+import { triggerN8nWebhook as triggerN8nDirect } from "@/lib/n8n";
 import { sendWhatsApp, buildNewLeadMessage } from "@/lib/whatsapp";
 import { rateLimit, getIp } from "@/lib/rateLimit";
 import { computeLeadScore } from "@/lib/leadScoring";
@@ -261,6 +262,16 @@ export async function POST(req: NextRequest) {
       utmSource: lead.utmSource,
       utmCampaign: lead.utmCampaign,
     },
+  }).catch(() => {});
+
+  // Fire n8n Railway direct webhook (if configured)
+  triggerN8nDirect("new-lead", {
+    leadId: lead.id,
+    clientId: lead.clientId,
+    name: `${lead.firstName} ${lead.lastName}`,
+    phone: lead.phone ?? "",
+    source: lead.source ?? "unknown",
+    createdAt: lead.createdAt.toISOString(),
   }).catch(() => {});
 
   return NextResponse.json({ lead }, { status: 201 });
