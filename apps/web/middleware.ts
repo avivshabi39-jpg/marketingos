@@ -219,7 +219,7 @@ export async function middleware(request: NextRequest) {
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://res.cloudinary.com https://image.pollinations.ai",
       "font-src 'self' data:",
-      "connect-src 'self' https://api.anthropic.com https://api.resend.com https://api.green-api.com",
+      "connect-src 'self' https://api.anthropic.com https://api.resend.com https://api.green-api.com https://app.inngest.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
@@ -229,5 +229,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|icons/|manifest.json|sw.js|icon-.*\\.png).*)",
+  ],
 };
