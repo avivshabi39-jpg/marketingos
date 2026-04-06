@@ -2,6 +2,7 @@ import { getClientSession } from "@/lib/clientAuth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { PortalAutomationsClient } from "./PortalAutomationsClient";
+import { N8nSection } from "./N8nSection";
 
 export default async function PortalAutomationsPage({ params }: { params: { slug: string } }) {
   const session = await getClientSession();
@@ -29,10 +30,17 @@ export default async function PortalAutomationsPage({ params }: { params: { slug
     prisma.lead.count({ where: { clientId: client.id, status: "NEW" } }),
   ]);
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "";
+
   return (
-    <PortalAutomationsClient
-      client={client}
-      stats={{ totalLeads, newLeads }}
-    />
+    <>
+      <PortalAutomationsClient
+        client={client}
+        stats={{ totalLeads, newLeads }}
+      />
+      <div style={{ padding: "16px", maxWidth: "700px" }}>
+        <N8nSection clientId={client.id} appUrl={appUrl} />
+      </div>
+    </>
   );
 }
