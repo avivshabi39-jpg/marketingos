@@ -1,8 +1,9 @@
 "use client";
 
+import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
 
-export default function GlobalError({
+export default function Error({
   error,
   reset,
 }: {
@@ -10,19 +11,38 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error);
+    Sentry.captureException(error);
   }, [error]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="text-center max-w-md px-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Something went wrong</h2>
-        <p className="text-gray-500 text-sm mb-6">{error.message}</p>
+    <div
+      style={{
+        minHeight: "50vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        direction: "rtl",
+      }}
+    >
+      <div style={{ textAlign: "center" }}>
+        <div style={{ fontSize: "48px" }}>⚠️</div>
+        <h2 style={{ fontWeight: 700, margin: "12px 0 8px" }}>שגיאה</h2>
+        <p style={{ color: "#6b7280", marginBottom: "16px" }}>
+          אירעה שגיאה בלתי צפויה
+        </p>
         <button
           onClick={reset}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
+          style={{
+            padding: "10px 24px",
+            background: "#6366f1",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            fontWeight: 600,
+          }}
         >
-          Try again
+          נסה שוב
         </button>
       </div>
     </div>
