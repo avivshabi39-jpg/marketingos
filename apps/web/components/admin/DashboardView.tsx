@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Circle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { N8nStatusCard } from "./N8nStatusCard";
+import { N8nDashboard } from "./N8nDashboard";
 
 // ─── Industry helpers ─────────────────────────────────────────────────────────
 const INDUSTRY_EMOJI: Record<string, string> = {
@@ -430,10 +430,8 @@ export default function DashboardView({
           ))}
         </div>
 
-        {/* n8n Status */}
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-          <N8nStatusCard />
-        </div>
+        {/* n8n Automation Hub */}
+        <N8nDashboard />
 
         {/* Quick Actions */}
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
