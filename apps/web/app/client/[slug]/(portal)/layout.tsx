@@ -3,6 +3,7 @@ import { getClientSession } from "@/lib/clientAuth";
 import { prisma } from "@/lib/prisma";
 import { ClientSidebar } from "@/components/client/ClientSidebar";
 import { getWhitelabelConfig } from "@/lib/whitelabel";
+import { OnboardingWrapper } from "@/components/client/OnboardingWrapper";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -54,6 +55,7 @@ export default async function ClientPortalLayout({
       portalTitle: true,
       portalWelcome: true,
       portalFooter: true,
+      onboardingDone: true,
     },
   });
 
@@ -120,7 +122,15 @@ export default async function ClientPortalLayout({
             {client.portalWelcome}
           </div>
         )}
-        <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">
+          <OnboardingWrapper
+            clientId={client.id}
+            clientName={client.name}
+            onboardingDone={client.onboardingDone}
+          >
+            {children}
+          </OnboardingWrapper>
+        </main>
         {/* Portal footer */}
         {client.whitelabelEnabled && client.portalFooter ? (
           <footer className="border-t border-gray-100 px-6 py-3 text-xs text-gray-400 text-center">

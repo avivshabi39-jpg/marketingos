@@ -48,6 +48,11 @@ model Client {
   googleAnalyticsId   String?
   googleBusinessUrl   String?
 
+  // Client onboarding
+  onboardingDone      Boolean   @default(false)
+  onboardingStep      Int       @default(0)
+  onboardingDoneAt    DateTime?
+
   // Landing page (per-client public page at /[slug])
   landingPageTitle    String?
   landingPageSubtitle String?
