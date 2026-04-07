@@ -34,7 +34,7 @@ export function EmptyState({
           width: "80px",
           height: "80px",
           borderRadius: "50%",
-          background: "#f3f4f6",
+          background: "var(--bg-hover)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -48,7 +48,7 @@ export function EmptyState({
         style={{
           fontSize: "18px",
           fontWeight: 700,
-          color: "#111827",
+          color: "var(--text-primary)",
           margin: "0 0 8px",
         }}
       >
@@ -57,7 +57,7 @@ export function EmptyState({
       <p
         style={{
           fontSize: "14px",
-          color: "#6b7280",
+          color: "var(--text-secondary)",
           margin: "0 0 24px",
           maxWidth: "280px",
           lineHeight: 1.6,

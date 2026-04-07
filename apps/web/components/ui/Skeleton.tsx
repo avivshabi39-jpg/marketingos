@@ -14,7 +14,7 @@ export function Skeleton({ width = "100%", height = 16, borderRadius = 6, style 
         width,
         height,
         borderRadius,
-        background: "linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%)",
+        background: "linear-gradient(90deg, var(--bg-hover) 25%, var(--border-color) 50%, var(--bg-hover) 75%)",
         backgroundSize: "200% 100%",
         animation: "skeleton-shimmer 1.5s infinite",
         flexShrink: 0,
@@ -26,7 +26,7 @@ export function Skeleton({ width = "100%", height = 16, borderRadius = 6, style 
 
 export function LeadCardSkeleton() {
   return (
-    <div style={{ background: "white", borderRadius: "12px", border: "1px solid #e5e7eb", padding: "14px 16px", display: "flex", flexDirection: "column", gap: "8px" }}>
+    <div style={{ background: "var(--bg-card)", borderRadius: "12px", border: "1px solid var(--border-color)", padding: "14px 16px", display: "flex", flexDirection: "column", gap: "8px" }}>
       <Skeleton width="60%" height={16} />
       <Skeleton width="40%" height={13} />
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -39,7 +39,7 @@ export function LeadCardSkeleton() {
 
 export function StatCardSkeleton() {
   return (
-    <div style={{ background: "white", borderRadius: "14px", border: "1px solid #e5e7eb", padding: "18px 20px", display: "flex", flexDirection: "column", gap: "10px" }}>
+    <div style={{ background: "var(--bg-card)", borderRadius: "14px", border: "1px solid var(--border-color)", padding: "18px 20px", display: "flex", flexDirection: "column", gap: "10px" }}>
       <Skeleton width="50%" height={13} />
       <Skeleton width="35%" height={28} />
       <Skeleton width="60%" height={12} />
@@ -62,7 +62,7 @@ export function NotificationSkeleton() {
 
 export function BroadcastCardSkeleton() {
   return (
-    <div style={{ background: "white", borderRadius: "12px", border: "1px solid #e5e7eb", padding: "16px", display: "flex", flexDirection: "column", gap: "10px" }}>
+    <div style={{ background: "var(--bg-card)", borderRadius: "12px", border: "1px solid var(--border-color)", padding: "16px", display: "flex", flexDirection: "column", gap: "10px" }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Skeleton width="40%" height={15} />
         <Skeleton width={60} height={22} borderRadius={6} />

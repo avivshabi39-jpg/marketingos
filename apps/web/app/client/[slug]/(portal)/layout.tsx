@@ -8,6 +8,7 @@ import { SetupProgressBar } from "@/components/client/SetupProgressBar";
 import { getSetupProgress } from "@/lib/setupProgress";
 import { NotificationCenter } from "@/components/client/NotificationCenter";
 import { PortalCommandPalette } from "@/components/client/PortalCommandPalette";
+import { DarkModeToggle } from "@/components/ui/DarkModeToggle";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -113,7 +114,10 @@ export default async function ClientPortalLayout({
       />
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="lg:hidden bg-white border-b border-gray-100 px-4 h-14 flex items-center">
-          <NotificationCenter clientId={client.id} />
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <DarkModeToggle size="sm" />
+            <NotificationCenter clientId={client.id} />
+          </div>
           {/* Show brand logo in mobile header when white-label is active */}
           {brandLogo ? (
             // eslint-disable-next-line @next/next/no-img-element

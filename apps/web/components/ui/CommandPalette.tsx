@@ -68,10 +68,10 @@ export function CommandPalette({ open, onClose, commands }: Props) {
 
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)", zIndex: 10000, display: "flex", alignItems: "flex-start", justifyContent: "center", paddingTop: "15vh", padding: "15vh 16px 0" }}>
-      <div onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: "560px", background: "white", borderRadius: "16px", overflow: "hidden", boxShadow: "0 25px 60px rgba(0,0,0,0.3)", direction: "rtl" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "16px", borderBottom: "1px solid #e5e7eb" }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: "560px", background: "var(--bg-card)", borderRadius: "16px", overflow: "hidden", boxShadow: "0 25px 60px rgba(0,0,0,0.3)", direction: "rtl" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "16px", borderBottom: "1px solid var(--border-color)" }}>
           <span style={{ fontSize: "18px" }}>🔍</span>
-          <input ref={inputRef} value={query} onChange={(e) => setQuery(e.target.value)} placeholder="חפש פקודה או דף..." style={{ flex: 1, border: "none", outline: "none", fontSize: "16px", color: "#111827", background: "transparent", direction: "rtl", fontFamily: "inherit" }} />
+          <input ref={inputRef} value={query} onChange={(e) => setQuery(e.target.value)} placeholder="חפש פקודה או דף..." style={{ flex: 1, border: "none", outline: "none", fontSize: "16px", color: "var(--text-primary)", background: "transparent", direction: "rtl", fontFamily: "inherit" }} />
           <kbd style={{ fontSize: "11px", color: "#9ca3af", background: "#f3f4f6", padding: "3px 6px", borderRadius: "4px", fontFamily: "monospace" }}>ESC</kbd>
         </div>
 
@@ -99,7 +99,7 @@ export function CommandPalette({ open, onClose, commands }: Props) {
           ))}
         </div>
 
-        <div style={{ padding: "10px 16px", borderTop: "1px solid #f3f4f6", display: "flex", gap: "16px", fontSize: "11px", color: "#9ca3af", direction: "ltr" }}>
+        <div style={{ padding: "10px 16px", borderTop: "1px solid var(--border-color)", display: "flex", gap: "16px", fontSize: "11px", color: "var(--text-muted)", direction: "ltr" }}>
           <span>↑↓ ניווט</span><span>↵ בחר</span><span>ESC סגור</span>
         </div>
       </div>

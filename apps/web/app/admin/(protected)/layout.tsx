@@ -6,6 +6,7 @@ import { PushPermission } from "@/components/admin/PushPermission";
 import { PwaInstallBanner } from "@/components/admin/PwaInstallBanner";
 import { InactivityGuard } from "@/components/admin/InactivityGuard";
 import { AdminCommandPalette } from "@/components/admin/AdminCommandPalette";
+import { DarkModeToggle } from "@/components/ui/DarkModeToggle";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
@@ -52,7 +53,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </Link>
           </div>
         )}
-        <TopBar />
+        <div className="flex items-center justify-between">
+          <TopBar />
+          <div className="px-4"><DarkModeToggle /></div>
+        </div>
         <div className="p-8">{children}</div>
       </div>
       <KeyboardShortcuts />
