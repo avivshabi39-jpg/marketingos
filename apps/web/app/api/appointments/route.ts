@@ -6,6 +6,7 @@ import { getClientSession } from "@/lib/clientAuth";
 import { sanitizeText, sanitizePhone, sanitizeEmail } from "@/lib/sanitize";
 import { getPaginationParams, paginationMeta } from "@/lib/pagination";
 import { triggerN8nWebhook as triggerN8nDirect } from "@/lib/n8n";
+import { createNotification } from "@/lib/notifications";
 
 const createSchema = z.object({
   clientId:    z.string().min(1),
@@ -117,6 +118,13 @@ export async function POST(req: NextRequest) {
     scheduledAt: appointment.scheduledAt.toISOString(),
     notes: appointment.notes ?? "",
     action: "created",
+  }).catch(() => {});
+
+  createNotification({
+    clientId: appointment.clientId,
+    type: "appointment",
+    title: "פגישה נקבעה",
+    body: `${appointment.name} — ${new Date(appointment.scheduledAt).toLocaleDateString("he-IL")}`,
   }).catch(() => {});
 
   return NextResponse.json({ appointment }, { status: 201 });

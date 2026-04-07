@@ -6,6 +6,7 @@ import { getWhitelabelConfig } from "@/lib/whitelabel";
 import { OnboardingWrapper } from "@/components/client/OnboardingWrapper";
 import { SetupProgressBar } from "@/components/client/SetupProgressBar";
 import { getSetupProgress } from "@/lib/setupProgress";
+import { NotificationCenter } from "@/components/client/NotificationCenter";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -111,7 +112,7 @@ export default async function ClientPortalLayout({
       />
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="lg:hidden bg-white border-b border-gray-100 px-4 h-14 flex items-center">
-          <div className="w-10" />
+          <NotificationCenter clientId={client.id} />
           {/* Show brand logo in mobile header when white-label is active */}
           {brandLogo ? (
             // eslint-disable-next-line @next/next/no-img-element

@@ -5,6 +5,7 @@ import { getSession } from "@/lib/auth";
 import { rateLimit, getIp } from "@/lib/rateLimit";
 import { sanitizeText } from "@/lib/sanitize";
 import { triggerN8nWebhook as triggerN8nDirect } from "@/lib/n8n";
+import { createNotification } from "@/lib/notifications";
 
 export const dynamic = "force-dynamic";
 
@@ -100,6 +101,13 @@ export async function POST(req: NextRequest) {
     totalLeads: phones.length,
     phones,
     createdAt: log.createdAt.toISOString(),
+  }).catch(() => {});
+
+  createNotification({
+    clientId,
+    type: "broadcast_sent",
+    title: "שידור נשלח",
+    body: `נשלח ל-${phones.length} אנשי קשר`,
   }).catch(() => {});
 
   return NextResponse.json({ broadcastId: log.id, totalCount: phones.length }, { status: 201 });

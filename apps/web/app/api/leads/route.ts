@@ -11,6 +11,7 @@ import { computeLeadScore } from "@/lib/leadScoring";
 import { decrypt } from "@/lib/encrypt";
 import { sendAutoReply } from "@/lib/autoReply";
 import { sanitizeText } from "@/lib/sanitize";
+import { createNotification } from "@/lib/notifications";
 
 const VALID_STATUSES = ["NEW", "CONTACTED", "QUALIFIED", "PROPOSAL", "WON", "LOST"] as const;
 type LeadStatus = (typeof VALID_STATUSES)[number];
@@ -272,6 +273,13 @@ export async function POST(req: NextRequest) {
     phone: lead.phone ?? "",
     source: lead.source ?? "unknown",
     createdAt: lead.createdAt.toISOString(),
+  }).catch(() => {});
+
+  createNotification({
+    clientId: lead.clientId,
+    type: "lead_new",
+    title: "ליד חדש התקבל",
+    body: `${lead.firstName} ${lead.lastName} — ${lead.source ?? "מקור לא ידוע"}`,
   }).catch(() => {});
 
   return NextResponse.json({ lead }, { status: 201 });

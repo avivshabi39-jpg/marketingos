@@ -5,6 +5,7 @@ import { getSession, isSuperAdmin } from "@/lib/auth";
 import { triggerN8nWebhook } from "@/lib/webhooks";
 import { triggerN8nWebhook as triggerN8nDirect } from "@/lib/n8n";
 import { verifyLeadOwnership } from "@/lib/rls";
+import { createNotification } from "@/lib/notifications";
 
 const updateSchema = z.object({
   status:     z.enum(["NEW", "CONTACTED", "QUALIFIED", "PROPOSAL", "WON", "LOST"]).optional(),
@@ -104,6 +105,13 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       oldStatus: lead.status,
       newStatus: parsed.data.status,
       updatedAt: updated.updatedAt.toISOString(),
+    }).catch(() => {});
+
+    createNotification({
+      clientId: updated.clientId,
+      type: "lead_status",
+      title: "סטטוס ליד עודכן",
+      body: `${lead.firstName} ${lead.lastName}: ${lead.status} → ${parsed.data.status}`,
     }).catch(() => {});
   }
 
