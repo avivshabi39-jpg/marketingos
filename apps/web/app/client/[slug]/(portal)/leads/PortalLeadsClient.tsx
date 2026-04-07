@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Phone, MessageCircle, Search, Filter } from "lucide-react";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 interface Lead {
   id: string;
@@ -166,10 +167,14 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
 
       {/* Leads */}
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
-          <div className="text-4xl mb-3">🎯</div>
-          <p className="text-gray-500 font-medium">אין לידים{filter !== "ALL" ? " בקטגוריה זו" : " עדיין"}</p>
-          <p className="text-gray-400 text-sm mt-1">שתף את דף הנחיתה כדי להתחיל לקבל לידים</p>
+        <div className="bg-white rounded-2xl border border-gray-100">
+          <EmptyState
+            icon="🎯"
+            title={filter !== "ALL" ? "אין לידים בקטגוריה זו" : "אין לידים עדיין"}
+            subtitle="שתף את דף הנחיתה או חבר פייסבוק כדי להתחיל לקבל לידים אוטומטית"
+            actionLabel="שתף את הדף שלך"
+            actionHref={`/client/${clientId}/settings`}
+          />
         </div>
       ) : (
         <div className="space-y-3">

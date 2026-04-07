@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { HelpButton } from "@/components/HelpButton";
 import { Plus, Users, FileText, GitBranch, ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export const metadata: Metadata = {
   title: "לקוחות | MarketingOS",
@@ -111,14 +112,14 @@ export default async function ClientsPage() {
 
       {/* Cards grid */}
       {clients.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center py-20 text-center">
-          <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3">
-            <Users size={22} className="text-gray-400" />
-          </div>
-          <p className="text-gray-500 text-sm">עדיין אין לקוחות. הוסף לקוח ראשון.</p>
-          <Link href="/admin/clients/new" className="mt-4">
-            <Button>הוסף לקוח</Button>
-          </Link>
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
+          <EmptyState
+            icon="🏢"
+            title="אין לקוחות עדיין"
+            subtitle="הוסף את הלקוח הראשון שלך ותתחיל לנהל את השיווק שלו"
+            actionLabel="הוסף לקוח"
+            actionHref="/admin/clients/new"
+          />
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">

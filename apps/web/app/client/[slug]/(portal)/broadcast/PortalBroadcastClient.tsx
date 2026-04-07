@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 const TEMPLATES = [
   { label: "👋 היכרות", text: "שלום! אנחנו כאן בשבילך. יש שאלות? צור קשר! 😊" },
@@ -153,6 +154,16 @@ export function PortalBroadcastClient({ clientId, clientName, stats, broadcasts 
       )}
 
       {/* Past broadcasts */}
+      {step === 1 && broadcasts.length === 0 && (
+        <div className="bg-white rounded-xl border border-gray-200">
+          <EmptyState
+            icon="📢"
+            title="לא נשלחו שידורים עדיין"
+            subtitle="שלח הודעת WhatsApp לכל הלידים שלך בלחיצה אחת"
+          />
+        </div>
+      )}
+
       {step === 1 && broadcasts.length > 0 && (
         <div className="bg-white rounded-xl border border-gray-200 p-4">
           <p className="font-bold text-sm mb-3">📋 שידורים קודמים</p>
