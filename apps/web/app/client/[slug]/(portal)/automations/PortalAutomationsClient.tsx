@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { PortalDripClient } from "./PortalDripClient";
 
 interface ClientData {
@@ -70,7 +71,7 @@ export function PortalAutomationsClient({
       setSaved(key);
       setTimeout(() => setSaved(null), 2500);
     } catch {
-      alert("שגיאה בשמירה — נסה שוב");
+      toast.error("שגיאה בשמירה — נסה שוב");
     }
     setSaving(null);
   }

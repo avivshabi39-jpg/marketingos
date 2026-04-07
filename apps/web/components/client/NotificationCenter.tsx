@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { getNotificationIcon, formatRelativeTime } from "@/lib/notifications";
 import { NotificationSkeleton } from "@/components/ui/Skeleton";
+import toast from "react-hot-toast";
 
 interface N { id: string; type: string; title: string; body: string; read: boolean; createdAt: string }
 
@@ -28,6 +29,7 @@ export function NotificationCenter({ clientId }: { clientId: string }) {
     await fetch(`/api/clients/${clientId}/notifications`, { method: "PATCH" }).catch(() => {});
     setUnread(0);
     setItems((p) => p.map((n) => ({ ...n, read: true })));
+    toast.success("כל ההתראות סומנו כנקראו");
   }
 
   useEffect(() => { load(); }, [clientId]);

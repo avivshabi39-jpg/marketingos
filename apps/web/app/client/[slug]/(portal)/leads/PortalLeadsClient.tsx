@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Phone, MessageCircle, Search, Filter } from "lucide-react";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Tooltip } from "@/components/ui/Tooltip";
+import toast from "react-hot-toast";
 
 interface Lead {
   id: string;
@@ -73,8 +74,11 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
       });
       if (res.ok) {
         setLeads((prev) => prev.map((l) => (l.id === leadId ? { ...l, status } : l)));
+        toast.success("סטטוס עודכן");
+      } else {
+        toast.error("שגיאה בעדכון סטטוס");
       }
-    } catch { /* ignore */ }
+    } catch { toast.error("שגיאה בעדכון"); }
     setUpdatingId(null);
   }
 

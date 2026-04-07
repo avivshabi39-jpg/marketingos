@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { PasswordChangeForm } from "./PasswordChangeForm";
 
 interface ClientData {
@@ -124,9 +125,10 @@ export function PortalSettingsClient({
       });
       if (!res.ok) throw new Error("Save failed");
       setSaved(true);
+      toast.success("נשמר בהצלחה");
       setTimeout(() => setSaved(false), 2500);
     } catch {
-      alert("שגיאה בשמירה — נסה שוב");
+      toast.error("שגיאה בשמירה — נסה שוב");
     }
     setSaving(false);
   }

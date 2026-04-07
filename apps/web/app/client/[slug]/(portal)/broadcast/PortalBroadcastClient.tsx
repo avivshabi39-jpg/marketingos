@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { EmptyState } from "@/components/ui/EmptyState";
+import toast from "react-hot-toast";
 
 const TEMPLATES = [
   { label: "👋 היכרות", text: "שלום! אנחנו כאן בשבילך. יש שאלות? צור קשר! 😊" },
@@ -62,7 +63,8 @@ export function PortalBroadcastClient({ clientId, clientName, stats, broadcasts 
         await fetch(`/api/broadcast/${data.broadcastId}/send`, { method: "POST" });
       }
       setDone(true);
-    } catch { /* ignore */ }
+      toast.success("שידור נשלח בהצלחה");
+    } catch { toast.error("שגיאה בשליחת השידור"); }
     setSending(false);
   }
 

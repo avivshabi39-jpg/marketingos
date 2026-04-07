@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 interface DripSettings {
   dripEnabled: boolean;
@@ -52,7 +53,7 @@ export function PortalDripClient({
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch {
-      alert("שגיאה בשמירה");
+      toast.error("שגיאה בשמירה");
     }
     setSaving(false);
   }
