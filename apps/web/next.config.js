@@ -1,3 +1,8 @@
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+  openAnalyzer: false,
+});
+
 /** @type {import('next').NextConfig} */
 const isProd = process.env.NODE_ENV === "production";
 
@@ -157,11 +162,11 @@ const nextConfig = {
 // Wrap with Sentry if available
 const { withSentryConfig } = require("@sentry/nextjs");
 
-module.exports = withSentryConfig(nextConfig, {
+module.exports = withBundleAnalyzer(withSentryConfig(nextConfig, {
   silent: true,
   widenClientFileUpload: true,
   hideSourceMaps: true,
   disableLogger: true,
   tunnelRoute: "/monitoring",
   dryRun: !process.env.SENTRY_AUTH_TOKEN,
-});
+}));

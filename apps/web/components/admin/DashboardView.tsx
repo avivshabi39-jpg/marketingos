@@ -4,8 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { Circle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { N8nDashboard } from "./N8nDashboard";
 import { Tooltip } from "@/components/ui/Tooltip";
+import dynamic from "next/dynamic";
+
+const N8nDashboard = dynamic(() => import("./N8nDashboard").then((m) => ({ default: m.N8nDashboard })), { ssr: false });
 
 // ─── Industry helpers ─────────────────────────────────────────────────────────
 const INDUSTRY_EMOJI: Record<string, string> = {

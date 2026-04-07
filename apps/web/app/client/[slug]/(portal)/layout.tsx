@@ -4,13 +4,21 @@ import { getClientSession } from "@/lib/clientAuth";
 import { prisma } from "@/lib/prisma";
 import { ClientSidebar } from "@/components/client/ClientSidebar";
 import { getWhitelabelConfig } from "@/lib/whitelabel";
-import { OnboardingWrapper } from "@/components/client/OnboardingWrapper";
 import { SetupProgressBar } from "@/components/client/SetupProgressBar";
 import { getSetupProgress } from "@/lib/setupProgress";
 import { NotificationCenter } from "@/components/client/NotificationCenter";
-import { PortalCommandPalette } from "@/components/client/PortalCommandPalette";
 import { DarkModeToggle } from "@/components/ui/DarkModeToggle";
+import dynamic from "next/dynamic";
 import type { Metadata } from "next";
+
+const OnboardingWrapper = dynamic(
+  () => import("@/components/client/OnboardingWrapper").then((m) => ({ default: m.OnboardingWrapper })),
+  { ssr: false }
+);
+const PortalCommandPalette = dynamic(
+  () => import("@/components/client/PortalCommandPalette").then((m) => ({ default: m.PortalCommandPalette })),
+  { ssr: false }
+);
 
 export async function generateMetadata({
   params,

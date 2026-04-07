@@ -3,10 +3,12 @@ import { KeyboardShortcuts } from "@/components/admin/KeyboardShortcuts";
 import { TopBar } from "@/components/admin/TopBar";
 import { AdminOnboarding } from "@/components/admin/AdminOnboarding";
 import { PushPermission } from "@/components/admin/PushPermission";
-import { PwaInstallBanner } from "@/components/admin/PwaInstallBanner";
-import { InactivityGuard } from "@/components/admin/InactivityGuard";
-import { AdminCommandPalette } from "@/components/admin/AdminCommandPalette";
 import { DarkModeToggle } from "@/components/ui/DarkModeToggle";
+import dynamic from "next/dynamic";
+
+const PwaInstallBanner = dynamic(() => import("@/components/admin/PwaInstallBanner").then((m) => ({ default: m.PwaInstallBanner })), { ssr: false });
+const InactivityGuard = dynamic(() => import("@/components/admin/InactivityGuard").then((m) => ({ default: m.InactivityGuard })), { ssr: false });
+const AdminCommandPalette = dynamic(() => import("@/components/admin/AdminCommandPalette").then((m) => ({ default: m.AdminCommandPalette })), { ssr: false });
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
