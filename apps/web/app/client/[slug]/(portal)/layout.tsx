@@ -7,6 +7,7 @@ import { OnboardingWrapper } from "@/components/client/OnboardingWrapper";
 import { SetupProgressBar } from "@/components/client/SetupProgressBar";
 import { getSetupProgress } from "@/lib/setupProgress";
 import { NotificationCenter } from "@/components/client/NotificationCenter";
+import { PortalCommandPalette } from "@/components/client/PortalCommandPalette";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -152,6 +153,7 @@ export default async function ClientPortalLayout({
           </footer>
         ) : null}
       </div>
+      <PortalCommandPalette slug={params.slug} />
     </div>
   );
 }
