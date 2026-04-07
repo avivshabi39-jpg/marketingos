@@ -4,7 +4,7 @@
 
 @layer base {
   html {
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: var(--font-rubik), var(--font-inter), system-ui, -apple-system, sans-serif;
   }
 
   /* Prevent iOS auto-zoom on input focus (requires font-size >= 16px) */

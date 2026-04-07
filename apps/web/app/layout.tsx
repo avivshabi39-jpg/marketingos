@@ -1,8 +1,22 @@
 import type { Metadata, Viewport } from "next";
+import { Rubik, Inter } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/ToastProvider";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+
+const rubik = Rubik({
+  subsets: ["latin", "hebrew"],
+  variable: "--font-rubik",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -35,7 +49,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="he" dir="rtl">
+    <html lang="he" dir="rtl" className={`${rubik.variable} ${inter.variable}`}>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -49,7 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
-      <body className="bg-gray-50 text-gray-900 antialiased">
+      <body className="bg-gray-50 text-gray-900 antialiased" style={{ fontFamily: "var(--font-rubik), var(--font-inter), system-ui, sans-serif" }}>
         {children}
         <ToastProvider />
         <Analytics />
