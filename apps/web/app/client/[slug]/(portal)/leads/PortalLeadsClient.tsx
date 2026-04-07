@@ -105,7 +105,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
           { label: 'סה"כ', value: stats.total, color: "text-indigo-600", bg: "bg-indigo-50" },
           { label: "חדשים", value: stats.new, color: "text-blue-600", bg: "bg-blue-50" },

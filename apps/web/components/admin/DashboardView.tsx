@@ -468,7 +468,7 @@ export default function DashboardView({
           style={{ background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)" }}
         >
           <h3 className="text-sm font-semibold mb-4 opacity-90">💰 מצב הצינור העסקי</h3>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-white/10 rounded-xl p-4 text-center">
               <p className="text-2xl font-extrabold mb-1">
                 ₪{pipelineValue.toLocaleString("he-IL")}
