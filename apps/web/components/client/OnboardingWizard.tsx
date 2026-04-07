@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackOnboardingStep, trackOnboardingCompleted } from "@/lib/analytics";
 
 interface Props {
   clientId: string;
@@ -55,6 +56,8 @@ export function OnboardingWizard({ clientId, clientName, onComplete }: Props) {
   const pct = Math.round(((step + 1) / STEPS.length) * 100);
 
   async function next() {
+    trackOnboardingStep(step + 1, STEPS.length);
+    if (isLast) trackOnboardingCompleted();
     setSaving(true);
     await fetch(`/api/clients/${clientId}/onboarding`, {
       method: "PATCH",

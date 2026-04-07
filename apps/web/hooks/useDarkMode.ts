@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { trackDarkModeToggled } from "@/lib/analytics";
 
 export function useDarkMode() {
   const [isDark, setIsDark] = useState(false);
@@ -23,6 +24,7 @@ export function useDarkMode() {
     const next = !isDark;
     setIsDark(next);
     localStorage.setItem("marketingos-dark-mode", String(next));
+    trackDarkModeToggled(next);
     if (next) document.documentElement.classList.add("dark");
     else document.documentElement.classList.remove("dark");
   }

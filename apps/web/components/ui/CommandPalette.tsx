@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { trackCommandUsed } from "@/lib/analytics";
 
 export interface Command {
   id: string;
@@ -57,6 +58,7 @@ export function CommandPalette({ open, onClose, commands }: Props) {
   });
 
   function exec(c: Command) {
+    trackCommandUsed(c.id);
     onClose();
     if (c.href) router.push(c.href);
     else c.action?.();
