@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { ClientSidebar } from "@/components/client/ClientSidebar";
 import { getWhitelabelConfig } from "@/lib/whitelabel";
 import { OnboardingWrapper } from "@/components/client/OnboardingWrapper";
+import { SetupProgressBar } from "@/components/client/SetupProgressBar";
+import { getSetupProgress } from "@/lib/setupProgress";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -56,6 +58,12 @@ export default async function ClientPortalLayout({
       portalWelcome: true,
       portalFooter: true,
       onboardingDone: true,
+      phone: true,
+      logoUrl: true,
+      greenApiInstanceId: true,
+      greenApiToken: true,
+      facebookPageId: true,
+      pagePublished: true,
     },
   });
 
@@ -122,6 +130,7 @@ export default async function ClientPortalLayout({
             {client.portalWelcome}
           </div>
         )}
+        <SetupProgressBar progress={getSetupProgress({ ...client, slug: params.slug })} />
         <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">
           <OnboardingWrapper
             clientId={client.id}
