@@ -1131,6 +1131,7 @@ function WhiteLabelTab() {
             <p className="text-xs font-bold text-gray-400 mb-2">תצוגה מקדימה:</p>
             <div className="flex items-center gap-3">
               {wl.logo ? (
+                // Dynamic user URL — next/image requires remotePatterns for unknown hosts
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={wl.logo} alt="" className="h-8 object-contain" />
               ) : (

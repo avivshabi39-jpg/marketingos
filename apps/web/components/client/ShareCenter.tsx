@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Copy, Check, MessageCircle, Download } from "lucide-react";
 
 interface ShareCenterProps {
@@ -114,8 +115,7 @@ export function ShareCenter({ slug, clientName, appUrl }: ShareCenterProps) {
           <span>📱</span> QR Code
         </p>
         <div className="flex items-center gap-4">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={qrUrl} alt="QR Code" className="w-24 h-24 rounded-lg border border-gray-200" />
+          <Image src={qrUrl} alt="QR Code" width={96} height={96} className="rounded-lg border border-gray-200" />
           <div className="space-y-2">
             <p className="text-xs text-gray-500">סרוק כדי לפתוח את הדף ישירות</p>
             <a

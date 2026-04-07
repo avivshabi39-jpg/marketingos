@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
@@ -125,11 +126,14 @@ export function ClientSidebar({
       {/* Logo / brand header */}
       <div className="flex items-center gap-3 px-4 py-4 border-b border-gray-800">
         {brandLogo ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={brandLogo}
             alt={clientName}
+            width={120}
+            height={32}
             className="h-8 object-contain flex-shrink-0"
+            style={{ width: "auto" }}
+            priority
           />
         ) : (
           <div

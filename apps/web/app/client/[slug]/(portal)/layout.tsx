@@ -1,4 +1,5 @@
 import { redirect, notFound } from "next/navigation";
+import Image from "next/image";
 import { getClientSession } from "@/lib/clientAuth";
 import { prisma } from "@/lib/prisma";
 import { ClientSidebar } from "@/components/client/ClientSidebar";
@@ -120,11 +121,14 @@ export default async function ClientPortalLayout({
           </div>
           {/* Show brand logo in mobile header when white-label is active */}
           {brandLogo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={brandLogo}
               alt={displayName}
+              width={120}
+              height={28}
               className="h-7 object-contain mx-auto"
+              style={{ width: "auto" }}
+              priority
             />
           ) : (
             <p className="font-semibold text-gray-900 text-sm mx-auto">{displayName}</p>

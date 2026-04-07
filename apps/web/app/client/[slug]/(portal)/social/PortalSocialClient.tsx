@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 const PLATFORMS = [
   { id: "facebook", label: "Facebook", icon: "📘" },
@@ -128,8 +129,9 @@ export function PortalSocialClient({ clientId, clientName, posts: initial }: { c
             <span className="text-[10px] text-gray-400">{result.length} תווים</span>
           </div>
           {imageUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={imageUrl} alt="post" className="w-full max-h-48 object-cover rounded-lg" />
+            <div style={{ position: "relative", width: "100%", height: "192px" }}>
+              <Image src={imageUrl} alt="post" fill className="object-cover rounded-lg" />
+            </div>
           )}
           <div className="bg-gray-50 rounded-lg p-3 text-sm leading-relaxed whitespace-pre-wrap border border-gray-100">{result}</div>
           <div className="flex gap-2">
