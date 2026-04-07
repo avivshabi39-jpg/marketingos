@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { getNotificationIcon, formatRelativeTime } from "@/lib/notifications";
+import { NotificationSkeleton } from "@/components/ui/Skeleton";
 
 interface N { id: string; type: string; title: string; body: string; read: boolean; createdAt: string }
 
@@ -56,7 +57,9 @@ export function NotificationCenter({ clientId }: { clientId: string }) {
           </div>
 
           <div style={{ maxHeight: "360px", overflowY: "auto" }}>
-            {items.length === 0 ? (
+            {loading && items.length === 0 ? (
+              <div>{[...Array(3)].map((_, i) => <NotificationSkeleton key={i} />)}</div>
+            ) : items.length === 0 ? (
               <div style={{ padding: "32px", textAlign: "center" }}>
                 <div style={{ fontSize: "32px", marginBottom: "8px" }}>🔔</div>
                 <div style={{ fontSize: "13px", color: "#6b7280" }}>אין התראות עדיין</div>
