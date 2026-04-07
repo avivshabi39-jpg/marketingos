@@ -10,11 +10,18 @@ export async function GET() {
 
   const result = await checkN8nHealth();
 
-  return NextResponse.json({
-    status: result.healthy ? "online" : "offline",
-    responseMs: result.responseMs,
-    error: result.error ?? null,
-    url: process.env.N8N_WEBHOOK_BASE_URL ?? "not configured",
-    checkedAt: new Date().toISOString(),
-  });
+  return NextResponse.json(
+    {
+      status: result.healthy ? "online" : "offline",
+      responseMs: result.responseMs,
+      error: result.error ?? null,
+      url: process.env.N8N_WEBHOOK_BASE_URL ?? "not configured",
+      checkedAt: new Date().toISOString(),
+    },
+    {
+      headers: {
+        "Cache-Control": "private, s-maxage=30, stale-while-revalidate=60",
+      },
+    }
+  );
 }

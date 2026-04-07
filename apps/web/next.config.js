@@ -5,9 +5,12 @@ const nextConfig = {
   output: "standalone",
   poweredByHeader: false,
   compress: true,
+  reactStrictMode: true,
+  productionBrowserSourceMaps: false,
   transpilePackages: ["@marketing/db"],
   experimental: {
     serverComponentsExternalPackages: ["@prisma/client", "bcryptjs", "@react-pdf/renderer"],
+    optimizePackageImports: ["lucide-react", "date-fns"],
   },
 
   images: {

@@ -20,7 +20,10 @@ export async function GET(
     prisma.notification.count({ where: { clientId: params.id, read: false } }),
   ]);
 
-  return NextResponse.json({ notifications, unreadCount });
+  return NextResponse.json(
+    { notifications, unreadCount },
+    { headers: { "Cache-Control": "private, s-maxage=10, stale-while-revalidate=30" } }
+  );
 }
 
 export async function PATCH(
