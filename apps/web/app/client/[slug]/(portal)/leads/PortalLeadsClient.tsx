@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Phone, MessageCircle, Search, Filter } from "lucide-react";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Tooltip } from "@/components/ui/Tooltip";
 
 interface Lead {
   id: string;
@@ -126,6 +127,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
             {autoReply ? "וואצאפ יוצא אוטומטית לכל ליד חדש" : "כבוי — תחזור ללידים באופן ידני"}
           </p>
         </div>
+        <Tooltip content={autoReply ? "כבה תגובה אוטומטית" : "הפעל תגובה אוטומטית"} position="top">
         <button
           onClick={toggleAutoReply}
           className={`relative w-12 h-6 rounded-full transition-colors ${autoReply ? "bg-green-500" : "bg-gray-300"}`}
@@ -135,6 +137,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
             style={{ right: autoReply ? "2px" : "26px" }}
           />
         </button>
+        </Tooltip>
       </div>
 
       {/* Search + Filter */}
@@ -214,6 +217,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                       <Phone size={12} />
                       {lead.phone}
                     </a>
+                    <Tooltip content="שלח WhatsApp ללקוח" position="top">
                     <button
                       onClick={() => openWhatsApp(lead)}
                       className="inline-flex items-center gap-1.5 bg-green-100 hover:bg-green-200 text-green-700 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
@@ -221,6 +225,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                       <MessageCircle size={12} />
                       וואצאפ
                     </button>
+                    </Tooltip>
                   </>
                 )}
                 {lead.email && (

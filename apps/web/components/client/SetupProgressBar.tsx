@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { SetupProgress } from "@/lib/setupProgress";
+import { Tooltip } from "@/components/ui/Tooltip";
 
 export function SetupProgressBar({ progress }: { progress: SetupProgress }) {
   const [open, setOpen] = useState(false);
@@ -110,6 +111,7 @@ export function SetupProgressBar({ progress }: { progress: SetupProgress }) {
                   )}
                 </div>
                 {!task.completed && (
+                  <Tooltip content={`לחץ להשלמת: ${task.label}`} position="left">
                   <Link
                     href={task.actionHref}
                     style={{
@@ -125,6 +127,7 @@ export function SetupProgressBar({ progress }: { progress: SetupProgress }) {
                   >
                     {task.actionLabel} →
                   </Link>
+                  </Tooltip>
                 )}
               </div>
             ))}

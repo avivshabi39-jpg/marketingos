@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Circle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { N8nDashboard } from "./N8nDashboard";
+import { Tooltip } from "@/components/ui/Tooltip";
 
 // ─── Industry helpers ─────────────────────────────────────────────────────────
 const INDUSTRY_EMOJI: Record<string, string> = {
@@ -403,6 +404,7 @@ export default function DashboardView({
                 : "הכל שקט היום — זה זמן טוב לשפר את הדפים"}
             </p>
           </div>
+          <Tooltip content="הוסף לקוח חדש למערכת" position="bottom">
           <a
             href="/admin/clients/new"
             style={{
@@ -414,6 +416,7 @@ export default function DashboardView({
           >
             + הוסף לקוח
           </a>
+          </Tooltip>
         </div>
 
         {/* Stats Bar */}
