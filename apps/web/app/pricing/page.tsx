@@ -29,7 +29,7 @@ const PLANS = [
     price:        "₪375",
     period:       "לחודש",
     popular:      true,
-    color:        "border-indigo-500",
+    color:        "border-blue-500",
     features: [
       { ok: true, text: "לקוחות ללא הגבלה" },
       { ok: true, text: "דפי נחיתה ללא הגבלה" },
@@ -86,14 +86,14 @@ export default function PricingPage() {
       {/* Navbar */}
       <nav className="flex items-center justify-between px-8 py-5 max-w-6xl mx-auto">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-indigo-500 flex items-center justify-center">
+          <div className="w-9 h-9 rounded-xl bg-blue-500 flex items-center justify-center">
             <TrendingUp size={18} className="text-white" />
           </div>
           <span className="text-white font-bold text-lg">MarketingOS</span>
         </Link>
         <div className="flex items-center gap-4">
-          <Link href="/admin/login" className="text-indigo-300 hover:text-white text-sm">כניסה</Link>
-          <Link href="/register" className="bg-indigo-500 hover:bg-indigo-400 text-white font-medium rounded-xl px-4 py-2 text-sm transition-all">
+          <Link href="/admin/login" className="text-blue-300 hover:text-white text-sm">כניסה</Link>
+          <Link href="/register" className="bg-blue-500 hover:bg-blue-400 text-white font-medium rounded-xl px-4 py-2 text-sm transition-all">
             התחל חינם
           </Link>
         </div>
@@ -102,7 +102,7 @@ export default function PricingPage() {
       {/* Hero */}
       <section className="text-center px-8 pt-14 pb-10">
         <h1 className="text-4xl font-bold text-white mb-4">מחירים פשוטים ושקופים</h1>
-        <p className="text-indigo-300 text-lg">התחל חינם, שדרג כשצומחים. ללא הפתעות.</p>
+        <p className="text-blue-300 text-lg">התחל חינם, שדרג כשצומחים. ללא הפתעות.</p>
       </section>
 
       {/* Plans */}
@@ -112,11 +112,11 @@ export default function PricingPage() {
             <div
               key={plan.name}
               className={`relative rounded-2xl border-2 p-7 flex flex-col ${plan.color} ${
-                plan.popular ? "bg-indigo-500/10" : "bg-white/5"
+                plan.popular ? "bg-blue-500/10" : "bg-white/5"
               }`}
             >
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-500 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg">
                   הכי פופולרי ⭐
                 </div>
               )}
@@ -125,7 +125,7 @@ export default function PricingPage() {
                 <h3 className="text-xl font-bold text-white">{plan.name}</h3>
                 <div className="mt-3">
                   <span className="text-3xl font-bold text-white">{plan.price}</span>
-                  <span className="text-indigo-400 text-sm mr-1">/{plan.period}</span>
+                  <span className="text-blue-400 text-sm mr-1">/{plan.period}</span>
                 </div>
               </div>
 
@@ -134,9 +134,9 @@ export default function PricingPage() {
                   <li key={f.text} className="flex items-center gap-2">
                     {f.ok
                       ? <Check size={14} className="text-green-400 flex-shrink-0" />
-                      : <X    size={14} className="text-gray-600  flex-shrink-0" />
+                      : <X    size={14} className="text-slate-600  flex-shrink-0" />
                     }
-                    <span className={`text-sm ${f.ok ? "text-indigo-200" : "text-gray-500"}`}>{f.text}</span>
+                    <span className={`text-sm ${f.ok ? "text-blue-200" : "text-slate-500"}`}>{f.text}</span>
                   </li>
                 ))}
               </ul>
@@ -157,7 +157,7 @@ export default function PricingPage() {
                   label={plan.cta}
                   className={
                     plan.popular
-                      ? "bg-indigo-500 hover:bg-indigo-400 text-white shadow-lg shadow-indigo-500/30"
+                      ? "bg-blue-500 hover:bg-blue-400 text-white shadow-lg shadow-blue-500/30"
                       : "bg-white/10 hover:bg-white/15 text-white border border-white/20"
                   }
                 />
@@ -181,13 +181,13 @@ export default function PricingPage() {
           {FAQ.map((item) => (
             <div key={item.q} className="rounded-xl border border-white/10 bg-white/5 px-5 py-4">
               <h4 className="text-white font-medium text-sm mb-1">{item.q}</h4>
-              <p className="text-indigo-300 text-sm leading-relaxed">{item.a}</p>
+              <p className="text-blue-300 text-sm leading-relaxed">{item.a}</p>
             </div>
           ))}
         </div>
 
         <div className="text-center mt-10">
-          <p className="text-indigo-400 text-sm mb-3">יש שאלות נוספות?</p>
+          <p className="text-blue-400 text-sm mb-3">יש שאלות נוספות?</p>
           <a
             href="https://wa.me/972500000000"
             target="_blank"
@@ -202,7 +202,7 @@ export default function PricingPage() {
 
       {/* Footer */}
       <footer className="border-t border-white/10 px-8 py-6 text-center">
-        <p className="text-indigo-500 text-sm">© {new Date().getFullYear()} MarketingOS</p>
+        <p className="text-blue-500 text-sm">© {new Date().getFullYear()} MarketingOS</p>
       </footer>
     </div>
   );

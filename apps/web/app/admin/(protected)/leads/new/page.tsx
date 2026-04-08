@@ -11,12 +11,12 @@ export default async function NewLeadPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Create Lead</h1>
-        <p className="text-gray-500 mt-1">Add a new lead manually and assign it to a client.</p>
+        <h1 className="text-2xl font-bold text-slate-900">Create Lead</h1>
+        <p className="text-slate-500 mt-1">Add a new lead manually and assign it to a client.</p>
       </div>
 
       {clients.length === 0 ? (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-slate-500">
           No active clients found. Please create a client first.
         </p>
       ) : (

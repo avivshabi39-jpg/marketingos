@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Loader2, Check, Copy, Share2, ExternalLink } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Loader2, Check, Copy, Share2, ExternalLink, Monitor, Smartphone } from "lucide-react";
 
 interface Props {
   client: { id: string; name: string; slug: string; industry: string; pagePublished: boolean; primaryColor: string; landingPageTitle: string | null };
@@ -46,7 +46,27 @@ export function PortalPageBuilder({ client, appUrl }: Props) {
   const [mobileView, setMobileView] = useState(false);
   const [copied, setCopied] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const previewContainerRef = useRef<HTMLDivElement>(null);
+  const [previewScale, setPreviewScale] = useState(1);
   const pageUrl = `${appUrl}/${client.slug}`;
+
+  const updateScale = useCallback(() => {
+    const container = previewContainerRef.current;
+    if (!container) return;
+    const { width, height } = container.getBoundingClientRect();
+    const iframeW = mobileView ? 390 : 1440;
+    const iframeH = 900;
+    const padding = 32;
+    const scaleX = (width - padding) / iframeW;
+    const scaleY = (height - padding) / iframeH;
+    setPreviewScale(Math.min(scaleX, scaleY, 1));
+  }, [mobileView]);
+
+  useEffect(() => {
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
+  }, [updateScale]);
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [chatHistory, error]);
 
@@ -94,91 +114,121 @@ export function PortalPageBuilder({ client, appUrl }: Props) {
   return (
     <div className="flex h-screen" dir="rtl">
       {/* Chat panel */}
-      <div className="w-[400px] bg-white border-l border-gray-200 flex flex-col flex-shrink-0">
-        <div className="px-4 py-3.5 text-white" style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)" }}>
+      <div className="w-[400px] bg-white border-l border-slate-200 flex flex-col flex-shrink-0">
+        <div className="px-4 py-3.5 text-white bg-gradient-to-l from-slate-900 to-blue-900">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center text-lg">🧙</div>
-            <div><p className="font-bold text-sm">בניית הדף שלי</p><p className="text-xs opacity-80">{client.name}</p></div>
+            <div className="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center text-sm font-bold">AI</div>
+            <div><p className="font-bold text-sm">בניית הדף שלי</p><p className="text-xs text-blue-200">{client.name}</p></div>
           </div>
           {phase === "briefing" && (
             <div className="mt-2.5">
               <div className="flex justify-between text-[11px] opacity-80 mb-1"><span>שאלה {currentQ + 1}/{QUESTIONS.length}</span><span>{Math.round(((currentQ + 1) / QUESTIONS.length) * 100)}%</span></div>
-              <div className="h-1 bg-white/30 rounded-full"><div className="h-full bg-white rounded-full transition-all" style={{ width: `${((currentQ + 1) / QUESTIONS.length) * 100}%` }} /></div>
+              <div className="h-1 bg-white/20 rounded-full"><div className="h-full bg-blue-400 rounded-full transition-all duration-300" style={{ width: `${((currentQ + 1) / QUESTIONS.length) * 100}%` }} /></div>
             </div>
           )}
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 sidebar-scroll">
           {chatHistory.map((msg, i) => (
             <div key={i} className={`flex gap-2 ${msg.type === "user" ? "justify-start" : "justify-end"}`}>
-              {msg.type === "ai" && <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-xs flex-shrink-0">🧙</div>}
-              <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed whitespace-pre-wrap ${msg.type === "ai" ? "bg-gray-100 text-gray-800 rounded-bl-sm" : "bg-indigo-600 text-white rounded-br-sm"}`}>{msg.content}</div>
+              {msg.type === "ai" && <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center text-[10px] text-white font-bold flex-shrink-0">AI</div>}
+              <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed whitespace-pre-wrap ${msg.type === "ai" ? "bg-slate-50 text-slate-800 border border-slate-100 rounded-bl-sm" : "bg-blue-600 text-white rounded-br-sm"}`}>{msg.content}</div>
             </div>
           ))}
-          {q?.tip && phase === "briefing" && <div className="bg-amber-50 border border-amber-200 rounded-lg p-2.5 text-xs text-amber-800">{q.tip}</div>}
+          {q?.tip && phase === "briefing" && <div className="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-xs text-amber-800">{q.tip}</div>}
           <div ref={chatEndRef} />
         </div>
 
         {phase === "briefing" && (
-          <div className="border-t border-gray-200 p-3 space-y-2">
-            {error && <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-xs text-red-600">⚠️ {error}</div>}
-            {q.type === "textarea" && <textarea value={currentAnswer} onChange={(e) => setCurrentAnswer(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitAnswer(); } }} placeholder={q.placeholder} rows={3} className="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm resize-none outline-none focus:border-indigo-400" />}
-            {q.type === "text" && <input value={currentAnswer} onChange={(e) => setCurrentAnswer(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitAnswer(); }} placeholder={q.placeholder} className="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-indigo-400" />}
+          <div className="border-t border-slate-200 p-3 space-y-2">
+            {error && <div className="bg-red-50 border border-red-200 rounded-xl px-3 py-2 text-xs text-red-600">{error}</div>}
+            {q.type === "textarea" && <textarea value={currentAnswer} onChange={(e) => setCurrentAnswer(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitAnswer(); } }} placeholder={q.placeholder} rows={3} className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm resize-none outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-150" />}
+            {q.type === "text" && <input value={currentAnswer} onChange={(e) => setCurrentAnswer(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitAnswer(); }} placeholder={q.placeholder} className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-150" />}
             {(q.type === "select" || q.type === "multiselect") && (
               <div className="flex flex-wrap gap-1.5">
                 {q.options?.map((opt) => {
                   const sel = q.type === "multiselect" ? (currentAnswer || "").split(",").filter(Boolean).includes(opt) : currentAnswer === opt;
-                  return <button key={opt} onClick={() => { if (q.type === "multiselect") { const a = (currentAnswer || "").split(",").filter(Boolean); setCurrentAnswer(sel ? a.filter((x) => x !== opt).join(",") : [...a, opt].join(",")); } else setCurrentAnswer(opt); }} className={`px-3 py-1.5 rounded-full text-xs font-medium border-2 transition-all ${sel ? "border-indigo-500 bg-indigo-50 text-indigo-700" : "border-gray-200 text-gray-600"}`}>{sel && "✓ "}{opt}</button>;
+                  return <button key={opt} onClick={() => { if (q.type === "multiselect") { const a = (currentAnswer || "").split(",").filter(Boolean); setCurrentAnswer(sel ? a.filter((x) => x !== opt).join(",") : [...a, opt].join(",")); } else setCurrentAnswer(opt); }} className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-150 ${sel ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-200 text-slate-600 hover:border-slate-300"}`}>{sel && "✓ "}{opt}</button>;
                 })}
               </div>
             )}
             <div className="flex gap-2">
-              <button onClick={submitAnswer} className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl py-2.5 text-sm transition-colors">{currentQ < QUESTIONS.length - 1 ? "הבא ←" : "✨ בנה!"}</button>
-              {q.optional && <button onClick={() => { setCurrentAnswer(""); submitAnswer(); }} className="px-4 border border-gray-200 rounded-xl text-xs text-gray-500">דלג</button>}
+              <button onClick={submitAnswer} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-2.5 text-sm transition-colors shadow-sm active:scale-[0.97]">{currentQ < QUESTIONS.length - 1 ? "הבא" : "בנה!"}</button>
+              {q.optional && <button onClick={() => { setCurrentAnswer(""); submitAnswer(); }} className="px-4 border border-slate-200 rounded-xl text-xs text-slate-500 hover:bg-slate-50 transition-colors">דלג</button>}
             </div>
           </div>
         )}
-        {phase === "building" && <div className="p-4 text-center"><Loader2 size={20} className="animate-spin text-indigo-500 mx-auto mb-2" /><p className="text-sm font-medium text-indigo-600">{buildStep}</p></div>}
+        {phase === "building" && <div className="p-4 text-center"><Loader2 size={20} className="animate-spin text-blue-600 mx-auto mb-2" /><p className="text-sm font-medium text-blue-600">{buildStep}</p></div>}
         {phase === "preview" && (
-          <div className="border-t border-gray-200 p-3 space-y-2">
-            <p className="text-xs text-gray-500">רוצה לשנות?</p>
+          <div className="border-t border-slate-200 p-3 space-y-2">
+            <p className="text-xs text-slate-500">רוצה לשנות?</p>
             <div className="flex gap-1.5 flex-wrap">
-              {["🔄 בנה מחדש"].map((l) => <button key={l} onClick={() => { setPhase("briefing"); setCurrentQ(0); setChatHistory([{ type: "ai", content: QUESTIONS[0].question }]); }} className="px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-600 text-xs font-medium">{l}</button>)}
+              <button onClick={() => { setPhase("briefing"); setCurrentQ(0); setChatHistory([{ type: "ai", content: QUESTIONS[0].question }]); }} className="px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-600 text-xs font-medium hover:bg-blue-100 transition-colors">בנה מחדש</button>
             </div>
-            <button onClick={publishPage} className="w-full py-3 bg-gradient-to-l from-green-600 to-emerald-500 text-white font-bold rounded-xl text-sm">🚀 פרסם!</button>
+            <button onClick={publishPage} className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm transition-colors shadow-sm active:scale-[0.97]">פרסם!</button>
           </div>
         )}
         {phase === "published" && (
-          <div className="border-t border-gray-200 p-4 space-y-3 text-center">
-            <div className="text-3xl">🎉</div>
-            <p className="text-xs font-mono text-gray-500" dir="ltr">{pageUrl}</p>
+          <div className="border-t border-slate-200 p-4 space-y-3 text-center">
+            <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center mx-auto"><Check size={20} className="text-emerald-600" /></div>
+            <p className="text-xs font-mono text-slate-500" dir="ltr">{pageUrl}</p>
             <div className="flex gap-2">
-              <button onClick={copyUrl} className="flex-1 flex items-center justify-center gap-1 bg-gray-100 rounded-lg py-2 text-xs font-medium">{copied ? <Check size={12} /> : <Copy size={12} />} {copied ? "הועתק!" : "העתק"}</button>
-              <button onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`הדף שלי מוכן! ${pageUrl}`)}`, "_blank")} className="flex-1 flex items-center justify-center gap-1 bg-green-600 text-white rounded-lg py-2 text-xs font-medium"><Share2 size={12} /> שתף</button>
+              <button onClick={copyUrl} className="flex-1 flex items-center justify-center gap-1 bg-slate-100 rounded-xl py-2 text-xs font-medium hover:bg-slate-200 transition-colors">{copied ? <Check size={12} /> : <Copy size={12} />} {copied ? "הועתק!" : "העתק"}</button>
+              <button onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`הדף שלי מוכן! ${pageUrl}`)}`, "_blank")} className="flex-1 flex items-center justify-center gap-1 bg-emerald-600 text-white rounded-xl py-2 text-xs font-medium hover:bg-emerald-700 transition-colors"><Share2 size={12} /> שתף</button>
             </div>
-            <a href={`/client/${client.slug}`} className="block text-xs text-indigo-600">← חזור לפורטל</a>
+            <a href={`/client/${client.slug}`} className="block text-xs text-blue-600 hover:underline">חזור לפורטל</a>
           </div>
         )}
       </div>
 
-      {/* Preview */}
-      <div className="flex-1 bg-gray-50 flex flex-col min-w-0">
-        <div className="bg-white border-b border-gray-200 px-4 py-2.5 flex items-center justify-between flex-shrink-0">
-          <span className="text-sm font-semibold text-gray-700">👁 תצוגה מקדימה</span>
+      {/* Preview with scale transform */}
+      <div className="flex-1 bg-slate-50 flex flex-col min-w-0">
+        <div className="bg-white border-b border-slate-200 px-4 py-2.5 flex items-center justify-between flex-shrink-0">
+          <span className="text-sm font-semibold text-slate-700">תצוגה מקדימה</span>
           <div className="flex gap-1.5">
-            <button onClick={() => setMobileView(true)} className={`px-2.5 py-1 rounded text-xs ${mobileView ? "bg-indigo-100 text-indigo-700" : "bg-gray-100 text-gray-500"}`}>📱</button>
-            <button onClick={() => setMobileView(false)} className={`px-2.5 py-1 rounded text-xs ${!mobileView ? "bg-indigo-100 text-indigo-700" : "bg-gray-100 text-gray-500"}`}>🖥️</button>
-            {(phase === "preview" || phase === "published") && <a href={pageUrl} target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 bg-gray-100 rounded text-xs text-gray-500 flex items-center gap-1"><ExternalLink size={10} /> פתח</a>}
+            <div className="flex bg-slate-100 rounded-xl p-0.5">
+              <button onClick={() => setMobileView(true)} className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 ${mobileView ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+                <Smartphone size={12} /> נייד
+              </button>
+              <button onClick={() => setMobileView(false)} className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 ${!mobileView ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+                <Monitor size={12} /> מחשב
+              </button>
+            </div>
+            {(phase === "preview" || phase === "published") && (
+              <a href={pageUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 rounded-xl text-xs text-slate-600 font-medium hover:bg-slate-200 transition-colors">
+                <ExternalLink size={11} /> פתח
+              </a>
+            )}
           </div>
         </div>
-        <div className="flex-1 flex items-start justify-center p-4 overflow-y-auto">
+        <div ref={previewContainerRef} className="flex-1 flex items-start justify-center overflow-hidden p-4">
           {phase === "briefing" ? (
-            <div className="text-center text-gray-400 mt-24"><div className="text-7xl mb-4">🌐</div><p className="text-base font-medium">הדף יופיע כאן</p><p className="text-sm mt-1">ענה על השאלות בצד ימין</p></div>
+            <div className="text-center text-slate-400 mt-24">
+              <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4"><Monitor size={28} className="text-slate-300" /></div>
+              <p className="text-base font-medium text-slate-500">הדף יופיע כאן</p>
+              <p className="text-sm mt-1">ענה על השאלות בצד ימין</p>
+            </div>
           ) : phase === "building" ? (
-            <div className="text-center text-indigo-500 mt-24"><div className="text-6xl mb-4 animate-bounce">🎨</div><p className="text-lg font-bold">{buildStep}</p></div>
+            <div className="text-center text-blue-600 mt-24"><Loader2 size={40} className="animate-spin mx-auto mb-4" /><p className="text-lg font-bold">{buildStep}</p></div>
           ) : (
-            <div className={`bg-white rounded-xl overflow-hidden shadow-xl transition-all ${mobileView ? "w-[390px]" : "w-full max-w-[900px]"}`}>
-              <iframe src={`${pageUrl}?t=${Date.now()}`} className="w-full border-none" style={{ height: "700px" }} title="Preview" />
+            <div
+              className="bg-white rounded-2xl overflow-hidden shadow-xl border border-slate-200 transition-all duration-300"
+              style={{
+                width: mobileView ? 390 : 1440,
+                height: 900,
+                transform: `scale(${previewScale})`,
+                transformOrigin: "top center",
+              }}
+            >
+              <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 border-b border-slate-200">
+                <div className="flex gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                </div>
+                <div className="flex-1 bg-white rounded-lg px-3 py-1 text-[10px] text-slate-400 font-mono truncate" dir="ltr">{pageUrl}</div>
+              </div>
+              <iframe src={`${pageUrl}?t=${Date.now()}`} className="w-full border-none" style={{ height: "calc(100% - 32px)" }} title="Preview" />
             </div>
           )}
         </div>

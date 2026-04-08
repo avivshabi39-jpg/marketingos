@@ -95,12 +95,12 @@ export function CreateWorkflowForm({ clients, defaultClientId }: Props) {
 
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1">
-          <label htmlFor="type" className="text-sm font-medium text-gray-700">Type *</label>
+          <label htmlFor="type" className="text-sm font-medium text-slate-700">Type *</label>
           <select
             id="type"
             value={form.type}
             onChange={(e) => set("type", e.target.value)}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             {WORKFLOW_TYPES.map((t) => (
               <option key={t.value} value={t.value}>{t.label}</option>
@@ -109,12 +109,12 @@ export function CreateWorkflowForm({ clients, defaultClientId }: Props) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label htmlFor="status" className="text-sm font-medium text-gray-700">Status</label>
+          <label htmlFor="status" className="text-sm font-medium text-slate-700">Status</label>
           <select
             id="status"
             value={form.status}
             onChange={(e) => set("status", e.target.value)}
-            className="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             {WORKFLOW_STATUSES.map((s) => (
               <option key={s.value} value={s.value}>{s.label}</option>
@@ -136,14 +136,14 @@ export function CreateWorkflowForm({ clients, defaultClientId }: Props) {
       )}
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="trigger" className="text-sm font-medium text-gray-700">Trigger</label>
+        <label htmlFor="trigger" className="text-sm font-medium text-slate-700">Trigger</label>
         <input
           id="trigger"
           list="trigger-suggestions"
           value={form.trigger}
           onChange={(e) => set("trigger", e.target.value)}
           placeholder="e.g. Lead Created"
-          className="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
         <datalist id="trigger-suggestions">
           {TRIGGER_SUGGESTIONS.map((t) => <option key={t} value={t} />)}
@@ -159,13 +159,13 @@ export function CreateWorkflowForm({ clients, defaultClientId }: Props) {
       />
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="clientId" className="text-sm font-medium text-gray-700">Client *</label>
+        <label htmlFor="clientId" className="text-sm font-medium text-slate-700">Client *</label>
         <select
           id="clientId"
           required
           value={form.clientId}
           onChange={(e) => set("clientId", e.target.value)}
-          className="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         >
           <option value="" disabled>Select a client…</option>
           {clients.map((c) => (
@@ -175,14 +175,14 @@ export function CreateWorkflowForm({ clients, defaultClientId }: Props) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="notes" className="text-sm font-medium text-gray-700">Notes</label>
+        <label htmlFor="notes" className="text-sm font-medium text-slate-700">Notes</label>
         <textarea
           id="notes"
           rows={3}
           value={form.notes}
           onChange={(e) => set("notes", e.target.value)}
           placeholder="Optional notes about this workflow…"
-          className="rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+          className="rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
         />
       </div>
 

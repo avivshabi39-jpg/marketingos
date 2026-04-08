@@ -48,7 +48,7 @@ export function IntakeCreateButton({ clients, onCreated }: { clients: Client[]; 
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition"
+        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm transition"
       >
         <Plus size={16} />
         צור טופס חדש
@@ -60,31 +60,31 @@ export function IntakeCreateButton({ clients, onCreated }: { clients: Client[]; 
             className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 relative"
             onClick={(e) => e.stopPropagation()}
           >
-            <button onClick={() => setOpen(false)} className="absolute top-4 left-4 text-gray-400 hover:text-gray-600">
+            <button onClick={() => setOpen(false)} className="absolute top-4 left-4 text-slate-400 hover:text-slate-600">
               <X size={18} />
             </button>
 
-            <h3 className="font-bold text-gray-900 text-lg mb-5">צור טופס חדש</h3>
+            <h3 className="font-bold text-slate-900 text-lg mb-5">צור טופס חדש</h3>
 
             <form onSubmit={submit} className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">שם הטופס *</label>
+                <label className="text-sm font-medium text-slate-700 block mb-1.5">שם הטופס *</label>
                 <input
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
                   placeholder="לדוגמה: טופס לקוח חדש - סתיו 2024"
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-300 outline-none"
+                  className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-300 outline-none"
                 />
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">בחר לקוח *</label>
+                <label className="text-sm font-medium text-slate-700 block mb-1.5">בחר לקוח *</label>
                 <select
                   value={clientId}
                   onChange={(e) => setClientId(e.target.value)}
                   required
-                  className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-300 outline-none bg-white"
+                  className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-300 outline-none bg-white"
                 >
                   <option value="">בחר לקוח...</option>
                   {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -92,7 +92,7 @@ export function IntakeCreateButton({ clients, onCreated }: { clients: Client[]; 
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">סוג טופס *</label>
+                <label className="text-sm font-medium text-slate-700 block mb-1.5">סוג טופס *</label>
                 <div className="grid grid-cols-2 gap-2">
                   {FORM_TYPES.map((ft) => (
                     <button
@@ -101,8 +101,8 @@ export function IntakeCreateButton({ clients, onCreated }: { clients: Client[]; 
                       onClick={() => setFormType(ft.value)}
                       className={`px-3 py-2.5 rounded-xl border text-sm font-medium transition-all ${
                         formType === ft.value
-                          ? "border-indigo-500 bg-indigo-50 text-indigo-700"
-                          : "border-gray-200 text-gray-600 hover:border-gray-300"
+                          ? "border-blue-500 bg-blue-50 text-blue-700"
+                          : "border-slate-200 text-slate-600 hover:border-slate-300"
                       }`}
                     >
                       {ft.label}
@@ -114,7 +114,7 @@ export function IntakeCreateButton({ clients, onCreated }: { clients: Client[]; 
               <button
                 type="submit"
                 disabled={loading || !name.trim() || !clientId}
-                className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition mt-2"
+                className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition mt-2"
               >
                 {loading ? <><Loader2 size={16} className="animate-spin" /> יוצר...</> : "צור טופס"}
               </button>

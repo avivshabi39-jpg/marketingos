@@ -72,13 +72,13 @@ function StepCard({
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
       {/* Step header */}
-      <div className="flex items-center justify-between bg-gray-50 px-4 py-3 border-b border-gray-100">
-        <span className="text-sm font-semibold text-gray-700">שלב {index + 1}</span>
+      <div className="flex items-center justify-between bg-slate-50 px-4 py-3 border-b border-slate-100">
+        <span className="text-sm font-semibold text-slate-700">שלב {index + 1}</span>
         <button
           onClick={() => onDelete(index)}
-          className="text-gray-400 hover:text-red-500 transition"
+          className="text-slate-400 hover:text-red-500 transition"
           title="מחק שלב"
         >
           <Trash2 size={15} />
@@ -88,12 +88,12 @@ function StepCard({
       <div className="p-4 space-y-3">
         {/* Delay */}
         <div className="flex items-center gap-3">
-          <label className="text-sm font-medium text-gray-600 w-20 flex-shrink-0">עיכוב</label>
+          <label className="text-sm font-medium text-slate-600 w-20 flex-shrink-0">עיכוב</label>
           <div className="relative">
             <select
               value={step.delay_days}
               onChange={(e) => onUpdate(index, "delay_days", Number(e.target.value))}
-              className="border border-gray-200 rounded-lg pl-3 pr-8 py-1.5 text-sm focus:ring-2 focus:ring-indigo-300 outline-none bg-white appearance-none"
+              className="border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm focus:ring-2 focus:ring-blue-300 outline-none bg-white appearance-none"
             >
               {DELAY_OPTIONS.map((d) => (
                 <option key={d} value={d}>
@@ -101,29 +101,29 @@ function StepCard({
                 </option>
               ))}
             </select>
-            <ChevronDown size={12} className="absolute left-2 top-2.5 text-gray-400 pointer-events-none" />
+            <ChevronDown size={12} className="absolute left-2 top-2.5 text-slate-400 pointer-events-none" />
           </div>
         </div>
 
         {/* Subject */}
         <div>
-          <label className="text-sm font-medium text-gray-600 block mb-1">נושא</label>
+          <label className="text-sm font-medium text-slate-600 block mb-1">נושא</label>
           <input
             value={step.subject}
             onChange={(e) => onUpdate(index, "subject", e.target.value)}
             placeholder="נושא המייל..."
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-300 outline-none"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none"
           />
         </div>
 
         {/* Body */}
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="text-sm font-medium text-gray-600">תוכן</label>
+            <label className="text-sm font-medium text-slate-600">תוכן</label>
             <button
               onClick={() => onAiWrite(index)}
               disabled={aiLoading}
-              className="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 transition disabled:opacity-50"
+              className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 transition disabled:opacity-50"
             >
               {aiLoading ? (
                 <Loader2 size={12} className="animate-spin" />
@@ -139,16 +139,16 @@ function StepCard({
             onChange={(e) => onUpdate(index, "body", e.target.value)}
             placeholder="תוכן המייל..."
             rows={4}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-300 outline-none resize-y min-h-[80px]"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none resize-y min-h-[80px]"
           />
           {/* Variable chips */}
           <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-            <span className="text-xs text-gray-400">הכנס:</span>
+            <span className="text-xs text-slate-400">הכנס:</span>
             {VARIABLES.map((v) => (
               <button
                 key={v}
                 onClick={() => insertVariable(v)}
-                className="text-xs px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-100 hover:bg-indigo-100 transition font-mono"
+                className="text-xs px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full border border-blue-100 hover:bg-blue-100 transition font-mono"
               >
                 {v}
               </button>
@@ -251,7 +251,7 @@ export default function SequenceBuilderPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-16">
-        <Loader2 size={24} className="animate-spin text-gray-300" />
+        <Loader2 size={24} className="animate-spin text-slate-300" />
       </div>
     );
   }
@@ -266,7 +266,7 @@ export default function SequenceBuilderPage() {
       <div className="flex items-center gap-3">
         <Link
           href="/admin/email-sequences"
-          className="text-gray-400 hover:text-gray-600 transition"
+          className="text-slate-400 hover:text-slate-600 transition"
         >
           <ArrowRight size={20} />
         </Link>
@@ -274,16 +274,16 @@ export default function SequenceBuilderPage() {
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="text-xl font-bold text-gray-900 bg-transparent border-b-2 border-transparent focus:border-indigo-400 outline-none w-full py-0.5"
+            className="text-xl font-bold text-slate-900 bg-transparent border-b-2 border-transparent focus:border-blue-400 outline-none w-full py-0.5"
           />
-          <p className="text-xs text-gray-400 mt-0.5">{sequence.client.name}</p>
+          <p className="text-xs text-slate-400 mt-0.5">{sequence.client.name}</p>
         </div>
         <div className="flex items-center gap-3 flex-shrink-0">
           {/* Active toggle */}
-          <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
             <div
               onClick={() => setIsActive((v) => !v)}
-              className={`relative w-10 h-5 rounded-full transition-colors ${isActive ? "bg-indigo-500" : "bg-gray-200"}`}
+              className={`relative w-10 h-5 rounded-full transition-colors ${isActive ? "bg-blue-500" : "bg-slate-200"}`}
             >
               <span
                 className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${isActive ? "translate-x-5" : "translate-x-0.5"}`}
@@ -294,7 +294,7 @@ export default function SequenceBuilderPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition"
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
           >
             {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
             שמור
@@ -303,11 +303,11 @@ export default function SequenceBuilderPage() {
       </div>
 
       {/* Trigger card */}
-      <div className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 flex items-center gap-3">
-        <Mail size={16} className="text-gray-400" />
+      <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 flex items-center gap-3">
+        <Mail size={16} className="text-slate-400" />
         <div>
-          <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">טריגר</p>
-          <p className="text-sm font-semibold text-gray-700">{triggerLabel}</p>
+          <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">טריגר</p>
+          <p className="text-sm font-semibold text-slate-700">{triggerLabel}</p>
         </div>
       </div>
 
@@ -325,7 +325,7 @@ export default function SequenceBuilderPage() {
             />
             {idx < steps.length - 1 && (
               <div className="flex justify-center my-1">
-                <div className="w-px h-6 bg-gray-200" />
+                <div className="w-px h-6 bg-slate-200" />
               </div>
             )}
           </div>
@@ -335,7 +335,7 @@ export default function SequenceBuilderPage() {
       {/* Add step button */}
       <button
         onClick={addStep}
-        className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-gray-200 rounded-xl py-3 text-sm text-gray-500 hover:border-indigo-300 hover:text-indigo-600 transition"
+        className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-slate-200 rounded-xl py-3 text-sm text-slate-500 hover:border-blue-300 hover:text-blue-600 transition"
       >
         <Plus size={16} /> + הוסף שלב
       </button>
@@ -345,7 +345,7 @@ export default function SequenceBuilderPage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition"
+          className="flex items-center gap-2 px-5 py-2.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
         >
           {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
           שמור רצף

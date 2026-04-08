@@ -72,7 +72,7 @@ export function ChatbotWidget({ clientSlug, greeting }: ChatbotWidgetProps) {
     >
       {/* Chat panel */}
       <div
-        className={`mb-3 w-[300px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col transition-all duration-300 origin-bottom-left ${
+        className={`mb-3 w-[300px] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col transition-all duration-300 origin-bottom-left ${
           open
             ? "opacity-100 scale-100 translate-y-0"
             : "opacity-0 scale-95 translate-y-4 pointer-events-none"
@@ -80,21 +80,21 @@ export function ChatbotWidget({ clientSlug, greeting }: ChatbotWidgetProps) {
         style={{ maxHeight: "440px", height: open ? "440px" : 0 }}
       >
         {/* Header */}
-        <div className="bg-gray-900 px-4 py-3 flex items-center justify-between flex-shrink-0">
+        <div className="bg-slate-900 px-4 py-3 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-green-400 rounded-full" />
             <span className="text-white text-sm font-medium">צ׳אטבוט</span>
           </div>
           <button
             onClick={() => setOpen(false)}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-slate-400 hover:text-white transition-colors"
           >
             <X size={16} />
           </button>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2.5 bg-gray-50">
+        <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2.5 bg-slate-50">
           {messages.map((msg, i) => (
             <div
               key={i}
@@ -103,8 +103,8 @@ export function ChatbotWidget({ clientSlug, greeting }: ChatbotWidgetProps) {
               <div
                 className={`max-w-[220px] px-3 py-2 rounded-2xl text-sm leading-relaxed ${
                   msg.role === "user"
-                    ? "bg-gray-900 text-white rounded-bl-sm"
-                    : "bg-white border border-gray-200 text-gray-800 rounded-br-sm shadow-sm"
+                    ? "bg-slate-900 text-white rounded-bl-sm"
+                    : "bg-white border border-slate-200 text-slate-800 rounded-br-sm shadow-sm"
                 }`}
               >
                 {msg.text}
@@ -115,11 +115,11 @@ export function ChatbotWidget({ clientSlug, greeting }: ChatbotWidgetProps) {
           {/* Typing indicator */}
           {loading && (
             <div className="flex justify-end">
-              <div className="bg-white border border-gray-200 rounded-2xl rounded-br-sm px-3 py-2.5 shadow-sm">
+              <div className="bg-white border border-slate-200 rounded-2xl rounded-br-sm px-3 py-2.5 shadow-sm">
                 <div className="flex gap-1 items-center">
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:0ms]" />
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]" />
-                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:300ms]" />
+                  <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0ms]" />
+                  <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:150ms]" />
+                  <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:300ms]" />
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@ export function ChatbotWidget({ clientSlug, greeting }: ChatbotWidgetProps) {
         </div>
 
         {/* Input */}
-        <div className="border-t border-gray-100 bg-white px-3 py-2.5 flex gap-2 flex-shrink-0">
+        <div className="border-t border-slate-100 bg-white px-3 py-2.5 flex gap-2 flex-shrink-0">
           <input
             ref={inputRef}
             type="text"
@@ -137,27 +137,27 @@ export function ChatbotWidget({ clientSlug, greeting }: ChatbotWidgetProps) {
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             placeholder="כתוב הודעה..."
             disabled={loading}
-            className="flex-1 text-sm px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-900 disabled:opacity-50"
+            className="flex-1 text-sm px-3 py-1.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-900 disabled:opacity-50"
           />
           <button
             onClick={sendMessage}
             disabled={loading || !input.trim()}
-            className="p-1.5 bg-gray-900 text-white rounded-lg hover:bg-gray-700 disabled:opacity-40 transition-colors"
+            className="p-1.5 bg-slate-900 text-white rounded-lg hover:bg-slate-700 disabled:opacity-40 transition-colors"
           >
             <Send size={14} />
           </button>
         </div>
 
         {/* Footer badge */}
-        <div className="bg-gray-50 border-t border-gray-100 text-center py-1.5">
-          <span className="text-[10px] text-gray-400">מופעל על ידי AI</span>
+        <div className="bg-slate-50 border-t border-slate-100 text-center py-1.5">
+          <span className="text-[10px] text-slate-400">מופעל על ידי AI</span>
         </div>
       </div>
 
       {/* Toggle button */}
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-full shadow-lg hover:bg-gray-700 transition-colors"
+        className="flex items-center gap-2 px-4 py-3 bg-slate-900 text-white rounded-full shadow-lg hover:bg-slate-700 transition-colors"
       >
         {open ? <X size={18} /> : <MessageCircle size={18} />}
         <span className="text-sm font-medium">צ׳אט</span>

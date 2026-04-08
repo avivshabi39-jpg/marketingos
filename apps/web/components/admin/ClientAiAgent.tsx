@@ -353,17 +353,17 @@ export function ClientAiAgent({
   const overLimit = charCount > MAX_CHARS;
 
   return (
-    <div className="flex flex-col h-[680px] bg-gray-50 rounded-2xl border border-gray-200 overflow-hidden" dir="rtl">
+    <div className="flex flex-col h-[680px] bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden" dir="rtl">
 
       {/* ── Header ── */}
-      <div className="bg-white border-b border-gray-100 px-5 py-3.5 flex items-center justify-between shrink-0">
+      <div className="bg-white border-b border-slate-100 px-5 py-3.5 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center">
-            <Wand2 size={18} className="text-indigo-600" />
+          <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center">
+            <Wand2 size={18} className="text-blue-600" />
           </div>
           <div>
-            <p className="font-semibold text-gray-900 text-sm">סוכן AI — {clientName}</p>
-            <p className="text-xs text-gray-400">{industry ?? "עסק"} · דף {pagePublished ? "מפורסם ✅" : "לא מפורסם"}</p>
+            <p className="font-semibold text-slate-900 text-sm">סוכן AI — {clientName}</p>
+            <p className="text-xs text-slate-400">{industry ?? "עסק"} · דף {pagePublished ? "מפורסם ✅" : "לא מפורסם"}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -371,7 +371,7 @@ export function ClientAiAgent({
             href={`/${clientSlug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 border border-indigo-200 px-2.5 py-1.5 rounded-lg transition"
+            className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 border border-blue-200 px-2.5 py-1.5 rounded-lg transition"
           >
             <ExternalLink size={12} />
             צפה בדף
@@ -380,7 +380,7 @@ export function ClientAiAgent({
           {!clearConfirm ? (
             <button
               onClick={() => setClearConfirm(true)}
-              className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 border border-gray-200 hover:border-red-200 px-2.5 py-1.5 rounded-lg transition"
+              className="flex items-center gap-1 text-xs text-slate-400 hover:text-red-500 border border-slate-200 hover:border-red-200 px-2.5 py-1.5 rounded-lg transition"
               title="נקה שיחה"
             >
               <Trash2 size={12} />
@@ -388,7 +388,7 @@ export function ClientAiAgent({
             </button>
           ) : (
             <div className="flex items-center gap-1.5">
-              <span className="text-xs text-gray-500">למחוק?</span>
+              <span className="text-xs text-slate-500">למחוק?</span>
               <button
                 onClick={clearChat}
                 className="text-xs px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
@@ -397,7 +397,7 @@ export function ClientAiAgent({
               </button>
               <button
                 onClick={() => setClearConfirm(false)}
-                className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200 transition"
+                className="text-xs px-2 py-1 bg-slate-100 text-slate-600 rounded-md hover:bg-slate-200 transition"
               >
                 ביטול
               </button>
@@ -407,20 +407,20 @@ export function ClientAiAgent({
       </div>
 
       {/* ── Quick actions ── */}
-      <div className="bg-white border-b border-gray-100 px-4 py-2.5 flex gap-2 flex-wrap shrink-0">
+      <div className="bg-white border-b border-slate-100 px-4 py-2.5 flex gap-2 flex-wrap shrink-0">
         {QUICK_ACTIONS.map((qa) => (
           <button
             key={qa.label}
             onClick={() => send(qa.message)}
             disabled={loading}
-            className="text-xs font-medium px-3 py-1.5 bg-gray-100 hover:bg-indigo-50 hover:text-indigo-700 text-gray-600 rounded-lg transition disabled:opacity-50"
+            className="text-xs font-medium px-3 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 rounded-lg transition disabled:opacity-50"
           >
             {qa.label}
           </button>
         ))}
         <a
           href={`/admin/clients/${clientId}/builder`}
-          className="text-xs font-medium px-3 py-1.5 bg-gray-100 hover:bg-indigo-50 hover:text-indigo-700 text-gray-600 rounded-lg transition"
+          className="text-xs font-medium px-3 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600 rounded-lg transition"
         >
           ✏️ ערוך בbuilder
         </a>
@@ -458,7 +458,7 @@ export function ClientAiAgent({
 
               /* ── Loading bubble (thinking dots) ── */
               ) : msg.isStreaming && msg.content === "" ? (
-                <div className="px-4 py-2 rounded-2xl rounded-tl-sm bg-white border border-gray-200 shadow-sm">
+                <div className="px-4 py-2 rounded-2xl rounded-tl-sm bg-white border border-slate-200 shadow-sm">
                   <ThinkingDots />
                 </div>
 
@@ -467,8 +467,8 @@ export function ClientAiAgent({
                 <div
                   className={`px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap break-words ${
                     msg.role === "user"
-                      ? "bg-indigo-600 text-white rounded-tr-sm"
-                      : `bg-white border border-gray-200 text-gray-800 rounded-tl-sm shadow-sm${msg.isStreaming ? " ai-cursor" : ""}`
+                      ? "bg-blue-600 text-white rounded-tr-sm"
+                      : `bg-white border border-slate-200 text-slate-800 rounded-tl-sm shadow-sm${msg.isStreaming ? " ai-cursor" : ""}`
                   }`}
                 >
                   {msg.content || (msg.isStreaming ? "\u200b" : "...")}
@@ -488,7 +488,7 @@ export function ClientAiAgent({
                       key={si}
                       onClick={() => send(s)}
                       disabled={loading}
-                      className="text-xs px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg border border-indigo-100 transition disabled:opacity-50"
+                      className="text-xs px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg border border-blue-100 transition disabled:opacity-50"
                     >
                       {s}
                     </button>
@@ -497,7 +497,7 @@ export function ClientAiAgent({
               ) : null}
 
               {/* ── Timestamp ── */}
-              <span className="text-[10px] text-gray-400 px-1">
+              <span className="text-[10px] text-slate-400 px-1">
                 {formatTime(msg.timestamp)}
               </span>
             </div>
@@ -507,7 +507,7 @@ export function ClientAiAgent({
         {/* Loading state before first stream chunk */}
         {loadState === "loading" && (
           <div className="flex justify-start">
-            <div className="px-4 py-2 rounded-2xl rounded-tl-sm bg-white border border-gray-200 shadow-sm">
+            <div className="px-4 py-2 rounded-2xl rounded-tl-sm bg-white border border-slate-200 shadow-sm">
               <ThinkingDots />
             </div>
           </div>
@@ -525,7 +525,7 @@ export function ClientAiAgent({
               bottomRef.current?.scrollIntoView({ behavior: "smooth" });
               setShowNewMsg(false);
             }}
-            className="flex items-center gap-1.5 text-xs font-medium bg-indigo-600 text-white px-3 py-1.5 rounded-full shadow-lg hover:bg-indigo-700 transition"
+            className="flex items-center gap-1.5 text-xs font-medium bg-blue-600 text-white px-3 py-1.5 rounded-full shadow-lg hover:bg-blue-700 transition"
           >
             <ChevronDown size={13} />
             הודעות חדשות
@@ -534,7 +534,7 @@ export function ClientAiAgent({
       )}
 
       {/* ── Input ── */}
-      <div className="bg-white border-t border-gray-100 p-3 shrink-0">
+      <div className="bg-white border-t border-slate-100 p-3 shrink-0">
         <div className="flex items-end gap-2">
           <div className="flex-1 relative">
             <textarea
@@ -545,14 +545,14 @@ export function ClientAiAgent({
               placeholder="ספר לי מה לשנות בדף שלך..."
               rows={1}
               disabled={loading}
-              className={`w-full resize-none border rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-300 outline-none disabled:opacity-60 leading-relaxed transition ${
-                overLimit ? "border-red-300 focus:ring-red-200" : "border-gray-200"
+              className={`w-full resize-none border rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-300 outline-none disabled:opacity-60 leading-relaxed transition ${
+                overLimit ? "border-red-300 focus:ring-red-200" : "border-slate-200"
               }`}
               style={{ maxHeight: "96px", overflowY: "auto" }}
             />
             {/* Character counter */}
             {charCount > 400 && (
-              <span className={`absolute bottom-2 left-3 text-[10px] ${overLimit ? "text-red-500" : "text-gray-400"}`}>
+              <span className={`absolute bottom-2 left-3 text-[10px] ${overLimit ? "text-red-500" : "text-slate-400"}`}>
                 {charCount}/{MAX_CHARS}
               </span>
             )}
@@ -560,7 +560,7 @@ export function ClientAiAgent({
           <button
             onClick={() => send()}
             disabled={loading || !input.trim() || overLimit}
-            className="shrink-0 w-10 h-10 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl flex items-center justify-center transition"
+            className="shrink-0 w-10 h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl flex items-center justify-center transition"
           >
             {loading ? (
               <span style={{ display: "flex", gap: "3px" }}>
@@ -576,7 +576,7 @@ export function ClientAiAgent({
             )}
           </button>
         </div>
-        <p className="text-[11px] text-gray-400 mt-1.5 text-center">
+        <p className="text-[11px] text-slate-400 mt-1.5 text-center">
           {loading ? "מחשב..." : "⌘+Enter לשליחה · Shift+Enter לשורה חדשה"}
         </p>
       </div>
@@ -603,15 +603,15 @@ export function ClientAiAgentWithPreview(props: Props) {
         {/* Mini preview */}
         <div className="hidden xl:flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-gray-600">תצוגה מקדימה</p>
+            <p className="text-sm font-medium text-slate-600">תצוגה מקדימה</p>
             <button
               onClick={() => window.location.reload()}
-              className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600"
+              className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600"
             >
               <RefreshCw size={11} /> רענן
             </button>
           </div>
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden" style={{ height: 680 }}>
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden" style={{ height: 680 }}>
             <div className="relative w-full h-full overflow-hidden">
               <iframe
                 src={`/${props.clientSlug}`}

@@ -241,10 +241,10 @@ export function EmailSequencesClient({ clients, initialClientId }: Props) {
       <div className="w-80 flex-shrink-0 flex flex-col gap-3">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-gray-900 text-sm">רצפי מייל</h2>
+          <h2 className="font-semibold text-slate-900 text-sm">רצפי מייל</h2>
           <button
             onClick={() => setShowCreate(true)}
-            className="flex items-center gap-1 text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 transition"
+            className="flex items-center gap-1 text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 transition"
           >
             <Plus size={13} /> חדש
           </button>
@@ -255,7 +255,7 @@ export function EmailSequencesClient({ clients, initialClientId }: Props) {
           <select
             value={selectedClientId}
             onChange={(e) => setSelectedClientId(e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-300"
           >
             {clients.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
@@ -267,13 +267,13 @@ export function EmailSequencesClient({ clients, initialClientId }: Props) {
         <div className="flex flex-col gap-2 flex-1 overflow-y-auto">
           {loadingSeqs ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 size={20} className="animate-spin text-gray-400" />
+              <Loader2 size={20} className="animate-spin text-slate-400" />
             </div>
           ) : sequences.length === 0 ? (
-            <div className="bg-white rounded-xl border border-dashed border-gray-200 flex flex-col items-center py-12 text-center">
-              <Mail size={28} className="text-gray-200 mb-2" />
-              <p className="text-sm text-gray-400">אין רצפי מייל</p>
-              <p className="text-xs text-gray-300 mt-1">צור ראשון ↑</p>
+            <div className="bg-white rounded-xl border border-dashed border-slate-200 flex flex-col items-center py-12 text-center">
+              <Mail size={28} className="text-slate-200 mb-2" />
+              <p className="text-sm text-slate-400">אין רצפי מייל</p>
+              <p className="text-xs text-slate-300 mt-1">צור ראשון ↑</p>
             </div>
           ) : (
             sequences.map((seq) => (
@@ -282,22 +282,22 @@ export function EmailSequencesClient({ clients, initialClientId }: Props) {
                 onClick={() => selectSequence(seq)}
                 className={`bg-white rounded-xl border p-4 cursor-pointer transition-all ${
                   selectedId === seq.id
-                    ? "border-indigo-400 shadow-md ring-1 ring-indigo-200"
-                    : "border-gray-100 hover:border-gray-200 hover:shadow-sm"
+                    ? "border-blue-400 shadow-md ring-1 ring-blue-200"
+                    : "border-slate-100 hover:border-slate-200 hover:shadow-sm"
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 truncate">{seq.name}</p>
-                    <span className="inline-block mt-1 text-xs bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full">
+                    <p className="text-sm font-semibold text-slate-900 truncate">{seq.name}</p>
+                    <span className="inline-block mt-1 text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">
                       {TRIGGER_LABELS[seq.trigger] ?? seq.trigger}
                     </span>
-                    <p className="text-xs text-gray-400 mt-1">{seq.steps.length} שלבים</p>
+                    <p className="text-xs text-slate-400 mt-1">{seq.steps.length} שלבים</p>
                   </div>
                   <div className="flex flex-col items-end gap-1.5">
                     <button
                       onClick={(e) => { e.stopPropagation(); toggleActive(seq); }}
-                      className="text-gray-400 hover:text-indigo-600 transition-colors"
+                      className="text-slate-400 hover:text-blue-600 transition-colors"
                       title={seq.isActive ? "כבה" : "הפעל"}
                     >
                       {seq.isActive
@@ -306,7 +306,7 @@ export function EmailSequencesClient({ clients, initialClientId }: Props) {
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); deleteSequence(seq.id); }}
-                      className="text-gray-300 hover:text-red-500 transition-colors"
+                      className="text-slate-300 hover:text-red-500 transition-colors"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -321,17 +321,17 @@ export function EmailSequencesClient({ clients, initialClientId }: Props) {
       {/* ── RIGHT PANEL: Step Builder ── */}
       <div className="flex-1 min-w-0">
         {!selectedSeq ? (
-          <div className="h-full bg-white rounded-2xl border border-dashed border-gray-200 flex flex-col items-center justify-center text-center py-24">
-            <Mail size={40} className="text-gray-200 mb-3" />
-            <p className="text-gray-400 text-sm">בחר רצף לעריכה</p>
-            <p className="text-gray-300 text-xs mt-1">או צור רצף חדש</p>
+          <div className="h-full bg-white rounded-2xl border border-dashed border-slate-200 flex flex-col items-center justify-center text-center py-24">
+            <Mail size={40} className="text-slate-200 mb-3" />
+            <p className="text-slate-400 text-sm">בחר רצף לעריכה</p>
+            <p className="text-slate-300 text-xs mt-1">או צור רצף חדש</p>
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
             {/* Builder header */}
             <div className="flex items-center justify-between mb-6">
-              <h3 className="font-semibold text-gray-900">{selectedSeq.name}</h3>
-              <div className="flex items-center gap-2 text-xs text-gray-400">
+              <h3 className="font-semibold text-slate-900">{selectedSeq.name}</h3>
+              <div className="flex items-center gap-2 text-xs text-slate-400">
                 {saving && <><Loader2 size={13} className="animate-spin" /> שומר...</>}
                 {saved && !saving && <><Check size={13} className="text-green-500" /> נשמר</>}
               </div>
@@ -350,11 +350,11 @@ export function EmailSequencesClient({ clients, initialClientId }: Props) {
               <div key={step.id}>
                 {/* Delay connector */}
                 <div className="flex flex-col items-start pr-5 my-1">
-                  <div className="w-px h-4 bg-gray-200 mr-[9px]" />
+                  <div className="w-px h-4 bg-slate-200 mr-[9px]" />
                   <select
                     value={step.delayDays}
                     onChange={(e) => updateStep(index, "delayDays", Number(e.target.value))}
-                    className="border border-gray-200 rounded-md px-2 py-1 text-xs bg-gray-50 focus:outline-none focus:ring-1 focus:ring-indigo-300"
+                    className="border border-slate-200 rounded-xl px-2 py-1 text-xs bg-slate-50 focus:outline-none focus:ring-1 focus:ring-blue-300"
                   >
                     {DELAY_OPTIONS.map((d) => (
                       <option key={d} value={d}>
@@ -362,49 +362,49 @@ export function EmailSequencesClient({ clients, initialClientId }: Props) {
                       </option>
                     ))}
                   </select>
-                  <div className="w-px h-4 bg-gray-200 mr-[9px]" />
+                  <div className="w-px h-4 bg-slate-200 mr-[9px]" />
                 </div>
 
                 {/* Email step card */}
-                <div className="border border-gray-200 rounded-xl p-4 bg-white shadow-sm">
+                <div className="border border-slate-200 rounded-xl p-4 bg-white shadow-sm">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="font-semibold text-gray-700 text-sm">📧 שלב {index + 1}</span>
+                    <span className="font-semibold text-slate-700 text-sm">📧 שלב {index + 1}</span>
                     <button
                       onClick={() => deleteStep(index)}
-                      className="text-gray-300 hover:text-red-500 transition-colors text-lg leading-none"
+                      className="text-slate-300 hover:text-red-500 transition-colors text-lg leading-none"
                     >
                       ×
                     </button>
                   </div>
 
-                  <label className="text-xs text-gray-400 block mb-1">נושא המייל</label>
+                  <label className="text-xs text-slate-400 block mb-1">נושא המייל</label>
                   <input
                     value={step.subject}
                     onChange={(e) => updateStep(index, "subject", e.target.value)}
                     placeholder="נושא המייל..."
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-blue-200"
                   />
 
-                  <label className="text-xs text-gray-400 block mb-1">תוכן המייל</label>
+                  <label className="text-xs text-slate-400 block mb-1">תוכן המייל</label>
                   <textarea
                     value={step.body}
                     onChange={(e) => updateStep(index, "body", e.target.value)}
                     placeholder={`תוכן המייל... השתמש ב-{name} {phone}`}
                     rows={4}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-vertical focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm resize-vertical focus:outline-none focus:ring-2 focus:ring-blue-200"
                   />
 
                   <div className="flex items-center gap-3 mt-2">
                     <button
                       onClick={() => generateAiStep(index)}
                       disabled={generatingStep === index}
-                      className="flex items-center gap-1.5 text-xs text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg px-3 py-1.5 transition disabled:opacity-60"
+                      className="flex items-center gap-1.5 text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg px-3 py-1.5 transition disabled:opacity-60"
                     >
                       {generatingStep === index
                         ? <><Loader2 size={11} className="animate-spin" /> מייצר...</>
                         : <>✨ AI כתוב מייל</>}
                     </button>
-                    <span className="text-xs text-gray-300">
+                    <span className="text-xs text-slate-300">
                       {"{name}"} {"{phone}"} {"{businessName}"}
                     </span>
                   </div>
@@ -415,11 +415,11 @@ export function EmailSequencesClient({ clients, initialClientId }: Props) {
             {/* Add step */}
             <div className={steps.length > 0 ? "mt-4" : "mt-4"}>
               {steps.length > 0 && (
-                <div className="w-px h-4 bg-gray-200 mr-[9px] mb-1" />
+                <div className="w-px h-4 bg-slate-200 mr-[9px] mb-1" />
               )}
               <button
                 onClick={addStep}
-                className="w-full border-2 border-dashed border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/40 rounded-xl py-3 text-sm text-gray-400 hover:text-indigo-500 transition-all"
+                className="w-full border-2 border-dashed border-slate-200 hover:border-blue-300 hover:bg-blue-50/40 rounded-xl py-3 text-sm text-slate-400 hover:text-blue-500 transition-all"
               >
                 + הוסף שלב
               </button>
@@ -436,23 +436,23 @@ export function EmailSequencesClient({ clients, initialClientId }: Props) {
             dir="rtl"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="font-semibold text-gray-900 mb-4">רצף מייל חדש</h3>
+            <h3 className="font-semibold text-slate-900 mb-4">רצף מייל חדש</h3>
 
-            <label className="text-xs text-gray-500 block mb-1">שם הרצף</label>
+            <label className="text-xs text-slate-500 block mb-1">שם הרצף</label>
             <input
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="לדוגמה: ברוכים הבאים"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-blue-200"
               autoFocus
               onKeyDown={(e) => e.key === "Enter" && createSequence()}
             />
 
-            <label className="text-xs text-gray-500 block mb-1">טריגר</label>
+            <label className="text-xs text-slate-500 block mb-1">טריגר</label>
             <select
               value={newTrigger}
               onChange={(e) => setNewTrigger(e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-blue-200"
             >
               {TRIGGER_OPTIONS.map(([k, v]) => (
                 <option key={k} value={k}>{v}</option>
@@ -463,14 +463,14 @@ export function EmailSequencesClient({ clients, initialClientId }: Props) {
               <button
                 onClick={createSequence}
                 disabled={creating || !newName.trim()}
-                className="flex-1 bg-indigo-600 text-white rounded-lg py-2 text-sm font-medium hover:bg-indigo-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 bg-blue-600 text-white rounded-lg py-2 text-sm font-medium hover:bg-blue-700 transition disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {creating ? <Loader2 size={14} className="animate-spin" /> : null}
                 צור רצף
               </button>
               <button
                 onClick={() => setShowCreate(false)}
-                className="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 border border-gray-200 rounded-lg transition"
+                className="px-4 py-2 text-sm text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg transition"
               >
                 ביטול
               </button>

@@ -15,8 +15,8 @@ const actions = [
     label: "+ ליד חדש",
     href: "/admin/leads/new",
     icon: UserPlus,
-    color: "text-indigo-600",
-    bg: "bg-indigo-50 hover:bg-indigo-100",
+    color: "text-blue-600",
+    bg: "bg-blue-50 hover:bg-blue-100",
     shortcut: "Ctrl+L",
   },
   {
@@ -64,7 +64,7 @@ const actions = [
 export default function QuickActions() {
   return (
     <div dir="rtl">
-      <h2 className="text-lg font-bold text-gray-900 mb-4">פעולות מהירות</h2>
+      <h2 className="text-lg font-bold text-slate-900 mb-4">פעולות מהירות</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {actions.map((action) => {
           const Icon = action.icon;
@@ -72,15 +72,15 @@ export default function QuickActions() {
             <Link
               key={action.href + action.label}
               href={action.href}
-              className={`flex flex-col items-center gap-2 rounded-2xl border border-gray-100 p-4 shadow-sm transition-all duration-150 hover:shadow-md group ${action.bg}`}
+              className={`flex flex-col items-center gap-2 rounded-2xl border border-slate-100 p-4 shadow-sm transition-all duration-150 hover:shadow-md group ${action.bg}`}
             >
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-white shadow-sm group-hover:scale-110 transition-transform duration-150`}>
                 <Icon size={20} className={action.color} />
               </div>
-              <span className="text-sm font-medium text-gray-800 text-center leading-tight">
+              <span className="text-sm font-medium text-slate-800 text-center leading-tight">
                 {action.label}
               </span>
-              <span className="text-[10px] text-gray-400 font-mono">{action.shortcut}</span>
+              <span className="text-[10px] text-slate-400 font-mono">{action.shortcut}</span>
             </Link>
           );
         })}

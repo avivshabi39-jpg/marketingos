@@ -38,7 +38,7 @@ export default async function ClientSlugLoginPage({
           className="absolute top-1/3 right-1/3 w-72 h-72 rounded-full blur-3xl opacity-20 pointer-events-none"
           style={{ backgroundColor: primaryColor }}
         />
-        <div className="absolute bottom-1/4 left-1/4 w-48 h-48 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 left-1/4 w-48 h-48 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* Logo */}
         <div className="flex items-center gap-3 relative z-10">
@@ -55,7 +55,7 @@ export default async function ClientSlugLoginPage({
         <div className="space-y-8 relative z-10">
           {clientName && (
             <div>
-              <p className="text-gray-400 text-sm font-medium uppercase tracking-widest mb-2">
+              <p className="text-slate-400 text-sm font-medium uppercase tracking-widest mb-2">
                 פורטל לקוחות של
               </p>
               <h2 className="text-4xl font-bold text-white leading-tight">{clientName}</h2>
@@ -65,12 +65,12 @@ export default async function ClientSlugLoginPage({
             <div>
               <h2 className="text-4xl font-bold text-white leading-tight">
                 פורטל לקוחות<br />
-                <span className="text-indigo-300">MarketingOS</span>
+                <span className="text-blue-300">MarketingOS</span>
               </h2>
             </div>
           )}
 
-          <p className="text-gray-400 text-base leading-relaxed max-w-sm">
+          <p className="text-slate-400 text-base leading-relaxed max-w-sm">
             צפייה בלידים, דוחות ביצועים, ומידע על הקמפיינים שלך — הכל במקום אחד.
           </p>
 
@@ -82,7 +82,7 @@ export default async function ClientSlugLoginPage({
               { icon: Shield,       label: "גישה מאובטחת לנתונים שלך" },
               { icon: BarChart2,    label: "ניתוח מקורות ופילוח קהל" },
             ].map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-3 text-gray-300">
+              <div key={label} className="flex items-center gap-3 text-slate-300">
                 <div
                   className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                   style={{ backgroundColor: `${primaryColor}33` }}
@@ -96,7 +96,7 @@ export default async function ClientSlugLoginPage({
         </div>
 
         {/* Footer */}
-        <p className="text-gray-600 text-xs relative z-10">
+        <p className="text-slate-600 text-xs relative z-10">
           © {new Date().getFullYear()} MarketingOS · כל הזכויות שמורות
         </p>
       </div>
@@ -113,28 +113,28 @@ export default async function ClientSlugLoginPage({
           >
             <TrendingUp size={16} className="text-white" />
           </div>
-          <span className="font-bold text-gray-900 text-sm">MarketingOS</span>
+          <span className="font-bold text-slate-900 text-sm">MarketingOS</span>
         </div>
 
         <div className="w-full max-w-sm space-y-8">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">כניסה לפורטל</h1>
+            <h1 className="text-2xl font-bold text-slate-900">כניסה לפורטל</h1>
             {clientName ? (
-              <p className="text-gray-500 mt-1 text-sm">
-                ברוך הבא ל-<span className="font-medium text-gray-700">{clientName}</span>
+              <p className="text-slate-500 mt-1 text-sm">
+                ברוך הבא ל-<span className="font-medium text-slate-700">{clientName}</span>
               </p>
             ) : (
-              <p className="text-gray-500 mt-1 text-sm">הזן את הסיסמה כדי להיכנס</p>
+              <p className="text-slate-500 mt-1 text-sm">הזן את הסיסמה כדי להיכנס</p>
             )}
           </div>
 
           <LoginForm slug={params.slug} primaryColor={primaryColor} />
 
-          <p className="text-center text-gray-400 text-xs">
+          <p className="text-center text-slate-400 text-xs">
             בעיה בכניסה?{" "}
             <a
               href="mailto:support@marketingos.io"
-              className="text-indigo-500 hover:text-indigo-700 underline underline-offset-2 transition-colors"
+              className="text-blue-500 hover:text-blue-700 underline underline-offset-2 transition-colors"
             >
               צור קשר
             </a>

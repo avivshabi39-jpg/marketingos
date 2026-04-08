@@ -56,18 +56,18 @@ export default function WhatsAppBlock({
         <span className="font-bold">WhatsApp</span>
       </div>
       <input
-        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-center outline-none"
+        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-center outline-none"
         value={text}
         placeholder="טקסט כפתור"
         onChange={(e) => onUpdate?.({ ...block.content, text: e.target.value })}
       />
       <input
-        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none"
+        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm outline-none"
         value={message}
         placeholder="הודעה מוכנה מראש"
         onChange={(e) => onUpdate?.({ ...block.content, message: e.target.value })}
       />
-      <label className="flex items-center gap-2 text-sm text-gray-600 justify-center">
+      <label className="flex items-center gap-2 text-sm text-slate-600 justify-center">
         <input
           type="checkbox"
           checked={sticky}

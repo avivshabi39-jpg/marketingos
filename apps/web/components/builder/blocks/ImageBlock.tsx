@@ -60,7 +60,7 @@ export default function ImageBlock({
           <img src={block.content.url} alt={block.content.alt || ""} className="max-w-full mx-auto rounded-lg shadow-md max-h-48 object-cover w-full" />
           <button
             onClick={() => onUpdate?.({ ...block.content, url: "" })}
-            className="absolute top-2 left-2 p-1 rounded-full bg-white shadow border border-gray-200 hover:bg-red-50"
+            className="absolute top-2 left-2 p-1 rounded-full bg-white shadow border border-slate-200 hover:bg-red-50"
           >
             <X size={14} className="text-red-500" />
           </button>
@@ -69,24 +69,24 @@ export default function ImageBlock({
         <button
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
-          className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg text-gray-400 hover:border-indigo-400 hover:text-indigo-500 transition-colors disabled:opacity-50"
+          className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-slate-300 rounded-lg text-slate-400 hover:border-blue-400 hover:text-blue-500 transition-colors disabled:opacity-50"
         >
           {uploading ? <Loader2 size={28} className="animate-spin" /> : <ImageIcon size={28} />}
           <span className="text-sm mt-2">{uploading ? "מעלה..." : "לחץ להעלאת תמונה"}</span>
-          <span className="text-xs mt-1 text-gray-300">JPG, PNG, WebP עד 5MB</span>
+          <span className="text-xs mt-1 text-slate-300">JPG, PNG, WebP עד 5MB</span>
         </button>
       )}
 
       {uploading && (
-        <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
-          <div className="h-full bg-indigo-500 rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
+        <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+          <div className="h-full bg-blue-500 rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
         </div>
       )}
 
       <button
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
-        className="w-full flex items-center justify-center gap-2 text-xs text-gray-500 border border-gray-200 rounded-lg py-1.5 hover:bg-gray-50 transition"
+        className="w-full flex items-center justify-center gap-2 text-xs text-slate-500 border border-slate-200 rounded-lg py-1.5 hover:bg-slate-50 transition"
       >
         <Upload size={12} /> {block.content.url ? "החלף תמונה" : "העלה תמונה"}
       </button>

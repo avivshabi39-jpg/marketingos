@@ -45,12 +45,12 @@ export function N8nDashboard() {
   const isOnline = status?.status === "online";
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h3 className="font-bold text-base text-gray-900 mb-0.5">⚡ n8n Automation Hub</h3>
-          <p className="text-xs text-gray-500">4 workflows פעילים</p>
+          <h3 className="font-bold text-base text-slate-900 mb-0.5">⚡ n8n Automation Hub</h3>
+          <p className="text-xs text-slate-500">4 workflows פעילים</p>
         </div>
         <div className="flex items-center gap-2">
           <span
@@ -61,12 +61,12 @@ export function N8nDashboard() {
             {loading ? "..." : isOnline ? "Online" : "Offline"}
           </span>
           {!loading && status?.responseMs != null && status.responseMs > 0 && (
-            <span className="text-[11px] text-gray-400">{status.responseMs}ms</span>
+            <span className="text-[11px] text-slate-400">{status.responseMs}ms</span>
           )}
           <button
             onClick={fetchStatus}
             disabled={loading}
-            className="text-xs text-gray-400 hover:text-indigo-600 transition-colors disabled:opacity-50 ml-1"
+            className="text-xs text-slate-400 hover:text-blue-600 transition-colors disabled:opacity-50 ml-1"
           >
             {loading ? "⏳" : "🔄"}
           </button>
@@ -82,7 +82,7 @@ export function N8nDashboard() {
 
       {/* URL */}
       {status?.url && status.url !== "not configured" && (
-        <div className="bg-gray-50 rounded-lg px-3 py-2 text-[11px] text-gray-500 font-mono mb-3" dir="ltr">
+        <div className="bg-slate-50 rounded-lg px-3 py-2 text-[11px] text-slate-500 font-mono mb-3" dir="ltr">
           🌐 {status.url}
         </div>
       )}
@@ -90,14 +90,14 @@ export function N8nDashboard() {
       {/* Workflows */}
       <div className="space-y-2">
         {WORKFLOWS.map((wf) => (
-          <div key={wf.id} className="border border-gray-100 rounded-lg px-3 py-2.5 flex items-center justify-between gap-3">
+          <div key={wf.id} className="border border-slate-100 rounded-lg px-3 py-2.5 flex items-center justify-between gap-3">
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5 mb-0.5">
                 <span className="text-sm">{wf.icon}</span>
-                <span className="font-semibold text-xs text-gray-900">{wf.name}</span>
+                <span className="font-semibold text-xs text-slate-900">{wf.name}</span>
               </div>
-              <p className="text-[11px] text-gray-500 truncate">{wf.desc}</p>
-              <p className="text-[10px] text-gray-300 font-mono mt-0.5" dir="ltr">/webhook/{wf.path}</p>
+              <p className="text-[11px] text-slate-500 truncate">{wf.desc}</p>
+              <p className="text-[10px] text-slate-300 font-mono mt-0.5" dir="ltr">/webhook/{wf.path}</p>
             </div>
             <button
               onClick={() => copyUrl(wf.path)}
@@ -115,7 +115,7 @@ export function N8nDashboard() {
 
       {/* Last checked */}
       {status?.checkedAt && (
-        <p className="text-[10px] text-gray-300 mt-3">
+        <p className="text-[10px] text-slate-300 mt-3">
           נבדק: {new Date(status.checkedAt).toLocaleTimeString("he-IL")}
         </p>
       )}

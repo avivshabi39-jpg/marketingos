@@ -102,25 +102,25 @@ export function ClientPageAgent({ clientId, clientSlug, clientName, industry }: 
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden" dir="rtl">
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden" dir="rtl">
       {/* Header */}
-      <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+      <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-indigo-50 flex items-center justify-center">
-            <Wand2 size={18} className="text-indigo-600" />
+          <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
+            <Wand2 size={18} className="text-blue-600" />
           </div>
           <div>
-            <h2 className="font-semibold text-gray-900">
+            <h2 className="font-semibold text-slate-900">
               {isRealEstate ? "בנה את האתר שלי 🤖" : "הסוכן האישי שלי 🤖"}
             </h2>
-            <p className="text-xs text-gray-400">שפר את דף הנחיתה שלך בשניות</p>
+            <p className="text-xs text-slate-400">שפר את דף הנחיתה שלך בשניות</p>
           </div>
         </div>
         <a
           href={`/${clientSlug}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-800 border border-indigo-200 rounded-lg px-3 py-1.5 transition"
+          className="flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 border border-blue-200 rounded-lg px-3 py-1.5 transition"
         >
           <ExternalLink size={12} />
           צפה בדף שלי
@@ -128,15 +128,15 @@ export function ClientPageAgent({ clientId, clientSlug, clientName, industry }: 
       </div>
 
       {/* Chat */}
-      <div className="h-72 overflow-y-auto p-4 space-y-3 bg-gray-50">
+      <div className="h-72 overflow-y-auto p-4 space-y-3 bg-slate-50">
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
             <div className={`max-w-[85%] space-y-1.5 flex flex-col ${msg.role === "user" ? "items-end" : "items-start"}`}>
               <div
                 className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                   msg.role === "user"
-                    ? "bg-indigo-600 text-white rounded-tr-sm"
-                    : "bg-white border border-gray-200 text-gray-800 rounded-tl-sm shadow-sm"
+                    ? "bg-blue-600 text-white rounded-tr-sm"
+                    : "bg-white border border-slate-200 text-slate-800 rounded-tl-sm shadow-sm"
                 }`}
               >
                 {msg.content}
@@ -154,7 +154,7 @@ export function ClientPageAgent({ clientId, clientSlug, clientName, industry }: 
                       key={si}
                       onClick={() => send(s)}
                       disabled={loading}
-                      className="text-xs px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg border border-indigo-100 transition disabled:opacity-50"
+                      className="text-xs px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg border border-blue-100 transition disabled:opacity-50"
                     >
                       {s}
                     </button>
@@ -166,8 +166,8 @@ export function ClientPageAgent({ clientId, clientSlug, clientName, industry }: 
         ))}
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-white border border-gray-200 rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-sm">
-              <div className="flex items-center gap-2 text-gray-400 text-sm">
+            <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-sm">
+              <div className="flex items-center gap-2 text-slate-400 text-sm">
                 <Loader2 size={13} className="animate-spin" />
                 חושב...
               </div>
@@ -178,7 +178,7 @@ export function ClientPageAgent({ clientId, clientSlug, clientName, industry }: 
       </div>
 
       {/* Input */}
-      <div className="p-3 bg-white border-t border-gray-100">
+      <div className="p-3 bg-white border-t border-slate-100">
         <div className="flex items-end gap-2">
           <textarea
             value={input}
@@ -187,12 +187,12 @@ export function ClientPageAgent({ clientId, clientSlug, clientName, industry }: 
             placeholder={isRealEstate ? "ספר לי מה לשפר באתר שלך..." : "ספר לי מה לשפר..."}
             rows={2}
             disabled={loading}
-            className="flex-1 resize-none border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-indigo-300 outline-none disabled:opacity-60 leading-relaxed"
+            className="flex-1 resize-none border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-300 outline-none disabled:opacity-60 leading-relaxed"
           />
           <button
             onClick={() => send()}
             disabled={loading || !input.trim()}
-            className="flex-shrink-0 w-10 h-10 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl flex items-center justify-center transition"
+            className="flex-shrink-0 w-10 h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl flex items-center justify-center transition"
           >
             {loading ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
           </button>

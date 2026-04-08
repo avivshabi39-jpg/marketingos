@@ -23,7 +23,7 @@ export function DarkModeToggle() {
   return (
     <button
       onClick={toggle}
-      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors"
+      className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors"
       aria-label={dark ? "עבור למצב בהיר" : "עבור למצב כהה"}
     >
       {dark ? <Sun size={18} /> : <Moon size={18} />}

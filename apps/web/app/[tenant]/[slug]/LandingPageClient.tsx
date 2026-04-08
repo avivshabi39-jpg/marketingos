@@ -57,8 +57,8 @@ export function LandingPageClient({ html, css, clientId, landingPageId }: Props)
       <div className="min-h-screen flex items-center justify-center text-center p-8">
         <div>
           <div className="text-5xl mb-4">✓</div>
-          <h2 className="text-2xl font-bold text-gray-900">Thank you!</h2>
-          <p className="text-gray-500 mt-2">We'll be in touch shortly.</p>
+          <h2 className="text-2xl font-bold text-slate-900">Thank you!</h2>
+          <p className="text-slate-500 mt-2">We'll be in touch shortly.</p>
         </div>
       </div>
     );

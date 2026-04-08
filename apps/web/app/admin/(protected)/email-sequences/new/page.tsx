@@ -116,21 +116,21 @@ export default function NewSequencePage() {
       <div className="flex items-center gap-3">
         <Link
           href="/admin/email-sequences"
-          className="text-gray-400 hover:text-gray-600 transition"
+          className="text-slate-400 hover:text-slate-600 transition"
         >
           <ArrowRight size={20} />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Mail size={22} className="text-indigo-500" /> רצף מייל חדש
+          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+            <Mail size={22} className="text-blue-500" /> רצף מייל חדש
           </h1>
-          <p className="text-sm text-gray-500 mt-0.5">הגדר רצף אוטומטי חדש</p>
+          <p className="text-sm text-slate-500 mt-0.5">הגדר רצף אוטומטי חדש</p>
         </div>
       </div>
 
       {/* Template picker */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-        <p className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-1.5">
+      <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+        <p className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-1.5">
           <Zap size={14} className="text-amber-500" /> התחל מתבנית מוכנה
         </p>
         <div className="grid grid-cols-3 gap-3">
@@ -140,35 +140,35 @@ export default function NewSequencePage() {
               onClick={() => applyTemplate(tpl.key)}
               className={`border rounded-lg p-3 text-right transition ${
                 selectedTemplate === tpl.key
-                  ? "border-indigo-500 bg-indigo-50"
-                  : "border-gray-200 hover:border-indigo-300 hover:bg-gray-50"
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-slate-200 hover:border-blue-300 hover:bg-slate-50"
               }`}
             >
-              <p className="text-sm font-semibold text-gray-800">{tpl.label}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{tpl.description}</p>
+              <p className="text-sm font-semibold text-slate-800">{tpl.label}</p>
+              <p className="text-xs text-slate-500 mt-0.5">{tpl.description}</p>
             </button>
           ))}
         </div>
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4">
+      <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5 space-y-4">
         <div>
-          <label className="text-sm font-medium text-gray-700 block mb-1">שם הרצף</label>
+          <label className="text-sm font-medium text-slate-700 block mb-1">שם הרצף</label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="לדוגמה: ליד חדש — נדלן"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-300 outline-none"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none"
           />
         </div>
 
         <div>
-          <label className="text-sm font-medium text-gray-700 block mb-1">טריגר</label>
+          <label className="text-sm font-medium text-slate-700 block mb-1">טריגר</label>
           <select
             value={trigger}
             onChange={(e) => setTrigger(e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-300 outline-none bg-white"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none bg-white"
           >
             {TRIGGER_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>{o.label}</option>
@@ -177,16 +177,16 @@ export default function NewSequencePage() {
         </div>
 
         <div>
-          <label className="text-sm font-medium text-gray-700 block mb-1">לקוח</label>
+          <label className="text-sm font-medium text-slate-700 block mb-1">לקוח</label>
           {loadingClients ? (
-            <div className="flex items-center gap-2 text-sm text-gray-400">
+            <div className="flex items-center gap-2 text-sm text-slate-400">
               <Loader2 size={14} className="animate-spin" /> טוען לקוחות...
             </div>
           ) : (
             <select
               value={clientId}
               onChange={(e) => setClientId(e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-300 outline-none bg-white"
+              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none bg-white"
             >
               {clients.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>
@@ -198,14 +198,14 @@ export default function NewSequencePage() {
         <div className="flex gap-3 pt-2 justify-end">
           <Link
             href="/admin/email-sequences"
-            className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+            className="px-4 py-2 text-sm text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition"
           >
             ביטול
           </Link>
           <button
             onClick={handleCreate}
             disabled={saving || loadingClients}
-            className="flex items-center gap-2 px-5 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition"
+            className="flex items-center gap-2 px-5 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
           >
             {saving ? <Loader2 size={14} className="animate-spin" /> : null}
             צור רצף

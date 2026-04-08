@@ -34,14 +34,14 @@ export function PushPermission() {
   if (!show || enabled) return null;
 
   return (
-    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 bg-white rounded-2xl px-5 py-3.5 shadow-xl border border-gray-200 z-[9999] flex items-center gap-3 max-w-[380px] w-[90%]" dir="rtl">
+    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 bg-white rounded-2xl px-5 py-3.5 shadow-xl border border-slate-200 z-[9999] flex items-center gap-3 max-w-[380px] w-[90%]" dir="rtl">
       <span className="text-2xl">🔔</span>
       <div className="flex-1">
         <p className="font-bold text-sm">קבל התראה על ליד חדש!</p>
-        <p className="text-xs text-gray-500">תדע מיד כשלקוח משאיר פרטים</p>
+        <p className="text-xs text-slate-500">תדע מיד כשלקוח משאיר פרטים</p>
       </div>
-      <button onClick={enable} className="px-3.5 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold">הפעל</button>
-      <button onClick={() => setShow(false)} className="px-2 py-2 border border-gray-200 rounded-lg text-xs text-gray-400">✕</button>
+      <button onClick={enable} className="px-3.5 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold">הפעל</button>
+      <button onClick={() => setShow(false)} className="px-2 py-2 border border-slate-200 rounded-lg text-xs text-slate-400">✕</button>
     </div>
   );
 }

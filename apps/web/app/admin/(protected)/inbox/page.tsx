@@ -98,10 +98,10 @@ function ReplyPanel({
   }
 
   return (
-    <div className="mt-3 border border-indigo-100 bg-indigo-50 rounded-xl p-3 space-y-2.5">
+    <div className="mt-3 border border-blue-100 bg-blue-50 rounded-xl p-3 space-y-2.5">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold text-indigo-700">💬 השב ל‑{item.title}</p>
-        <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X size={14} /></button>
+        <p className="text-xs font-semibold text-blue-700">💬 השב ל‑{item.title}</p>
+        <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={14} /></button>
       </div>
 
       <textarea
@@ -109,17 +109,17 @@ function ReplyPanel({
         onChange={(e) => setMessage(e.target.value)}
         placeholder="כתוב הודעה..."
         rows={3}
-        className="w-full text-sm border border-indigo-200 bg-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-300 outline-none resize-none"
+        className="w-full text-sm border border-blue-200 bg-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-300 outline-none resize-none"
       />
 
       {/* Variables */}
       <div className="flex items-center gap-2 flex-wrap">
-        <span className="text-xs text-gray-500">משתנים:</span>
+        <span className="text-xs text-slate-500">משתנים:</span>
         {VARIABLES.map((v) => (
           <button
             key={v}
             onClick={() => setMessage((prev) => prev + v)}
-            className="text-xs font-mono px-2 py-1 bg-white border border-gray-200 rounded-md hover:border-indigo-300 hover:text-indigo-600 transition"
+            className="text-xs font-mono px-2 py-1 bg-white border border-slate-200 rounded-xl hover:border-blue-300 hover:text-blue-600 transition"
           >
             {v}
           </button>
@@ -204,8 +204,8 @@ export default function InboxPage() {
     <div className="space-y-6 max-w-3xl" dir="rtl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <MessageSquare size={22} className="text-indigo-500" />
+          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+            <MessageSquare size={22} className="text-blue-500" />
             תיבת הודעות
             {unread > 0 && (
               <span className="text-sm font-semibold bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
@@ -213,12 +213,12 @@ export default function InboxPage() {
               </span>
             )}
           </h1>
-          <p className="text-sm text-gray-500 mt-1">כל הפניות, הלידים והטפסים במקום אחד</p>
+          <p className="text-sm text-slate-500 mt-1">כל הפניות, הלידים והטפסים במקום אחד</p>
         </div>
         <button
           onClick={load}
           disabled={loading}
-          className="flex items-center gap-2 text-sm text-gray-500 hover:text-indigo-600 border border-gray-200 px-3 py-2 rounded-lg transition"
+          className="flex items-center gap-2 text-sm text-slate-500 hover:text-blue-600 border border-slate-200 px-3 py-2 rounded-lg transition"
         >
           <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           רענן
@@ -233,8 +233,8 @@ export default function InboxPage() {
             onClick={() => setFilter(f.value)}
             className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${
               filter === f.value
-                ? "bg-indigo-50 border-indigo-300 text-indigo-700 font-medium"
-                : "border-gray-200 text-gray-600 hover:border-gray-300"
+                ? "bg-blue-50 border-blue-300 text-blue-700 font-medium"
+                : "border-slate-200 text-slate-600 hover:border-slate-300"
             }`}
           >
             {f.label}
@@ -245,12 +245,12 @@ export default function InboxPage() {
       {/* List */}
       {loading ? (
         <div className="flex justify-center py-20">
-          <Loader2 size={28} className="animate-spin text-gray-300" />
+          <Loader2 size={28} className="animate-spin text-slate-300" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center py-20">
-          <MessageSquare size={32} className="text-gray-200 mb-3" />
-          <p className="text-sm text-gray-500">אין הודעות</p>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm flex flex-col items-center justify-center py-20">
+          <MessageSquare size={32} className="text-slate-200 mb-3" />
+          <p className="text-sm text-slate-500">אין הודעות</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -264,7 +264,7 @@ export default function InboxPage() {
               <div
                 key={item.id}
                 className={`bg-white rounded-xl border shadow-sm p-4 transition-all ${
-                  done ? "opacity-50 border-gray-100" : "border-gray-100 hover:shadow-md"
+                  done ? "opacity-50 border-slate-100" : "border-slate-100 hover:shadow-md"
                 }`}
               >
                 <div className="flex items-start gap-4">
@@ -277,13 +277,13 @@ export default function InboxPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <p className="font-semibold text-gray-900 text-sm">{item.title}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">{item.subtitle}</p>
+                        <p className="font-semibold text-slate-900 text-sm">{item.title}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">{item.subtitle}</p>
                       </div>
-                      <span className="text-[10px] text-gray-400 flex-shrink-0 mt-0.5">{timeAgo(item.createdAt)}</span>
+                      <span className="text-[10px] text-slate-400 flex-shrink-0 mt-0.5">{timeAgo(item.createdAt)}</span>
                     </div>
                     {item.detail && (
-                      <p className="text-xs text-gray-600 mt-1.5 line-clamp-2">{item.detail}</p>
+                      <p className="text-xs text-slate-600 mt-1.5 line-clamp-2">{item.detail}</p>
                     )}
                     <div className="flex items-center gap-2 mt-2.5">
                       <span
@@ -319,8 +319,8 @@ export default function InboxPage() {
                           onClick={() => setReplyOpen(isReplying ? null : item.id)}
                           className={`flex items-center gap-1 text-xs rounded-lg px-2 py-1.5 transition border ${
                             isReplying
-                              ? "bg-indigo-50 border-indigo-300 text-indigo-700"
-                              : "text-gray-500 border-gray-200 hover:border-indigo-300 hover:text-indigo-600"
+                              ? "bg-blue-50 border-blue-300 text-blue-700"
+                              : "text-slate-500 border-slate-200 hover:border-blue-300 hover:text-blue-600"
                           }`}
                         >
                           <MessageSquare size={11} />
@@ -334,7 +334,7 @@ export default function InboxPage() {
                       className={`flex items-center gap-1 text-xs rounded-lg px-2 py-1.5 transition ${
                         done
                           ? "text-green-600 border border-green-200 cursor-default"
-                          : "text-gray-500 border border-gray-200 hover:border-green-300 hover:text-green-600"
+                          : "text-slate-500 border border-slate-200 hover:border-green-300 hover:text-green-600"
                       }`}
                     >
                       <Check size={11} />

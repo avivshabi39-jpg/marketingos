@@ -35,11 +35,11 @@ export default function ForgotPasswordPage() {
     >
       <div className="w-full max-w-sm space-y-6">
         <div className="flex flex-col items-center">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-xl mb-4">
+          <div className="w-12 h-12 rounded-2xl bg-blue-500 flex items-center justify-center shadow-xl mb-4">
             <TrendingUp size={22} className="text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white">שכחתי סיסמה</h1>
-          <p className="text-indigo-300 text-sm mt-1 text-center">נשלח קישור לאיפוס לכתובת המייל שלך</p>
+          <p className="text-blue-300 text-sm mt-1 text-center">נשלח קישור לאיפוס לכתובת המייל שלך</p>
         </div>
 
         {sent ? (
@@ -48,10 +48,10 @@ export default function ForgotPasswordPage() {
               <span className="text-2xl">✉️</span>
             </div>
             <p className="text-white font-medium">בדוק את תיבת הדואר שלך</p>
-            <p className="text-indigo-300 text-sm">
+            <p className="text-blue-300 text-sm">
               אם האימייל רשום במערכת, שלחנו קישור לאיפוס הסיסמה. הקישור תקף לשעה אחת.
             </p>
-            <a href="/admin/login" className="block mt-4 text-indigo-400 hover:text-indigo-200 text-sm underline underline-offset-2">
+            <a href="/admin/login" className="block mt-4 text-blue-400 hover:text-blue-200 text-sm underline underline-offset-2">
               חזרה לכניסה
             </a>
           </div>
@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
           <div className="rounded-2xl p-6 border border-white/10 bg-white/6 space-y-4">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-indigo-100 mb-1.5">כתובת אימייל</label>
+                <label className="block text-sm font-medium text-blue-100 mb-1.5">כתובת אימייל</label>
                 <input
                   type="email"
                   required
@@ -67,7 +67,7 @@ export default function ForgotPasswordPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@agency.com"
                   dir="ltr"
-                  className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-indigo-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                 />
               </div>
 
@@ -78,13 +78,13 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl py-3 text-sm transition-all"
+                className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-400 text-white font-semibold rounded-xl py-3 text-sm transition-all"
               >
                 {loading ? <><Loader2 size={15} className="animate-spin" /> שולח...</> : "שלח קישור לאיפוס"}
               </button>
             </form>
-            <p className="text-center text-indigo-400 text-sm">
-              <a href="/admin/login" className="hover:text-indigo-200 underline underline-offset-2">חזרה לכניסה</a>
+            <p className="text-center text-blue-400 text-sm">
+              <a href="/admin/login" className="hover:text-blue-200 underline underline-offset-2">חזרה לכניסה</a>
             </p>
           </div>
         )}

@@ -80,7 +80,7 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
     <div className="space-y-6" dir="rtl">
       {/* Header */}
       <div className="flex items-start gap-4">
-        <Link href="/admin/clients" className="mt-1 text-gray-400 hover:text-gray-600">
+        <Link href="/admin/clients" className="mt-1 text-slate-400 hover:text-slate-600">
           <ArrowRight size={18} />
         </Link>
         <div className="flex items-center gap-4 flex-1 flex-wrap">
@@ -92,8 +92,8 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-2xl font-semibold text-gray-900">{client.name}</h1>
-              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${client.isActive ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
+              <h1 className="text-2xl font-semibold text-slate-900">{client.name}</h1>
+              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${client.isActive ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-500"}`}>
                 {client.isActive ? "פעיל" : "לא פעיל"}
               </span>
               {client.industry && (
@@ -101,13 +101,13 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
                   {INDUSTRY_HE[client.industry] ?? client.industry}
                 </span>
               )}
-              <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 font-medium">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-medium">
                 {PLAN_HE[client.plan] ?? client.plan}
               </span>
             </div>
-            <p className="text-sm text-gray-500 mt-0.5">{client.slug} · {client.email}</p>
+            <p className="text-sm text-slate-500 mt-0.5">{client.slug} · {client.email}</p>
             {client.subdomain && (
-              <p className="text-xs text-indigo-500 mt-0.5">
+              <p className="text-xs text-blue-500 mt-0.5">
                 {`${client.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "localhost"}`}
               </p>
             )}
@@ -117,7 +117,7 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
             <a
               href={`/${client.slug}/intake`}
               target="_blank"
-              className="flex items-center gap-1.5 text-sm text-indigo-500 hover:text-indigo-700 font-medium"
+              className="flex items-center gap-1.5 text-sm text-blue-500 hover:text-blue-700 font-medium"
             >
               <ExternalLink size={14} />
               פתח טופס
@@ -138,73 +138,73 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
           <div className="space-y-6">
             <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
               {[
-                { label: "סה\"כ לידים", value: client._count.leads, icon: Users, color: "text-indigo-600 bg-indigo-50" },
+                { label: "סה\"כ לידים", value: client._count.leads, icon: Users, color: "text-blue-600 bg-blue-50" },
                 { label: "לידים החודש", value: leadsThisMonth, icon: TrendingUp, color: "text-blue-600 bg-blue-50" },
                 { label: "אחוז המרה", value: `${conversionRate}%`, icon: TrendingUp, color: "text-green-600 bg-green-50" },
                 { label: "הכנסה כוללת", value: `₪${revenue.toLocaleString("he-IL")}`, icon: Banknote, color: "text-amber-600 bg-amber-50" },
               ].map((s) => {
                 const Icon = s.icon;
                 return (
-                  <div key={s.label} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+                  <div key={s.label} className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
                     <div className={`w-9 h-9 rounded-lg flex items-center justify-center mb-3 ${s.color}`}>
                       <Icon size={18} />
                     </div>
-                    <p className="text-2xl font-bold text-gray-900">{s.value}</p>
-                    <p className="text-sm text-gray-500 mt-0.5">{s.label}</p>
+                    <p className="text-2xl font-bold text-slate-900">{s.value}</p>
+                    <p className="text-sm text-slate-500 mt-0.5">{s.label}</p>
                   </div>
                 );
               })}
             </div>
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
-              <div><p className="text-xs text-gray-400 mb-1">טלפון</p><p className="font-medium text-gray-800">{client.phone ?? "—"}</p></div>
-              <div><p className="text-xs text-gray-400 mb-1">וואטסאפ</p><p className="font-medium text-gray-800">{client.whatsappNumber ?? "—"}</p></div>
-              <div><p className="text-xs text-gray-400 mb-1">תקציב חודשי</p><p className="font-medium text-gray-800">{client.monthlyBudget ? `₪${client.monthlyBudget.toLocaleString("he-IL")}` : "—"}</p></div>
-              <div><p className="text-xs text-gray-400 mb-1">פיקסל פייסבוק</p><p className="font-medium text-gray-800 truncate">{client.facebookPixelId ?? "—"}</p></div>
-              <div><p className="text-xs text-gray-400 mb-1">Google Ads ID</p><p className="font-medium text-gray-800 truncate">{client.googleAdsId ?? "—"}</p></div>
-              <div><p className="text-xs text-gray-400 mb-1">Google Analytics 4</p><p className="font-medium text-gray-800 truncate">{client.googleAnalyticsId ?? "—"}</p></div>
-              <div><p className="text-xs text-gray-400 mb-1">קישור Google Business</p><p className="font-medium text-gray-800 truncate">{client.googleBusinessUrl ?? "—"}</p></div>
-              <div><p className="text-xs text-gray-400 mb-1">דוחות לאימייל</p><p className="font-medium text-gray-800 truncate">{client.reportEmail ?? "—"}</p></div>
+            <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5 grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+              <div><p className="text-xs text-slate-400 mb-1">טלפון</p><p className="font-medium text-slate-800">{client.phone ?? "—"}</p></div>
+              <div><p className="text-xs text-slate-400 mb-1">וואטסאפ</p><p className="font-medium text-slate-800">{client.whatsappNumber ?? "—"}</p></div>
+              <div><p className="text-xs text-slate-400 mb-1">תקציב חודשי</p><p className="font-medium text-slate-800">{client.monthlyBudget ? `₪${client.monthlyBudget.toLocaleString("he-IL")}` : "—"}</p></div>
+              <div><p className="text-xs text-slate-400 mb-1">פיקסל פייסבוק</p><p className="font-medium text-slate-800 truncate">{client.facebookPixelId ?? "—"}</p></div>
+              <div><p className="text-xs text-slate-400 mb-1">Google Ads ID</p><p className="font-medium text-slate-800 truncate">{client.googleAdsId ?? "—"}</p></div>
+              <div><p className="text-xs text-slate-400 mb-1">Google Analytics 4</p><p className="font-medium text-slate-800 truncate">{client.googleAnalyticsId ?? "—"}</p></div>
+              <div><p className="text-xs text-slate-400 mb-1">קישור Google Business</p><p className="font-medium text-slate-800 truncate">{client.googleBusinessUrl ?? "—"}</p></div>
+              <div><p className="text-xs text-slate-400 mb-1">דוחות לאימייל</p><p className="font-medium text-slate-800 truncate">{client.reportEmail ?? "—"}</p></div>
             </div>
           </div>
         ),
         "leads": (
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="font-semibold text-gray-900">לידים ({client._count.leads})</h2>
-              <Link href={`/admin/leads?clientId=${client.id}`} className="text-xs text-indigo-500 hover:text-indigo-700 font-medium">
+          <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+              <h2 className="font-semibold text-slate-900">לידים ({client._count.leads})</h2>
+              <Link href={`/admin/leads?clientId=${client.id}`} className="text-xs text-blue-500 hover:text-blue-700 font-medium">
                 הצג בדף לידים
               </Link>
             </div>
-            <table className="min-w-full divide-y divide-gray-100">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-slate-100">
+              <thead className="bg-slate-50">
                 <tr>
                   {["שם", "טלפון", "מקור", "סטטוס", "ניקוד", "תאריך"].map((h) => (
-                    <th key={h} className="px-5 py-3 text-right text-xs font-semibold text-gray-500 uppercase">{h}</th>
+                    <th key={h} className="px-5 py-3 text-right text-xs font-semibold text-slate-500 uppercase">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-slate-50">
                 {client.leads.map((lead) => (
-                  <tr key={lead.id} className="hover:bg-gray-50">
+                  <tr key={lead.id} className="hover:bg-slate-50">
                     <td className="px-5 py-3">
-                      <p className="text-sm font-medium text-gray-900">{lead.firstName} {lead.lastName}</p>
-                      <p className="text-xs text-gray-400">{lead.email ?? ""}</p>
+                      <p className="text-sm font-medium text-slate-900">{lead.firstName} {lead.lastName}</p>
+                      <p className="text-xs text-slate-400">{lead.email ?? ""}</p>
                     </td>
-                    <td className="px-5 py-3 text-sm text-gray-600">{lead.phone ?? "—"}</td>
-                    <td className="px-5 py-3 text-sm text-gray-500">{lead.source ?? "—"}</td>
+                    <td className="px-5 py-3 text-sm text-slate-600">{lead.phone ?? "—"}</td>
+                    <td className="px-5 py-3 text-sm text-slate-500">{lead.source ?? "—"}</td>
                     <td className="px-5 py-3">
-                      <span className={`text-xs px-2 py-1 rounded-full font-medium ${STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"}`}>
+                      <span className={`text-xs px-2 py-1 rounded-full font-medium ${STATUS_COLORS[lead.status] ?? "bg-slate-100 text-slate-600"}`}>
                         {STATUS_HE[lead.status] ?? lead.status}
                       </span>
                     </td>
-                    <td className="px-5 py-3 text-sm text-gray-500">{lead.leadScore}</td>
-                    <td className="px-5 py-3 text-sm text-gray-400">{new Date(lead.createdAt).toLocaleDateString("he-IL")}</td>
+                    <td className="px-5 py-3 text-sm text-slate-500">{lead.leadScore}</td>
+                    <td className="px-5 py-3 text-sm text-slate-400">{new Date(lead.createdAt).toLocaleDateString("he-IL")}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
             {client.leads.length === 0 && (
-              <p className="px-6 py-10 text-center text-sm text-gray-500">עדיין אין לידים.</p>
+              <p className="px-6 py-10 text-center text-sm text-slate-500">עדיין אין לידים.</p>
             )}
           </div>
         ),
@@ -212,26 +212,26 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
         "reports": (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-500">{client.reports.length} דוחות</p>
+              <p className="text-sm text-slate-500">{client.reports.length} דוחות</p>
               <GenerateReportButton clients={[]} fixedClientId={client.id} />
             </div>
             {client.reports.length === 0 ? (
-              <div className="bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center py-16">
-                <ClipboardList size={28} className="text-gray-300 mb-3" />
-                <p className="text-sm text-gray-500">עדיין אין דוחות.</p>
-                <p className="text-xs text-gray-400 mt-1">לחץ על &quot;צור דוח&quot; כדי להתחיל</p>
+              <div className="bg-white rounded-xl border border-slate-100 shadow-sm flex flex-col items-center py-16">
+                <ClipboardList size={28} className="text-slate-300 mb-3" />
+                <p className="text-sm text-slate-500">עדיין אין דוחות.</p>
+                <p className="text-xs text-slate-400 mt-1">לחץ על &quot;צור דוח&quot; כדי להתחיל</p>
               </div>
             ) : (
               client.reports.map((report) => (
-                <div key={report.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+                <div key={report.id} className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <p className="font-semibold text-gray-900">דוח {REPORT_TYPE_HE[report.type] ?? report.type}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">תקופה: {report.period}</p>
+                      <p className="font-semibold text-slate-900">דוח {REPORT_TYPE_HE[report.type] ?? report.type}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">תקופה: {report.period}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <SendReportButton reportId={report.id} />
-                      <p className="text-xs text-gray-400">{new Date(report.createdAt).toLocaleDateString("he-IL")}</p>
+                      <p className="text-xs text-slate-400">{new Date(report.createdAt).toLocaleDateString("he-IL")}</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-4 gap-3">
@@ -241,9 +241,9 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
                       { label: "המרה", val: `${report.conversionRate.toFixed(1)}%` },
                       { label: "הכנסה", val: report.revenue ? `₪${report.revenue.toLocaleString("he-IL")}` : "—" },
                     ].map((s) => (
-                      <div key={s.label} className="bg-gray-50 rounded-lg p-3 text-center">
-                        <p className="text-lg font-bold text-gray-900">{s.val}</p>
-                        <p className="text-xs text-gray-500">{s.label}</p>
+                      <div key={s.label} className="bg-slate-50 rounded-lg p-3 text-center">
+                        <p className="text-lg font-bold text-slate-900">{s.val}</p>
+                        <p className="text-xs text-slate-500">{s.label}</p>
                       </div>
                     ))}
                   </div>
@@ -255,19 +255,19 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
         "landing": (
           <>
             {!client.pagePublished && (
-              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200 rounded-2xl py-14 px-8 text-center mb-6">
+              <div className="bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-200 rounded-2xl py-14 px-8 text-center mb-6">
                 <div className="text-6xl mb-4">🧙</div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">בוא נבנה את הדף שלך!</h3>
-                <p className="text-gray-500 text-sm mb-6 max-w-md mx-auto">
+                <h3 className="text-2xl font-bold text-slate-900 mb-2">בוא נבנה את הדף שלך!</h3>
+                <p className="text-slate-500 text-sm mb-6 max-w-md mx-auto">
                   15 שאלות פשוטות → AI בונה דף מקצועי מושלם
                 </p>
                 <Link
                   href={`/admin/page-builder/${client.id}`}
-                  className="inline-flex items-center gap-2 bg-gradient-to-l from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold rounded-xl px-8 py-4 text-lg transition-all shadow-lg shadow-indigo-500/20"
+                  className="inline-flex items-center gap-2 bg-gradient-to-l from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-xl px-8 py-4 text-lg transition-all shadow-lg shadow-blue-500/20"
                 >
                   🧙 בנה דף נחיתה מקצועי
                 </Link>
-                <p className="text-xs text-gray-400 mt-3">לוקח כ-5 דקות</p>
+                <p className="text-xs text-slate-400 mt-3">לוקח כ-5 דקות</p>
               </div>
             )}
             <AbTestResults clientId={client.id} />
@@ -299,10 +299,10 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
         "chatbot": (
           <div className="space-y-6">
             <WhatsAppSetup clientId={client.id} />
-            <div className="border-t border-gray-200 pt-4">
+            <div className="border-t border-slate-200 pt-4">
               <Link
                 href={`/admin/clients/${client.id}/chatbot`}
-                className="inline-flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+                className="inline-flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
               >
                 הגדרות צ׳אטבוט מתקדמות →
               </Link>

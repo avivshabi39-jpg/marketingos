@@ -38,9 +38,9 @@ function getIconConfig(type: string): {
     case "call":
       return { Icon: Phone, bgClass: "bg-purple-100", textClass: "text-purple-600" };
     case "email":
-      return { Icon: Mail, bgClass: "bg-indigo-100", textClass: "text-indigo-600" };
+      return { Icon: Mail, bgClass: "bg-blue-100", textClass: "text-blue-600" };
     default:
-      return { Icon: Circle, bgClass: "bg-gray-100", textClass: "text-gray-500" };
+      return { Icon: Circle, bgClass: "bg-slate-100", textClass: "text-slate-500" };
   }
 }
 
@@ -98,10 +98,10 @@ export function LeadTimeline({ leadId }: Props) {
       <div className="space-y-3" dir="rtl">
         {[...Array(3)].map((_, i) => (
           <div key={i} className="flex gap-3">
-            <div className="w-9 h-9 rounded-full bg-gray-100 animate-pulse flex-shrink-0" />
+            <div className="w-9 h-9 rounded-full bg-slate-100 animate-pulse flex-shrink-0" />
             <div className="flex-1 space-y-2 pb-4">
-              <div className="h-4 bg-gray-100 rounded animate-pulse w-1/2" />
-              <div className="h-3 bg-gray-100 rounded animate-pulse w-1/3" />
+              <div className="h-4 bg-slate-100 rounded animate-pulse w-1/2" />
+              <div className="h-3 bg-slate-100 rounded animate-pulse w-1/3" />
             </div>
           </div>
         ))}
@@ -119,7 +119,7 @@ export function LeadTimeline({ leadId }: Props) {
 
   if (activities.length === 0) {
     return (
-      <div dir="rtl" className="text-sm text-gray-400 py-4 text-center">
+      <div dir="rtl" className="text-sm text-slate-400 py-4 text-center">
         אין פעילויות עדיין
       </div>
     );
@@ -133,7 +133,7 @@ export function LeadTimeline({ leadId }: Props) {
           <div key={activity.id} className="flex gap-3 relative">
             {/* Line connector (except last) */}
             {i < activities.length - 1 && (
-              <div className="absolute right-[18px] top-8 bottom-0 w-0.5 bg-gray-100" />
+              <div className="absolute right-[18px] top-8 bottom-0 w-0.5 bg-slate-100" />
             )}
             {/* Icon circle */}
             <div
@@ -143,11 +143,11 @@ export function LeadTimeline({ leadId }: Props) {
             </div>
             {/* Content */}
             <div className="flex-1 pb-4">
-              <p className="text-sm font-medium text-gray-900">{getTitle(activity)}</p>
+              <p className="text-sm font-medium text-slate-900">{getTitle(activity)}</p>
               {activity.content && (
-                <p className="text-xs text-gray-500 mt-0.5">{activity.content}</p>
+                <p className="text-xs text-slate-500 mt-0.5">{activity.content}</p>
               )}
-              <p className="text-xs text-gray-400 mt-1">{formatDate(activity.createdAt)}</p>
+              <p className="text-xs text-slate-400 mt-1">{formatDate(activity.createdAt)}</p>
             </div>
           </div>
         );

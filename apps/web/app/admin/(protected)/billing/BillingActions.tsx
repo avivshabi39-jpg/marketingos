@@ -36,7 +36,7 @@ export function BillingActions({ plan, mode }: BillingActionsProps) {
           href="https://wa.me/972501234567?text=אני+רוצה+לנהל+את+המנוי+שלי"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-medium rounded-lg transition-colors"
         >
           נהל מנוי
         </a>
@@ -48,8 +48,8 @@ export function BillingActions({ plan, mode }: BillingActionsProps) {
   return (
     <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-5 text-center">
       <div className="text-2xl mb-2">💳</div>
-      <h4 className="font-semibold text-gray-900 text-sm mb-1">שדרג ל-{PLAN_LABELS[plan]}</h4>
-      <p className="text-gray-500 text-xs mb-4">צור איתנו קשר ונשדרג אותך תוך דקות</p>
+      <h4 className="font-semibold text-slate-900 text-sm mb-1">שדרג ל-{PLAN_LABELS[plan]}</h4>
+      <p className="text-slate-500 text-xs mb-4">צור איתנו קשר ונשדרג אותך תוך דקות</p>
       <div className="flex gap-2 justify-center">
         <a
           href="https://wa.me/972501234567?text=אני+רוצה+לשדרג+לתוכנית+Pro"
@@ -61,7 +61,7 @@ export function BillingActions({ plan, mode }: BillingActionsProps) {
         </a>
         <a
           href="mailto:info@marketingos.co.il?subject=שדרוג תוכנית MarketingOS"
-          className="inline-flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg px-4 py-2 text-xs transition-colors"
+          className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg px-4 py-2 text-xs transition-colors"
         >
           📧 מייל
         </a>

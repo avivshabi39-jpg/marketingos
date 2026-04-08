@@ -30,7 +30,7 @@ export function PropertyBroadcastButton({ propertyId }: { propertyId: string }) 
     <button
       onClick={handleBroadcast}
       disabled={loading}
-      className="w-full flex items-center justify-center gap-1.5 text-xs text-indigo-600 bg-indigo-50 hover:bg-indigo-100 disabled:opacity-60 px-3 py-2 rounded-lg transition-colors font-medium"
+      className="w-full flex items-center justify-center gap-1.5 text-xs text-blue-600 bg-blue-50 hover:bg-blue-100 disabled:opacity-60 px-3 py-2 rounded-lg transition-colors font-medium"
     >
       {loading ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
       {sent !== null ? `נשלח ל-${sent} לידים` : "שלח לכל מנויים מתאימים"}

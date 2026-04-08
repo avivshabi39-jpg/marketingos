@@ -133,11 +133,11 @@ export default function BroadcastPage() {
     <div className="space-y-6 max-w-2xl" dir="rtl">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
           <MessageCircle size={22} className="text-green-500" />
           שידור WhatsApp
         </h1>
-        <p className="text-sm text-gray-500 mt-1">שלח הודעה המונית ללידים שלך</p>
+        <p className="text-sm text-slate-500 mt-1">שלח הודעה המונית ללידים שלך</p>
       </div>
 
       {/* Explanation banner */}
@@ -160,13 +160,13 @@ export default function BroadcastPage() {
           return (
             <div key={s} className="flex items-center gap-2">
               <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
-                ${step >= s ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-400"}`}>
+                ${step >= s ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-400"}`}>
                 {s}
               </div>
-              <span className={step >= s ? "text-gray-700 font-medium" : "text-gray-400"}>
+              <span className={step >= s ? "text-slate-700 font-medium" : "text-slate-400"}>
                 {labels[s]}
               </span>
-              {idx < 2 && <ChevronRight size={14} className="text-gray-300" />}
+              {idx < 2 && <ChevronRight size={14} className="text-slate-300" />}
             </div>
           );
         })}
@@ -174,8 +174,8 @@ export default function BroadcastPage() {
 
       {/* Step 1: Select audience */}
       {step === 1 && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-5">
-          <h2 className="font-semibold text-gray-800">בחר קהל יעד</h2>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-5">
+          <h2 className="font-semibold text-slate-800">בחר קהל יעד</h2>
 
           {clients.length === 0 ? (
             <div className="flex items-center gap-3 p-4 bg-amber-50 text-amber-700 rounded-xl text-sm">
@@ -189,11 +189,11 @@ export default function BroadcastPage() {
                 <span>השידור יישלח מהוואצאפ המחובר למערכת. כל לקוח יכול לחבר וואצאפ משלו בהגדרות.</span>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5">לקוח</label>
+                <label className="block text-xs font-medium text-slate-600 mb-1.5">לקוח</label>
                 <select
                   value={selectedClientId}
                   onChange={(e) => setSelectedClientId(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
                 >
                   <option value="">בחר לקוח...</option>
                   {clients.map((c) => (
@@ -203,7 +203,7 @@ export default function BroadcastPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1.5">סגמנט לידים</label>
+                <label className="block text-xs font-medium text-slate-600 mb-1.5">סגמנט לידים</label>
                 <div className="grid grid-cols-2 gap-2">
                   {FILTER_OPTS.map((f) => (
                     <button
@@ -211,8 +211,8 @@ export default function BroadcastPage() {
                       onClick={() => setFilter(f.value)}
                       className={`px-4 py-2.5 rounded-xl text-sm font-medium border transition-all text-right
                         ${filter === f.value
-                          ? "bg-indigo-50 border-indigo-300 text-indigo-700"
-                          : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
+                          ? "bg-blue-50 border-blue-300 text-blue-700"
+                          : "border-slate-200 text-slate-600 hover:border-slate-300"}`}
                     >
                       {f.label}
                     </button>
@@ -225,7 +225,7 @@ export default function BroadcastPage() {
           <button
             disabled={!selectedClientId}
             onClick={() => setStep(2)}
-            className="w-full py-2.5 bg-indigo-600 text-white rounded-xl font-medium disabled:opacity-50 hover:bg-indigo-700"
+            className="w-full py-2.5 bg-blue-600 text-white rounded-xl font-medium disabled:opacity-50 hover:bg-blue-700"
           >
             המשך
           </button>
@@ -234,11 +234,11 @@ export default function BroadcastPage() {
 
       {/* Step 2: Message */}
       {step === 2 && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-5">
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-5">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold text-gray-800">כתוב את ההודעה</h2>
+            <h2 className="font-semibold text-slate-800">כתוב את ההודעה</h2>
             {selectedClient && (
-              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">{selectedClient.name}</span>
+              <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-lg">{selectedClient.name}</span>
             )}
           </div>
 
@@ -255,7 +255,7 @@ export default function BroadcastPage() {
                   if (data.post) setMessage(data.post);
                 } catch { /* ignore */ }
               }}
-              className="mb-2 px-4 py-2 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded-lg text-xs font-medium hover:bg-indigo-100 transition-colors"
+              className="mb-2 px-4 py-2 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg text-xs font-medium hover:bg-blue-100 transition-colors"
             >
               ✨ הצע הודעה עם AI
             </button>
@@ -264,22 +264,22 @@ export default function BroadcastPage() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="שלום {name}, אנחנו רוצים לעדכן אותך..."
-              className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none"
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none"
             />
-            <p className="text-xs text-gray-400 mt-1">{message.length} / 4096 תווים</p>
+            <p className="text-xs text-slate-400 mt-1">{message.length} / 4096 תווים</p>
           </div>
 
           <div className="flex gap-3">
             <button
               onClick={() => setStep(1)}
-              className="flex-1 py-2.5 border border-gray-200 text-gray-600 rounded-xl text-sm hover:bg-gray-50"
+              className="flex-1 py-2.5 border border-slate-200 text-slate-600 rounded-xl text-sm hover:bg-slate-50"
             >
               חזור
             </button>
             <button
               disabled={!message.trim() || creating}
               onClick={handleCreate}
-              className="flex-1 py-2.5 bg-indigo-600 text-white rounded-xl font-medium disabled:opacity-50 hover:bg-indigo-700 flex items-center justify-center gap-2"
+              className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl font-medium disabled:opacity-50 hover:bg-blue-700 flex items-center justify-center gap-2"
             >
               {creating && <Loader2 size={14} className="animate-spin" />}
               {creating ? "מכין..." : "המשך לשליחה"}
@@ -290,25 +290,25 @@ export default function BroadcastPage() {
 
       {/* Step 3: Send */}
       {step === 3 && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-5">
-          <h2 className="font-semibold text-gray-800">שלח שידור</h2>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-5">
+          <h2 className="font-semibold text-slate-800">שלח שידור</h2>
 
-          <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+          <div className="bg-slate-50 rounded-xl p-4 space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500">לקוח</span>
+              <span className="text-slate-500">לקוח</span>
               <span className="font-medium">{selectedClient?.name}</span>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500">סגמנט</span>
+              <span className="text-slate-500">סגמנט</span>
               <span className="font-medium">{FILTER_OPTS.find((f) => f.value === filter)?.label}</span>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-500 flex items-center gap-1"><Users size={13} /> נמענים</span>
-              <span className="font-bold text-indigo-600">{totalCount}</span>
+              <span className="text-slate-500 flex items-center gap-1"><Users size={13} /> נמענים</span>
+              <span className="font-bold text-blue-600">{totalCount}</span>
             </div>
-            <div className="border-t border-gray-100 pt-2">
-              <p className="text-xs text-gray-500 mb-1">תוכן ההודעה:</p>
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">{message}</p>
+            <div className="border-t border-slate-100 pt-2">
+              <p className="text-xs text-slate-500 mb-1">תוכן ההודעה:</p>
+              <p className="text-sm text-slate-700 whitespace-pre-wrap">{message}</p>
             </div>
           </div>
 
@@ -316,14 +316,14 @@ export default function BroadcastPage() {
           {(sending || done) && (
             <div className="space-y-3">
               <div className="flex items-center justify-between text-sm font-medium">
-                <span className="text-gray-700">
+                <span className="text-slate-700">
                   {done ? "הושלם!" : `שולח... ${progress.sent} / ${progress.total}`}
                 </span>
-                <span className="text-indigo-600">{pct}%</span>
+                <span className="text-blue-600">{pct}%</span>
               </div>
-              <div className="w-full bg-gray-100 rounded-full h-3">
+              <div className="w-full bg-slate-100 rounded-full h-3">
                 <div
-                  className="h-3 rounded-full bg-indigo-500 transition-all duration-500"
+                  className="h-3 rounded-full bg-blue-500 transition-all duration-500"
                   style={{ width: `${pct}%` }}
                 />
               </div>
@@ -368,21 +368,21 @@ export default function BroadcastPage() {
 
       {/* Recent broadcasts */}
       {logs.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-          <h3 className="text-sm font-semibold text-gray-700 mb-4">שידורים אחרונים</h3>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+          <h3 className="text-sm font-semibold text-slate-700 mb-4">שידורים אחרונים</h3>
           <div className="space-y-2">
             {logs.map((log) => (
-              <div key={log.id} className="flex items-center gap-3 py-2.5 border-b border-gray-50 last:border-0">
+              <div key={log.id} className="flex items-center gap-3 py-2.5 border-b border-slate-50 last:border-0">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800 truncate">{log.client.name}</p>
-                  <p className="text-xs text-gray-400 truncate mt-0.5">{log.message.slice(0, 60)}{log.message.length > 60 ? "..." : ""}</p>
+                  <p className="text-sm font-medium text-slate-800 truncate">{log.client.name}</p>
+                  <p className="text-xs text-slate-400 truncate mt-0.5">{log.message.slice(0, 60)}{log.message.length > 60 ? "..." : ""}</p>
                 </div>
                 <div className="text-left flex-shrink-0 space-y-0.5">
                   <div className="flex items-center gap-1.5 justify-end">
                     <CheckCircle2 size={11} className="text-green-500" />
                     <span className="text-xs font-medium">{log.sentCount}/{log.totalCount}</span>
                   </div>
-                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLORS[log.status] ?? "bg-gray-100 text-gray-600"}`}>
+                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLORS[log.status] ?? "bg-slate-100 text-slate-600"}`}>
                     {STATUS_HE[log.status] ?? log.status}
                   </span>
                 </div>

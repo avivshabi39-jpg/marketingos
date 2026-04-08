@@ -99,7 +99,7 @@ function classNames(...classes: (string | false | null | undefined)[]) {
 }
 
 const inputCls =
-  "w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition";
+  "w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition";
 
 export function NewPropertyClient({ clientId, slug }: Props) {
   const router = useRouter();
@@ -276,8 +276,8 @@ export function NewPropertyClient({ clientId, slug }: Props) {
     <div className="max-w-2xl mx-auto" dir="rtl">
       {/* Page header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-900">הוספת נכס חדש</h1>
-        <p className="text-gray-500 text-sm mt-0.5">מלא את הפרטים כדי לפרסם את הנכס</p>
+        <h1 className="text-2xl font-semibold text-slate-900">הוספת נכס חדש</h1>
+        <p className="text-slate-500 text-sm mt-0.5">מלא את הפרטים כדי לפרסם את הנכס</p>
       </div>
 
       {/* Step indicator */}
@@ -292,10 +292,10 @@ export function NewPropertyClient({ clientId, slug }: Props) {
                 className={classNames(
                   "w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold flex-shrink-0 transition-colors",
                   done
-                    ? "bg-indigo-600 text-white"
+                    ? "bg-blue-600 text-white"
                     : active
-                    ? "bg-indigo-600 text-white"
-                    : "bg-gray-200 text-gray-500"
+                    ? "bg-blue-600 text-white"
+                    : "bg-slate-200 text-slate-500"
                 )}
               >
                 {done ? <Check size={14} /> : num}
@@ -303,13 +303,13 @@ export function NewPropertyClient({ clientId, slug }: Props) {
               <span
                 className={classNames(
                   "text-sm font-medium hidden sm:block",
-                  active ? "text-indigo-600" : done ? "text-gray-600" : "text-gray-400"
+                  active ? "text-blue-600" : done ? "text-slate-600" : "text-slate-400"
                 )}
               >
                 {label}
               </span>
               {idx < stepLabels.length - 1 && (
-                <div className="flex-1 h-px bg-gray-200 w-6 sm:w-10 mx-1" />
+                <div className="flex-1 h-px bg-slate-200 w-6 sm:w-10 mx-1" />
               )}
             </div>
           );
@@ -317,15 +317,15 @@ export function NewPropertyClient({ clientId, slug }: Props) {
       </div>
 
       {/* Form card */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+      <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
         {/* ── Step 1: Property Details ── */}
         {step === 1 && (
           <div className="space-y-5">
-            <h2 className="text-base font-semibold text-gray-800 mb-4">פרטי הנכס</h2>
+            <h2 className="text-base font-semibold text-slate-800 mb-4">פרטי הנכס</h2>
 
             {/* Property type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
                 סוג נכס
               </label>
               <select
@@ -344,7 +344,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
             {/* City + Neighborhood */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                   עיר <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -357,7 +357,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
                 {errors.city && <p className="text-xs text-red-500 mt-1">{errors.city}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                   שכונה
                 </label>
                 <input
@@ -372,7 +372,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
 
             {/* Street */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">רחוב</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">רחוב</label>
               <input
                 type="text"
                 value={formData.street}
@@ -384,7 +384,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
 
             {/* Price */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
                 מחיר (₪) <span className="text-red-500">*</span>
               </label>
               <input
@@ -401,7 +401,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
             {/* Rooms + Area */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                   חדרים
                 </label>
                 <input
@@ -415,7 +415,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                   שטח (מ&quot;ר)
                 </label>
                 <input
@@ -432,7 +432,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
             {/* Floor + Total floors */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">קומה</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">קומה</label>
                 <input
                   type="number"
                   value={formData.floor}
@@ -443,7 +443,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">
                   סה&quot;כ קומות
                 </label>
                 <input
@@ -459,7 +459,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
 
             {/* Features */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-slate-700 mb-2">
                 מאפיינים
               </label>
               <div className="flex flex-wrap gap-2">
@@ -473,8 +473,8 @@ export function NewPropertyClient({ clientId, slug }: Props) {
                       className={classNames(
                         "px-3 py-1.5 rounded-full text-xs font-medium border transition-colors",
                         selected
-                          ? "bg-indigo-600 text-white border-indigo-600"
-                          : "bg-white text-gray-600 border-gray-200 hover:border-indigo-400 hover:text-indigo-600"
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-white text-slate-600 border-slate-200 hover:border-blue-400 hover:text-blue-600"
                       )}
                     >
                       {feature}
@@ -491,18 +491,18 @@ export function NewPropertyClient({ clientId, slug }: Props) {
                   type="checkbox"
                   checked={formData.isExclusive}
                   onChange={(e) => update("isExclusive", e.target.checked)}
-                  className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-sm text-gray-700">בלעדי</span>
+                <span className="text-sm text-slate-700">בלעדי</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={formData.isFeatured}
                   onChange={(e) => update("isFeatured", e.target.checked)}
-                  className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-sm text-gray-700">מומלץ</span>
+                <span className="text-sm text-slate-700">מומלץ</span>
               </label>
             </div>
           </div>
@@ -511,7 +511,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
         {/* ── Step 2: Images ── */}
         {step === 2 && (
           <div className="space-y-5">
-            <h2 className="text-base font-semibold text-gray-800 mb-4">תמונות</h2>
+            <h2 className="text-base font-semibold text-slate-800 mb-4">תמונות</h2>
 
             {/* Drop zone */}
             <div
@@ -523,16 +523,16 @@ export function NewPropertyClient({ clientId, slug }: Props) {
               className={classNames(
                 "border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors",
                 dragging
-                  ? "border-indigo-500 bg-indigo-50"
-                  : "border-gray-200 bg-gray-50 hover:border-indigo-400 hover:bg-indigo-50/40"
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-slate-200 bg-slate-50 hover:border-blue-400 hover:bg-blue-50/40"
               )}
             >
-              <Upload size={28} className="mx-auto text-gray-300 mb-3" />
-              <p className="text-sm font-medium text-gray-600">
+              <Upload size={28} className="mx-auto text-slate-300 mb-3" />
+              <p className="text-sm font-medium text-slate-600">
                 גרור תמונות לכאן או{" "}
-                <span className="text-indigo-600 underline">לחץ לבחירה</span>
+                <span className="text-blue-600 underline">לחץ לבחירה</span>
               </p>
-              <p className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP עד 2MB לתמונה</p>
+              <p className="text-xs text-slate-400 mt-1">PNG, JPG, WEBP עד 2MB לתמונה</p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -552,7 +552,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
                     <img
                       src={url}
                       alt="תמונת נכס"
-                      className="w-full aspect-square object-cover rounded-lg border border-gray-200"
+                      className="w-full aspect-square object-cover rounded-lg border border-slate-200"
                     />
                     <button
                       type="button"
@@ -572,13 +572,13 @@ export function NewPropertyClient({ clientId, slug }: Props) {
                         "w-full aspect-square rounded-lg border flex flex-col items-center justify-center gap-1.5",
                         f.progress === "error"
                           ? "border-red-200 bg-red-50"
-                          : "border-gray-200 bg-gray-50"
+                          : "border-slate-200 bg-slate-50"
                       )}
                     >
                       {f.progress === "uploading" ? (
                         <>
-                          <Loader2 size={20} className="text-indigo-500 animate-spin" />
-                          <span className="text-xs text-gray-400 text-center px-1 truncate max-w-full">
+                          <Loader2 size={20} className="text-blue-500 animate-spin" />
+                          <span className="text-xs text-slate-400 text-center px-1 truncate max-w-full">
                             {f.name}
                           </span>
                         </>
@@ -598,11 +598,11 @@ export function NewPropertyClient({ clientId, slug }: Props) {
         {/* ── Step 3: Description ── */}
         {step === 3 && (
           <div className="space-y-5">
-            <h2 className="text-base font-semibold text-gray-800 mb-4">תיאור הנכס</h2>
+            <h2 className="text-base font-semibold text-slate-800 mb-4">תיאור הנכס</h2>
 
             {/* Title */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
                 כותרת הנכס <span className="text-red-500">*</span>
               </label>
               <input
@@ -618,12 +618,12 @@ export function NewPropertyClient({ clientId, slug }: Props) {
             {/* Description + AI button */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-sm font-medium text-gray-700">תיאור</label>
+                <label className="block text-sm font-medium text-slate-700">תיאור</label>
                 <button
                   type="button"
                   onClick={generateAiDescription}
                   disabled={aiLoading}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 disabled:opacity-60 transition-all shadow-sm"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 disabled:opacity-60 transition-all shadow-sm"
                 >
                   {aiLoading ? (
                     <Loader2 size={12} className="animate-spin" />
@@ -645,13 +645,13 @@ export function NewPropertyClient({ clientId, slug }: Props) {
         )}
 
         {/* Navigation buttons */}
-        <div className="flex items-center justify-between mt-8 pt-5 border-t border-gray-100">
+        <div className="flex items-center justify-between mt-8 pt-5 border-t border-slate-100">
           <div>
             {step > 1 && (
               <button
                 type="button"
                 onClick={() => setStep((s) => s - 1)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
               >
                 <ChevronRight size={16} />
                 הקודם
@@ -664,7 +664,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
               <button
                 type="button"
                 onClick={() => setStep(3)}
-                className="text-sm text-gray-500 hover:text-gray-700 underline"
+                className="text-sm text-slate-500 hover:text-slate-700 underline"
               >
                 דלג
               </button>
@@ -674,7 +674,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
               <button
                 type="button"
                 onClick={handleNextStep}
-                className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm"
+                className="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm"
               >
                 הבא
                 <ChevronLeft size={16} />
@@ -684,7 +684,7 @@ export function NewPropertyClient({ clientId, slug }: Props) {
                 type="button"
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="inline-flex items-center gap-2 px-6 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-60 transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-6 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-60 transition-colors shadow-sm"
               >
                 {submitting && <Loader2 size={14} className="animate-spin" />}
                 פרסם נכס

@@ -39,22 +39,22 @@ export default async function LeadDetailPage({
   return (
     <div className="p-6 max-w-3xl mx-auto" dir="rtl">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-1 text-sm text-gray-500 mb-6">
-        <Link href="/admin/leads" className="hover:text-indigo-600">לידים</Link>
+      <nav className="flex items-center gap-1 text-sm text-slate-500 mb-6">
+        <Link href="/admin/leads" className="hover:text-blue-600">לידים</Link>
         <ChevronRight size={14} />
-        <span className="text-gray-800">{lead.firstName} {lead.lastName}</span>
+        <span className="text-slate-800">{lead.firstName} {lead.lastName}</span>
       </nav>
 
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6 shadow-sm">
+      <div className="bg-white rounded-xl border border-slate-100 p-6 mb-6 shadow-sm">
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">
+            <h1 className="text-xl font-bold text-slate-900">
               {lead.firstName} {lead.lastName}
             </h1>
-            <p className="text-sm text-gray-500 mt-1">{lead.client.name}</p>
+            <p className="text-sm text-slate-500 mt-1">{lead.client.name}</p>
           </div>
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700">
+          <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
             {STATUS_HE[lead.status] ?? lead.status}
           </span>
         </div>
@@ -62,34 +62,34 @@ export default async function LeadDetailPage({
         <div className="grid grid-cols-2 gap-4 mt-4 text-sm">
           {lead.phone && (
             <div>
-              <span className="text-gray-400 block text-xs mb-0.5">טלפון</span>
-              <a href={`tel:${lead.phone}`} className="text-gray-800 hover:text-indigo-600">{lead.phone}</a>
+              <span className="text-slate-400 block text-xs mb-0.5">טלפון</span>
+              <a href={`tel:${lead.phone}`} className="text-slate-800 hover:text-blue-600">{lead.phone}</a>
             </div>
           )}
           {lead.email && (
             <div>
-              <span className="text-gray-400 block text-xs mb-0.5">אימייל</span>
-              <a href={`mailto:${lead.email}`} className="text-gray-800 hover:text-indigo-600">{lead.email}</a>
+              <span className="text-slate-400 block text-xs mb-0.5">אימייל</span>
+              <a href={`mailto:${lead.email}`} className="text-slate-800 hover:text-blue-600">{lead.email}</a>
             </div>
           )}
           {lead.source && (
             <div>
-              <span className="text-gray-400 block text-xs mb-0.5">מקור</span>
-              <span className="text-gray-800">{lead.source}</span>
+              <span className="text-slate-400 block text-xs mb-0.5">מקור</span>
+              <span className="text-slate-800">{lead.source}</span>
             </div>
           )}
           {lead.leadScore > 0 && (
             <div>
-              <span className="text-gray-400 block text-xs mb-0.5">ניקוד</span>
-              <span className="text-gray-800">{lead.leadScore}</span>
+              <span className="text-slate-400 block text-xs mb-0.5">ניקוד</span>
+              <span className="text-slate-800">{lead.leadScore}</span>
             </div>
           )}
         </div>
 
         {lead.notes && (
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <span className="text-gray-400 block text-xs mb-1">הערות</span>
-            <p className="text-sm text-gray-700 whitespace-pre-wrap">{lead.notes}</p>
+          <div className="mt-4 pt-4 border-t border-slate-100">
+            <span className="text-slate-400 block text-xs mb-1">הערות</span>
+            <p className="text-sm text-slate-700 whitespace-pre-wrap">{lead.notes}</p>
           </div>
         )}
       </div>

@@ -30,14 +30,14 @@ type Client = {
   greenApiToken: string | null;
 };
 
-const inputCls = "w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white";
-const selectCls = "w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white";
+const inputCls = "w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white";
+const selectCls = "w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white";
 
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      {hint && <p className="text-xs text-gray-400 mb-1">{hint}</p>}
+      <label className="block text-sm font-medium text-slate-700 mb-1">{label}</label>
+      {hint && <p className="text-xs text-slate-400 mb-1">{hint}</p>}
       {children}
     </div>
   );
@@ -176,14 +176,14 @@ export function ClientSettingsForm({ client }: { client: Client }) {
   return (
     <form onSubmit={handleSave} className="space-y-6">
       {/* פרטים בסיסיים */}
-      <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">פרטים בסיסיים</h3>
+      <section className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+        <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide">פרטים בסיסיים</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="שם העסק">
             <input value={form.name} onChange={(e) => set("name", e.target.value)} className={inputCls} />
           </Field>
           <Field label="Slug (קריאה בלבד)">
-            <input value={client.slug} readOnly className={`${inputCls} bg-gray-50 text-gray-400 cursor-not-allowed`} dir="ltr" />
+            <input value={client.slug} readOnly className={`${inputCls} bg-slate-50 text-slate-400 cursor-not-allowed`} dir="ltr" />
           </Field>
           {(client as Client & { subdomain?: string | null }).subdomain && (
             <Field label="תת-דומיין" hint="כתובת הדף הנחיתה שלך">
@@ -191,7 +191,7 @@ export function ClientSettingsForm({ client }: { client: Client }) {
                 <input
                   value={`${(client as Client & { subdomain?: string | null }).subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "localhost"}`}
                   readOnly
-                  className={`${inputCls} bg-gray-50 text-gray-400 cursor-not-allowed flex-1`}
+                  className={`${inputCls} bg-slate-50 text-slate-400 cursor-not-allowed flex-1`}
                   dir="ltr"
                 />
                 <CopyLinkButton
@@ -234,9 +234,9 @@ export function ClientSettingsForm({ client }: { client: Client }) {
                 type="color"
                 value={form.primaryColor}
                 onChange={(e) => set("primaryColor", e.target.value)}
-                className="h-9 w-16 rounded-lg border border-gray-200 cursor-pointer p-0.5"
+                className="h-9 w-16 rounded-lg border border-slate-200 cursor-pointer p-0.5"
               />
-              <span className="text-sm text-gray-500 font-mono">{form.primaryColor}</span>
+              <span className="text-sm text-slate-500 font-mono">{form.primaryColor}</span>
             </div>
           </Field>
           <Field label="סטטוס">
@@ -245,17 +245,17 @@ export function ClientSettingsForm({ client }: { client: Client }) {
                 type="checkbox"
                 checked={form.isActive}
                 onChange={(e) => set("isActive", e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-indigo-500 focus:ring-indigo-400"
+                className="w-4 h-4 rounded border-slate-300 text-blue-500 focus:ring-blue-400"
               />
-              <span className="text-sm text-gray-700">לקוח פעיל</span>
+              <span className="text-sm text-slate-700">לקוח פעיל</span>
             </label>
           </Field>
         </div>
       </section>
 
       {/* יצירת קשר */}
-      <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">יצירת קשר</h3>
+      <section className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+        <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide">יצירת קשר</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="אימייל">
             <input type="email" dir="ltr" value={form.email} onChange={(e) => set("email", e.target.value)} className={inputCls} />
@@ -270,8 +270,8 @@ export function ClientSettingsForm({ client }: { client: Client }) {
       </section>
 
       {/* תקציב ודוחות */}
-      <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">תקציב ודוחות</h3>
+      <section className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+        <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide">תקציב ודוחות</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="תקציב חודשי (₪)">
             <input type="number" min="0" value={form.monthlyBudget} onChange={(e) => set("monthlyBudget", e.target.value)} placeholder="5000" className={inputCls} />
@@ -290,8 +290,8 @@ export function ClientSettingsForm({ client }: { client: Client }) {
       </section>
 
       {/* אינטגרציות */}
-      <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">אינטגרציות</h3>
+      <section className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+        <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide">אינטגרציות</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
             <Field label="n8n Webhook URL" hint="אוטומציות — כל ליד חדש יישלח לכאן">
@@ -307,7 +307,7 @@ export function ClientSettingsForm({ client }: { client: Client }) {
                   type="button"
                   onClick={handleTestWebhook}
                   disabled={testingWebhook || !form.n8nWebhookUrl}
-                  className="flex items-center gap-1.5 text-xs border border-gray-200 text-gray-600 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-40 whitespace-nowrap"
+                  className="flex items-center gap-1.5 text-xs border border-slate-200 text-slate-600 px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-40 whitespace-nowrap"
                 >
                   {testingWebhook ? <Loader2 size={12} className="animate-spin" /> : <Zap size={12} />}
                   בדוק
@@ -345,14 +345,14 @@ export function ClientSettingsForm({ client }: { client: Client }) {
       </section>
 
       {/* פורטל לקוח */}
-      <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
+      <section className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
         <div>
-          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">פורטל לקוח</h3>
-          <p className="text-xs text-gray-400 mt-0.5">הלקוח יתחבר עם ה-Slug שלו + הסיסמה לצפייה בנתונים</p>
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide">פורטל לקוח</h3>
+          <p className="text-xs text-slate-400 mt-0.5">הלקוח יתחבר עם ה-Slug שלו + הסיסמה לצפייה בנתונים</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <CopyLinkButton url={`/client/${client.slug}`} label="העתק קישור לפורטל" />
-          <span className="text-xs text-gray-400 font-mono">/client/{client.slug}</span>
+          <span className="text-xs text-slate-400 font-mono">/client/{client.slug}</span>
         </div>
         <div className="max-w-sm">
           <Field label="סיסמת פורטל חדשה" hint="השאר ריק כדי לא לשנות. לפחות 6 תווים.">
@@ -368,7 +368,7 @@ export function ClientSettingsForm({ client }: { client: Client }) {
               <button
                 type="button"
                 onClick={() => setShowPortalPw(!showPortalPw)}
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
               >
                 {showPortalPw ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>
@@ -382,7 +382,7 @@ export function ClientSettingsForm({ client }: { client: Client }) {
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
         >
           {saving ? <Loader2 size={15} className="animate-spin" /> : <Check size={15} />}
           {saving ? "שומר..." : "שמור שינויים"}
@@ -419,7 +419,7 @@ export function ClientSettingsForm({ client }: { client: Client }) {
               <button
                 type="button"
                 onClick={() => setShowDeleteConfirm(false)}
-                className="border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+                className="border border-slate-200 text-slate-600 text-sm font-medium px-4 py-2 rounded-lg hover:bg-slate-50 transition-colors"
               >
                 ביטול
               </button>

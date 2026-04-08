@@ -160,23 +160,23 @@ export default function CampaignsPage() {
     <div className="space-y-6" dir="rtl">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link href={`/admin/clients/${clientId}`} className="text-gray-400 hover:text-gray-600">
+        <Link href={`/admin/clients/${clientId}`} className="text-slate-400 hover:text-slate-600">
           <ArrowRight size={18} />
         </Link>
         <div className="flex items-center gap-2">
-          <Megaphone size={20} className="text-indigo-500" />
-          <h1 className="text-2xl font-bold text-gray-900">יוצר תמונות קמפיין</h1>
+          <Megaphone size={20} className="text-blue-500" />
+          <h1 className="text-2xl font-bold text-slate-900">יוצר תמונות קמפיין</h1>
         </div>
-        {client && <span className="text-sm text-gray-500">· {client.name}</span>}
+        {client && <span className="text-sm text-slate-500">· {client.name}</span>}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Form */}
         <div className="lg:col-span-2 space-y-6">
           {/* Step 1: Type */}
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-            <h2 className="font-semibold text-gray-900 flex items-center gap-2">
-              <span className="w-6 h-6 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-xs font-bold">1</span>
+          <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+            <h2 className="font-semibold text-slate-900 flex items-center gap-2">
+              <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">1</span>
               בחר סוג תמונה
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -186,34 +186,34 @@ export default function CampaignsPage() {
                   onClick={() => setImageType(t.value)}
                   className={`flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${
                     imageType === t.value
-                      ? "border-indigo-500 bg-indigo-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-slate-200 hover:border-slate-300"
                   }`}
                 >
                   <span className="text-2xl">{t.icon}</span>
-                  <p className="text-xs font-medium text-center text-gray-700">{t.label}</p>
-                  <p className="text-[10px] text-gray-400">{t.size}</p>
+                  <p className="text-xs font-medium text-center text-slate-700">{t.label}</p>
+                  <p className="text-[10px] text-slate-400">{t.size}</p>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Step 2: Content */}
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-            <h2 className="font-semibold text-gray-900 flex items-center gap-2">
-              <span className="w-6 h-6 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-xs font-bold">2</span>
+          <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+            <h2 className="font-semibold text-slate-900 flex items-center gap-2">
+              <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold">2</span>
               הוסף תוכן
             </h2>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">תבנית</label>
+              <label className="text-sm font-medium text-slate-700 block mb-1">תבנית</label>
               <div className="flex gap-2 flex-wrap">
                 {TEMPLATES.map((t) => (
                   <button
                     key={t.value}
                     onClick={() => setTemplate(t.value)}
                     className={`px-3 py-1.5 text-sm rounded-lg border transition-all ${
-                      template === t.value ? "border-indigo-500 bg-indigo-50 text-indigo-700" : "border-gray-200 text-gray-600 hover:border-gray-300"
+                      template === t.value ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-200 text-slate-600 hover:border-slate-300"
                     }`}
                   >
                     {t.label}
@@ -224,7 +224,7 @@ export default function CampaignsPage() {
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-sm font-medium text-gray-700">כותרת ראשית *</label>
+                <label className="text-sm font-medium text-slate-700">כותרת ראשית *</label>
                 <button
                   onClick={generateHeadline}
                   disabled={generatingHeadline}
@@ -235,7 +235,7 @@ export default function CampaignsPage() {
                 </button>
               </div>
               <input
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-300 outline-none"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-300 outline-none"
                 value={headline}
                 onChange={(e) => setHeadline(e.target.value)}
                 placeholder="גגות מקצועיים — שירות אמין ומהיר"
@@ -243,9 +243,9 @@ export default function CampaignsPage() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">כותרת משנה (אופציונלי)</label>
+              <label className="text-sm font-medium text-slate-700 block mb-1">כותרת משנה (אופציונלי)</label>
               <input
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-300 outline-none"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-300 outline-none"
                 value={subheadline}
                 onChange={(e) => setSubheadline(e.target.value)}
                 placeholder="צרו קשר עכשיו לקבלת הצעת מחיר"
@@ -253,9 +253,9 @@ export default function CampaignsPage() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">מחיר (אופציונלי)</label>
+              <label className="text-sm font-medium text-slate-700 block mb-1">מחיר (אופציונלי)</label>
               <input
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-300 outline-none"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-300 outline-none"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 placeholder="₪1,500,000"
@@ -265,7 +265,7 @@ export default function CampaignsPage() {
             <button
               onClick={generate}
               disabled={generating || !headline.trim()}
-              className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition"
+              className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition"
             >
               {generating ? (
                 <><Loader2 size={18} className="animate-spin" /> יוצר תמונה...</>
@@ -277,12 +277,12 @@ export default function CampaignsPage() {
 
           {/* Step 3: Preview */}
           {result && (
-            <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-              <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+            <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+              <h2 className="font-semibold text-slate-900 flex items-center gap-2">
                 <span className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-bold">3</span>
                 תצוגה מקדימה
               </h2>
-              <div className="border border-gray-200 rounded-xl overflow-hidden max-h-80 flex items-center justify-center bg-gray-50">
+              <div className="border border-slate-200 rounded-xl overflow-hidden max-h-80 flex items-center justify-center bg-slate-50">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={result.dataUrl}
@@ -290,18 +290,18 @@ export default function CampaignsPage() {
                   className="max-w-full max-h-80 object-contain"
                 />
               </div>
-              <p className="text-xs text-gray-500 text-center">{result.dimensions.width} × {result.dimensions.height} px</p>
+              <p className="text-xs text-slate-500 text-center">{result.dimensions.width} × {result.dimensions.height} px</p>
               <div className="flex gap-3">
                 <button
                   onClick={downloadImage}
-                  className="flex-1 flex items-center justify-center gap-2 border border-gray-200 text-gray-700 py-2.5 rounded-lg hover:bg-gray-50 transition text-sm font-medium"
+                  className="flex-1 flex items-center justify-center gap-2 border border-slate-200 text-slate-700 py-2.5 rounded-lg hover:bg-slate-50 transition text-sm font-medium"
                 >
                   <Download size={16} /> הורד תמונה
                 </button>
                 <button
                   onClick={generate}
                   disabled={generating}
-                  className="flex-1 flex items-center justify-center gap-2 bg-indigo-50 text-indigo-600 py-2.5 rounded-lg hover:bg-indigo-100 transition text-sm font-medium"
+                  className="flex-1 flex items-center justify-center gap-2 bg-blue-50 text-blue-600 py-2.5 rounded-lg hover:bg-blue-100 transition text-sm font-medium"
                 >
                   <RefreshCw size={16} /> צור מחדש
                 </button>
@@ -311,17 +311,17 @@ export default function CampaignsPage() {
         </div>
 
         {/* Right: History */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 space-y-4 h-fit">
-          <h3 className="font-semibold text-gray-900 text-sm">היסטוריה</h3>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5 space-y-4 h-fit">
+          <h3 className="font-semibold text-slate-900 text-sm">היסטוריה</h3>
           {loadingHistory ? (
             <div className="flex justify-center py-8">
-              <Loader2 size={20} className="animate-spin text-gray-300" />
+              <Loader2 size={20} className="animate-spin text-slate-300" />
             </div>
           ) : history.length === 0 ? (
             <div className="text-center py-8">
-              <Megaphone size={28} className="mx-auto text-gray-200 mb-2" />
-              <p className="text-sm text-gray-400">עדיין אין תמונות</p>
-              <p className="text-xs text-gray-300 mt-1">התמונות שתיצור יופיעו כאן</p>
+              <Megaphone size={28} className="mx-auto text-slate-200 mb-2" />
+              <p className="text-sm text-slate-400">עדיין אין תמונות</p>
+              <p className="text-xs text-slate-300 mt-1">התמונות שתיצור יופיעו כאן</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-2">
@@ -331,11 +331,11 @@ export default function CampaignsPage() {
                   <img
                     src={img.imageUrl}
                     alt={img.headline}
-                    className="w-full h-20 object-cover rounded-lg border border-gray-100 cursor-pointer hover:opacity-90"
+                    className="w-full h-20 object-cover rounded-lg border border-slate-100 cursor-pointer hover:opacity-90"
                     onClick={() => setResult({ svg: "", dataUrl: img.imageUrl, dimensions: { width: 1200, height: 630 } })}
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-lg transition-colors" />
-                  <p className="text-[10px] text-gray-500 mt-0.5 truncate">{img.headline}</p>
+                  <p className="text-[10px] text-slate-500 mt-0.5 truncate">{img.headline}</p>
                 </div>
               ))}
             </div>

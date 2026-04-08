@@ -39,10 +39,10 @@ export default async function CampaignsIndexPage() {
     <div className="space-y-6" dir="rtl">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Megaphone size={22} className="text-indigo-500" /> קמפיינים
+          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+            <Megaphone size={22} className="text-blue-500" /> קמפיינים
           </h1>
-          <p className="text-sm text-gray-500 mt-1">יצירת תמונות קמפיין לכל לקוח</p>
+          <p className="text-sm text-slate-500 mt-1">יצירת תמונות קמפיין לכל לקוח</p>
         </div>
         {clients.length > 0 && (
           <CampaignQuickCreate
@@ -52,16 +52,16 @@ export default async function CampaignsIndexPage() {
       </div>
 
       {clients.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center py-16">
-          <Megaphone size={36} className="text-gray-200 mb-3" />
-          <p className="text-sm text-gray-500">אין לקוחות פעילים</p>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm flex flex-col items-center py-16">
+          <Megaphone size={36} className="text-slate-200 mb-3" />
+          <p className="text-sm text-slate-500">אין לקוחות פעילים</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {clientsWithImages.map((c) => (
-            <div key={c.id} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+            <div key={c.id} className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
               {/* Header */}
-              <div className="p-4 flex items-center gap-3 border-b border-gray-50">
+              <div className="p-4 flex items-center gap-3 border-b border-slate-50">
                 <div
                   className="w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
                   style={{ backgroundColor: c.primaryColor }}
@@ -69,12 +69,12 @@ export default async function CampaignsIndexPage() {
                   {c.name[0]}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 text-sm truncate">{c.name}</p>
-                  <p className="text-xs text-gray-400">{c._count.campaignImages} תמונות</p>
+                  <p className="font-semibold text-slate-900 text-sm truncate">{c.name}</p>
+                  <p className="text-xs text-slate-400">{c._count.campaignImages} תמונות</p>
                 </div>
                 <Link
                   href={`/admin/clients/${c.id}/campaigns`}
-                  className="flex items-center gap-1 text-xs bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition font-medium"
+                  className="flex items-center gap-1 text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition font-medium"
                 >
                   <Plus size={12} /> צור
                 </Link>
@@ -94,7 +94,7 @@ export default async function CampaignsIndexPage() {
                   ))}
                 </div>
               ) : (
-                <div className="flex flex-col items-center py-8 text-gray-300">
+                <div className="flex flex-col items-center py-8 text-slate-300">
                   <Megaphone size={24} className="mb-1.5" />
                   <p className="text-xs">אין תמונות עדיין</p>
                 </div>

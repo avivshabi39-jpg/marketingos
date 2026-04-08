@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Circle } from "lucide-react";
+import { Circle, Users, Globe, Target, TrendingUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Tooltip } from "@/components/ui/Tooltip";
+import { KPICard } from "@/components/ui/Card";
 import dynamic from "next/dynamic";
 
 const N8nDashboard = dynamic(() => import("./N8nDashboard").then((m) => ({ default: m.N8nDashboard })), { ssr: false });
@@ -52,12 +53,12 @@ const INDUSTRY_LABELS: Record<string, string> = {
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  NEW: "bg-blue-100 text-blue-700",
-  CONTACTED: "bg-yellow-100 text-yellow-700",
-  QUALIFIED: "bg-purple-100 text-purple-700",
-  PROPOSAL: "bg-orange-100 text-orange-700",
-  WON: "bg-green-100 text-green-700",
-  LOST: "bg-red-100 text-red-700",
+  NEW: "bg-blue-50 text-blue-700 border border-blue-200",
+  CONTACTED: "bg-amber-50 text-amber-700 border border-amber-200",
+  QUALIFIED: "bg-purple-50 text-purple-700 border border-purple-200",
+  PROPOSAL: "bg-orange-50 text-orange-700 border border-orange-200",
+  WON: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+  LOST: "bg-red-50 text-red-700 border border-red-200",
 };
 
 const STATUS_HE: Record<string, string> = {
@@ -72,8 +73,8 @@ const STATUS_HE: Record<string, string> = {
 const SOURCE_COLORS: Record<string, string> = {
   facebook: "bg-blue-500",
   google: "bg-red-500",
-  organic: "bg-green-500",
-  manual: "bg-gray-400",
+  organic: "bg-emerald-500",
+  manual: "bg-slate-400",
   other: "bg-purple-400",
 };
 
@@ -175,12 +176,12 @@ function timeAgo(date: Date | string): string {
 
 // ─── Quick Actions ────────────────────────────────────────────────────────────
 const QUICK_ACTIONS = [
-  { icon: "👤", label: "הוסף לקוח",    href: "/admin/clients/new",  color: "#6366f1" },
-  { icon: "🎯", label: "הוסף ליד",     href: "/admin/leads?new=1",  color: "#22c55e" },
-  { icon: "✨", label: "בנה דף",       href: "/admin/ai-agent",     color: "#f59e0b" },
-  { icon: "📢", label: "שלח שידור",    href: "/admin/broadcast",    color: "#ef4444" },
-  { icon: "📊", label: "צור דוח",      href: "/admin/reports",      color: "#8b5cf6" },
-  { icon: "🚀", label: "תבנית מהירה", href: "/admin/snapshots",    color: "#06b6d4" },
+  { icon: "👤", label: "הוסף לקוח",    href: "/admin/clients/new",  color: "#3B82F6" },
+  { icon: "🎯", label: "הוסף ליד",     href: "/admin/leads?new=1",  color: "#059669" },
+  { icon: "✨", label: "בנה דף",       href: "/admin/ai-agent",     color: "#D97706" },
+  { icon: "📢", label: "שלח שידור",    href: "/admin/broadcast",    color: "#DC2626" },
+  { icon: "📊", label: "צור דוח",      href: "/admin/reports",      color: "#7C3AED" },
+  { icon: "🚀", label: "תבנית מהירה", href: "/admin/snapshots",    color: "#0891B2" },
 ];
 
 // ─── Clients Table ────────────────────────────────────────────────────────────
@@ -196,21 +197,17 @@ function ClientsTable({ clients }: { clients: ClientType[] }) {
 
   if (clients.length === 0) {
     return (
-      <div style={{ textAlign: "center", padding: "60px 20px", color: "#6b7280" }}>
-        <div style={{ fontSize: "64px", marginBottom: "16px" }}>🚀</div>
-        <h3 style={{ fontSize: "20px", fontWeight: 600, marginBottom: "8px", color: "#111827" }}>
+      <div className="text-center py-16 px-5">
+        <div className="text-6xl mb-4">🚀</div>
+        <h3 className="text-xl font-semibold mb-2 text-slate-900">
           עדיין אין לקוחות
         </h3>
-        <p style={{ marginBottom: "24px" }}>
+        <p className="text-slate-500 mb-6">
           הוסף לקוח ראשון ובנה לו דף נחיתה תוך דקות
         </p>
         <a
           href="/admin/clients/new"
-          style={{
-            background: "#6366f1", color: "white",
-            padding: "12px 28px", borderRadius: "10px",
-            textDecoration: "none", fontWeight: 600, fontSize: "15px",
-          }}
+          className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-7 py-3 rounded-xl font-semibold text-sm transition-colors shadow-sm hover:shadow-md"
         >
           + הוסף לקוח ראשון
         </a>
@@ -221,29 +218,22 @@ function ClientsTable({ clients }: { clients: ClientType[] }) {
   return (
     <div className="overflow-x-auto">
       {/* Search */}
-      <div className="px-4 py-3 border-b border-gray-100">
+      <div className="px-6 py-3 border-b border-slate-100">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="🔍 חפש לקוח..."
-          className="w-full max-w-xs border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-indigo-400"
+          placeholder="חפש לקוח..."
+          className="w-full max-w-xs border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white transition-all duration-150 placeholder:text-slate-400"
           dir="rtl"
         />
       </div>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <table className="w-full">
         <thead>
-          <tr style={{ borderBottom: "1px solid #f3f4f6" }}>
+          <tr className="border-b border-slate-100 bg-slate-50">
             {["לקוח", "ענף", "דף", "לידים 7י׳", "הצטרף", ""].map((h) => (
               <th
                 key={h}
-                style={{
-                  padding: "10px 16px",
-                  textAlign: "right",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  color: "#6b7280",
-                  whiteSpace: "nowrap",
-                }}
+                className="px-6 py-4 text-right text-xs font-semibold text-slate-500 uppercase tracking-wide whitespace-nowrap"
               >
                 {h}
               </th>
@@ -262,82 +252,75 @@ function ClientsTable({ clients }: { clients: ClientType[] }) {
               <tr
                 key={c.id}
                 onClick={() => router.push(`/admin/clients/${c.id}/overview`)}
-                style={{ cursor: "pointer", borderBottom: "1px solid #f9fafb" }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLTableRowElement).style.background = "#f9fafb";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLTableRowElement).style.background = "";
-                }}
+                className="cursor-pointer border-b border-slate-50 hover:bg-slate-50/50 transition-colors duration-100"
               >
                 {/* Name */}
-                <td style={{ padding: "12px 16px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-3">
                     <div
-                      style={{
-                        width: "32px", height: "32px",
-                        borderRadius: "8px",
-                        background: c.primaryColor,
-                        color: "white",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: "12px", fontWeight: 700, flexShrink: 0,
-                      }}
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                      style={{ backgroundColor: c.primaryColor }}
                     >
                       {c.name[0]}
                     </div>
-                    <span style={{ fontWeight: 600, fontSize: "14px", color: "#111827" }}>
+                    <span className="font-semibold text-sm text-slate-900">
                       {c.name}
                     </span>
                   </div>
                 </td>
                 {/* Industry */}
-                <td style={{ padding: "12px 16px", fontSize: "13px", color: "#374151", whiteSpace: "nowrap" }}>
+                <td className="px-6 py-4 text-sm text-slate-600 whitespace-nowrap">
                   {emoji} {label}
                 </td>
                 {/* Page status */}
-                <td style={{ padding: "12px 16px", whiteSpace: "nowrap" }}>
+                <td className="px-6 py-4 whitespace-nowrap">
                   {c.pagePublished ? (
-                    <span style={{ color: "#16a34a", fontSize: "13px", fontWeight: 500 }}>✅ פורסם</span>
+                    <span className="text-emerald-600 text-sm font-medium">פורסם</span>
                   ) : (
-                    <span style={{ color: "#9ca3af", fontSize: "13px" }}>⚪ טיוטה</span>
+                    <span className="text-slate-400 text-sm">טיוטה</span>
                   )}
                 </td>
                 {/* 7-day leads */}
-                <td style={{ padding: "12px 16px", textAlign: "center" }}>
+                <td className="px-6 py-4 text-center">
                   <span
-                    style={{
-                      display: "inline-block",
-                      minWidth: "28px",
-                      background: c.leads7d > 0 ? "#eff6ff" : "#f9fafb",
-                      color: c.leads7d > 0 ? "#2563eb" : "#9ca3af",
-                      borderRadius: "20px",
-                      padding: "2px 10px",
-                      fontSize: "13px",
-                      fontWeight: c.leads7d > 0 ? 700 : 400,
-                      textAlign: "center",
-                    }}
+                    className={`inline-block min-w-[28px] rounded-lg px-2.5 py-0.5 text-sm text-center ${
+                      c.leads7d > 0
+                        ? "bg-blue-50 text-blue-700 font-bold border border-blue-200"
+                        : "bg-slate-50 text-slate-400"
+                    }`}
                   >
                     {c.leads7d}
                   </span>
                 </td>
                 {/* Joined */}
-                <td style={{ padding: "12px 16px", fontSize: "12px", color: "#9ca3af", whiteSpace: "nowrap" }}>
+                <td className="px-6 py-4 text-xs text-slate-400 whitespace-nowrap">
                   {joined}
                 </td>
                 {/* Actions */}
-                <td style={{ padding: "12px 16px" }}>
-                  <div style={{ display: "flex", gap: "4px", justifyContent: "flex-end" }} onClick={(e) => e.stopPropagation()}>
+                <td className="px-6 py-4">
+                  <div className="flex gap-2 justify-end" onClick={(e) => e.stopPropagation()}>
                     {c.pagePublished ? (
-                      <a href={`/${c.slug}`} target="_blank" rel="noopener noreferrer" style={{ padding: "3px 8px", background: "#f0fdf4", color: "#166534", border: "1px solid #bbf7d0", borderRadius: "6px", fontSize: "11px", textDecoration: "none", fontWeight: 500 }}>
-                        👁 דף
+                      <a
+                        href={`/${c.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-medium hover:bg-emerald-100 transition-colors"
+                      >
+                        צפה
                       </a>
                     ) : (
-                      <a href={`/admin/page-builder/${c.id}`} style={{ padding: "3px 8px", background: "#eef2ff", color: "#6366f1", border: "1px solid #c7d2fe", borderRadius: "6px", fontSize: "11px", textDecoration: "none", fontWeight: 500 }}>
-                        🧙 בנה
+                      <a
+                        href={`/admin/page-builder/${c.id}`}
+                        className="px-2.5 py-1 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg text-xs font-medium hover:bg-blue-100 transition-colors"
+                      >
+                        בנה
                       </a>
                     )}
-                    <a href={`/admin/clients/${c.id}`} style={{ padding: "3px 8px", background: "#f9fafb", color: "#374151", border: "1px solid #e5e7eb", borderRadius: "6px", fontSize: "11px", textDecoration: "none" }}>
-                      פתח ↗
+                    <a
+                      href={`/admin/clients/${c.id}`}
+                      className="px-2.5 py-1 bg-slate-50 text-slate-600 border border-slate-200 rounded-lg text-xs hover:bg-slate-100 transition-colors"
+                    >
+                      פתח
                     </a>
                   </div>
                 </td>
@@ -377,62 +360,62 @@ export default function DashboardView({
       return prefix.charAt(0).toUpperCase() + prefix.slice(1);
     })();
 
-  const statsBar = [
-    { icon: "👥", label: "לקוחות פעילים", value: clients.length },
-    { icon: "🌐", label: "דפים פורסמו",    value: publishedCount },
-    { icon: "🎯", label: "לידים היום",      value: todayLeads },
-    { icon: "📊", label: "לידים 7 ימים",    value: newLeads7d },
-  ];
-
   return (
-    <div className="min-h-screen bg-[#F8FAFC]" dir="rtl">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+    <div dir="rtl">
+      <div className="max-w-7xl mx-auto space-y-6">
 
         {/* Welcome Bar */}
-        <div style={{
-          background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)",
-          borderRadius: "16px", padding: "20px 24px",
-          color: "white", display: "flex",
-          justifyContent: "space-between", alignItems: "center",
-          gap: "12px",
-        }}>
+        <div className="bg-gradient-to-l from-slate-900 to-blue-900 rounded-2xl p-6 text-white flex justify-between items-center gap-4">
           <div>
-            <h1 style={{ fontSize: "22px", fontWeight: 700, margin: 0 }}>
-              {greeting}, {displayName}! 👋
+            <h1 className="text-2xl font-bold">
+              {greeting}, {displayName}!
             </h1>
-            <p style={{ opacity: 0.75, margin: "4px 0 0", fontSize: "14px" }}>
+            <p className="text-blue-200 mt-1 text-sm">
               {todayLeads > 0
-                ? `🎯 היום הגיעו ${todayLeads} לידים חדשים`
+                ? `היום הגיעו ${todayLeads} לידים חדשים`
                 : "הכל שקט היום — זה זמן טוב לשפר את הדפים"}
             </p>
           </div>
           <Tooltip content="הוסף לקוח חדש למערכת" position="bottom">
-          <a
-            href="/admin/clients/new"
-            style={{
-              background: "rgba(255,255,255,0.2)", color: "white",
-              padding: "8px 16px", borderRadius: "8px",
-              textDecoration: "none", fontSize: "13px",
-              fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0,
-            }}
-          >
-            + הוסף לקוח
-          </a>
+            <a
+              href="/admin/clients/new"
+              className="bg-white/15 hover:bg-white/25 text-white px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap flex-shrink-0 transition-colors"
+            >
+              + הוסף לקוח
+            </a>
           </Tooltip>
         </div>
 
-        {/* Stats Bar */}
+        {/* KPI Stats */}
         <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-          {statsBar.map(({ icon, label, value }) => (
-            <div
-              key={label}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5"
-            >
-              <div style={{ fontSize: "28px", marginBottom: "8px" }}>{icon}</div>
-              <p className="text-3xl font-bold text-gray-900 tabular-nums">{value}</p>
-              <p className="text-sm text-gray-500 mt-1">{label}</p>
-            </div>
-          ))}
+          <KPICard
+            title="לקוחות פעילים"
+            value={clients.length}
+            icon={<Users size={20} />}
+            iconBg="bg-blue-50"
+            iconColor="text-blue-600"
+          />
+          <KPICard
+            title="דפים פורסמו"
+            value={publishedCount}
+            icon={<Globe size={20} />}
+            iconBg="bg-emerald-50"
+            iconColor="text-emerald-600"
+          />
+          <KPICard
+            title="לידים היום"
+            value={todayLeads}
+            icon={<Target size={20} />}
+            iconBg="bg-amber-50"
+            iconColor="text-amber-600"
+          />
+          <KPICard
+            title="לידים 7 ימים"
+            value={newLeads7d}
+            icon={<TrendingUp size={20} />}
+            iconBg="bg-purple-50"
+            iconColor="text-purple-600"
+          />
         </div>
 
         {/* n8n Automation Hub */}
@@ -444,20 +427,15 @@ export default function DashboardView({
             <a
               key={href}
               href={href}
-              style={{ textDecoration: "none" }}
-              className="bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-150"
+              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex flex-col items-center gap-2.5 hover:shadow-md hover:-translate-y-0.5 hover:border-slate-200 transition-all duration-200 no-underline"
             >
               <div
-                style={{
-                  width: "40px", height: "40px", borderRadius: "10px",
-                  background: color + "1a", display: "flex",
-                  alignItems: "center", justifyContent: "center",
-                  fontSize: "20px",
-                }}
+                className="w-11 h-11 rounded-xl flex items-center justify-center text-xl"
+                style={{ backgroundColor: color + "15" }}
               >
                 {icon}
               </div>
-              <span style={{ fontSize: "11px", fontWeight: 600, color: "#374151", textAlign: "center" }}>
+              <span className="text-xs font-semibold text-slate-700 text-center">
                 {label}
               </span>
             </a>
@@ -465,51 +443,42 @@ export default function DashboardView({
         </div>
 
         {/* Pipeline Banner */}
-        <div
-          className="rounded-2xl p-6 text-white"
-          style={{ background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)" }}
-        >
-          <h3 className="text-sm font-semibold mb-4 opacity-90">💰 מצב הצינור העסקי</h3>
+        <div className="bg-gradient-to-l from-slate-900 to-blue-900 rounded-2xl p-6 text-white">
+          <h3 className="text-sm font-semibold mb-4 text-blue-200">מצב הצינור העסקי</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-white/10 rounded-xl p-4 text-center">
+            <div className="bg-white/10 rounded-xl p-5 text-center backdrop-blur-sm">
               <p className="text-2xl font-extrabold mb-1">
                 ₪{pipelineValue.toLocaleString("he-IL")}
               </p>
-              <p className="text-xs opacity-80">כסף בצינור</p>
-              <p className="text-xs opacity-60 mt-1">{pipelineCount} לידים פתוחים</p>
+              <p className="text-xs text-blue-200">כסף בצינור</p>
+              <p className="text-xs text-blue-300/60 mt-1">{pipelineCount} לידים פתוחים</p>
             </div>
-            <div
-              className="rounded-xl p-4 text-center border border-green-400/30"
-              style={{ background: "rgba(34,197,94,0.15)" }}
-            >
-              <p className="text-2xl font-extrabold mb-1 text-green-300">
+            <div className="bg-emerald-500/15 rounded-xl p-5 text-center border border-emerald-400/20">
+              <p className="text-2xl font-extrabold mb-1 text-emerald-300">
                 ₪{wonValue.toLocaleString("he-IL")}
               </p>
-              <p className="text-xs opacity-80">נסגר החודש</p>
-              <p className="text-xs opacity-60 mt-1">{wonCount} עסקאות</p>
+              <p className="text-xs text-blue-200">נסגר החודש</p>
+              <p className="text-xs text-blue-300/60 mt-1">{wonCount} עסקאות</p>
             </div>
-            <div
-              className="rounded-xl p-4 text-center border border-indigo-400/30"
-              style={{ background: "rgba(99,102,241,0.15)" }}
-            >
-              <p className="text-2xl font-extrabold mb-1 text-indigo-300">
+            <div className="bg-blue-500/15 rounded-xl p-5 text-center border border-blue-400/20">
+              <p className="text-2xl font-extrabold mb-1 text-blue-300">
                 {wonCount > 0 && pipelineCount > 0
                   ? Math.round((wonCount / (wonCount + pipelineCount)) * 100)
                   : wonCount > 0 ? 100 : 0}%
               </p>
-              <p className="text-xs opacity-80">אחוז המרה</p>
-              <p className="text-xs opacity-60 mt-1">החודש</p>
+              <p className="text-xs text-blue-200">אחוז המרה</p>
+              <p className="text-xs text-blue-300/60 mt-1">החודש</p>
             </div>
           </div>
         </div>
 
         {/* Clients Table */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h2 className="text-lg font-bold text-gray-900">הלקוחות שלי</h2>
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+            <h2 className="text-lg font-bold text-slate-900">הלקוחות שלי</h2>
             <Link
               href="/admin/clients/new"
-              className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
             >
               + הוסף לקוח
             </Link>
@@ -517,108 +486,32 @@ export default function DashboardView({
           <ClientsTable clients={clients} />
         </div>
 
-        {/* Bottom row */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-
-          {/* Recent Leads — 2 cols */}
-          <div className="xl:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-              <h2 className="font-semibold text-gray-900">לידים אחרונים</h2>
-              <Link
-                href="/admin/leads"
-                className="text-xs text-indigo-500 hover:text-indigo-700 font-medium"
-              >
-                הצג הכל
-              </Link>
-            </div>
-            <div className="divide-y divide-gray-50">
-              {recentLeads.length === 0 ? (
-                <div className="px-6 py-10 text-center space-y-2">
-                  <p className="text-sm text-gray-500">אין לידים עדיין.</p>
-                  <Link
-                    href="/admin/intake-forms"
-                    className="inline-flex items-center gap-1.5 text-xs text-indigo-500 hover:text-indigo-700 font-medium"
-                  >
-                    שתף את הטופס עם הלקוח שלך ←
-                  </Link>
-                </div>
-              ) : (
-                recentLeads.map((lead) => {
-                  const srcKey = (() => {
-                    const s = lead.source?.toLowerCase() ?? "other";
-                    if (s.includes("facebook") || s.includes("fb")) return "facebook";
-                    if (s.includes("google")) return "google";
-                    if (s === "organic") return "organic";
-                    if (s === "manual") return "manual";
-                    return "other";
-                  })();
-                  return (
-                    <div
-                      key={lead.id}
-                      className="flex items-center gap-4 px-6 py-3.5 hover:bg-gray-50/50 transition-colors"
-                    >
-                      <div
-                        className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                        style={{ backgroundColor: lead.client.primaryColor }}
-                      >
-                        {initials(lead.firstName, lead.lastName)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
-                          {lead.firstName} {lead.lastName}
-                        </p>
-                        <p className="text-xs text-gray-500">{lead.phone ?? "—"}</p>
-                      </div>
-                      <span
-                        className={`hidden sm:inline-flex items-center gap-1.5 text-xs px-2 py-1 rounded-full font-medium text-white ${
-                          SOURCE_COLORS[srcKey] ?? SOURCE_COLORS.other
-                        }`}
-                      >
-                        <Circle size={5} className="fill-current" />
-                        {SOURCE_LABELS[srcKey] ?? lead.source ?? "אחר"}
-                      </span>
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full font-medium ${
-                          STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"
-                        }`}
-                      >
-                        {STATUS_HE[lead.status] ?? lead.status}
-                      </span>
-                      <span className="hidden md:block text-xs text-gray-400 flex-shrink-0">
-                        {new Date(lead.createdAt).toLocaleDateString("he-IL")}
-                      </span>
-                    </div>
-                  );
-                })
-              )}
-            </div>
-          </div>
-
-          {/* Right column: Sources + Activity */}
+        {/* Bottom row — Sources + Activity */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           <div className="space-y-6">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
-              <div className="px-6 py-4 border-b border-gray-100">
-                <h2 className="font-semibold text-gray-900">מקורות לידים</h2>
-                <p className="text-xs text-gray-500 mt-0.5">החודש הנוכחי</p>
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-slate-100">
+                <h2 className="font-semibold text-slate-900">מקורות לידים</h2>
+                <p className="text-xs text-slate-500 mt-0.5">החודש הנוכחי</p>
               </div>
               <div className="px-6 py-5 space-y-4">
                 {sourceSorted.length === 0 ? (
-                  <p className="text-sm text-gray-500 text-center py-6">אין נתונים</p>
+                  <p className="text-sm text-slate-500 text-center py-6">אין נתונים</p>
                 ) : (
                   sourceSorted.map(([src, count]) => {
                     const pct = Math.round((count / (totalSourceLeads || 1)) * 100);
                     return (
                       <div key={src} className="space-y-1.5">
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-700 font-medium">
+                          <span className="text-slate-700 font-medium">
                             {SOURCE_LABELS[src] ?? src}
                           </span>
-                          <span className="text-gray-500">{count} ({pct}%)</span>
+                          <span className="text-slate-500">{count} ({pct}%)</span>
                         </div>
-                        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                           <div
-                            className={`h-full rounded-full ${
-                              SOURCE_COLORS[src] ?? "bg-gray-400"
+                            className={`h-full rounded-full transition-all duration-500 ${
+                              SOURCE_COLORS[src] ?? "bg-slate-400"
                             }`}
                             style={{ width: `${pct}%` }}
                           />
@@ -631,11 +524,11 @@ export default function DashboardView({
             </div>
 
             {recentActivities.length > 0 && (
-              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
-                <div className="px-6 py-4 border-b border-gray-100">
-                  <h2 className="font-semibold text-gray-900">פעילות אחרונה</h2>
+              <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                <div className="px-6 py-4 border-b border-slate-100">
+                  <h2 className="font-semibold text-slate-900">פעילות אחרונה</h2>
                 </div>
-                <div className="px-6 py-3 divide-y divide-gray-50">
+                <div className="px-6 py-3 divide-y divide-slate-50">
                   {recentActivities.slice(0, 5).map((activity) => (
                     <div key={activity.id} className="flex items-start gap-3 py-3">
                       <div
@@ -645,14 +538,14 @@ export default function DashboardView({
                         {activity.lead.firstName[0]}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-gray-700 leading-snug">
+                        <p className="text-sm text-slate-700 leading-snug">
                           <span className="font-medium">
                             {activity.lead.firstName} {activity.lead.lastName}
                           </span>
                           {" — "}
                           {activity.content}
                         </p>
-                        <p className="text-xs text-gray-400 mt-0.5">
+                        <p className="text-xs text-slate-400 mt-0.5">
                           {timeAgo(activity.createdAt)}
                         </p>
                       </div>

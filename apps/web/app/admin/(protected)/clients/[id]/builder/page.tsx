@@ -102,7 +102,7 @@ function SortableBlock({
       ref={setNodeRef}
       style={style}
       className={`relative group rounded-xl border-2 transition-colors ${
-        isSelected ? "border-blue-500 ring-2 ring-blue-200" : "border-transparent hover:border-gray-300"
+        isSelected ? "border-blue-500 ring-2 ring-blue-200" : "border-transparent hover:border-slate-300"
       }`}
       onClick={(e) => {
         e.stopPropagation();
@@ -114,16 +114,16 @@ function SortableBlock({
         <button
           {...attributes}
           {...listeners}
-          className="p-1 rounded bg-white shadow-sm border border-gray-200 cursor-grab active:cursor-grabbing"
+          className="p-1 rounded bg-white shadow-sm border border-slate-200 cursor-grab active:cursor-grabbing"
         >
-          <GripVertical size={14} className="text-gray-400" />
+          <GripVertical size={14} className="text-slate-400" />
         </button>
         <button
           onClick={(e) => {
             e.stopPropagation();
             onDelete();
           }}
-          className="p-1 rounded bg-white shadow-sm border border-gray-200 hover:bg-red-50 hover:text-red-500"
+          className="p-1 rounded bg-white shadow-sm border border-slate-200 hover:bg-red-50 hover:text-red-500"
         >
           <Trash2 size={14} />
         </button>
@@ -131,7 +131,7 @@ function SortableBlock({
 
       {/* Block type badge */}
       <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-        <span className="text-[10px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">
+        <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 font-medium">
           {BLOCK_DEFINITIONS.find((d) => d.type === block.type)?.label || block.type}
         </span>
       </div>
@@ -162,8 +162,8 @@ function DraggableLibraryItem({
       onClick={onAdd}
       className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm rounded-lg border transition text-right cursor-grab active:cursor-grabbing ${
         isDragging
-          ? "opacity-40 border-indigo-300 bg-indigo-50"
-          : "border-gray-100 hover:border-indigo-300 hover:bg-indigo-50"
+          ? "opacity-40 border-blue-300 bg-blue-50"
+          : "border-slate-100 hover:border-blue-300 hover:bg-blue-50"
       }`}
     >
       <span className="text-lg">{def.icon}</span>
@@ -184,7 +184,7 @@ function DroppableCanvas({
   return (
     <div
       ref={setNodeRef}
-      className={`min-h-[200px] transition-colors rounded-xl ${isOver ? "ring-2 ring-indigo-400 ring-offset-2 bg-indigo-50/30" : ""}`}
+      className={`min-h-[200px] transition-colors rounded-xl ${isOver ? "ring-2 ring-blue-400 ring-offset-2 bg-blue-50/30" : ""}`}
     >
       {children}
     </div>
@@ -465,7 +465,7 @@ export default function BuilderPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin h-8 w-8 border-2 border-indigo-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-2 border-blue-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -477,39 +477,39 @@ export default function BuilderPage() {
   ];
 
   return (
-    <div dir="rtl" className="h-screen flex flex-col bg-gray-50">
+    <div dir="rtl" className="h-screen flex flex-col bg-slate-50">
       {/* ─── Header bar ──────────────────────────────────────────────── */}
-      <header className="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-4 shrink-0 z-20">
+      <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 shrink-0 z-20">
         <div className="flex items-center gap-3">
           <Link
             href={`/admin/clients/${clientId}`}
-            className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+            className="flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700"
           >
             <ArrowRight size={16} />
             חזור
           </Link>
-          <span className="text-sm font-semibold text-gray-800">{clientData?.name}</span>
+          <span className="text-sm font-semibold text-slate-800">{clientData?.name}</span>
         </div>
 
         <div className="flex items-center gap-2">
           {/* Mobile / Desktop toggle */}
-          <div className="flex items-center gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50">
+          <div className="flex items-center gap-1 border border-slate-200 rounded-lg p-0.5 bg-slate-50">
             <button
               onClick={() => setMobilePreview(false)}
-              className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-md transition ${!mobilePreview ? "bg-white shadow-sm text-gray-800 font-medium" : "text-gray-400 hover:text-gray-600"}`}
+              className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-xl transition ${!mobilePreview ? "bg-white shadow-sm text-slate-800 font-medium" : "text-slate-400 hover:text-slate-600"}`}
             >
               <Monitor size={13} /> דסקטופ
             </button>
             <button
               onClick={() => setMobilePreview(true)}
-              className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-md transition ${mobilePreview ? "bg-white shadow-sm text-gray-800 font-medium" : "text-gray-400 hover:text-gray-600"}`}
+              className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-xl transition ${mobilePreview ? "bg-white shadow-sm text-slate-800 font-medium" : "text-slate-400 hover:text-slate-600"}`}
             >
               <Smartphone size={13} /> מובייל
             </button>
           </div>
 
           {/* A/B Testing toggle */}
-          <div className="flex items-center gap-1 border border-gray-200 rounded-lg p-0.5 bg-gray-50">
+          <div className="flex items-center gap-1 border border-slate-200 rounded-lg p-0.5 bg-slate-50">
             <button
               onClick={async () => {
                 const newEnabled = !clientData?.abTestEnabled;
@@ -523,10 +523,10 @@ export default function BuilderPage() {
                   toast.success(newEnabled ? "A/B Testing הופעל" : "A/B Testing כובה");
                 } catch { toast.error("שגיאה"); }
               }}
-              className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-md transition ${
+              className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-xl transition ${
                 clientData?.abTestEnabled
                   ? "bg-purple-600 text-white shadow-sm font-medium"
-                  : "text-gray-400 hover:text-gray-600"
+                  : "text-slate-400 hover:text-slate-600"
               }`}
             >
               <FlaskConical size={12} />
@@ -539,13 +539,13 @@ export default function BuilderPage() {
             <div className="flex items-center gap-1 border border-purple-200 rounded-lg p-0.5 bg-purple-50">
               <button
                 onClick={() => { setActiveVersion("A"); setSelectedId(null); }}
-                className={`px-3 py-1 text-xs rounded-md font-medium transition ${activeVersion === "A" ? "bg-white shadow-sm text-gray-800" : "text-gray-400 hover:text-gray-600"}`}
+                className={`px-3 py-1 text-xs rounded-xl font-medium transition ${activeVersion === "A" ? "bg-white shadow-sm text-slate-800" : "text-slate-400 hover:text-slate-600"}`}
               >
                 גרסה A
               </button>
               <button
                 onClick={() => { setActiveVersion("B"); setSelectedId(null); }}
-                className={`px-3 py-1 text-xs rounded-md font-medium transition ${activeVersion === "B" ? "bg-white shadow-sm text-gray-800" : "text-gray-400 hover:text-gray-600"}`}
+                className={`px-3 py-1 text-xs rounded-xl font-medium transition ${activeVersion === "B" ? "bg-white shadow-sm text-slate-800" : "text-slate-400 hover:text-slate-600"}`}
               >
                 גרסה B
               </button>
@@ -556,18 +556,18 @@ export default function BuilderPage() {
           <div className="relative">
             <button
               onClick={() => setShowTemplates(!showTemplates)}
-              className="flex items-center gap-1 px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50"
+              className="flex items-center gap-1 px-3 py-1.5 text-sm border border-slate-200 rounded-lg hover:bg-slate-50"
             >
               תבניות מוכנות
               <ChevronDown size={14} />
             </button>
             {showTemplates && (
-              <div className="absolute left-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 w-48 z-50">
+              <div className="absolute left-0 top-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg py-1 w-48 z-50">
                 {INDUSTRY_TEMPLATES.map((t) => (
                   <button
                     key={t.id}
                     onClick={() => loadTemplate(t.id)}
-                    className="w-full text-right px-3 py-2 text-sm hover:bg-gray-50"
+                    className="w-full text-right px-3 py-2 text-sm hover:bg-slate-50"
                   >
                     {t.label}
                   </button>
@@ -588,7 +588,7 @@ export default function BuilderPage() {
 
           {/* Save status indicator */}
           {saving ? (
-            <span className="text-xs text-gray-400 flex items-center gap-1">
+            <span className="text-xs text-slate-400 flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse inline-block" />
               שומר...
             </span>
@@ -603,7 +603,7 @@ export default function BuilderPage() {
           <button
             onClick={() => saveBlocks(activeBlocks)}
             disabled={saving}
-            className="flex items-center gap-1 px-3 py-1.5 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+            className="flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             <Save size={14} />
             {clientData?.abTestEnabled ? `שמור ${activeVersion}` : "שמור"}
@@ -625,7 +625,7 @@ export default function BuilderPage() {
           {clientData?.slug && (
             <button
               onClick={() => setShowQR(true)}
-              className="flex items-center gap-1 px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50"
+              className="flex items-center gap-1 px-3 py-1.5 text-sm border border-slate-200 rounded-lg hover:bg-slate-50"
               title="QR Code"
             >
               📲
@@ -637,7 +637,7 @@ export default function BuilderPage() {
             <Link
               href={`/${clientData.slug}`}
               target="_blank"
-              className="flex items-center gap-1 px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50"
+              className="flex items-center gap-1 px-3 py-1.5 text-sm border border-slate-200 rounded-lg hover:bg-slate-50"
             >
               <Eye size={14} />
               צפה בדף
@@ -658,21 +658,21 @@ export default function BuilderPage() {
                   className="bg-white rounded-2xl p-8 text-center shadow-2xl max-w-xs w-full"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">QR Code לדף</h3>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-4">QR Code לדף</h3>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={qrUrl} alt="QR" className="w-48 h-48 mx-auto rounded-xl border border-gray-200" />
-                  <p className="text-xs text-gray-500 mt-3 mb-4 break-all">{pageUrl}</p>
+                  <img src={qrUrl} alt="QR" className="w-48 h-48 mx-auto rounded-xl border border-slate-200" />
+                  <p className="text-xs text-slate-500 mt-3 mb-4 break-all">{pageUrl}</p>
                   <div className="flex gap-2 justify-center">
                     <a
                       href={qrUrl}
                       download="qr.png"
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                      className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
                     >
                       ⬇️ הורד
                     </a>
                     <button
                       onClick={() => setShowQR(false)}
-                      className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                      className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
                     >
                       סגור
                     </button>
@@ -694,12 +694,12 @@ export default function BuilderPage() {
       >
       <div className="flex flex-1 overflow-hidden">
         {/* LEFT — Block library */}
-        <aside className="w-[260px] bg-white border-l border-gray-200 overflow-y-auto p-4 shrink-0">
-          <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">סוגי בלוקים</h3>
-          <p className="text-[10px] text-gray-400 mb-3">לחץ או גרור לקנבס</p>
+        <aside className="w-[260px] bg-white border-l border-slate-200 overflow-y-auto p-4 shrink-0">
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">סוגי בלוקים</h3>
+          <p className="text-[10px] text-slate-400 mb-3">לחץ או גרור לקנבס</p>
           {categories.map((cat) => (
             <div key={cat.key} className="mb-4">
-              <p className="text-xs font-semibold text-gray-500 mb-2">{cat.label}</p>
+              <p className="text-xs font-semibold text-slate-500 mb-2">{cat.label}</p>
               <div className="space-y-1.5">
                 {cat.types.map((def) => (
                   <DraggableLibraryItem
@@ -718,17 +718,17 @@ export default function BuilderPage() {
           className="flex-1 overflow-y-auto p-6"
           onClick={() => setSelectedId(null)}
         >
-          <div className={`mx-auto transition-all duration-300 ${mobilePreview ? "max-w-[390px] shadow-2xl rounded-2xl overflow-hidden border-2 border-gray-300" : "max-w-3xl"}`}>
+          <div className={`mx-auto transition-all duration-300 ${mobilePreview ? "max-w-[390px] shadow-2xl rounded-2xl overflow-hidden border-2 border-slate-300" : "max-w-3xl"}`}>
             <DroppableCanvas isOver={isOverCanvas && activeLibraryBlock !== null}>
               {activeBlocks.length === 0 ? (
-                <div className={`border-2 border-dashed rounded-2xl transition-colors ${isOverCanvas && activeLibraryBlock ? "border-indigo-400 bg-indigo-50/50" : "border-gray-200"}`}>
+                <div className={`border-2 border-dashed rounded-2xl transition-colors ${isOverCanvas && activeLibraryBlock ? "border-blue-400 bg-blue-50/50" : "border-slate-200"}`}>
                   <div className="flex flex-col items-center justify-center h-64 text-center">
                     <div className="text-6xl mb-4">🎨</div>
-                    <h3 className="text-xl font-semibold text-gray-700 mb-2">הקנבס שלך ריק</h3>
-                    <p className="text-gray-400 mb-6">גרור בלוק מהצד שמאל, או לחץ על אחד מהכפתורים</p>
+                    <h3 className="text-xl font-semibold text-slate-700 mb-2">הקנבס שלך ריק</h3>
+                    <p className="text-slate-400 mb-6">גרור בלוק מהצד שמאל, או לחץ על אחד מהכפתורים</p>
                     <button
                       onClick={() => addBlock("hero")}
-                      className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl hover:bg-indigo-700 transition-colors font-medium"
+                      className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-colors font-medium"
                     >
                       ✨ בנה דף אוטומטי עם AI
                     </button>
@@ -760,7 +760,7 @@ export default function BuilderPage() {
                   </SortableContext>
                   {/* Drop zone at the end — shown while dragging from library */}
                   {activeLibraryBlock && (
-                    <div className="h-12 mt-3 rounded-xl border-2 border-dashed border-indigo-300 bg-indigo-50/50 flex items-center justify-center text-xs text-indigo-500">
+                    <div className="h-12 mt-3 rounded-xl border-2 border-dashed border-blue-300 bg-blue-50/50 flex items-center justify-center text-xs text-blue-500">
                       שחרר כאן להוסיף
                     </div>
                   )}
@@ -776,7 +776,7 @@ export default function BuilderPage() {
             (() => {
               const def = BLOCK_DEFINITIONS.find((d) => d.type === activeLibraryBlock);
               return def ? (
-                <div className="px-4 py-3 bg-indigo-600 text-white rounded-xl shadow-2xl text-sm font-medium flex items-center gap-2 opacity-90" style={{ cursor: "grabbing" }}>
+                <div className="px-4 py-3 bg-blue-600 text-white rounded-xl shadow-2xl text-sm font-medium flex items-center gap-2 opacity-90" style={{ cursor: "grabbing" }}>
                   <span className="text-xl">{def.icon}</span>
                   {def.label}
                 </div>
@@ -797,11 +797,11 @@ export default function BuilderPage() {
         </DragOverlay>
 
         {/* RIGHT — Properties panel */}
-        <aside className="w-[300px] bg-white border-r border-gray-200 overflow-y-auto p-4 shrink-0">
+        <aside className="w-[300px] bg-white border-r border-slate-200 overflow-y-auto p-4 shrink-0">
           {selectedBlock ? (
             <div className="space-y-5">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-gray-700">
+                <h3 className="text-sm font-bold text-slate-700">
                   {BLOCK_DEFINITIONS.find((d) => d.type === selectedBlock.type)?.icon}{" "}
                   {BLOCK_DEFINITIONS.find((d) => d.type === selectedBlock.type)?.label}
                 </h3>
@@ -815,11 +815,11 @@ export default function BuilderPage() {
 
               {/* Content fields */}
               <div className="space-y-3">
-                <p className="text-xs font-semibold text-gray-400 uppercase">תוכן</p>
+                <p className="text-xs font-semibold text-slate-400 uppercase">תוכן</p>
                 {Object.entries(selectedBlock.content).map(([key, value]) => (
                   <div key={key}>
                     <div className="flex items-center justify-between mb-1">
-                      <label className="text-xs text-gray-500">{key}</label>
+                      <label className="text-xs text-slate-500">{key}</label>
                       <button
                         onClick={async () => {
                           try {
@@ -855,7 +855,7 @@ export default function BuilderPage() {
                     </div>
                     {value.length > 50 ? (
                       <textarea
-                        className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:ring-1 focus:ring-indigo-300 resize-y"
+                        className="w-full px-2.5 py-1.5 text-sm border border-slate-200 rounded-lg outline-none focus:ring-1 focus:ring-blue-300 resize-y"
                         rows={3}
                         value={value}
                         onChange={(e) =>
@@ -867,7 +867,7 @@ export default function BuilderPage() {
                       />
                     ) : (
                       <input
-                        className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none focus:ring-1 focus:ring-indigo-300"
+                        className="w-full px-2.5 py-1.5 text-sm border border-slate-200 rounded-lg outline-none focus:ring-1 focus:ring-blue-300"
                         value={value}
                         onChange={(e) =>
                           updateBlockContent(selectedBlock.id, {
@@ -882,38 +882,38 @@ export default function BuilderPage() {
               </div>
 
               {/* Settings */}
-              <div className="space-y-3 border-t border-gray-100 pt-4">
-                <p className="text-xs font-semibold text-gray-400 uppercase">עיצוב</p>
+              <div className="space-y-3 border-t border-slate-100 pt-4">
+                <p className="text-xs font-semibold text-slate-400 uppercase">עיצוב</p>
 
                 {/* Background color */}
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">צבע רקע</label>
+                  <label className="text-xs text-slate-500 block mb-1">צבע רקע</label>
                   <input
                     type="color"
                     value={selectedBlock.settings.backgroundColor || "#ffffff"}
                     onChange={(e) =>
                       updateBlockSettings(selectedBlock.id, { backgroundColor: e.target.value })
                     }
-                    className="w-full h-8 rounded border border-gray-200 cursor-pointer"
+                    className="w-full h-8 rounded border border-slate-200 cursor-pointer"
                   />
                 </div>
 
                 {/* Text color */}
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">צבע טקסט</label>
+                  <label className="text-xs text-slate-500 block mb-1">צבע טקסט</label>
                   <input
                     type="color"
                     value={selectedBlock.settings.textColor || "#000000"}
                     onChange={(e) =>
                       updateBlockSettings(selectedBlock.id, { textColor: e.target.value })
                     }
-                    className="w-full h-8 rounded border border-gray-200 cursor-pointer"
+                    className="w-full h-8 rounded border border-slate-200 cursor-pointer"
                   />
                 </div>
 
                 {/* Padding */}
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">ריפוד</label>
+                  <label className="text-xs text-slate-500 block mb-1">ריפוד</label>
                   <select
                     value={selectedBlock.settings.padding || "md"}
                     onChange={(e) =>
@@ -921,7 +921,7 @@ export default function BuilderPage() {
                         padding: e.target.value as "sm" | "md" | "lg",
                       })
                     }
-                    className="w-full px-2.5 py-1.5 text-sm border border-gray-200 rounded-lg outline-none"
+                    className="w-full px-2.5 py-1.5 text-sm border border-slate-200 rounded-lg outline-none"
                   >
                     <option value="sm">קטן</option>
                     <option value="md">בינוני</option>
@@ -931,7 +931,7 @@ export default function BuilderPage() {
 
                 {/* Alignment */}
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">יישור</label>
+                  <label className="text-xs text-slate-500 block mb-1">יישור</label>
                   <div className="flex gap-1">
                     {(["right", "center", "left"] as const).map((a) => (
                       <button
@@ -939,8 +939,8 @@ export default function BuilderPage() {
                         onClick={() => updateBlockSettings(selectedBlock.id, { alignment: a })}
                         className={`flex-1 py-1.5 text-xs rounded border ${
                           selectedBlock.settings.alignment === a
-                            ? "bg-indigo-50 border-indigo-300 text-indigo-700"
-                            : "border-gray-200 text-gray-500 hover:bg-gray-50"
+                            ? "bg-blue-50 border-blue-300 text-blue-700"
+                            : "border-slate-200 text-slate-500 hover:bg-slate-50"
                         }`}
                       >
                         {a === "right" ? "ימין" : a === "center" ? "מרכז" : "שמאל"}
@@ -951,7 +951,7 @@ export default function BuilderPage() {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full text-gray-400">
+            <div className="flex flex-col items-center justify-center h-full text-slate-400">
               <p className="text-sm">בחר בלוק לעריכה</p>
             </div>
           )}

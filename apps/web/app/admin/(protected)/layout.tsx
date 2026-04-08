@@ -44,22 +44,23 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }) > 0;
 
   return (
-    <div className="flex min-h-screen" dir="ltr">
+    <div className="flex min-h-screen" style={{ backgroundColor: '#F8FAFC' }} dir="ltr">
       <Sidebar hasRealEstate={hasRealEstate} />
       <div className="flex-1 overflow-auto pb-16 lg:pb-0" dir="rtl">
         {isPastDue && (
-          <div className="bg-yellow-50 border-b border-yellow-200 px-6 py-3 text-sm text-yellow-800 flex items-center justify-between gap-4" dir="rtl">
-            <span>⚠️ יש בעיה עם תשלום המנוי שלך. אנא עדכן את פרטי התשלום כדי להמשיך להשתמש בשירות.</span>
-            <Link href="/admin/billing" className="font-semibold underline hover:text-yellow-900 whitespace-nowrap">
+          <div className="bg-amber-50 border-b border-amber-200 px-6 py-3 text-sm text-amber-800 flex items-center justify-between gap-4" dir="rtl">
+            <span>יש בעיה עם תשלום המנוי שלך. אנא עדכן את פרטי התשלום כדי להמשיך להשתמש בשירות.</span>
+            <Link href="/admin/billing" className="font-semibold underline hover:text-amber-900 whitespace-nowrap">
               עדכן תשלום
             </Link>
           </div>
         )}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between sticky top-0 z-10"
+             style={{ borderBottom: '1px solid #E2E8F0', backgroundColor: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)' }}>
           <TopBar />
           <div className="px-4"><DarkModeToggle /></div>
         </div>
-        <div className="p-8">{children}</div>
+        <div className="p-6 lg:p-8">{children}</div>
       </div>
       <KeyboardShortcuts />
       <AdminOnboarding userName="משתמש חדש" />

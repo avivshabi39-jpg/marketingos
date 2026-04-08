@@ -99,7 +99,7 @@ function classNames(...classes: (string | false | null | undefined)[]) {
 }
 
 const inputCls =
-  "w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition";
+  "w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition";
 
 interface UploadingFile {
   name: string;
@@ -356,13 +356,13 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
         <div className="flex items-center gap-3">
           <Link
             href={`/client/${slug}/properties`}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
           >
             <ChevronRight size={20} />
           </Link>
           <div>
-            <h1 className="text-2xl font-semibold text-gray-900">עריכת נכס</h1>
-            <p className="text-gray-400 text-sm mt-0.5 truncate max-w-xs">{property.title}</p>
+            <h1 className="text-2xl font-semibold text-slate-900">עריכת נכס</h1>
+            <p className="text-slate-400 text-sm mt-0.5 truncate max-w-xs">{property.title}</p>
           </div>
         </div>
 
@@ -392,17 +392,17 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
       </div>
 
       {/* Form card */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-6">
+      <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-6">
 
         {/* ── Basic info ── */}
         <section className="space-y-5">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100 pb-2">
+          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2">
             פרטי הנכס
           </h2>
 
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">
               כותרת <span className="text-red-500">*</span>
             </label>
             <input
@@ -417,7 +417,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
           {/* Property type + status */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">סוג נכס</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">סוג נכס</label>
               <select
                 value={formData.propertyType}
                 onChange={(e) => update("propertyType", e.target.value as PropertyType)}
@@ -431,7 +431,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">סטטוס</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">סטטוס</label>
               <select
                 value={formData.status}
                 onChange={(e) => update("status", e.target.value as PropertyStatus)}
@@ -449,7 +449,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
           {/* City + Neighborhood */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
                 עיר <span className="text-red-500">*</span>
               </label>
               <input
@@ -461,7 +461,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
               {errors.city && <p className="text-xs text-red-500 mt-1">{errors.city}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">שכונה</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">שכונה</label>
               <input
                 type="text"
                 value={formData.neighborhood}
@@ -473,7 +473,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
 
           {/* Street */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">רחוב</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">רחוב</label>
             <input
               type="text"
               value={formData.street}
@@ -484,7 +484,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
 
           {/* Price */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">
               מחיר (₪) <span className="text-red-500">*</span>
             </label>
             <input
@@ -500,7 +500,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
           {/* Rooms + Area */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">חדרים</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">חדרים</label>
               <input
                 type="number"
                 value={formData.rooms}
@@ -511,7 +511,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
                 שטח (מ&quot;ר)
               </label>
               <input
@@ -527,7 +527,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
           {/* Floor + Total floors */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">קומה</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">קומה</label>
               <input
                 type="number"
                 value={formData.floor}
@@ -537,7 +537,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">
                 סה&quot;כ קומות
               </label>
               <input
@@ -552,7 +552,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
 
           {/* Features */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">מאפיינים</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">מאפיינים</label>
             <div className="flex flex-wrap gap-2">
               {FEATURES.map((feature) => {
                 const selected = formData.features.includes(feature);
@@ -564,8 +564,8 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
                     className={classNames(
                       "px-3 py-1.5 rounded-full text-xs font-medium border transition-colors",
                       selected
-                        ? "bg-indigo-600 text-white border-indigo-600"
-                        : "bg-white text-gray-600 border-gray-200 hover:border-indigo-400 hover:text-indigo-600"
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "bg-white text-slate-600 border-slate-200 hover:border-blue-400 hover:text-blue-600"
                     )}
                   >
                     {feature}
@@ -582,25 +582,25 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
                 type="checkbox"
                 checked={formData.isExclusive}
                 onChange={(e) => update("isExclusive", e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
               />
-              <span className="text-sm text-gray-700">בלעדי</span>
+              <span className="text-sm text-slate-700">בלעדי</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 checked={formData.isFeatured}
                 onChange={(e) => update("isFeatured", e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
               />
-              <span className="text-sm text-gray-700">מומלץ</span>
+              <span className="text-sm text-slate-700">מומלץ</span>
             </label>
           </div>
         </section>
 
         {/* ── Images ── */}
         <section className="space-y-4">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100 pb-2">
+          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2">
             תמונות
           </h2>
 
@@ -613,14 +613,14 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
             className={classNames(
               "border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors",
               dragging
-                ? "border-indigo-500 bg-indigo-50"
-                : "border-gray-200 bg-gray-50 hover:border-indigo-400 hover:bg-indigo-50/40"
+                ? "border-blue-500 bg-blue-50"
+                : "border-slate-200 bg-slate-50 hover:border-blue-400 hover:bg-blue-50/40"
             )}
           >
-            <Upload size={22} className="mx-auto text-gray-300 mb-2" />
-            <p className="text-sm text-gray-500">
+            <Upload size={22} className="mx-auto text-slate-300 mb-2" />
+            <p className="text-sm text-slate-500">
               גרור תמונות לכאן או{" "}
-              <span className="text-indigo-600 underline">לחץ לבחירה</span>
+              <span className="text-blue-600 underline">לחץ לבחירה</span>
             </p>
             <input
               ref={fileInputRef}
@@ -641,7 +641,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
                   <img
                     src={url}
                     alt="תמונת נכס"
-                    className="w-full aspect-square object-cover rounded-lg border border-gray-200"
+                    className="w-full aspect-square object-cover rounded-lg border border-slate-200"
                   />
                   <button
                     type="button"
@@ -659,11 +659,11 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
                     key={f.name}
                     className={classNames(
                       "w-full aspect-square rounded-lg border flex flex-col items-center justify-center gap-1.5",
-                      f.progress === "error" ? "border-red-200 bg-red-50" : "border-gray-200 bg-gray-50"
+                      f.progress === "error" ? "border-red-200 bg-red-50" : "border-slate-200 bg-slate-50"
                     )}
                   >
                     {f.progress === "uploading" ? (
-                      <Loader2 size={20} className="text-indigo-500 animate-spin" />
+                      <Loader2 size={20} className="text-blue-500 animate-spin" />
                     ) : (
                       <>
                         <ImageIcon size={20} className="text-red-400" />
@@ -678,18 +678,18 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
 
         {/* ── Description ── */}
         <section className="space-y-4">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100 pb-2">
+          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2">
             תיאור
           </h2>
 
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-sm font-medium text-gray-700">תיאור הנכס</label>
+              <label className="block text-sm font-medium text-slate-700">תיאור הנכס</label>
               <button
                 type="button"
                 onClick={generateAiDescription}
                 disabled={aiLoading}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600 disabled:opacity-60 transition-all shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 disabled:opacity-60 transition-all shadow-sm"
               >
                 {aiLoading ? (
                   <Loader2 size={12} className="animate-spin" />
@@ -711,10 +711,10 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
 
         {/* ── Private notes ── */}
         <section className="space-y-4">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100 pb-2">
+          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2">
             📝 הערות פנימיות
           </h2>
-          <p className="text-xs text-gray-400">רק אתה רואה את זה — כתוב ניסיונות שיווק, מה עבד, מה לא</p>
+          <p className="text-xs text-slate-400">רק אתה רואה את זה — כתוב ניסיונות שיווק, מה עבד, מה לא</p>
           <textarea
             value={formData.privateNotes}
             onChange={(e) => update("privateNotes", e.target.value)}
@@ -726,7 +726,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
 
         {/* ── Publish settings ── */}
         <section className="space-y-4">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100 pb-2">
+          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2">
             פרסום
           </h2>
           <label className="flex items-center gap-3 cursor-pointer">
@@ -734,16 +734,16 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
               type="checkbox"
               checked={formData.published}
               onChange={(e) => update("published", e.target.checked)}
-              className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm text-gray-700">פרסם באתר שלי מיד</span>
+            <span className="text-sm text-slate-700">פרסם באתר שלי מיד</span>
           </label>
 
           {formData.published && (
             <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-center justify-between gap-3">
               <div>
                 <p className="font-semibold text-green-800 text-sm">✅ הנכס פורסם באתר שלך</p>
-                <p className="text-xs text-gray-500 mt-0.5 break-all">
+                <p className="text-xs text-slate-500 mt-0.5 break-all">
                   {appUrl}/client/{slug}/properties/{property.id}
                 </p>
               </div>
@@ -754,7 +754,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
                     navigator.clipboard.writeText(`${appUrl}/client/${slug}/properties/${property.id}`);
                     toast.success("קישור הועתק!");
                   }}
-                  className="flex items-center gap-1 text-xs text-gray-600 bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 hover:border-gray-300 transition"
+                  className="flex items-center gap-1 text-xs text-slate-600 bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 hover:border-slate-300 transition"
                 >
                   <Copy size={11} /> העתק
                 </button>
@@ -762,7 +762,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
                   href={`/client/${slug}/properties/${property.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-lg px-2.5 py-1.5 hover:bg-indigo-100 transition"
+                  className="flex items-center gap-1 text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded-lg px-2.5 py-1.5 hover:bg-blue-100 transition"
                 >
                   <ExternalLink size={11} /> צפה
                 </a>
@@ -773,7 +773,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
 
         {/* ── Marketing log ── */}
         <section className="space-y-4">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100 pb-2">
+          <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-100 pb-2">
             📝 יומן שיווק (רק אתה רואה)
           </h2>
 
@@ -790,7 +790,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
               type="button"
               onClick={addLogEntry}
               disabled={addingLog || !logEntry.trim()}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 transition flex-shrink-0"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition flex-shrink-0"
             >
               {addingLog ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
             </button>
@@ -798,25 +798,25 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
 
           {/* Log entries */}
           {marketingLog.length === 0 ? (
-            <p className="text-xs text-gray-400 text-center py-4">אין רשומות עדיין</p>
+            <p className="text-xs text-slate-400 text-center py-4">אין רשומות עדיין</p>
           ) : (
             <div className="space-y-2">
               {marketingLog.map((entry) => (
                 <div
                   key={entry.id}
-                  className="flex items-start gap-3 bg-gray-50 rounded-lg px-3 py-2.5 group"
+                  className="flex items-start gap-3 bg-slate-50 rounded-lg px-3 py-2.5 group"
                 >
                   <span className="text-base flex-shrink-0">📌</span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-gray-400 mb-0.5">
+                    <p className="text-xs text-slate-400 mb-0.5">
                       {new Date(entry.date).toLocaleDateString("he-IL")}
                     </p>
-                    <p className="text-sm text-gray-700">{entry.text}</p>
+                    <p className="text-sm text-slate-700">{entry.text}</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => deleteLogEntry(entry.id)}
-                    className="text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition flex-shrink-0"
+                    className="text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition flex-shrink-0"
                   >
                     <X size={14} />
                   </button>
@@ -827,10 +827,10 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
         </section>
 
         {/* ── Save button ── */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
           <Link
             href={`/client/${slug}/properties`}
-            className="text-sm text-gray-500 hover:text-gray-700"
+            className="text-sm text-slate-500 hover:text-slate-700"
           >
             ביטול
           </Link>
@@ -838,7 +838,7 @@ export function EditPropertyClient({ property, slug, appUrl = "" }: Props) {
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-60 transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-60 transition-colors shadow-sm"
           >
             {saving ? (
               <Loader2 size={14} className="animate-spin" />

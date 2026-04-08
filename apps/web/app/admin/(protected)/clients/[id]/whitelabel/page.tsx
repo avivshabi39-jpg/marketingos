@@ -120,12 +120,12 @@ export default function WhitelabelPage() {
     <div className="space-y-8 max-w-3xl" dir="rtl">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link href={`/admin/clients/${clientId}`} className="text-gray-400 hover:text-gray-600">
+        <Link href={`/admin/clients/${clientId}`} className="text-slate-400 hover:text-slate-600">
           <ArrowRight size={18} />
         </Link>
         <div>
-          <h1 className="text-xl font-semibold text-gray-900">הגדרות White-label</h1>
-          <p className="text-sm text-gray-500 mt-0.5">התאם את המיתוג של הפורטל ללקוח</p>
+          <h1 className="text-xl font-semibold text-slate-900">הגדרות White-label</h1>
+          <p className="text-sm text-slate-500 mt-0.5">התאם את המיתוג של הפורטל ללקוח</p>
         </div>
       </div>
 
@@ -136,23 +136,23 @@ export default function WhitelabelPage() {
       )}
 
       {/* ── Section 1: מיתוג בסיסי ── */}
-      <section className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-900">מיתוג בסיסי</h2>
-          <p className="text-xs text-gray-500 mt-0.5">שם המותג, לוגו וצבעים שיופיעו בפורטל הלקוח</p>
+      <section className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-100">
+          <h2 className="font-semibold text-slate-900">מיתוג בסיסי</h2>
+          <p className="text-xs text-slate-500 mt-0.5">שם המותג, לוגו וצבעים שיופיעו בפורטל הלקוח</p>
         </div>
         <div className="p-6 space-y-5">
           {/* whitelabelEnabled toggle */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-800">הפעל White-label</p>
-              <p className="text-xs text-gray-500 mt-0.5">הצג מיתוג מותאם אישית בפורטל הלקוח</p>
+              <p className="text-sm font-medium text-slate-800">הפעל White-label</p>
+              <p className="text-xs text-slate-500 mt-0.5">הצג מיתוג מותאם אישית בפורטל הלקוח</p>
             </div>
             <button
               type="button"
               onClick={() => update("whitelabelEnabled", !settings.whitelabelEnabled)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-                settings.whitelabelEnabled ? "bg-indigo-600" : "bg-gray-200"
+                settings.whitelabelEnabled ? "bg-blue-600" : "bg-slate-200"
               }`}
             >
               <span
@@ -165,28 +165,28 @@ export default function WhitelabelPage() {
 
           {/* brandName */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               שם המותג
-              <span className="text-gray-400 font-normal mr-1.5">— יחליף את &apos;MarketingOS&apos;</span>
+              <span className="text-slate-400 font-normal mr-1.5">— יחליף את &apos;MarketingOS&apos;</span>
             </label>
             <input
               type="text"
               value={settings.brandName}
               onChange={(e) => update("brandName", e.target.value)}
               placeholder="שם החברה שלך"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {/* brandLogo */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">לוגו URL</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">לוגו URL</label>
             <input
               type="url"
               value={settings.brandLogo}
               onChange={(e) => update("brandLogo", e.target.value)}
               placeholder="https://example.com/logo.png"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {settings.brandLogo && (
               <div className="mt-2">
@@ -194,7 +194,7 @@ export default function WhitelabelPage() {
                 <img
                   src={settings.brandLogo}
                   alt="תצוגה מקדימה של הלוגו"
-                  className="h-12 object-contain rounded border border-gray-100 p-1"
+                  className="h-12 object-contain rounded border border-slate-100 p-1"
                   onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
                 />
               </div>
@@ -204,36 +204,36 @@ export default function WhitelabelPage() {
           {/* Colors */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">צבע ראשי</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">צבע ראשי</label>
               <div className="flex items-center gap-2">
                 <input
                   type="color"
                   value={settings.brandPrimaryColor}
                   onChange={(e) => update("brandPrimaryColor", e.target.value)}
-                  className="h-9 w-12 cursor-pointer rounded border border-gray-200 p-0.5"
+                  className="h-9 w-12 cursor-pointer rounded border border-slate-200 p-0.5"
                 />
                 <input
                   type="text"
                   value={settings.brandPrimaryColor}
                   onChange={(e) => update("brandPrimaryColor", e.target.value)}
-                  className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">צבע משני</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">צבע משני</label>
               <div className="flex items-center gap-2">
                 <input
                   type="color"
                   value={settings.brandSecondaryColor}
                   onChange={(e) => update("brandSecondaryColor", e.target.value)}
-                  className="h-9 w-12 cursor-pointer rounded border border-gray-200 p-0.5"
+                  className="h-9 w-12 cursor-pointer rounded border border-slate-200 p-0.5"
                 />
                 <input
                   type="text"
                   value={settings.brandSecondaryColor}
                   onChange={(e) => update("brandSecondaryColor", e.target.value)}
-                  className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
@@ -241,9 +241,9 @@ export default function WhitelabelPage() {
 
           {/* Preview box */}
           <div>
-            <p className="text-xs text-gray-500 mb-2 font-medium">ככה ייראה הפורטל שלך</p>
+            <p className="text-xs text-slate-500 mb-2 font-medium">ככה ייראה הפורטל שלך</p>
             <div
-              className="rounded-xl border border-gray-200 overflow-hidden"
+              className="rounded-xl border border-slate-200 overflow-hidden"
               style={{ fontFamily: "inherit" }}
             >
               {/* Mock portal header */}
@@ -267,20 +267,20 @@ export default function WhitelabelPage() {
                 </span>
               </div>
               {/* Mock portal body */}
-              <div className="bg-gray-50 px-4 py-3 flex gap-2">
+              <div className="bg-slate-50 px-4 py-3 flex gap-2">
                 <div
                   className="h-7 rounded-lg px-3 flex items-center text-white text-xs font-medium"
                   style={{ backgroundColor: settings.brandPrimaryColor }}
                 >
                   דף הבית
                 </div>
-                <div className="h-7 rounded-lg px-3 flex items-center text-gray-500 text-xs">לידים</div>
-                <div className="h-7 rounded-lg px-3 flex items-center text-gray-500 text-xs">דוחות</div>
+                <div className="h-7 rounded-lg px-3 flex items-center text-slate-500 text-xs">לידים</div>
+                <div className="h-7 rounded-lg px-3 flex items-center text-slate-500 text-xs">דוחות</div>
               </div>
-              <div className="bg-white px-4 py-3 border-t border-gray-100">
+              <div className="bg-white px-4 py-3 border-t border-slate-100">
                 <div className="h-3 w-32 rounded" style={{ backgroundColor: settings.brandSecondaryColor, opacity: 0.4 }} />
-                <div className="h-2 w-48 bg-gray-100 rounded mt-2" />
-                <div className="h-2 w-36 bg-gray-100 rounded mt-1.5" />
+                <div className="h-2 w-48 bg-slate-100 rounded mt-2" />
+                <div className="h-2 w-36 bg-slate-100 rounded mt-1.5" />
               </div>
             </div>
           </div>
@@ -288,29 +288,29 @@ export default function WhitelabelPage() {
       </section>
 
       {/* ── Section 2: דומיין מותאם ── */}
-      <section className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-900">דומיין מותאם</h2>
-          <p className="text-xs text-gray-500 mt-0.5">חבר דומיין משלך לפורטל הלקוח</p>
+      <section className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-100">
+          <h2 className="font-semibold text-slate-900">דומיין מותאם</h2>
+          <p className="text-xs text-slate-500 mt-0.5">חבר דומיין משלך לפורטל הלקוח</p>
         </div>
         <div className="p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">דומיין</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">דומיין</label>
             <input
               type="text"
               value={settings.customDomain}
               onChange={(e) => update("customDomain", e.target.value)}
               placeholder="crm.yoursite.co.il"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               dir="ltr"
             />
           </div>
 
           {/* DNS instructions */}
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-gray-600 space-y-1">
-            <p className="font-medium text-gray-700 mb-2">הוראות חיבור DNS:</p>
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-600 space-y-1">
+            <p className="font-medium text-slate-700 mb-2">הוראות חיבור DNS:</p>
             <p>1. פתח את ה-DNS שלך</p>
-            <p>2. הוסף CNAME: <code className="bg-gray-200 px-1 rounded text-xs" dir="ltr">crm → marketingos.co.il</code></p>
+            <p>2. הוסף CNAME: <code className="bg-slate-200 px-1 rounded text-xs" dir="ltr">crm → marketingos.co.il</code></p>
             <p>3. לחץ &quot;אמת דומיין&quot;</p>
           </div>
 
@@ -320,7 +320,7 @@ export default function WhitelabelPage() {
               type="button"
               onClick={handleVerifyDomain}
               disabled={verifying || !settings.customDomain.trim()}
-              className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {verifying && <Loader2 size={14} className="animate-spin" />}
               אמת דומיין
@@ -343,45 +343,45 @@ export default function WhitelabelPage() {
       </section>
 
       {/* ── Section 3: תוכן מותאם ── */}
-      <section className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-900">תוכן מותאם</h2>
-          <p className="text-xs text-gray-500 mt-0.5">טקסטים שיופיעו בפורטל הלקוח</p>
+      <section className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="px-6 py-4 border-b border-slate-100">
+          <h2 className="font-semibold text-slate-900">תוכן מותאם</h2>
+          <p className="text-xs text-slate-500 mt-0.5">טקסטים שיופיעו בפורטל הלקוח</p>
         </div>
         <div className="p-6 space-y-5">
           {/* portalTitle */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">כותרת פורטל</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">כותרת פורטל</label>
             <input
               type="text"
               value={settings.portalTitle}
               onChange={(e) => update("portalTitle", e.target.value)}
               placeholder="ברוכים הבאים לפורטל שלנו"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           {/* portalWelcome */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">הודעת ברוכים הבאים</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">הודעת ברוכים הבאים</label>
             <textarea
               value={settings.portalWelcome}
               onChange={(e) => update("portalWelcome", e.target.value)}
               placeholder="שלום! כאן תוכלו לעקוב אחר כל הלידים והנתונים שלכם."
               rows={3}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             />
           </div>
 
           {/* portalFooter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Footer text</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">Footer text</label>
             <input
               type="text"
               value={settings.portalFooter}
               onChange={(e) => update("portalFooter", e.target.value)}
               placeholder="© 2025 שם החברה. כל הזכויות שמורות."
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -399,7 +399,7 @@ export default function WhitelabelPage() {
           type="button"
           onClick={handleSave}
           disabled={saving}
-          className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {saving && <Loader2 size={14} className="animate-spin" />}
           {saving ? "שומר..." : "שמור הגדרות"}

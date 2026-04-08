@@ -69,7 +69,7 @@ export default function GalleryBlock({
   return (
     <section className="w-full px-4 py-6">
       <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" onChange={handleFileChange} />
-      <div className="flex items-center gap-2 text-gray-500 mb-3">
+      <div className="flex items-center gap-2 text-slate-500 mb-3">
         <ImageIcon size={16} />
         <span className="text-sm font-medium">גלריה ({filledImages.length}/10)</span>
       </div>
@@ -97,7 +97,7 @@ export default function GalleryBlock({
           <button
             onClick={addSlot}
             disabled={!!uploading}
-            className="aspect-square flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg text-gray-400 hover:border-indigo-400 hover:text-indigo-500 transition-colors disabled:opacity-50"
+            className="aspect-square flex flex-col items-center justify-center border-2 border-dashed border-slate-300 rounded-lg text-slate-400 hover:border-blue-400 hover:text-blue-500 transition-colors disabled:opacity-50"
           >
             {uploading === "new" ? <Loader2 size={20} className="animate-spin" /> : <Plus size={20} />}
             <span className="text-xs mt-1">הוסף</span>
@@ -109,7 +109,7 @@ export default function GalleryBlock({
         <button
           onClick={addSlot}
           disabled={!!uploading}
-          className="mt-3 w-full flex items-center justify-center gap-2 text-xs text-gray-500 border border-gray-200 rounded-lg py-1.5 hover:bg-gray-50 transition"
+          className="mt-3 w-full flex items-center justify-center gap-2 text-xs text-slate-500 border border-slate-200 rounded-lg py-1.5 hover:bg-slate-50 transition"
         >
           <Upload size={12} /> העלה תמונה ({filledImages.length}/10)
         </button>

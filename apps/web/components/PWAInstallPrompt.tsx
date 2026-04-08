@@ -52,7 +52,7 @@ export default function PWAInstallPrompt() {
 
   return (
     <div
-      className="fixed bottom-0 inset-x-0 z-50 flex items-center justify-between gap-3 bg-indigo-600 text-white px-4 py-3 shadow-lg"
+      className="fixed bottom-0 inset-x-0 z-50 flex items-center justify-between gap-3 bg-blue-600 text-white px-4 py-3 shadow-lg"
       dir="rtl"
     >
       <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -64,13 +64,13 @@ export default function PWAInstallPrompt() {
       <div className="flex items-center gap-2 flex-shrink-0">
         <button
           onClick={handleInstall}
-          className="bg-white text-indigo-600 text-sm font-semibold px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors"
+          className="bg-white text-blue-600 text-sm font-semibold px-3 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
         >
           הוסף
         </button>
         <button
           onClick={handleDismiss}
-          className="p-1 rounded-md hover:bg-indigo-500 transition-colors"
+          className="p-1 rounded-md hover:bg-blue-500 transition-colors"
           aria-label="סגור"
         >
           <X size={16} />

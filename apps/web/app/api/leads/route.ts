@@ -209,16 +209,16 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  // Write initial activity
+  // --- Side effects: non-blocking, failures logged but don't break lead creation ---
+
   prisma.leadActivity.create({
     data: {
       leadId: lead.id,
       type: "created",
       content: `ליד נוצר ממקור: ${lead.source ?? "לא ידוע"}`,
     },
-  }).catch(() => {});
+  }).catch((err) => console.error("[lead-activity] Failed for lead", lead.id, err));
 
-  // Create InboxEvent for client owner
   prisma.client.findUnique({
     where: { id: lead.clientId },
     select: { ownerId: true },
@@ -234,15 +234,12 @@ export async function POST(req: NextRequest) {
         phone:       lead.phone ?? undefined,
       },
     });
-  }).catch(() => {});
+  }).catch((err) => console.error("[lead-inbox-event] Failed for lead", lead.id, err));
 
-  // Fire existing workflow webhooks (legacy)
-  triggerWorkflowWebhooks(lead).catch(() => {});
+  triggerWorkflowWebhooks(lead).catch((err) => console.error("[lead-workflow-webhook] Failed for lead", lead.id, err));
 
-  // Fire Green API WhatsApp notification to client
-  sendWhatsAppLeadNotification(lead).catch(() => {});
+  sendWhatsAppLeadNotification(lead).catch((err) => console.error("[lead-whatsapp-notify] Failed for lead", lead.id, err));
 
-  // Auto-reply: confirm to lead + alert agent
   prisma.client.findUnique({
     where: { id: lead.clientId },
     select: {
@@ -250,9 +247,10 @@ export async function POST(req: NextRequest) {
       greenApiInstanceId: true, greenApiToken: true,
       autoReplyActive: true, whatsappTemplate: true,
     },
-  }).then((c) => { if (c) sendAutoReply(lead, c).catch(() => {}); }).catch(() => {});
+  }).then((c) => {
+    if (c) sendAutoReply(lead, c).catch((err) => console.error("[lead-auto-reply] Failed for lead", lead.id, err));
+  }).catch((err) => console.error("[lead-auto-reply-lookup] Failed for lead", lead.id, err));
 
-  // Fire n8n webhook
   triggerN8nWebhook(lead.clientId, "lead.created", {
     lead: {
       id: lead.id,
@@ -263,9 +261,8 @@ export async function POST(req: NextRequest) {
       utmSource: lead.utmSource,
       utmCampaign: lead.utmCampaign,
     },
-  }).catch(() => {});
+  }).catch((err) => console.error("[lead-n8n-webhook] Failed for client", lead.clientId, err));
 
-  // Fire n8n Railway direct webhook (if configured)
   triggerN8nDirect("new-lead", {
     leadId: lead.id,
     clientId: lead.clientId,
@@ -273,14 +270,14 @@ export async function POST(req: NextRequest) {
     phone: lead.phone ?? "",
     source: lead.source ?? "unknown",
     createdAt: lead.createdAt.toISOString(),
-  }).catch(() => {});
+  }).catch((err) => console.error("[lead-n8n-direct] Failed for client", lead.clientId, err));
 
   createNotification({
     clientId: lead.clientId,
     type: "lead_new",
     title: "ליד חדש התקבל",
     body: `${lead.firstName} ${lead.lastName} — ${lead.source ?? "מקור לא ידוע"}`,
-  }).catch(() => {});
+  }).catch((err) => console.error("[lead-notification] Failed for client", lead.clientId, err));
 
   return NextResponse.json({ lead }, { status: 201 });
 }

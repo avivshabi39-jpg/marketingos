@@ -81,7 +81,7 @@ function ResetForm() {
           <span className="text-2xl">✅</span>
         </div>
         <p className="text-white font-medium">הסיסמה אופסה בהצלחה!</p>
-        <a href="/admin/login" className="block text-indigo-400 hover:text-indigo-200 underline underline-offset-2 text-sm">
+        <a href="/admin/login" className="block text-blue-400 hover:text-blue-200 underline underline-offset-2 text-sm">
           כניסה למערכת
         </a>
       </div>
@@ -91,7 +91,7 @@ function ResetForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-indigo-100 mb-1.5">סיסמה חדשה</label>
+        <label className="block text-sm font-medium text-blue-100 mb-1.5">סיסמה חדשה</label>
         <input
           type="password"
           required
@@ -99,12 +99,12 @@ function ResetForm() {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="לפחות 8 תווים"
           dir="ltr"
-          className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-indigo-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+          className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/60"
         />
         {password.length > 0 && <PasswordStrengthBar password={password} />}
       </div>
       <div>
-        <label className="block text-sm font-medium text-indigo-100 mb-1.5">אישור סיסמה</label>
+        <label className="block text-sm font-medium text-blue-100 mb-1.5">אישור סיסמה</label>
         <input
           type="password"
           required
@@ -112,14 +112,14 @@ function ResetForm() {
           onChange={(e) => setConfirm(e.target.value)}
           placeholder="חזור על הסיסמה"
           dir="ltr"
-          className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-indigo-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+          className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/60"
         />
       </div>
       {error && <p className="text-red-300 text-sm">{error}</p>}
       <button
         type="submit"
         disabled={loading}
-        className="w-full flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl py-3 text-sm"
+        className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-400 text-white font-semibold rounded-xl py-3 text-sm"
       >
         {loading ? <><Loader2 size={15} className="animate-spin" /> מאפס...</> : "אפס סיסמה"}
       </button>
@@ -136,13 +136,13 @@ export default function ResetPasswordPage() {
     >
       <div className="w-full max-w-sm space-y-6">
         <div className="flex flex-col items-center">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-xl mb-4">
+          <div className="w-12 h-12 rounded-2xl bg-blue-500 flex items-center justify-center shadow-xl mb-4">
             <TrendingUp size={22} className="text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white">איפוס סיסמה</h1>
         </div>
         <div className="rounded-2xl p-6 border border-white/10 bg-white/6 space-y-4">
-          <Suspense fallback={<p className="text-indigo-300 text-sm text-center">טוען...</p>}>
+          <Suspense fallback={<p className="text-blue-300 text-sm text-center">טוען...</p>}>
             <ResetForm />
           </Suspense>
         </div>

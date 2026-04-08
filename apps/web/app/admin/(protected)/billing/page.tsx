@@ -17,8 +17,8 @@ const PLAN_LABELS: Record<string, string> = {
 };
 
 const PLAN_BADGE_COLORS: Record<string, string> = {
-  BASIC: "bg-gray-100 text-gray-700",
-  PRO: "bg-indigo-100 text-indigo-700",
+  BASIC: "bg-slate-100 text-slate-700",
+  PRO: "bg-blue-100 text-blue-700",
   AGENCY: "bg-amber-100 text-amber-700",
 };
 
@@ -26,7 +26,7 @@ const STATUS_BADGE_COLORS: Record<string, string> = {
   active: "bg-green-100 text-green-700",
   past_due: "bg-yellow-100 text-yellow-700",
   canceled: "bg-red-100 text-red-700",
-  incomplete: "bg-gray-100 text-gray-600",
+  incomplete: "bg-slate-100 text-slate-600",
   trialing: "bg-blue-100 text-blue-700",
 };
 
@@ -48,8 +48,8 @@ const plans = [
     period: "30 יום",
     priceNum: 0,
     description: "הכר את המערכת ללא תשלום",
-    color: "border-gray-200",
-    badgeColor: "bg-gray-100 text-gray-700",
+    color: "border-slate-200",
+    badgeColor: "bg-slate-100 text-slate-700",
     popular: false,
     badge: null as string | null,
     features: ["עד 40 לקוחות", "דפי נחיתה", "עד 100 לידים", "טפסי קבלה"],
@@ -61,8 +61,8 @@ const plans = [
     period: "לחודש",
     priceNum: 375,
     description: "לקוחות ללא הגבלה, כל התכונות",
-    color: "border-indigo-400",
-    badgeColor: "bg-indigo-100 text-indigo-700",
+    color: "border-blue-400",
+    badgeColor: "bg-blue-100 text-blue-700",
     popular: true,
     badge: "הכי פופולרי 🔥" as string | null,
     features: ["לקוחות ללא הגבלה", "לידים ללא הגבלה", "AI Agent בעברית 24/7", "וואצאפ אוטומטי", "דוחות שבועיים אוטומטיים", "A/B Testing", "פורטל לקוח מלא", "QR Code + SEO"],
@@ -125,8 +125,8 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
     <div className="space-y-8 max-w-5xl mx-auto" dir="rtl">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900">חיוב ומנוי</h1>
-        <p className="text-gray-500 mt-0.5 text-sm">נהל את תוכנית המנוי שלך</p>
+        <h1 className="text-2xl font-semibold text-slate-900">חיוב ומנוי</h1>
+        <p className="text-slate-500 mt-0.5 text-sm">נהל את תוכנית המנוי שלך</p>
       </div>
 
       {/* Trial banner */}
@@ -173,19 +173,19 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
       )}
 
       {/* Current plan card */}
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
-        <h2 className="text-base font-semibold text-gray-900 mb-4">התוכנית הנוכחית</h2>
+      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
+        <h2 className="text-base font-semibold text-slate-900 mb-4">התוכנית הנוכחית</h2>
         <div className="flex flex-wrap items-center gap-3">
           <span className={`px-3 py-1.5 rounded-full text-sm font-semibold ${PLAN_BADGE_COLORS[currentPlan]}`}>
             {PLAN_LABELS[currentPlan]}
           </span>
           {subStatus && (
-            <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${STATUS_BADGE_COLORS[subStatus] ?? "bg-gray-100 text-gray-600"}`}>
+            <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${STATUS_BADGE_COLORS[subStatus] ?? "bg-slate-100 text-slate-600"}`}>
               {STATUS_LABELS[subStatus] ?? subStatus}
             </span>
           )}
           {subscription?.currentPeriodEnd && subStatus === "active" && (
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-slate-500">
               חידוש הבא: {new Date(subscription.currentPeriodEnd).toLocaleDateString("he-IL")}
             </span>
           )}
@@ -205,7 +205,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
 
         {/* Manage subscription buttons */}
         {hasStripeSubscription && (
-          <div className="mt-5 pt-5 border-t border-gray-100 flex items-center gap-3 flex-wrap">
+          <div className="mt-5 pt-5 border-t border-slate-100 flex items-center gap-3 flex-wrap">
             <BillingActions
               plan="BASIC"
               currentPlan={currentPlan}
@@ -227,18 +227,18 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
       {/* Invoice history */}
       {invoices.length > 0 && (
         <div>
-          <h2 className="text-base font-semibold text-gray-900 mb-4">היסטוריית חשבוניות</h2>
-          <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+          <h2 className="text-base font-semibold text-slate-900 mb-4">היסטוריית חשבוניות</h2>
+          <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="text-right px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">תאריך</th>
-                  <th className="text-right px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">סכום</th>
-                  <th className="text-right px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">סטטוס</th>
+                <tr className="border-b border-slate-100 bg-slate-50">
+                  <th className="text-right px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">תאריך</th>
+                  <th className="text-right px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">סכום</th>
+                  <th className="text-right px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wide">סטטוס</th>
                   <th className="px-5 py-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-slate-50">
                 {invoices.map((inv) => {
                   const date = new Date((inv.created) * 1000).toLocaleDateString("he-IL");
                   const amount = inv.amount_paid != null
@@ -249,15 +249,15 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
                   const statusMap: Record<string, { label: string; cls: string }> = {
                     paid:   { label: "שולם",     cls: "bg-green-50 text-green-700" },
                     open:   { label: "פתוח",     cls: "bg-yellow-50 text-yellow-700" },
-                    void:   { label: "בוטל",     cls: "bg-gray-100 text-gray-500" },
-                    draft:  { label: "טיוטה",    cls: "bg-gray-100 text-gray-500" },
+                    void:   { label: "בוטל",     cls: "bg-slate-100 text-slate-500" },
+                    draft:  { label: "טיוטה",    cls: "bg-slate-100 text-slate-500" },
                     uncollectible: { label: "לא שולם", cls: "bg-red-50 text-red-700" },
                   };
-                  const st = statusMap[inv.status ?? ""] ?? { label: inv.status ?? "—", cls: "bg-gray-100 text-gray-500" };
+                  const st = statusMap[inv.status ?? ""] ?? { label: inv.status ?? "—", cls: "bg-slate-100 text-slate-500" };
                   return (
-                    <tr key={inv.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-5 py-3.5 text-gray-700">{date}</td>
-                      <td className="px-5 py-3.5 font-medium text-gray-900">{amount}</td>
+                    <tr key={inv.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-5 py-3.5 text-slate-700">{date}</td>
+                      <td className="px-5 py-3.5 font-medium text-slate-900">{amount}</td>
                       <td className="px-5 py-3.5">
                         <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${st.cls}`}>
                           {st.label}
@@ -269,7 +269,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
                             href={inv.invoice_pdf}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-indigo-600 hover:text-indigo-800 text-xs font-medium"
+                            className="text-blue-600 hover:text-blue-800 text-xs font-medium"
                           >
                             הורד PDF
                           </a>
@@ -286,17 +286,17 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
 
       {/* Plan cards */}
       <div id="plans">
-        <h2 className="text-base font-semibold text-gray-900 mb-4">תוכניות זמינות</h2>
+        <h2 className="text-base font-semibold text-slate-900 mb-4">תוכניות זמינות</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {plans.map((plan) => {
             const isCurrent = plan.key === currentPlan;
             return (
               <div
                 key={plan.key}
-                className={`relative bg-white rounded-xl border-2 ${plan.color} shadow-sm p-6 flex flex-col gap-4 ${isCurrent ? "ring-2 ring-indigo-400 ring-offset-1" : ""}`}
+                className={`relative bg-white rounded-xl border-2 ${plan.color} shadow-sm p-6 flex flex-col gap-4 ${isCurrent ? "ring-2 ring-blue-400 ring-offset-1" : ""}`}
               >
                 {plan.badge && (
-                  <div className={`absolute -top-3 left-1/2 -translate-x-1/2 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap ${plan.popular ? "bg-indigo-500" : "bg-amber-500"}`}>
+                  <div className={`absolute -top-3 left-1/2 -translate-x-1/2 text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap ${plan.popular ? "bg-blue-500" : "bg-amber-500"}`}>
                     {plan.badge}
                   </div>
                 )}
@@ -306,21 +306,21 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
                       {plan.name}
                     </span>
                     {isCurrent && (
-                      <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">
+                      <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">
                         ✓ התוכנית הנוכחית
                       </span>
                     )}
                   </div>
                   <div className="flex items-baseline gap-1 mt-3">
-                    <p className="text-2xl font-bold text-gray-900">{plan.price}</p>
-                    <span className="text-sm text-gray-500">/ {plan.period}</span>
+                    <p className="text-2xl font-bold text-slate-900">{plan.price}</p>
+                    <span className="text-sm text-slate-500">/ {plan.period}</span>
                   </div>
-                  <p className="text-sm text-gray-500 mt-1">{plan.description}</p>
+                  <p className="text-sm text-slate-500 mt-1">{plan.description}</p>
                 </div>
 
                 <ul className="space-y-2 flex-1">
                   {plan.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm text-gray-700">
+                    <li key={f} className="flex items-center gap-2 text-sm text-slate-700">
                       <span className="w-4 h-4 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
                       {f}
                     </li>

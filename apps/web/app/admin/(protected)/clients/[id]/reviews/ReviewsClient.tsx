@@ -59,14 +59,14 @@ export function ReviewsClient({
       <div className="flex items-center gap-3 mb-2">
         <Link
           href={`/admin/clients/${clientId}`}
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+          className="flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700"
         >
           <ArrowRight size={14} className="rotate-180" /> {clientName}
         </Link>
       </div>
 
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
           <Star size={24} className="text-yellow-500" /> בקשות ביקורת
         </h1>
         {googleBusinessUrl && (
@@ -102,24 +102,24 @@ export function ReviewsClient({
       )}
 
       {wonLeads.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
-          <Star size={48} className="mx-auto text-gray-200 mb-3" />
-          <p className="text-gray-500 font-medium">אין לידים שנסגרו עדיין</p>
-          <p className="text-gray-400 text-sm mt-1">לאחר סגירת עסקאות, תוכל לשלוח כאן בקשות ביקורת</p>
+        <div className="text-center py-16 bg-white rounded-xl border border-slate-200">
+          <Star size={48} className="mx-auto text-slate-200 mb-3" />
+          <p className="text-slate-500 font-medium">אין לידים שנסגרו עדיין</p>
+          <p className="text-slate-400 text-sm mt-1">לאחר סגירת עסקאות, תוכל לשלוח כאן בקשות ביקורת</p>
         </div>
       ) : (
         <div className="space-y-3">
-          <p className="text-sm text-gray-500">{wonLeads.length} לידים שנסגרו — שלח בקשת ביקורת ב-WhatsApp</p>
+          <p className="text-sm text-slate-500">{wonLeads.length} לידים שנסגרו — שלח בקשת ביקורת ב-WhatsApp</p>
           {wonLeads.map((lead) => (
             <div
               key={lead.id}
-              className="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-between gap-4 shadow-sm"
+              className="bg-white border border-slate-200 rounded-xl p-4 flex items-center justify-between gap-4 shadow-sm"
             >
               <div className="min-w-0">
-                <p className="font-medium text-gray-900 text-sm">
+                <p className="font-medium text-slate-900 text-sm">
                   {lead.firstName} {lead.lastName}
                 </p>
-                <p className="text-xs text-gray-400 mt-0.5">
+                <p className="text-xs text-slate-400 mt-0.5">
                   {lead.phone ?? lead.email ?? "—"}
                   {" · "}
                   {new Date(lead.createdAt).toLocaleDateString("he-IL")}

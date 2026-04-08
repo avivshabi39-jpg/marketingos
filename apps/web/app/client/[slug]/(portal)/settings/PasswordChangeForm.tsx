@@ -52,16 +52,16 @@ export function PasswordChangeForm({ slug }: { slug: string }) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-50 flex items-center gap-2">
-        <Lock size={18} className="text-gray-400" />
-        <h2 className="font-semibold text-gray-900">שינוי סיסמת פורטל</h2>
+    <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="px-6 py-4 border-b border-slate-50 flex items-center gap-2">
+        <Lock size={18} className="text-slate-400" />
+        <h2 className="font-semibold text-slate-900">שינוי סיסמת פורטל</h2>
       </div>
 
       <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
         {/* Current password */}
         <div>
-          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
             סיסמה נוכחית
           </label>
           <input
@@ -70,13 +70,13 @@ export function PasswordChangeForm({ slug }: { slug: string }) {
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400/60 focus:border-indigo-400 focus:bg-white transition-all"
+            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/60 focus:border-blue-400 focus:bg-white transition-all"
           />
         </div>
 
         {/* New password */}
         <div>
-          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
             סיסמה חדשה (מינימום 6 תווים)
           </label>
           <input
@@ -86,13 +86,13 @@ export function PasswordChangeForm({ slug }: { slug: string }) {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400/60 focus:border-indigo-400 focus:bg-white transition-all"
+            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/60 focus:border-blue-400 focus:bg-white transition-all"
           />
         </div>
 
         {/* Confirm password */}
         <div>
-          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
             אימות סיסמה חדשה
           </label>
           <input
@@ -101,7 +101,7 @@ export function PasswordChangeForm({ slug }: { slug: string }) {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400/60 focus:border-indigo-400 focus:bg-white transition-all"
+            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/60 focus:border-blue-400 focus:bg-white transition-all"
           />
         </div>
 
@@ -123,7 +123,7 @@ export function PasswordChangeForm({ slug }: { slug: string }) {
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
+          className="flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
         >
           {loading ? (
             <>

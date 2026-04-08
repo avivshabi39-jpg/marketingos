@@ -109,12 +109,12 @@ export default function OfficeDetailPage() {
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse" dir="rtl">
-        <div className="h-8 w-56 bg-gray-200 rounded-lg" />
+        <div className="h-8 w-56 bg-slate-200 rounded-lg" />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => <div key={i} className="h-20 bg-white rounded-xl border border-gray-200" />)}
+          {[...Array(4)].map((_, i) => <div key={i} className="h-20 bg-white rounded-xl border border-slate-200" />)}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[...Array(3)].map((_, i) => <div key={i} className="h-40 bg-white rounded-xl border border-gray-200" />)}
+          {[...Array(3)].map((_, i) => <div key={i} className="h-40 bg-white rounded-xl border border-slate-200" />)}
         </div>
       </div>
     );
@@ -132,17 +132,17 @@ export default function OfficeDetailPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link href="/admin/offices" className="text-gray-400 hover:text-gray-700">
+          <Link href="/admin/offices" className="text-slate-400 hover:text-slate-700">
             <ArrowRight size={18} />
           </Link>
-          <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 font-bold text-base flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 font-bold text-base flex items-center justify-center">
             {office.name.slice(0, 2)}
           </div>
-          <h1 className="text-xl font-bold text-gray-900">{office.name}</h1>
+          <h1 className="text-xl font-bold text-slate-900">{office.name}</h1>
         </div>
         <button
           onClick={openAddAgent}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700"
         >
           <Plus size={16} /> הוסף סוכן
         </button>
@@ -151,16 +151,16 @@ export default function OfficeDetailPage() {
       {/* Stats row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { icon: Users, label: "סוכנים", value: office.agents.length, color: "text-indigo-500" },
+          { icon: Users, label: "סוכנים", value: office.agents.length, color: "text-blue-500" },
           { icon: TrendingUp, label: "לידים החודש", value: totalMonthlyLeads, color: "text-green-500" },
           { icon: Home, label: "נכסים", value: totalProperties, color: "text-blue-500" },
           { icon: Star, label: "סוכן מוביל", value: topAgent?.name.split(" ")[0] ?? "—", color: "text-amber-500" },
         ].map(({ icon: Icon, label, value, color }) => (
-          <div key={label} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
+          <div key={label} className="bg-white rounded-xl border border-slate-100 shadow-sm p-4 flex items-center gap-3">
             <Icon size={20} className={color} />
             <div>
-              <p className="text-lg font-bold text-gray-900">{value}</p>
-              <p className="text-xs text-gray-500">{label}</p>
+              <p className="text-lg font-bold text-slate-900">{value}</p>
+              <p className="text-xs text-slate-500">{label}</p>
             </div>
           </div>
         ))}
@@ -168,13 +168,13 @@ export default function OfficeDetailPage() {
 
       {/* Add agent modal */}
       {showAddAgent && (
-        <div className="bg-white rounded-xl border border-indigo-200 p-5 shadow-sm">
+        <div className="bg-white rounded-xl border border-blue-200 p-5 shadow-sm">
           <h3 className="text-sm font-semibold mb-3">הוסף סוכן למשרד</h3>
           <div className="flex gap-3">
             <select
               value={selectedAgentId}
               onChange={(e) => setSelectedAgentId(e.target.value)}
-              className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-300"
+              className="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-300"
             >
               <option value="">בחר סוכן...</option>
               {available.map((a) => (
@@ -184,27 +184,27 @@ export default function OfficeDetailPage() {
             <button
               onClick={addAgent}
               disabled={adding || !selectedAgentId}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm disabled:opacity-50"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm disabled:opacity-50"
             >
               {adding ? "מוסיף..." : "הוסף"}
             </button>
             <button
               onClick={() => setShowAddAgent(false)}
-              className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50"
+              className="px-4 py-2 border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50"
             >
               ביטול
             </button>
           </div>
           {available.length === 0 && (
-            <p className="text-xs text-gray-400 mt-2">אין סוכני נדל"ן זמינים להוספה</p>
+            <p className="text-xs text-slate-400 mt-2">אין סוכני נדל"ן זמינים להוספה</p>
           )}
         </div>
       )}
 
       {/* Performance chart — CSS bars */}
       {office.agents.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-          <h3 className="text-sm font-semibold text-gray-700 mb-4">ביצועים — לידים החודש</h3>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+          <h3 className="text-sm font-semibold text-slate-700 mb-4">ביצועים — לידים החודש</h3>
           <div className="space-y-2.5">
             {[...office.agents]
               .sort((a, b) => b.monthlyLeads - a.monthlyLeads)
@@ -213,14 +213,14 @@ export default function OfficeDetailPage() {
                 const isTop = agent.id === topAgent?.id;
                 return (
                   <div key={agent.id} className="flex items-center gap-3">
-                    <span className="text-xs text-gray-600 w-24 text-right truncate">{agent.name.split(" ")[0]}</span>
-                    <div className="flex-1 bg-gray-100 rounded-full h-4 overflow-hidden">
+                    <span className="text-xs text-slate-600 w-24 text-right truncate">{agent.name.split(" ")[0]}</span>
+                    <div className="flex-1 bg-slate-100 rounded-full h-4 overflow-hidden">
                       <div
-                        className={`h-full rounded-full transition-all ${isTop ? "bg-indigo-500" : "bg-gray-300"}`}
+                        className={`h-full rounded-full transition-all ${isTop ? "bg-blue-500" : "bg-slate-300"}`}
                         style={{ width: `${Math.max(pct, 2)}%` }}
                       />
                     </div>
-                    <span className={`text-xs font-semibold w-8 ${isTop ? "text-indigo-600" : "text-gray-500"}`}>
+                    <span className={`text-xs font-semibold w-8 ${isTop ? "text-blue-600" : "text-slate-500"}`}>
                       {agent.monthlyLeads}
                     </span>
                     {isTop && <Star size={12} className="text-amber-400 flex-shrink-0" />}
@@ -233,31 +233,31 @@ export default function OfficeDetailPage() {
 
       {/* Agents grid */}
       {office.agents.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center py-16">
-          <Users size={36} className="text-gray-200 mb-3" />
-          <p className="text-gray-500 font-medium">אין סוכנים במשרד</p>
-          <p className="text-sm text-gray-400 mt-1">לחץ "הוסף סוכן" להוסיף סוכן</p>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm flex flex-col items-center py-16">
+          <Users size={36} className="text-slate-200 mb-3" />
+          <p className="text-slate-500 font-medium">אין סוכנים במשרד</p>
+          <p className="text-sm text-slate-400 mt-1">לחץ "הוסף סוכן" להוסיף סוכן</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {office.agents.map((agent) => (
-            <div key={agent.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+            <div key={agent.id} className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
               {/* Header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-sm">
                     {agent.name.slice(0, 2)}
                   </div>
                   <div>
-                    <p className="font-semibold text-sm text-gray-900">{agent.name}</p>
+                    <p className="font-semibold text-sm text-slate-900">{agent.name}</p>
                     {agent.agentCity && (
-                      <p className="text-xs text-gray-400">{agent.agentCity}</p>
+                      <p className="text-xs text-slate-400">{agent.agentCity}</p>
                     )}
                   </div>
                 </div>
                 <button
                   onClick={() => removeAgent(agent.id, agent.name)}
-                  className="p-1.5 rounded-lg hover:bg-red-50 text-gray-300 hover:text-red-400 transition-colors"
+                  className="p-1.5 rounded-lg hover:bg-red-50 text-slate-300 hover:text-red-400 transition-colors"
                   title="הסר מהמשרד"
                 >
                   <Trash2 size={14} />
@@ -267,20 +267,20 @@ export default function OfficeDetailPage() {
               {/* Stats */}
               <div className="grid grid-cols-3 gap-2 text-center text-xs mb-4">
                 <div>
-                  <p className="font-bold text-gray-900">{agent._count.properties}</p>
-                  <p className="text-gray-400">נכסים</p>
+                  <p className="font-bold text-slate-900">{agent._count.properties}</p>
+                  <p className="text-slate-400">נכסים</p>
                 </div>
                 <div>
-                  <p className="font-bold text-gray-900">{agent.monthlyLeads}</p>
-                  <p className="text-gray-400">לידים/חודש</p>
+                  <p className="font-bold text-slate-900">{agent.monthlyLeads}</p>
+                  <p className="text-slate-400">לידים/חודש</p>
                 </div>
                 <div>
-                  <p className="font-bold text-gray-900">{agent.conversionRate}%</p>
-                  <p className="text-gray-400">המרה</p>
+                  <p className="font-bold text-slate-900">{agent.conversionRate}%</p>
+                  <p className="text-slate-400">המרה</p>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-xs text-gray-400 border-t border-gray-50 pt-3">
+              <div className="flex items-center justify-between text-xs text-slate-400 border-t border-slate-50 pt-3">
                 <span>פעיל לפני {agent.lastActiveDays} ימים</span>
                 <div className="flex gap-2">
                   {agent.agentPhone && (
@@ -295,7 +295,7 @@ export default function OfficeDetailPage() {
                   )}
                   <Link
                     href={`/admin/clients/${agent.id}`}
-                    className="flex items-center gap-1 px-2 py-1 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 text-xs"
+                    className="flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 text-xs"
                   >
                     <Phone size={11} /> פרטים
                   </Link>

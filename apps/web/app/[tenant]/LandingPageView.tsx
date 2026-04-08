@@ -180,8 +180,8 @@ export function LandingPageView({
           <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto" style={{ background: heroColor }}>
             <CheckCircle2 size={40} className="text-white" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900">תודה רבה!</h2>
-          <p className="text-gray-600">קיבלנו את הפנייה שלך ונחזור אליך בהקדם.</p>
+          <h2 className="text-2xl font-bold text-slate-900">תודה רבה!</h2>
+          <p className="text-slate-600">קיבלנו את הפנייה שלך ונחזור אליך בהקדם.</p>
           <div className="space-y-3 pt-2">
             {waLink && (
               <a href={waLink} target="_blank" rel="noopener noreferrer"
@@ -192,7 +192,7 @@ export function LandingPageView({
               </a>
             )}
             <button onClick={copyUrl}
-              className="flex items-center justify-center gap-2 w-full border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 font-medium rounded-xl py-2.5 text-sm transition-colors"
+              className="flex items-center justify-center gap-2 w-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 font-medium rounded-xl py-2.5 text-sm transition-colors"
             >
               {copied ? <Check size={15} className="text-green-600" /> : <Copy size={15} />}
               {copied ? "הקישור הועתק!" : "שתף את הטופס"}
@@ -233,11 +233,11 @@ export function LandingPageView({
       </section>
 
       {/* FORM */}
-      <section ref={formRef} className="flex-1 bg-gray-50 flex items-start justify-center px-4 py-12">
+      <section ref={formRef} className="flex-1 bg-slate-50 flex items-start justify-center px-4 py-12">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6 space-y-5">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">השאר פרטים ונחזור אליך בהקדם</h2>
-            <p className="text-gray-500 text-sm mt-1">מלא את הטופס — ללא התחייבות</p>
+            <h2 className="text-xl font-bold text-slate-900">השאר פרטים ונחזור אליך בהקדם</h2>
+            <p className="text-slate-500 text-sm mt-1">מלא את הטופס — ללא התחייבות</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -245,7 +245,7 @@ export function LandingPageView({
               const Icon = field.icon;
               return (
                 <div key={field.id}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">
                     {field.label}
                     {field.required && <span className="text-red-500 mr-1">*</span>}
                   </label>
@@ -255,27 +255,27 @@ export function LandingPageView({
                       value={values[field.id] ?? ""}
                       onChange={(e) => { setValues(p => ({...p, [field.id]: e.target.value})); }}
                       placeholder={field.placeholder}
-                      className={`w-full rounded-xl border px-4 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 ${errors[field.id] ? "border-red-300 focus:ring-red-300" : "border-gray-200 focus:ring-indigo-300"}`}
+                      className={`w-full rounded-xl border px-4 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 ${errors[field.id] ? "border-red-300 focus:ring-red-300" : "border-slate-200 focus:ring-blue-300"}`}
                     />
                   ) : field.type === "select" && field.options ? (
                     <select
                       value={values[field.id] ?? ""}
                       onChange={(e) => setValues(p => ({...p, [field.id]: e.target.value}))}
-                      className={`w-full rounded-xl border px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 ${errors[field.id] ? "border-red-300 focus:ring-red-300" : "border-gray-200 focus:ring-indigo-300"}`}
+                      className={`w-full rounded-xl border px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 ${errors[field.id] ? "border-red-300 focus:ring-red-300" : "border-slate-200 focus:ring-blue-300"}`}
                     >
                       <option value="">בחר...</option>
                       {field.options.map(o => <option key={o} value={o}>{o}</option>)}
                     </select>
                   ) : (
                     <div className="relative">
-                      {Icon && <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"><Icon size={16} /></div>}
+                      {Icon && <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"><Icon size={16} /></div>}
                       <input
                         type={field.type}
                         value={values[field.id] ?? ""}
                         onChange={(e) => setValues(p => ({...p, [field.id]: e.target.value}))}
                         placeholder={field.placeholder}
                         dir={field.type === "email" || field.type === "tel" ? "ltr" : "rtl"}
-                        className={`w-full rounded-xl border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${Icon ? "pr-10" : ""} ${errors[field.id] ? "border-red-300 focus:ring-red-300" : "border-gray-200 focus:ring-indigo-300"}`}
+                        className={`w-full rounded-xl border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${Icon ? "pr-10" : ""} ${errors[field.id] ? "border-red-300 focus:ring-red-300" : "border-slate-200 focus:ring-blue-300"}`}
                       />
                     </div>
                   )}
@@ -298,15 +298,15 @@ export function LandingPageView({
             >
               {loading ? <><Loader2 size={17} className="animate-spin" /> שולח...</> : ctaText}
             </button>
-            <p className="text-center text-gray-400 text-xs">הפרטים שלך מוגנים ולא יועברו לצדדים שלישיים</p>
+            <p className="text-center text-slate-400 text-xs">הפרטים שלך מוגנים ולא יועברו לצדדים שלישיים</p>
           </form>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-white border-t border-gray-100 py-6 px-6 text-center space-y-3">
+      <footer className="bg-white border-t border-slate-100 py-6 px-6 text-center space-y-3">
         {client.phone && (
-          <a href={`tel:${client.phone}`} className="flex items-center justify-center gap-2 text-gray-600 text-sm hover:text-gray-900">
+          <a href={`tel:${client.phone}`} className="flex items-center justify-center gap-2 text-slate-600 text-sm hover:text-slate-900">
             <Phone size={14} /> {client.phone}
           </a>
         )}
@@ -320,7 +320,7 @@ export function LandingPageView({
             <MessageSquare size={14} /> שלח וואצאפ
           </a>
         )}
-        <p className="text-xs text-gray-400">מופעל על ידי <span className="font-medium">MarketingOS</span></p>
+        <p className="text-xs text-slate-400">מופעל על ידי <span className="font-medium">MarketingOS</span></p>
       </footer>
       {client.whatsappNumber && (
         <LiveChat whatsappNumber={client.whatsappNumber} businessName={client.name} />

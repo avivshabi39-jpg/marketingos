@@ -25,7 +25,7 @@ function CopyBtn({ text }: { text: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="flex items-center gap-1 text-xs text-gray-400 hover:text-indigo-600 transition-colors"
+      className="flex items-center gap-1 text-xs text-slate-400 hover:text-blue-600 transition-colors"
     >
       {copied ? <><Check size={11} /> הועתק!</> : <><Copy size={11} /> העתק</>}
     </button>
@@ -74,14 +74,14 @@ export function ClientAiTools({ clientName, industry }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6" dir="rtl">
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6" dir="rtl">
       <div className="flex items-center gap-2 mb-4">
-        <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-          <Sparkles size={16} className="text-indigo-500" />
+        <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+          <Sparkles size={16} className="text-blue-500" />
         </div>
         <div>
-          <h2 className="font-semibold text-gray-900">✨ כלי AI</h2>
-          <p className="text-xs text-gray-400">צור תוכן שיווקי בלחיצה אחת</p>
+          <h2 className="font-semibold text-slate-900">✨ כלי AI</h2>
+          <p className="text-xs text-slate-400">צור תוכן שיווקי בלחיצה אחת</p>
         </div>
       </div>
 
@@ -89,7 +89,7 @@ export function ClientAiTools({ clientName, industry }: Props) {
         <button
           onClick={handleSocialPost}
           disabled={loading !== null}
-          className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg transition-colors disabled:opacity-60"
+          className="flex items-center gap-1.5 text-sm font-medium px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors disabled:opacity-60"
         >
           {loading === "social-post"
             ? <><Loader2 size={13} className="animate-spin" /> יוצר פוסט...</>
@@ -114,18 +114,18 @@ export function ClientAiTools({ clientName, industry }: Props) {
       )}
 
       {result && (
-        <div className="bg-gray-50 rounded-xl p-4">
+        <div className="bg-slate-50 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-gray-500">
+            <span className="text-xs font-semibold text-slate-500">
               {result.tool === "social-post" ? "פוסט לפייסבוק" : "הודעת פולו-אפ"}
             </span>
             <CopyBtn text={result.text} />
           </div>
-          <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{result.text}</p>
+          <p className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">{result.text}</p>
           <button
             onClick={result.tool === "social-post" ? handleSocialPost : handleFollowup}
             disabled={loading !== null}
-            className="mt-3 text-xs text-gray-400 hover:text-indigo-600 disabled:opacity-50"
+            className="mt-3 text-xs text-slate-400 hover:text-blue-600 disabled:opacity-50"
           >
             {loading ? "יוצר..." : "↺ צור מחדש"}
           </button>

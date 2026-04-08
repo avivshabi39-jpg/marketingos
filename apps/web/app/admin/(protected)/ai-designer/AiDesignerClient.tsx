@@ -117,16 +117,16 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
     <div className="max-w-5xl mx-auto space-y-6" dir="rtl">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">🎨 מעצב תמונות AI</h1>
-        <p className="text-gray-500 text-sm mt-1">צור תמונות שיווקיות מקצועיות בעזרת AI</p>
+        <h1 className="text-2xl font-bold text-slate-900">🎨 מעצב תמונות AI</h1>
+        <p className="text-slate-500 text-sm mt-1">צור תמונות שיווקיות מקצועיות בעזרת AI</p>
       </div>
 
       {/* Usage counter */}
-      <div className="bg-indigo-50 border border-indigo-100 rounded-xl px-5 py-3 flex items-center justify-between">
-        <span className="text-sm text-indigo-700 font-medium">
+      <div className="bg-blue-50 border border-blue-100 rounded-xl px-5 py-3 flex items-center justify-between">
+        <span className="text-sm text-blue-700 font-medium">
           📊 {usedThisMonth} תמונות נוצרו החודש
         </span>
-        <span className="text-xs text-indigo-500">Powered by Pollinations AI</span>
+        <span className="text-xs text-blue-500">Powered by Pollinations AI</span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -134,7 +134,7 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
         <div className="lg:col-span-2">
           {/* FORM PHASE */}
           {phase === "form" && (
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 space-y-5">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
               {error && (
                 <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm">
                   {error}
@@ -143,11 +143,11 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
 
               {/* Client selector */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">בחר לקוח</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">בחר לקוח</label>
                 <select
                   value={clientId}
                   onChange={(e) => setClientId(e.target.value)}
-                  className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none"
+                  className="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm bg-white focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
                 >
                   {clients.map((c) => (
                     <option key={c.id} value={c.id}>{c.name}</option>
@@ -157,19 +157,19 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">תאר את התמונה שאתה רוצה</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">תאר את התמונה שאתה רוצה</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={3}
                   placeholder="תמונה של בית יוקרתי בתל אביב עם שקיעה ברקע, לסוכן נדלן מקצועי..."
-                  className="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none resize-none"
+                  className="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none resize-none"
                 />
               </div>
 
               {/* Style */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">סגנון</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">סגנון</label>
                 <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                   {STYLES.map((s) => (
                     <button
@@ -177,12 +177,12 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
                       onClick={() => setStyle(s.id)}
                       className={`rounded-xl border-2 p-2.5 text-center transition-all ${
                         style === s.id
-                          ? "border-indigo-500 bg-indigo-50"
-                          : "border-gray-200 hover:border-gray-300"
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-slate-200 hover:border-slate-300"
                       }`}
                     >
                       <div className="text-sm font-medium">{s.label}</div>
-                      <div className="text-[10px] text-gray-500">{s.desc}</div>
+                      <div className="text-[10px] text-slate-500">{s.desc}</div>
                     </button>
                   ))}
                 </div>
@@ -190,7 +190,7 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
 
               {/* Platform */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">פלטפורמה</label>
+                <label className="block text-sm font-medium text-slate-700 mb-2">פלטפורמה</label>
                 <div className="flex flex-wrap gap-2">
                   {PLATFORMS.map((p) => (
                     <button
@@ -198,8 +198,8 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
                       onClick={() => setPlatform(p.id)}
                       className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                         platform === p.id
-                          ? "bg-indigo-600 text-white"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          ? "bg-blue-600 text-white"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                       }`}
                     >
                       {p.label} <span className="text-xs opacity-70">{p.size}</span>
@@ -210,18 +210,18 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
 
               {/* Colors */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">צבע מותג (אופציונלי)</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">צבע מותג (אופציונלי)</label>
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
                     value={colors}
                     onChange={(e) => setColors(e.target.value)}
-                    className="w-10 h-10 rounded-lg border border-gray-200 cursor-pointer"
+                    className="w-10 h-10 rounded-lg border border-slate-200 cursor-pointer"
                   />
                   <input
                     value={colors}
                     onChange={(e) => setColors(e.target.value)}
-                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono"
+                    className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm font-mono"
                     dir="ltr"
                   />
                 </div>
@@ -231,7 +231,7 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
               <button
                 onClick={generate}
                 disabled={!description.trim() || !clientId}
-                className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl py-3.5 text-sm transition-colors disabled:opacity-40 shadow-lg shadow-indigo-500/20"
+                className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl py-3.5 text-sm transition-colors disabled:opacity-40 shadow-lg shadow-blue-500/20"
               >
                 ✨ צור תמונה AI
               </button>
@@ -240,13 +240,13 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
 
           {/* GENERATING PHASE */}
           {phase === "generating" && (
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-12 text-center">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-12 text-center">
               <div className="text-6xl mb-6 animate-bounce">🎨</div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">המעצב AI עובד...</h3>
-              <p className="text-gray-500 text-sm mb-6">בונה תמונה מקצועית עבורך</p>
-              <div className="w-48 h-1.5 bg-gray-200 rounded-full mx-auto overflow-hidden">
+              <h3 className="text-xl font-bold text-slate-900 mb-2">המעצב AI עובד...</h3>
+              <p className="text-slate-500 text-sm mb-6">בונה תמונה מקצועית עבורך</p>
+              <div className="w-48 h-1.5 bg-slate-200 rounded-full mx-auto overflow-hidden">
                 <div
-                  className="h-full bg-indigo-500 rounded-full"
+                  className="h-full bg-blue-500 rounded-full"
                   style={{ animation: "progress 2s ease-in-out infinite", width: "70%" }}
                 />
               </div>
@@ -262,30 +262,30 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
 
           {/* RESULT PHASE */}
           {phase === "result" && imageUrl && (
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-              <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-                <h3 className="font-semibold text-gray-900">✅ התמונה מוכנה!</h3>
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+                <h3 className="font-semibold text-slate-900">✅ התמונה מוכנה!</h3>
                 <div className="flex items-center gap-2">
                   <a
                     href={imageUrl}
                     download="ai-image.jpg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 bg-indigo-600 text-white rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-indigo-500 transition-colors"
+                    className="flex items-center gap-1 bg-blue-600 text-white rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-blue-500 transition-colors"
                   >
                     <Download size={13} />
                     הורד
                   </a>
                   <button
                     onClick={copyUrl}
-                    className="flex items-center gap-1 bg-gray-100 text-gray-700 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-gray-200 transition-colors"
+                    className="flex items-center gap-1 bg-slate-100 text-slate-700 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-slate-200 transition-colors"
                   >
                     {copied ? <Check size={13} /> : <Copy size={13} />}
                     {copied ? "הועתק!" : "העתק URL"}
                   </button>
                   <button
                     onClick={reset}
-                    className="flex items-center gap-1 bg-gray-100 text-gray-700 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-gray-200 transition-colors"
+                    className="flex items-center gap-1 bg-slate-100 text-slate-700 rounded-lg px-3 py-1.5 text-xs font-medium hover:bg-slate-200 transition-colors"
                   >
                     <RefreshCw size={13} />
                     חדש
@@ -305,14 +305,14 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
 
         {/* Gallery sidebar */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-gray-900 text-sm flex items-center gap-2">
+          <h3 className="font-semibold text-slate-900 text-sm flex items-center gap-2">
             <ImageIcon size={16} />
             יצירות קודמות ({gallery.length})
           </h3>
           {gallery.length === 0 ? (
-            <div className="bg-gray-50 rounded-xl p-6 text-center">
-              <p className="text-sm text-gray-400">עדיין אין תמונות</p>
-              <p className="text-xs text-gray-300 mt-1">צור את התמונה הראשונה שלך!</p>
+            <div className="bg-slate-50 rounded-xl p-6 text-center">
+              <p className="text-sm text-slate-400">עדיין אין תמונות</p>
+              <p className="text-xs text-slate-300 mt-1">צור את התמונה הראשונה שלך!</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-2">
@@ -323,7 +323,7 @@ export function AiDesignerClient({ clients }: { clients: Client[] }) {
                     setImageUrl(img.imageUrl);
                     setPhase("result");
                   }}
-                  className="group relative rounded-xl overflow-hidden border border-gray-200 hover:border-indigo-300 transition-all aspect-square"
+                  className="group relative rounded-xl overflow-hidden border border-slate-200 hover:border-blue-300 transition-all aspect-square"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img

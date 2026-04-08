@@ -53,7 +53,7 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={copy}
-      className="flex items-center gap-1 text-xs text-gray-500 hover:text-indigo-600 transition"
+      className="flex items-center gap-1 text-xs text-slate-500 hover:text-blue-600 transition"
     >
       {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
       {copied ? "הועתק" : "העתק"}
@@ -199,10 +199,10 @@ export default function SocialPostsPage() {
   return (
     <div className="space-y-6" dir="rtl">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
           <Sparkles size={22} className="text-purple-500" /> יוצר פוסטים לסושיאל
         </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-slate-500 mt-1">
           AI יוצר פוסט מוכן לפרסום בעברית עם האשטגים
         </p>
       </div>
@@ -210,20 +210,20 @@ export default function SocialPostsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* RIGHT PANEL — Creation */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-5">
-            <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+          <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-5">
+            <h2 className="font-semibold text-slate-900 flex items-center gap-2">
               <span className="text-lg">📱</span> צור פוסט שיווקי
             </h2>
 
             {/* Client dropdown */}
             <div>
-              <label className="text-xs font-medium text-gray-600 block mb-1">
+              <label className="text-xs font-medium text-slate-600 block mb-1">
                 בחר לקוח
               </label>
               <select
                 value={form.clientId}
                 onChange={(e) => setForm((f) => ({ ...f, clientId: e.target.value }))}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-300 outline-none"
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-blue-300 outline-none"
               >
                 <option value="">בחר לקוח</option>
                 {clients.map((c) => (
@@ -236,7 +236,7 @@ export default function SocialPostsPage() {
 
             {/* 1. Image */}
             <div>
-              <label className="text-xs font-medium text-gray-600 block mb-2">
+              <label className="text-xs font-medium text-slate-600 block mb-2">
                 1. תמונה (אופציונלי)
               </label>
               <div
@@ -244,7 +244,7 @@ export default function SocialPostsPage() {
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center cursor-pointer hover:border-indigo-300 hover:bg-indigo-50/30 transition-all"
+                className="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center cursor-pointer hover:border-blue-300 hover:bg-blue-50/30 transition-all"
               >
                 {form.imagePreview ? (
                   <div className="flex items-center gap-3">
@@ -255,7 +255,7 @@ export default function SocialPostsPage() {
                       className="w-[120px] h-[120px] object-cover rounded-lg flex-shrink-0"
                     />
                     <div className="text-right flex-1">
-                      <p className="text-sm text-gray-700 font-medium">
+                      <p className="text-sm text-slate-700 font-medium">
                         {form.imageFile?.name}
                       </p>
                       <button
@@ -276,7 +276,7 @@ export default function SocialPostsPage() {
                 ) : (
                   <div className="py-4">
                     <span className="text-2xl">📎</span>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <p className="text-sm text-slate-400 mt-1">
                       גרור תמונה לכאן או לחץ לבחירה
                     </p>
                   </div>
@@ -293,7 +293,7 @@ export default function SocialPostsPage() {
                 }}
               />
               <div className="flex items-center gap-2 mt-2">
-                <span className="text-xs text-gray-400">או הכנס URL:</span>
+                <span className="text-xs text-slate-400">או הכנס URL:</span>
                 <input
                   value={form.imageUrl}
                   onChange={(e) =>
@@ -305,14 +305,14 @@ export default function SocialPostsPage() {
                     }))
                   }
                   placeholder="https://..."
-                  className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                  className="flex-1 border border-slate-200 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
               </div>
             </div>
 
             {/* 2. Topic */}
             <div>
-              <label className="text-xs font-medium text-gray-600 block mb-1">
+              <label className="text-xs font-medium text-slate-600 block mb-1">
                 2. נושא / מילות מפתח
               </label>
               <textarea
@@ -320,13 +320,13 @@ export default function SocialPostsPage() {
                 onChange={(e) => setForm((f) => ({ ...f, topic: e.target.value }))}
                 rows={3}
                 placeholder="מבצע קיץ, שירות..."
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-300 outline-none resize-none"
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none resize-none"
               />
             </div>
 
             {/* 3. Style */}
             <div>
-              <label className="text-xs font-medium text-gray-600 block mb-2">
+              <label className="text-xs font-medium text-slate-600 block mb-2">
                 3. סגנון
               </label>
               <div className="flex flex-wrap gap-2">
@@ -336,8 +336,8 @@ export default function SocialPostsPage() {
                     onClick={() => setForm((f) => ({ ...f, style: s.id }))}
                     className={`px-3 py-1.5 text-sm rounded-full border transition-all ${
                       form.style === s.id
-                        ? "border-indigo-500 bg-indigo-50 text-indigo-700 font-medium"
-                        : "border-gray-200 text-gray-600 hover:border-gray-300"
+                        ? "border-blue-500 bg-blue-50 text-blue-700 font-medium"
+                        : "border-slate-200 text-slate-600 hover:border-slate-300"
                     }`}
                   >
                     {s.label}
@@ -348,7 +348,7 @@ export default function SocialPostsPage() {
 
             {/* 4. Platform */}
             <div>
-              <label className="text-xs font-medium text-gray-600 block mb-2">
+              <label className="text-xs font-medium text-slate-600 block mb-2">
                 4. פלטפורמה
               </label>
               <div className="flex flex-wrap gap-2">
@@ -358,8 +358,8 @@ export default function SocialPostsPage() {
                     onClick={() => setForm((f) => ({ ...f, platform: p.id }))}
                     className={`px-3 py-1.5 text-sm rounded-full border transition-all ${
                       form.platform === p.id
-                        ? "border-indigo-500 bg-indigo-50 text-indigo-700 font-medium"
-                        : "border-gray-200 text-gray-600 hover:border-gray-300"
+                        ? "border-blue-500 bg-blue-50 text-blue-700 font-medium"
+                        : "border-slate-200 text-slate-600 hover:border-slate-300"
                     }`}
                   >
                     {p.icon} {p.label}
@@ -370,7 +370,7 @@ export default function SocialPostsPage() {
 
             {/* Language */}
             <div>
-              <label className="text-xs font-medium text-gray-600 block mb-2">
+              <label className="text-xs font-medium text-slate-600 block mb-2">
                 5. שפה
               </label>
               <div className="flex gap-2">
@@ -380,8 +380,8 @@ export default function SocialPostsPage() {
                     onClick={() => setForm((f) => ({ ...f, language: l.id }))}
                     className={`flex-1 px-3 py-1.5 text-sm rounded-full border transition-all ${
                       form.language === l.id
-                        ? "border-indigo-500 bg-indigo-50 text-indigo-700 font-medium"
-                        : "border-gray-200 text-gray-600 hover:border-gray-300"
+                        ? "border-blue-500 bg-blue-50 text-blue-700 font-medium"
+                        : "border-slate-200 text-slate-600 hover:border-slate-300"
                     }`}
                   >
                     {l.label}
@@ -411,7 +411,7 @@ export default function SocialPostsPage() {
           {result !== null && (
             <div className="bg-white rounded-xl border border-green-200 shadow-sm p-6 space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-semibold text-gray-900 flex items-center gap-2">
+                <h2 className="font-semibold text-slate-900 flex items-center gap-2">
                   <span className="w-5 h-5 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-bold">
                     ✓
                   </span>
@@ -436,11 +436,11 @@ export default function SocialPostsPage() {
                   value={editedText}
                   onChange={(e) => setEditedText(e.target.value)}
                   rows={8}
-                  className="w-full border border-indigo-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 resize-vertical"
+                  className="w-full border border-blue-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 resize-vertical"
                 />
               ) : (
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
+                <div className="bg-slate-50 rounded-lg p-4">
+                  <p className="text-sm text-slate-800 whitespace-pre-wrap leading-relaxed">
                     {result}
                   </p>
                 </div>
@@ -458,7 +458,7 @@ export default function SocialPostsPage() {
                       setEditingResult(true);
                     }
                   }}
-                  className="flex items-center gap-1.5 text-xs border border-gray-200 rounded-lg px-3 py-1.5 text-gray-600 hover:border-indigo-300 hover:text-indigo-600 transition"
+                  className="flex items-center gap-1.5 text-xs border border-slate-200 rounded-lg px-3 py-1.5 text-slate-600 hover:border-blue-300 hover:text-blue-600 transition"
                 >
                   <Edit2 size={12} />
                   {editingResult ? "סיים עריכה" : "ערוך"}
@@ -469,7 +469,7 @@ export default function SocialPostsPage() {
                 <button
                   onClick={savePost}
                   disabled={saving}
-                  className="flex items-center gap-1.5 text-xs bg-indigo-600 text-white px-3 py-1.5 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition"
+                  className="flex items-center gap-1.5 text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
                 >
                   {saving ? <Loader2 size={11} className="animate-spin" /> : null}
                   💾 שמור
@@ -478,7 +478,7 @@ export default function SocialPostsPage() {
                 <button
                   onClick={generate}
                   disabled={generating}
-                  className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-indigo-600 border border-gray-200 rounded-lg px-3 py-1.5 transition"
+                  className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-blue-600 border border-slate-200 rounded-lg px-3 py-1.5 transition"
                 >
                   <RefreshCw size={12} /> 🔄 צור שוב
                 </button>
@@ -488,12 +488,12 @@ export default function SocialPostsPage() {
         </div>
 
         {/* LEFT PANEL — Saved posts */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 h-fit">
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5 h-fit">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900 text-sm">פוסטים שמורים</h3>
+            <h3 className="font-semibold text-slate-900 text-sm">פוסטים שמורים</h3>
             <button
               onClick={loadPosts}
-              className="text-gray-400 hover:text-indigo-500 transition"
+              className="text-slate-400 hover:text-blue-500 transition"
             >
               <RefreshCw size={13} />
             </button>
@@ -501,10 +501,10 @@ export default function SocialPostsPage() {
 
           {loadingPosts ? (
             <div className="flex justify-center py-8">
-              <Loader2 size={20} className="animate-spin text-gray-300" />
+              <Loader2 size={20} className="animate-spin text-slate-300" />
             </div>
           ) : savedPosts.length === 0 ? (
-            <div className="text-center py-8 text-gray-300">
+            <div className="text-center py-8 text-slate-300">
               <Sparkles size={28} className="mx-auto mb-2" />
               <p className="text-xs">פוסטים ששמרת יופיעו כאן</p>
             </div>
@@ -515,10 +515,10 @@ export default function SocialPostsPage() {
                 return (
                   <div
                     key={post.id}
-                    className="p-3 rounded-lg border border-gray-100 hover:border-indigo-200 transition-all group"
+                    className="p-3 rounded-lg border border-slate-100 hover:border-blue-200 transition-all group"
                   >
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <span className="text-[10px] text-gray-400">
+                      <span className="text-[10px] text-slate-400">
                         {plat?.icon} {plat?.label ?? post.platform} · {post.client.name}
                       </span>
                       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
@@ -528,22 +528,22 @@ export default function SocialPostsPage() {
                               .writeText(post.content)
                               .then(() => toast.success("הועתק!"))
                           }
-                          className="text-gray-400 hover:text-indigo-500"
+                          className="text-slate-400 hover:text-blue-500"
                         >
                           <Copy size={11} />
                         </button>
                         <button
                           onClick={() => deletePost(post.id)}
-                          className="text-gray-400 hover:text-red-500"
+                          className="text-slate-400 hover:text-red-500"
                         >
                           <Trash2 size={11} />
                         </button>
                       </div>
                     </div>
-                    <p className="text-xs text-gray-600 whitespace-pre-wrap break-words">
+                    <p className="text-xs text-slate-600 whitespace-pre-wrap break-words">
                       {post.content}
                     </p>
-                    <p className="text-[10px] text-gray-400 mt-1">
+                    <p className="text-[10px] text-slate-400 mt-1">
                       {new Date(post.createdAt).toLocaleDateString("he-IL")}
                     </p>
                   </div>

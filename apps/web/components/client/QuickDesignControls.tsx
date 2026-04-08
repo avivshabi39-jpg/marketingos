@@ -44,17 +44,17 @@ export function QuickDesignControls({
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
       <div className="flex items-center justify-between mb-5">
-        <h2 className="font-semibold text-gray-900 flex items-center gap-2">
-          <Palette size={17} className="text-indigo-500" />
+        <h2 className="font-semibold text-slate-900 flex items-center gap-2">
+          <Palette size={17} className="text-blue-500" />
           עיצוב מהיר
         </h2>
         <a
           href={`/${slug}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 font-medium"
+          className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-700 font-medium"
         >
           <Eye size={13} />
           תצוגה מקדימה
@@ -64,7 +64,7 @@ export function QuickDesignControls({
       <div className="space-y-4">
         {/* Primary Color */}
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg border border-gray-200 overflow-hidden flex-shrink-0">
+          <div className="w-8 h-8 rounded-lg border border-slate-200 overflow-hidden flex-shrink-0">
             <input
               type="color"
               value={color}
@@ -75,17 +75,17 @@ export function QuickDesignControls({
             />
           </div>
           <div className="flex-1">
-            <label className="text-xs font-medium text-gray-600 flex items-center gap-1">
-              <span className="w-3 h-3 rounded-full inline-block border border-gray-300" style={{ background: color }} />
+            <label className="text-xs font-medium text-slate-600 flex items-center gap-1">
+              <span className="w-3 h-3 rounded-full inline-block border border-slate-300" style={{ background: color }} />
               צבע ראשי
             </label>
-            <p className="text-xs text-gray-400 font-mono">{color}</p>
+            <p className="text-xs text-slate-400 font-mono">{color}</p>
           </div>
         </div>
 
         {/* Title */}
         <div>
-          <label className="text-xs font-medium text-gray-600 flex items-center gap-1.5 mb-1.5">
+          <label className="text-xs font-medium text-slate-600 flex items-center gap-1.5 mb-1.5">
             <Type size={12} />
             כותרת הדף
           </label>
@@ -94,14 +94,14 @@ export function QuickDesignControls({
             value={title}
             onChange={(e) => { setTitle(e.target.value); setDirty(true); }}
             placeholder="הכנס כותרת ראשית..."
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-gray-50"
+            className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50"
             maxLength={200}
           />
         </div>
 
         {/* CTA */}
         <div>
-          <label className="text-xs font-medium text-gray-600 flex items-center gap-1.5 mb-1.5">
+          <label className="text-xs font-medium text-slate-600 flex items-center gap-1.5 mb-1.5">
             <MousePointer size={12} />
             טקסט כפתור הקריאה לפעולה
           </label>
@@ -110,7 +110,7 @@ export function QuickDesignControls({
             value={cta}
             onChange={(e) => { setCta(e.target.value); setDirty(true); }}
             placeholder="למשל: צור קשר עכשיו"
-            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-gray-50"
+            className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 bg-slate-50"
             maxLength={100}
           />
         </div>
@@ -118,7 +118,7 @@ export function QuickDesignControls({
         <button
           onClick={handleSave}
           disabled={saving || !dirty}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Save size={15} />
           {saving ? "שומר..." : "שמור שינויים"}

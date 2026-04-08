@@ -103,7 +103,7 @@ export default async function ClientPortalLayout({
   const hideFooter = ownerBrand.enabled && ownerBrand.hideFooter;
 
   return (
-    <div className="flex min-h-screen bg-gray-50" dir="rtl">
+    <div className="flex min-h-screen bg-slate-50" dir="rtl">
       {/* CSS variables + helper classes for brand color */}
       <style>{`
         :root {
@@ -122,7 +122,7 @@ export default async function ClientPortalLayout({
         industry={client.industry ?? null}
       />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="lg:hidden bg-white border-b border-gray-100 px-4 h-14 flex items-center">
+        <header className="lg:hidden bg-white border-b border-slate-100 px-4 h-14 flex items-center">
           <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
             <DarkModeToggle size="sm" />
             <NotificationCenter clientId={client.id} />
@@ -139,12 +139,12 @@ export default async function ClientPortalLayout({
               priority
             />
           ) : (
-            <p className="font-semibold text-gray-900 text-sm mx-auto">{displayName}</p>
+            <p className="font-semibold text-slate-900 text-sm mx-auto">{displayName}</p>
           )}
         </header>
         {/* Portal welcome banner */}
         {client.whitelabelEnabled && client.portalWelcome && (
-          <div className="bg-indigo-50 border-b border-indigo-100 px-6 py-2.5 text-sm text-indigo-800 text-right">
+          <div className="bg-blue-50 border-b border-blue-100 px-6 py-2.5 text-sm text-blue-800 text-right">
             {client.portalWelcome}
           </div>
         )}
@@ -160,11 +160,11 @@ export default async function ClientPortalLayout({
         </main>
         {/* Portal footer */}
         {client.whitelabelEnabled && client.portalFooter ? (
-          <footer className="border-t border-gray-100 px-6 py-3 text-xs text-gray-400 text-center">
+          <footer className="border-t border-slate-100 px-6 py-3 text-xs text-slate-400 text-center">
             {client.portalFooter}
           </footer>
         ) : !hideFooter ? (
-          <footer className="border-t border-gray-100 px-6 py-3 text-xs text-gray-400 text-center">
+          <footer className="border-t border-slate-100 px-6 py-3 text-xs text-slate-400 text-center">
             Powered by {ownerBrand.enabled ? ownerBrand.name : "MarketingOS"}
           </footer>
         ) : null}

@@ -104,29 +104,29 @@ export function ChecklistCard({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
       {/* Header */}
       <div
-        className="flex items-center justify-between px-6 py-4 border-b border-gray-100 cursor-pointer"
+        className="flex items-center justify-between px-6 py-4 border-b border-slate-100 cursor-pointer"
         onClick={() => setCollapsed(!collapsed)}
       >
         <div>
-          <h2 className="font-semibold text-gray-900">רשימת משימות להצלחה</h2>
+          <h2 className="font-semibold text-slate-900">רשימת משימות להצלחה</h2>
           <div className="flex items-center gap-2 mt-1">
-            <div className="flex-1 h-1.5 bg-gray-100 rounded-full w-32 overflow-hidden">
+            <div className="flex-1 h-1.5 bg-slate-100 rounded-full w-32 overflow-hidden">
               <div
-                className="h-full bg-indigo-500 rounded-full transition-all"
+                className="h-full bg-blue-500 rounded-full transition-all"
                 style={{ width: `${(completed / items.length) * 100}%` }}
               />
             </div>
-            <span className="text-xs text-gray-500">{completed}/{items.length} הושלם</span>
+            <span className="text-xs text-slate-500">{completed}/{items.length} הושלם</span>
           </div>
         </div>
-        {collapsed ? <ChevronDown size={16} className="text-gray-400" /> : <ChevronUp size={16} className="text-gray-400" />}
+        {collapsed ? <ChevronDown size={16} className="text-slate-400" /> : <ChevronUp size={16} className="text-slate-400" />}
       </div>
 
       {!collapsed && (
-        <div className="divide-y divide-gray-50">
+        <div className="divide-y divide-slate-50">
           {items.map((item) => (
             <div
               key={item.id}
@@ -134,24 +134,24 @@ export function ChecklistCard({
             >
               <span className="text-xl flex-shrink-0">{item.icon}</span>
               <div className="flex-1 min-w-0">
-                <p className={`text-sm font-medium ${item.done ? "text-gray-400 line-through" : "text-gray-800"}`}>
+                <p className={`text-sm font-medium ${item.done ? "text-slate-400 line-through" : "text-slate-800"}`}>
                   {item.label}
                 </p>
-                <p className="text-xs text-gray-400 mt-0.5">{item.description}</p>
+                <p className="text-xs text-slate-400 mt-0.5">{item.description}</p>
               </div>
               {item.done ? (
                 <CheckCircle2 size={20} className="text-green-500 flex-shrink-0" />
               ) : item.href ? (
                 <Link
                   href={item.href}
-                  className="flex-shrink-0 text-xs font-medium px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg transition-colors"
+                  className="flex-shrink-0 text-xs font-medium px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
                 >
                   {item.actionLabel}
                 </Link>
               ) : (
                 <button
                   onClick={item.onAction}
-                  className="flex-shrink-0 text-xs font-medium px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg transition-colors"
+                  className="flex-shrink-0 text-xs font-medium px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
                 >
                   {item.actionLabel}
                 </button>

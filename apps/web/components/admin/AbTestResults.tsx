@@ -43,7 +43,7 @@ export function AbTestResults({ clientId }: { clientId: string }) {
   }
 
   if (loading) return (
-    <div className="flex items-center gap-2 text-sm text-gray-400 py-4">
+    <div className="flex items-center gap-2 text-sm text-slate-400 py-4">
       <Loader2 size={14} className="animate-spin" /> טוען תוצאות A/B...
     </div>
   );
@@ -78,29 +78,29 @@ export function AbTestResults({ clientId }: { clientId: string }) {
           const r = results[v];
           const isWinner = results.winner === v;
           return (
-            <div key={v} className={`bg-white rounded-xl p-4 border-2 transition-all ${isWinner ? "border-green-400" : "border-gray-100"}`}>
+            <div key={v} className={`bg-white rounded-xl p-4 border-2 transition-all ${isWinner ? "border-green-400" : "border-slate-100"}`}>
               <div className="flex items-center justify-between mb-3">
-                <span className="font-bold text-gray-800">גרסה {v}</span>
+                <span className="font-bold text-slate-800">גרסה {v}</span>
                 {isWinner && <Trophy size={14} className="text-green-500" />}
               </div>
               <div className="space-y-1.5 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-500">צפיות</span>
+                  <span className="text-slate-500">צפיות</span>
                   <span className="font-medium">{r.views}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">הגשות</span>
+                  <span className="text-slate-500">הגשות</span>
                   <span className="font-medium">{r.submits}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">המרה</span>
-                  <span className={`font-bold ${isWinner ? "text-green-600" : "text-gray-700"}`}>{r.conversion}%</span>
+                  <span className="text-slate-500">המרה</span>
+                  <span className={`font-bold ${isWinner ? "text-green-600" : "text-slate-700"}`}>{r.conversion}%</span>
                 </div>
               </div>
               <button
                 onClick={() => selectWinner(v)}
                 disabled={selecting}
-                className="mt-3 w-full text-xs py-1.5 rounded-lg font-medium bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white transition"
+                className="mt-3 w-full text-xs py-1.5 rounded-lg font-medium bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white transition"
               >
                 {selecting ? "..." : `בחר גרסה ${v} כמנצחת`}
               </button>

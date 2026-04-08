@@ -59,7 +59,7 @@ export default function BlockRenderer({
       })}
 
       {/* Footer */}
-      <footer className="py-6 text-center text-sm text-gray-400 border-t border-gray-100">
+      <footer className="py-6 text-center text-sm text-slate-400 border-t border-slate-100">
         {clientName && <span>{clientName}</span>}
       </footer>
     </div>

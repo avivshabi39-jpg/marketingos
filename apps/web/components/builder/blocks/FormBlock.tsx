@@ -16,6 +16,7 @@ export default function FormBlock({
 }) {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [gender, setGender] = useState("");
   const [ageRange, setAgeRange] = useState("");
   const [city, setCity] = useState("");
@@ -25,26 +26,30 @@ export default function FormBlock({
     e.preventDefault();
     if (!clientSlug) return;
     setLoading(true);
+    setError("");
     const formData = new FormData(e.currentTarget);
     const data = {
       fullName: formData.get("fullName") as string,
       phone: formData.get("phone") as string,
       email: formData.get("email") as string || undefined,
-      businessName: formData.get("fullName") as string,
       description: formData.get("message") as string || undefined,
       gender: gender || undefined,
       ageRange: ageRange || undefined,
       city: city || undefined,
     };
     try {
-      await fetch(`/api/intake/${clientSlug}`, {
+      const res = await fetch(`/api/intake/${clientSlug}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-      setSubmitted(true);
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        setError("שגיאה בשליחת הטופס. נסה שוב.");
+      }
     } catch {
-      // silently fail
+      setError("שגיאת רשת. בדוק את החיבור ונסה שוב.");
     } finally {
       setLoading(false);
     }
@@ -70,7 +75,7 @@ export default function FormBlock({
               name="fullName"
               required
               placeholder="שם מלא *"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none"
             />
             <input
               name="phone"
@@ -78,24 +83,24 @@ export default function FormBlock({
               type="tel"
               dir="ltr"
               placeholder="* טלפון"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none text-left"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none text-left"
             />
             <input
               name="email"
               type="email"
               dir="ltr"
               placeholder="אימייל"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none text-left"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none text-left"
             />
             <textarea
               name="message"
               placeholder="הודעה"
               rows={3}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none resize-none"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-300 outline-none resize-none"
             />
             {/* Optional demographics */}
-            <div className="border-t border-gray-200 pt-3 space-y-3">
-              <p className="text-xs text-gray-400">פרטים נוספים (לא חובה)</p>
+            <div className="border-t border-slate-200 pt-3 space-y-3">
+              <p className="text-xs text-slate-400">פרטים נוספים (לא חובה)</p>
               <div className="flex gap-2">
                 {[
                   { id: "male", label: "👨 זכר" },
@@ -109,7 +114,7 @@ export default function FormBlock({
                     className={`flex-1 py-1.5 rounded-lg text-xs font-medium border-2 transition-all ${
                       gender === g.id
                         ? "border-blue-500 bg-blue-50 text-blue-700"
-                        : "border-gray-200 text-gray-500"
+                        : "border-slate-200 text-slate-500"
                     }`}
                   >
                     {g.label}
@@ -125,7 +130,7 @@ export default function FormBlock({
                     className={`flex-1 py-1.5 rounded-lg text-xs font-medium border-2 transition-all ${
                       ageRange === a
                         ? "border-blue-500 bg-blue-50 text-blue-700"
-                        : "border-gray-200 text-gray-500"
+                        : "border-slate-200 text-slate-500"
                     }`}
                   >
                     {a}
@@ -136,9 +141,12 @@ export default function FormBlock({
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 placeholder="עיר מגורים"
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-300 outline-none"
+                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-300 outline-none"
               />
             </div>
+            {error && (
+              <p className="text-sm text-red-600 text-center bg-red-50 rounded-lg py-2 px-3">{error}</p>
+            )}
             <button
               type="submit"
               disabled={loading}
@@ -157,15 +165,15 @@ export default function FormBlock({
     <section className="w-full px-4 py-6">
       <div className="max-w-md mx-auto space-y-3">
         <input
-          className="w-full text-xl font-bold text-center bg-transparent border-b border-dashed border-gray-300 outline-none pb-1"
+          className="w-full text-xl font-bold text-center bg-transparent border-b border-dashed border-slate-300 outline-none pb-1"
           value={title || ""}
           placeholder="כותרת טופס"
           onChange={(e) => onUpdate?.({ ...block.content, title: e.target.value })}
         />
         <div className="space-y-2 opacity-60 pointer-events-none">
-          <div className="h-10 bg-gray-100 rounded-lg border border-gray-200" />
-          <div className="h-10 bg-gray-100 rounded-lg border border-gray-200" />
-          <div className="h-10 bg-gray-100 rounded-lg border border-gray-200" />
+          <div className="h-10 bg-slate-100 rounded-lg border border-slate-200" />
+          <div className="h-10 bg-slate-100 rounded-lg border border-slate-200" />
+          <div className="h-10 bg-slate-100 rounded-lg border border-slate-200" />
         </div>
         <input
           className="w-full py-2 rounded-lg text-white font-semibold text-center outline-none"
@@ -175,7 +183,7 @@ export default function FormBlock({
           onChange={(e) => onUpdate?.({ ...block.content, button: e.target.value })}
         />
         <input
-          className="w-full text-sm text-center bg-transparent border-b border-dashed border-gray-200 outline-none text-gray-500"
+          className="w-full text-sm text-center bg-transparent border-b border-dashed border-slate-200 outline-none text-slate-500"
           value={successMessage || ""}
           placeholder="הודעת הצלחה"
           onChange={(e) => onUpdate?.({ ...block.content, successMessage: e.target.value })}

@@ -46,26 +46,26 @@ export function AiSuggestionsBar({ clientId, onSuggestionClick }: Props) {
   return (
     <div className="space-y-2 mb-4">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold text-indigo-700 flex items-center gap-1">
+        <p className="text-xs font-semibold text-blue-700 flex items-center gap-1">
           <Lightbulb size={13} />
           הצעות מהסוכן
         </p>
-        <button onClick={dismissAll} className="text-xs text-gray-400 hover:text-gray-600">
+        <button onClick={dismissAll} className="text-xs text-slate-400 hover:text-slate-600">
           סגור הכל
         </button>
       </div>
       {visible.map((s) => (
         <div
           key={s.id}
-          className="flex items-start gap-3 bg-indigo-50 border border-indigo-100 rounded-xl px-4 py-3"
+          className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-xl px-4 py-3"
         >
-          <Lightbulb size={14} className="text-indigo-500 flex-shrink-0 mt-0.5" />
+          <Lightbulb size={14} className="text-blue-500 flex-shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
-            <p className="text-sm text-gray-700">💡 הסוכן ממליץ: {s.suggestion}</p>
+            <p className="text-sm text-slate-700">💡 הסוכן ממליץ: {s.suggestion}</p>
             {onSuggestionClick && (
               <button
                 onClick={() => onSuggestionClick(s.suggestion)}
-                className="mt-1.5 flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-800 font-medium"
+                className="mt-1.5 flex items-center gap-1 text-xs text-blue-600 hover:text-blue-800 font-medium"
               >
                 <Wand2 size={11} />
                 לחץ לשיפור עם AI
@@ -74,7 +74,7 @@ export function AiSuggestionsBar({ clientId, onSuggestionClick }: Props) {
           </div>
           <button
             onClick={() => dismiss(s.id)}
-            className="text-gray-300 hover:text-gray-500 flex-shrink-0"
+            className="text-slate-300 hover:text-slate-500 flex-shrink-0"
           >
             <X size={14} />
           </button>

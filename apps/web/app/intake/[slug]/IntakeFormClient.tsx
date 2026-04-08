@@ -88,10 +88,10 @@ type FieldErrors = Partial<Record<keyof FormData, string>>;
 const BASE = [
   "block w-full rounded-xl border px-4 py-3 text-sm bg-white",
   "focus:outline-none focus:ring-2 focus:ring-offset-0 transition-all",
-  "placeholder:text-gray-400 shadow-sm",
+  "placeholder:text-slate-400 shadow-sm",
 ].join(" ");
 
-const NORMAL = "border-gray-200 focus:border-blue-400 focus:ring-blue-400/20";
+const NORMAL = "border-slate-200 focus:border-blue-400 focus:ring-blue-400/20";
 const ERROR  = "border-red-300 focus:border-red-400 focus:ring-red-400/20";
 
 // ─── Small helper components ──────────────────────────────────────────────────
@@ -103,11 +103,11 @@ function Label({
 }) {
   return (
     <div className="flex flex-col gap-0.5 mb-1.5">
-      <span className="text-sm font-semibold text-gray-700">
+      <span className="text-sm font-semibold text-slate-700">
         {text}
         {required && <span className="text-red-500 font-normal mr-1"> *</span>}
       </span>
-      {hint && <span className="text-xs text-gray-400">{hint}</span>}
+      {hint && <span className="text-xs text-slate-400">{hint}</span>}
       {error && <span className="text-xs text-red-600">{error}</span>}
     </div>
   );
@@ -116,9 +116,9 @@ function Label({
 function SummaryRow({ label, value }: { label: string; value: string | null | undefined }) {
   if (!value) return null;
   return (
-    <div className="flex justify-between items-start gap-4 py-2 border-b border-gray-100 last:border-0 text-sm">
-      <span className="text-gray-500 flex-shrink-0">{label}</span>
-      <span className="text-gray-900 font-medium text-left break-words max-w-[60%]">{value}</span>
+    <div className="flex justify-between items-start gap-4 py-2 border-b border-slate-100 last:border-0 text-sm">
+      <span className="text-slate-500 flex-shrink-0">{label}</span>
+      <span className="text-slate-900 font-medium text-left break-words max-w-[60%]">{value}</span>
     </div>
   );
 }
@@ -198,7 +198,7 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
 
   if (submitted) {
     return (
-      <div dir="rtl" className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center p-6">
+      <div dir="rtl" className="min-h-screen bg-gradient-to-br from-slate-50 to-white flex items-center justify-center p-6">
         <div className="text-center max-w-sm px-4">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl shadow-lg"
@@ -206,11 +206,11 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
           >
             ✓
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-3">תודה רבה!</h1>
-          <p className="text-gray-500 leading-relaxed">
+          <h1 className="text-3xl font-bold text-slate-900 mb-3">תודה רבה!</h1>
+          <p className="text-slate-500 leading-relaxed">
             הטופס נשלח בהצלחה.
             <br />
-            צוות <strong className="text-gray-800">{clientName}</strong> יצור איתך קשר בהקדם.
+            צוות <strong className="text-slate-800">{clientName}</strong> יצור איתך קשר בהקדם.
           </p>
         </div>
       </div>
@@ -220,7 +220,7 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
   // ── Page ─────────────────────────────────────────────────────────────────
 
   return (
-    <div dir="rtl" className="min-h-screen bg-gray-50">
+    <div dir="rtl" className="min-h-screen bg-slate-50">
 
       {/* ───── Branded hero ────────────────────────────────────────────── */}
       <div
@@ -244,7 +244,7 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
       </div>
 
       {/* ───── Step bar ────────────────────────────────────────────────── */}
-      <div className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-20">
+      <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-20">
         <div className="max-w-xl mx-auto px-6 py-4">
           <div className="flex items-center gap-0">
             {STEPS.map((label, i) => (
@@ -258,7 +258,7 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
                         ? "text-white border-transparent"
                         : i === step
                         ? "text-white border-transparent shadow-sm"
-                        : "bg-white text-gray-300 border-gray-200",
+                        : "bg-white text-slate-300 border-slate-200",
                     ].join(" ")}
                     style={i <= step ? { backgroundColor: primaryColor, borderColor: primaryColor } : {}}
                   >
@@ -267,7 +267,7 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
                   <span
                     className={[
                       "text-xs whitespace-nowrap hidden sm:block leading-none",
-                      i === step ? "font-semibold text-gray-800" : "text-gray-400",
+                      i === step ? "font-semibold text-slate-800" : "text-slate-400",
                     ].join(" ")}
                   >
                     {label}
@@ -275,7 +275,7 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
                 </div>
                 {/* Connecting line */}
                 {i < STEPS.length - 1 && (
-                  <div className="flex-1 h-0.5 mx-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="flex-1 h-0.5 mx-2 bg-slate-200 rounded-full overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all duration-500"
                       style={{ width: i < step ? "100%" : "0%", backgroundColor: primaryColor }}
@@ -285,17 +285,17 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
               </div>
             ))}
           </div>
-          <p className="text-xs text-gray-400 mt-2">שלב {step + 1} מתוך {STEPS.length}</p>
+          <p className="text-xs text-slate-400 mt-2">שלב {step + 1} מתוך {STEPS.length}</p>
         </div>
       </div>
 
       {/* ───── Form card ───────────────────────────────────────────────── */}
       <div className="max-w-xl mx-auto px-4 py-8 pb-20">
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
 
           {/* Card title */}
-          <div className="px-6 pt-7 pb-2 border-b border-gray-50">
-            <h2 className="text-lg font-bold text-gray-900">{STEPS[step]}</h2>
+          <div className="px-6 pt-7 pb-2 border-b border-slate-50">
+            <h2 className="text-lg font-bold text-slate-900">{STEPS[step]}</h2>
           </div>
 
           <div className="px-6 py-6 space-y-6">
@@ -363,7 +363,7 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
                           "px-4 py-2 rounded-full text-sm font-medium border transition-all",
                           form.preferredContact === c
                             ? "text-white border-transparent shadow-sm"
-                            : "text-gray-600 border-gray-200 bg-white hover:border-gray-400",
+                            : "text-slate-600 border-slate-200 bg-white hover:border-slate-400",
                         ].join(" ")}
                         style={form.preferredContact === c ? { backgroundColor: primaryColor, borderColor: primaryColor } : {}}
                       >
@@ -457,7 +457,7 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
                           "px-3 py-3 rounded-xl text-sm font-medium border text-right transition-all",
                           form.mainGoal === g
                             ? "text-white border-transparent shadow-sm"
-                            : "text-gray-700 border-gray-200 bg-white hover:border-gray-300",
+                            : "text-slate-700 border-slate-200 bg-white hover:border-slate-300",
                         ].join(" ")}
                         style={form.mainGoal === g ? { backgroundColor: primaryColor, borderColor: primaryColor } : {}}
                       >
@@ -481,14 +481,14 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
                             "px-3 py-3 rounded-xl text-sm font-medium border text-right flex items-center gap-2 transition-all",
                             on
                               ? "text-white border-transparent shadow-sm"
-                              : "text-gray-700 border-gray-200 bg-white hover:border-gray-300",
+                              : "text-slate-700 border-slate-200 bg-white hover:border-slate-300",
                           ].join(" ")}
                           style={on ? { backgroundColor: primaryColor, borderColor: primaryColor } : {}}
                         >
                           <span
                             className={[
                               "w-4 h-4 rounded border-2 flex-shrink-0 flex items-center justify-center text-xs font-bold",
-                              on ? "bg-white/30 border-white/60 text-white" : "border-gray-300",
+                              on ? "bg-white/30 border-white/60 text-white" : "border-slate-300",
                             ].join(" ")}
                           >
                             {on && "✓"}
@@ -547,8 +547,8 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
               <>
                 {/* Summary */}
                 <div>
-                  <p className="text-sm font-bold text-gray-700 mb-3">סיכום הפרטים שלך</p>
-                  <div className="bg-gray-50 rounded-xl border border-gray-100 px-5 py-2">
+                  <p className="text-sm font-bold text-slate-700 mb-3">סיכום הפרטים שלך</p>
+                  <div className="bg-slate-50 rounded-xl border border-slate-100 px-5 py-2">
                     <SummaryRow label="שם מלא"        value={form.fullName} />
                     <SummaryRow label="שם העסק"       value={form.businessName} />
                     <SummaryRow label="אימייל"         value={form.email} />
@@ -561,7 +561,7 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
                     <SummaryRow label="ערוצי שיווק"    value={form.marketingChannels} />
                   </div>
                   {(!form.fullName && !form.businessName) && (
-                    <p className="text-xs text-gray-400 mt-2 text-center">
+                    <p className="text-xs text-slate-400 mt-2 text-center">
                       חזרו לשלב הראשון כדי למלא את הפרטים
                     </p>
                   )}
@@ -582,14 +582,14 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
                     <div
                       className={[
                         "w-5 h-5 rounded border-2 flex items-center justify-center transition-all",
-                        agreed ? "border-transparent" : "border-gray-300 bg-white group-hover:border-gray-400",
+                        agreed ? "border-transparent" : "border-slate-300 bg-white group-hover:border-slate-400",
                       ].join(" ")}
                       style={agreed ? { backgroundColor: primaryColor, borderColor: primaryColor } : {}}
                     >
                       {agreed && <span className="text-white text-xs font-bold leading-none">✓</span>}
                     </div>
                   </div>
-                  <span className="text-sm text-gray-600 leading-relaxed">
+                  <span className="text-sm text-slate-600 leading-relaxed">
                     אני מסכים/ה שהמידע שמסרתי ישמש לצורך יצירת קשר ומתן שירות שיווקי.
                   </span>
                 </label>
@@ -606,12 +606,12 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
           )}
 
           {/* ── Navigation ─────────────────────────────────────────────── */}
-          <div className="px-6 pb-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+          <div className="px-6 pb-6 pt-4 border-t border-slate-100 flex items-center justify-between">
             {step > 0 ? (
               <button
                 type="button"
                 onClick={back}
-                className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors"
+                className="text-sm text-slate-500 hover:text-slate-800 font-medium transition-colors"
               >
                 חזרה
               </button>

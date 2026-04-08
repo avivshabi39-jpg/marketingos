@@ -42,7 +42,7 @@ const WORKFLOW_DEFS: Omit<WorkflowCard, "active" | "lastRun" | "webhookUrl">[] =
     id: "lead-email-notify",
     title: "ליד חדש → מייל ללקוח",
     description: "שולח מייל מיידי ללקוח כשמגיע ליד חדש עם כל הפרטים",
-    icon: Mail, iconColor: "text-indigo-600", iconBg: "bg-indigo-50",
+    icon: Mail, iconColor: "text-blue-600", iconBg: "bg-blue-50",
   },
 ];
 
@@ -85,67 +85,67 @@ function WorkflowCardItem({ wf, onToggle, onWebhookChange, onSave }: {
   }
 
   return (
-    <div className={`bg-white rounded-xl border shadow-sm p-5 transition-all ${wf.active ? "border-green-200" : "border-gray-100"}`}>
+    <div className={`bg-white rounded-xl border shadow-sm p-5 transition-all ${wf.active ? "border-green-200" : "border-slate-100"}`}>
       <div className="flex items-start gap-4">
         <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${wf.iconBg}`}>
           <Icon size={20} className={wf.iconColor} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2 flex-wrap">
-            <h3 className="font-semibold text-gray-900 text-sm">{wf.title}</h3>
+            <h3 className="font-semibold text-slate-900 text-sm">{wf.title}</h3>
             <div className="flex items-center gap-2">
               {wf.active ? (
                 <span className="flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-1 rounded-full font-medium">
                   <CheckCircle2 size={11} /> פעיל
                 </span>
               ) : (
-                <span className="flex items-center gap-1 text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full font-medium">
+                <span className="flex items-center gap-1 text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-full font-medium">
                   <XCircle size={11} /> כבוי
                 </span>
               )}
               {/* Toggle — fixed translate direction */}
               <button
                 onClick={onToggle}
-                className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${wf.active ? "bg-green-500" : "bg-gray-300"}`}
+                className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${wf.active ? "bg-green-500" : "bg-slate-300"}`}
               >
                 <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${wf.active ? "translate-x-4" : "translate-x-1"}`} />
               </button>
             </div>
           </div>
-          <p className="text-sm text-gray-500 mt-1 leading-relaxed">{wf.description}</p>
+          <p className="text-sm text-slate-500 mt-1 leading-relaxed">{wf.description}</p>
           {wf.lastRun && (
-            <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+            <p className="text-xs text-slate-400 mt-2 flex items-center gap-1">
               <Clock size={11} /> הופעל לאחרונה: {new Date(wf.lastRun).toLocaleString("he-IL")}
             </p>
           )}
           <div className="flex items-center gap-2 mt-3">
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className="flex items-center gap-1.5 text-xs border border-gray-200 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition"
+              className="flex items-center gap-1.5 text-xs border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg hover:bg-slate-50 transition"
             >
               <Settings size={12} /> הגדר
             </button>
             <button
               onClick={handleTest}
               disabled={testing}
-              className="flex items-center gap-1.5 text-xs border border-gray-200 text-gray-600 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
+              className="flex items-center gap-1.5 text-xs border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg hover:bg-slate-50 transition disabled:opacity-50"
             >
               {testing ? <Loader2 size={12} className="animate-spin" /> : <Zap size={12} />}
               בדוק
             </button>
           </div>
           {showSettings && (
-            <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-              <label className="text-xs font-medium text-gray-600 block mb-1.5">n8n Webhook URL</label>
+            <div className="mt-3 p-3 bg-slate-50 rounded-lg">
+              <label className="text-xs font-medium text-slate-600 block mb-1.5">n8n Webhook URL</label>
               <input
                 type="url" dir="ltr"
                 value={wf.webhookUrl}
                 onChange={(e) => onWebhookChange(e.target.value)}
                 onBlur={onSave}
                 placeholder="https://n8n.your-domain.com/webhook/..."
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+                className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-300 bg-white"
               />
-              <p className="text-xs text-gray-400 mt-1">קבל URL זה מתוך n8n ← Webhook node</p>
+              <p className="text-xs text-slate-400 mt-1">קבל URL זה מתוך n8n ← Webhook node</p>
             </div>
           )}
         </div>
@@ -209,7 +209,7 @@ export default function WorkflowsPage() {
   if (loadingInit) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 size={24} className="animate-spin text-indigo-500" />
+        <Loader2 size={24} className="animate-spin text-blue-500" />
       </div>
     );
   }
@@ -218,10 +218,10 @@ export default function WorkflowsPage() {
     <div className="space-y-6" dir="rtl">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">אוטומציות</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-slate-900">אוטומציות</h1>
+          <p className="text-sm text-slate-500 mt-1">
             חבר את המערכת ל-n8n להפעלת אוטומציות חכמות. מחייב{" "}
-            <a href="https://n8n.io" target="_blank" rel="noopener noreferrer" className="text-indigo-500 hover:underline">
+            <a href="https://n8n.io" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
               n8n self-hosted
             </a>.
           </p>
@@ -229,20 +229,20 @@ export default function WorkflowsPage() {
       </div>
 
       {/* n8n setup card */}
-      <div className="bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100 rounded-xl p-5">
+      <div className="bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-100 rounded-xl p-5">
         <div className="flex items-start gap-3">
           <div className="text-3xl">🐙</div>
           <div>
-            <h3 className="font-semibold text-gray-900">הגדרת n8n</h3>
-            <p className="text-sm text-gray-600 mt-0.5 mb-3">הפעל n8n עם Docker בשתי שורות:</p>
-            <pre className="bg-gray-900 text-green-400 text-xs px-4 py-3 rounded-lg overflow-x-auto font-mono leading-relaxed" dir="ltr">
+            <h3 className="font-semibold text-slate-900">הגדרת n8n</h3>
+            <p className="text-sm text-slate-600 mt-0.5 mb-3">הפעל n8n עם Docker בשתי שורות:</p>
+            <pre className="bg-slate-900 text-green-400 text-xs px-4 py-3 rounded-lg overflow-x-auto font-mono leading-relaxed" dir="ltr">
 {`docker run -d \\
   --name n8n \\
   -p 5678:5678 \\
   -v ~/.n8n:/home/node/.n8n \\
   n8nio/n8n`}
             </pre>
-            <p className="text-xs text-gray-500 mt-2">לאחר מכן פתח <code dir="ltr" className="bg-gray-100 px-1 rounded">http://localhost:5678</code> וצור workflow לכל אוטומציה</p>
+            <p className="text-xs text-slate-500 mt-2">לאחר מכן פתח <code dir="ltr" className="bg-slate-100 px-1 rounded">http://localhost:5678</code> וצור workflow לכל אוטומציה</p>
           </div>
         </div>
       </div>

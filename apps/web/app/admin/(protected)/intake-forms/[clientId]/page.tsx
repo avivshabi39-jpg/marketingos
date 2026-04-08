@@ -24,7 +24,7 @@ export default async function IntakeResponsesPage({
   return (
     <div className="space-y-6" dir="rtl">
       <div className="flex items-center gap-3">
-        <Link href="/admin/intake-forms" className="text-gray-400 hover:text-gray-600">
+        <Link href="/admin/intake-forms" className="text-slate-400 hover:text-slate-600">
           <ArrowRight size={18} />
         </Link>
         <div className="flex items-center gap-3 flex-1">
@@ -35,10 +35,10 @@ export default async function IntakeResponsesPage({
             {client.name[0]}
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-gray-900">
+            <h1 className="text-xl font-semibold text-slate-900">
               טפסי קבלה — {client.name}
             </h1>
-            <p className="text-sm text-gray-500">{forms.length} תגובות</p>
+            <p className="text-sm text-slate-500">{forms.length} תגובות</p>
           </div>
         </div>
       </div>

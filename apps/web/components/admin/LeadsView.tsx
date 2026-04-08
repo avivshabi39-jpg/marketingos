@@ -49,7 +49,7 @@ const SOURCE_COLORS: Record<string, string> = {
   facebook: "bg-blue-500 text-white",
   google:   "bg-red-500 text-white",
   organic:  "bg-green-500 text-white",
-  manual:   "bg-gray-400 text-white",
+  manual:   "bg-slate-400 text-white",
   other:    "bg-purple-400 text-white",
 };
 
@@ -58,7 +58,7 @@ const SOURCE_BORDER: Record<string, string> = {
   facebook: "border-r-blue-400",
   google:   "border-r-red-400",
   organic:  "border-r-green-400",
-  manual:   "border-r-gray-300",
+  manual:   "border-r-slate-300",
   other:    "border-r-purple-400",
 };
 const SOURCE_HE: Record<string, string> = {
@@ -126,7 +126,7 @@ function ScoreStars({ score, onChange }: { score: number; onChange?: (s: number)
           size={12}
           onClick={onChange ? () => onChange((i + 1) * 20) : undefined}
           className={cn(
-            i < stars ? "text-amber-400 fill-amber-400" : "text-gray-200",
+            i < stars ? "text-amber-400 fill-amber-400" : "text-slate-200",
             onChange && "cursor-pointer hover:scale-110 transition-transform"
           )}
         />
@@ -191,7 +191,7 @@ function LeadPanel({
       {/* Panel */}
       <div className="w-full max-w-md bg-white shadow-2xl flex flex-col overflow-y-auto animate-in slide-in-from-right duration-200">
         {/* Header */}
-        <div className="flex items-start justify-between p-5 border-b border-gray-100">
+        <div className="flex items-start justify-between p-5 border-b border-slate-100">
           <div className="flex items-center gap-3">
             <div
               className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm"
@@ -200,19 +200,19 @@ function LeadPanel({
               {lead.firstName[0]}{lead.lastName[0]}
             </div>
             <div>
-              <h2 className="font-semibold text-gray-900">{lead.firstName} {lead.lastName}</h2>
-              <p className="text-xs text-gray-500">{lead.client.name}</p>
+              <h2 className="font-semibold text-slate-900">{lead.firstName} {lead.lastName}</h2>
+              <p className="text-xs text-slate-500">{lead.client.name}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <Link
               href={`/admin/leads/${lead.id}`}
-              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-indigo-600 transition-colors"
+              className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-blue-600 transition-colors"
               title="פתח עמוד מלא"
             >
               <ExternalLink size={16} />
             </Link>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
               <X size={18} />
             </button>
           </div>
@@ -224,8 +224,8 @@ function LeadPanel({
             {lead.phone && (
               <div className="space-y-1.5">
                 <div className="flex items-center gap-2">
-                  <Phone size={14} className="text-gray-400 flex-shrink-0" />
-                  <span className="text-sm text-gray-700 font-medium" dir="ltr">{lead.phone}</span>
+                  <Phone size={14} className="text-slate-400 flex-shrink-0" />
+                  <span className="text-sm text-slate-700 font-medium" dir="ltr">{lead.phone}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <a
@@ -264,8 +264,8 @@ function LeadPanel({
             )}
             {lead.email && (
               <div className="flex items-center gap-3">
-                <Mail size={14} className="text-gray-400 flex-shrink-0" />
-                <a href={`mailto:${lead.email}`} className="text-sm text-gray-700 hover:text-indigo-600">{lead.email}</a>
+                <Mail size={14} className="text-slate-400 flex-shrink-0" />
+                <a href={`mailto:${lead.email}`} className="text-sm text-slate-700 hover:text-blue-600">{lead.email}</a>
               </div>
             )}
             <div className="flex items-center gap-2 flex-wrap">
@@ -274,29 +274,29 @@ function LeadPanel({
                 score={lead.leadScore}
                 onChange={(score) => patch({ leadScore: score }, "score")}
               />
-              {saving === "score" && <Loader2 size={12} className="animate-spin text-gray-400" />}
+              {saving === "score" && <Loader2 size={12} className="animate-spin text-slate-400" />}
             </div>
           </div>
 
           {/* UTM */}
           {(lead.utmSource || lead.utmCampaign || lead.utmMedium) && (
-            <div className="bg-gray-50 rounded-xl p-3 text-xs space-y-1">
-              <p className="font-semibold text-gray-500 mb-2">UTM</p>
-              {lead.utmSource && <p className="text-gray-700">מקור: <span className="font-medium">{lead.utmSource}</span></p>}
-              {lead.utmMedium && <p className="text-gray-700">מדיה: <span className="font-medium">{lead.utmMedium}</span></p>}
-              {lead.utmCampaign && <p className="text-gray-700">קמפיין: <span className="font-medium">{lead.utmCampaign}</span></p>}
+            <div className="bg-slate-50 rounded-xl p-3 text-xs space-y-1">
+              <p className="font-semibold text-slate-500 mb-2">UTM</p>
+              {lead.utmSource && <p className="text-slate-700">מקור: <span className="font-medium">{lead.utmSource}</span></p>}
+              {lead.utmMedium && <p className="text-slate-700">מדיה: <span className="font-medium">{lead.utmMedium}</span></p>}
+              {lead.utmCampaign && <p className="text-slate-700">קמפיין: <span className="font-medium">{lead.utmCampaign}</span></p>}
             </div>
           )}
 
           {/* Status */}
           <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">סטטוס</label>
+            <label className="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">סטטוס</label>
             <div className="relative">
               <select
                 value={lead.status}
                 onChange={(e) => patch({ status: e.target.value }, "status")}
                 className={cn(
-                  "w-full rounded-lg border px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-400 appearance-none cursor-pointer pr-8",
+                  "w-full rounded-lg border px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-400 appearance-none cursor-pointer pr-8",
                   col?.badge
                 )}
               >
@@ -304,14 +304,14 @@ function LeadPanel({
                   <option key={c.key} value={c.key}>{c.label}</option>
                 ))}
               </select>
-              <ChevronDown size={14} className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-              {saving === "status" && <Loader2 size={12} className="absolute left-8 top-1/2 -translate-y-1/2 animate-spin text-gray-400" />}
+              <ChevronDown size={14} className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              {saving === "status" && <Loader2 size={12} className="absolute left-8 top-1/2 -translate-y-1/2 animate-spin text-slate-400" />}
             </div>
           </div>
 
           {/* Deal Value */}
           <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+            <label className="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">
               <DollarSign size={12} className="inline ml-1" />
               ערך עסקה (₪)
             </label>
@@ -324,13 +324,13 @@ function LeadPanel({
                 if (val !== lead.value) patch({ value: val }, "value");
               }}
               placeholder="0"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
           {/* Follow-up date */}
           <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">
+            <label className="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">
               <Calendar size={12} className="inline ml-1" />
               תאריך מעקב
             </label>
@@ -343,13 +343,13 @@ function LeadPanel({
                   patch({ followUpAt: new Date(localFollowUp).toISOString() }, "followup");
                 }
               }}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
           {/* Notes */}
           <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide">הערות</label>
+            <label className="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wide">הערות</label>
             <textarea
               rows={4}
               value={localNotes}
@@ -360,10 +360,10 @@ function LeadPanel({
                 }
               }}
               placeholder="הוסף הערה..."
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
             />
             {saving === "notes" && (
-              <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
+              <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
                 <Loader2 size={10} className="animate-spin" /> שומר...
               </p>
             )}
@@ -374,8 +374,8 @@ function LeadPanel({
 
           {/* Timeline */}
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">מידע נוסף</p>
-            <div className="space-y-1.5 text-xs text-gray-500">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">מידע נוסף</p>
+            <div className="space-y-1.5 text-xs text-slate-500">
               <div className="flex items-center gap-2">
                 <Clock size={11} />
                 <span>נוצר {new Date(lead.createdAt).toLocaleDateString("he-IL", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
@@ -458,50 +458,50 @@ function QuickAddModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" dir="rtl">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-900">ליד חדש</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600"><X size={18} /></button>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+          <h2 className="font-semibold text-slate-900">ליד חדש</h2>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={18} /></button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">שם פרטי *</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">שם פרטי *</label>
               <input value={form.firstName} onChange={(e) => set("firstName", e.target.value)}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">שם משפחה *</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">שם משפחה *</label>
               <input value={form.lastName} onChange={(e) => set("lastName", e.target.value)}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">טלפון</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1">טלפון</label>
             <input type="tel" dir="ltr" value={form.phone} onChange={(e) => set("phone", e.target.value)}
               placeholder="050-0000000"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">אימייל</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1">אימייל</label>
             <input type="email" dir="ltr" value={form.email} onChange={(e) => set("email", e.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">ערך עסקה (₪)</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1">ערך עסקה (₪)</label>
             <input type="number" min="0" value={form.value} onChange={(e) => set("value", e.target.value)}
               placeholder="0"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">מקור</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">מקור</label>
               <select value={form.source} onChange={(e) => set("source", e.target.value)}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <option value="manual">ידני</option>
                 <option value="facebook">פייסבוק</option>
                 <option value="google">גוגל</option>
@@ -511,9 +511,9 @@ function QuickAddModal({
             </div>
             {!clientId && (
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">לקוח *</label>
+                <label className="block text-xs font-medium text-slate-600 mb-1">לקוח *</label>
                 <select value={form.clientId} onChange={(e) => set("clientId", e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
                   {clients.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
               </div>
@@ -524,12 +524,12 @@ function QuickAddModal({
 
           <div className="flex gap-2 pt-1">
             <button type="submit" disabled={loading}
-              className="flex-1 flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-lg transition-colors">
+              className="flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-lg transition-colors">
               {loading && <Loader2 size={14} className="animate-spin" />}
               {loading ? "שומר..." : "הוסף ליד"}
             </button>
             <button type="button" onClick={onClose}
-              className="flex-1 border border-gray-200 text-gray-600 text-sm font-medium py-2.5 rounded-lg hover:bg-gray-50 transition-colors">
+              className="flex-1 border border-slate-200 text-slate-600 text-sm font-medium py-2.5 rounded-lg hover:bg-slate-50 transition-colors">
               ביטול
             </button>
           </div>
@@ -557,7 +557,7 @@ function KanbanCard({
   onQuickAction: (id: string, action: "advance" | "lost" | "whatsapp") => void;
 }) {
   const srcKey_ = srcKey(lead.source);
-  const borderColor = SOURCE_BORDER[srcKey_] ?? "border-r-gray-200";
+  const borderColor = SOURCE_BORDER[srcKey_] ?? "border-r-slate-200";
   const nextStatus = NEXT_STATUS[lead.status];
 
   const isOverdue =
@@ -576,20 +576,20 @@ function KanbanCard({
         "hover:shadow-md cursor-grab active:cursor-grabbing active:opacity-70 active:scale-95",
         "transition-all select-none group",
         borderColor,
-        isSelected ? "border-indigo-300 ring-2 ring-indigo-200" : "border-gray-100",
+        isSelected ? "border-blue-300 ring-2 ring-blue-200" : "border-slate-100",
         isOverdue && "ring-1 ring-amber-300"
       )}
     >
       <div className="flex items-start justify-between gap-1">
         <button
           onClick={(e) => { e.stopPropagation(); onToggleSelect(lead.id); }}
-          className="flex-shrink-0 text-gray-300 hover:text-indigo-500 mt-0.5 transition-colors"
+          className="flex-shrink-0 text-slate-300 hover:text-blue-500 mt-0.5 transition-colors"
         >
-          {isSelected ? <CheckSquare size={13} className="text-indigo-500" /> : <Square size={13} />}
+          {isSelected ? <CheckSquare size={13} className="text-blue-500" /> : <Square size={13} />}
         </button>
         <div className="flex-1 min-w-0 mr-1">
           <div className="flex items-center gap-1.5">
-            <p className="text-sm font-medium text-gray-900 leading-tight truncate">
+            <p className="text-sm font-medium text-slate-900 leading-tight truncate">
               {lead.firstName} {lead.lastName}
             </p>
             {isOverdue && (
@@ -598,7 +598,7 @@ function KanbanCard({
               </span>
             )}
           </div>
-          <p className="text-xs text-gray-400 truncate mt-0.5">{lead.client.name}</p>
+          <p className="text-xs text-slate-400 truncate mt-0.5">{lead.client.name}</p>
         </div>
         <SourceBadge source={lead.source} />
       </div>
@@ -624,7 +624,7 @@ function KanbanCard({
       )}
       {lead.phone && (
         <div className="flex items-center gap-1.5">
-          <span className="flex items-center gap-1 text-xs text-gray-500 flex-1 min-w-0 truncate">
+          <span className="flex items-center gap-1 text-xs text-slate-500 flex-1 min-w-0 truncate">
             <Phone size={11} className="flex-shrink-0" />{lead.phone}
           </span>
           <a
@@ -644,13 +644,13 @@ function KanbanCard({
       ) : null}
       <div className="flex items-center justify-between pt-1">
         <ScoreStars score={lead.leadScore} />
-        <span className="flex items-center gap-1 text-xs text-gray-400">
+        <span className="flex items-center gap-1 text-xs text-slate-400">
           <Clock size={10} />{timeAgo(lead.createdAt)}
         </span>
       </div>
 
       {/* Quick actions — visible on hover */}
-      <div className="hidden group-hover:flex items-center gap-1 pt-1 border-t border-gray-50">
+      <div className="hidden group-hover:flex items-center gap-1 pt-1 border-t border-slate-50">
         {lead.phone && (
           <button
             onClick={(e) => { e.stopPropagation(); onQuickAction(lead.id, "whatsapp"); }}
@@ -663,7 +663,7 @@ function KanbanCard({
         {nextStatus && lead.status !== "LOST" && (
           <button
             onClick={(e) => { e.stopPropagation(); onQuickAction(lead.id, "advance"); }}
-            className="flex items-center gap-1 px-1.5 py-1 rounded bg-indigo-50 text-indigo-600 hover:bg-indigo-100 text-xs transition-colors"
+            className="flex items-center gap-1 px-1.5 py-1 rounded bg-blue-50 text-blue-600 hover:bg-blue-100 text-xs transition-colors"
             title={`העבר ל-${COLUMNS.find(c => c.key === nextStatus)?.label}`}
           >
             <ArrowRight size={11} />
@@ -784,28 +784,28 @@ function KanbanView({
                   {colLeads.length}
                 </span>
                 <span
-                  className="text-xs font-medium text-gray-600"
+                  className="text-xs font-medium text-slate-600"
                   style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
                 >
                   {col.label}
                 </span>
-                <ChevronDown size={12} className="text-gray-400 rotate-90" />
+                <ChevronDown size={12} className="text-slate-400 rotate-90" />
               </button>
             ) : (
               <div
                 className={cn(
                   "rounded-xl border-t-2 p-3 min-h-[120px] transition-all",
                   col.color, col.bg,
-                  isOver && "ring-2 ring-indigo-300 ring-offset-1"
+                  isOver && "ring-2 ring-blue-300 ring-offset-1"
                 )}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-1.5">
-                    <h3 className="font-semibold text-gray-800 text-sm">{col.label}</h3>
+                    <h3 className="font-semibold text-slate-800 text-sm">{col.label}</h3>
                     {canCollapse && (
                       <button
                         onClick={() => toggleCollapse(col.key)}
-                        className="text-gray-400 hover:text-gray-600"
+                        className="text-slate-400 hover:text-slate-600"
                         title="כווץ עמודה"
                       >
                         <ChevronDown size={13} className="-rotate-90" />
@@ -814,7 +814,7 @@ function KanbanView({
                   </div>
                   <div className="flex items-center gap-1.5">
                     {colValue > 0 && (
-                      <span className="text-xs text-gray-400 font-medium">
+                      <span className="text-xs text-slate-400 font-medium">
                         ₪{(colValue / 1000).toFixed(0)}K
                       </span>
                     )}
@@ -838,9 +838,9 @@ function KanbanView({
                   {colLeads.length === 0 && (
                     <div className={cn(
                       "border-2 border-dashed rounded-lg py-6 text-center transition-colors",
-                      isOver ? "border-indigo-300 bg-indigo-50/50" : "border-gray-200"
+                      isOver ? "border-blue-300 bg-blue-50/50" : "border-slate-200"
                     )}>
-                      <p className="text-xs text-gray-400">{isOver ? "שחרר כאן" : "גרור לכאן"}</p>
+                      <p className="text-xs text-slate-400">{isOver ? "שחרר כאן" : "גרור לכאן"}</p>
                     </div>
                   )}
                 </div>
@@ -863,31 +863,31 @@ function ListView({
   onLeadClick: (lead: Lead) => void;
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden" dir="rtl">
-      <table className="min-w-full divide-y divide-gray-100">
-        <thead className="bg-gray-50">
+    <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden" dir="rtl">
+      <table className="min-w-full divide-y divide-slate-100">
+        <thead className="bg-slate-50">
           <tr>
             {["שם", "טלפון", "מקור", "סטטוס", "ניקוד", "ערך", "לקוח", "תאריך"].map((h) => (
-              <th key={h} className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">
+              <th key={h} className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase">
                 {h}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-50">
+        <tbody className="divide-y divide-slate-50">
           {leads.map((lead) => {
             const col = COLUMNS.find((c) => c.key === lead.status);
             return (
               <tr
                 key={lead.id}
                 onClick={() => onLeadClick(lead)}
-                className="hover:bg-gray-50/60 transition-colors cursor-pointer"
+                className="hover:bg-slate-50/60 transition-colors cursor-pointer"
               >
                 <td className="px-4 py-3">
-                  <p className="text-sm font-medium text-gray-900">{lead.firstName} {lead.lastName}</p>
-                  <p className="text-xs text-gray-400">{lead.email ?? ""}</p>
+                  <p className="text-sm font-medium text-slate-900">{lead.firstName} {lead.lastName}</p>
+                  <p className="text-xs text-slate-400">{lead.email ?? ""}</p>
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-600">
+                <td className="px-4 py-3 text-sm text-slate-600">
                   {lead.phone ? (
                     <div className="flex items-center gap-1.5">
                       <span dir="ltr">{lead.phone}</span>
@@ -904,16 +904,16 @@ function ListView({
                 </td>
                 <td className="px-4 py-3"><SourceBadge source={lead.source} /></td>
                 <td className="px-4 py-3">
-                  <span className={cn("text-xs px-2 py-1 rounded-full font-medium", col?.badge ?? "bg-gray-100 text-gray-600")}>
+                  <span className={cn("text-xs px-2 py-1 rounded-full font-medium", col?.badge ?? "bg-slate-100 text-slate-600")}>
                     {col?.label ?? lead.status}
                   </span>
                 </td>
                 <td className="px-4 py-3"><ScoreStars score={lead.leadScore} /></td>
-                <td className="px-4 py-3 text-sm text-gray-600">
+                <td className="px-4 py-3 text-sm text-slate-600">
                   {lead.value ? `₪${lead.value.toLocaleString("he-IL")}` : "—"}
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-500">{lead.client.name}</td>
-                <td className="px-4 py-3 text-sm text-gray-400">
+                <td className="px-4 py-3 text-sm text-slate-500">{lead.client.name}</td>
+                <td className="px-4 py-3 text-sm text-slate-400">
                   {new Date(lead.createdAt).toLocaleDateString("he-IL")}
                 </td>
               </tr>
@@ -922,7 +922,7 @@ function ListView({
         </tbody>
       </table>
       {leads.length === 0 && (
-        <p className="px-6 py-10 text-sm text-center text-gray-500">לא נמצאו לידים.</p>
+        <p className="px-6 py-10 text-sm text-center text-slate-500">לא נמצאו לידים.</p>
       )}
     </div>
   );
@@ -1079,14 +1079,14 @@ export function LeadsView({
     <div className="space-y-4">
       {/* Toolbar */}
       <div className="flex items-center gap-3 flex-wrap">
-        <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
+        <div className="flex gap-1 bg-slate-100 p-1 rounded-lg">
           {(["kanban", "list"] as const).map((v) => (
             <button
               key={v}
               onClick={() => setView(v)}
               className={cn(
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all",
-                view === v ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+                view === v ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
               )}
             >
               {v === "kanban" ? <LayoutGrid size={14} /> : <List size={14} />}
@@ -1097,15 +1097,15 @@ export function LeadsView({
 
         {/* Search */}
         <div className="relative flex-1 min-w-[160px] max-w-xs">
-          <Search size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          <Search size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="חיפוש שם / טלפון..."
-            className="w-full rounded-lg border border-gray-200 pr-8 pl-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="w-full rounded-lg border border-slate-200 pr-8 pl-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
           />
           {search && (
-            <button onClick={() => setSearch("")} className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+            <button onClick={() => setSearch("")} className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
               <X size={12} />
             </button>
           )}
@@ -1115,14 +1115,14 @@ export function LeadsView({
           <a
             href={`/api/leads/export${clientId ? `?clientId=${clientId}` : ""}`}
             download
-            className="flex items-center gap-1.5 border border-gray-200 text-gray-600 text-sm font-medium px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-1.5 border border-slate-200 text-slate-600 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-50 transition-colors"
           >
             <Download size={14} />
             ייצוא CSV
           </a>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
           >
             <Plus size={15} />
             הוסף ליד
@@ -1132,11 +1132,11 @@ export function LeadsView({
 
       {/* Bulk actions toolbar */}
       {selectedIds.size > 0 && (
-        <div className="flex items-center gap-3 bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-2.5" dir="rtl">
-          <span className="text-sm font-medium text-indigo-700">{selectedIds.size} נבחרו</span>
-          <button onClick={clearSelection} className="text-indigo-400 hover:text-indigo-600"><X size={14} /></button>
-          <div className="h-4 w-px bg-indigo-200 mx-1" />
-          <span className="text-xs text-indigo-500">שנה סטטוס:</span>
+        <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-2.5" dir="rtl">
+          <span className="text-sm font-medium text-blue-700">{selectedIds.size} נבחרו</span>
+          <button onClick={clearSelection} className="text-blue-400 hover:text-blue-600"><X size={14} /></button>
+          <div className="h-4 w-px bg-blue-200 mx-1" />
+          <span className="text-xs text-blue-500">שנה סטטוס:</span>
           {COLUMNS.map((c) => (
             <button
               key={c.key}
@@ -1147,7 +1147,7 @@ export function LeadsView({
               {c.label}
             </button>
           ))}
-          <div className="h-4 w-px bg-indigo-200 mx-1" />
+          <div className="h-4 w-px bg-blue-200 mx-1" />
           <button
             disabled={bulkWorking}
             onClick={handleBulkDelete}
@@ -1155,7 +1155,7 @@ export function LeadsView({
           >
             <Trash2 size={13} /> מחק
           </button>
-          {bulkWorking && <Loader2 size={14} className="animate-spin text-indigo-500 mr-auto" />}
+          {bulkWorking && <Loader2 size={14} className="animate-spin text-blue-500 mr-auto" />}
         </div>
       )}
 

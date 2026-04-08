@@ -25,13 +25,13 @@ const STATUS_HE: Record<string, string> = {
 
 function ScoreBar({ score }: { score: number }) {
   const pct = Math.round((score / 10) * 100);
-  const color = score >= 7 ? "bg-red-500" : score >= 4 ? "bg-amber-400" : "bg-gray-300";
+  const color = score >= 7 ? "bg-red-500" : score >= 4 ? "bg-amber-400" : "bg-slate-300";
   return (
     <div className="flex items-center gap-2">
-      <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+      <div className="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
         <div className={`h-full rounded-full transition-all ${color}`} style={{ width: `${pct}%` }} />
       </div>
-      <span className={`text-xs font-bold w-5 text-right ${score >= 7 ? "text-red-600" : score >= 4 ? "text-amber-600" : "text-gray-400"}`}>
+      <span className={`text-xs font-bold w-5 text-right ${score >= 7 ? "text-red-600" : score >= 4 ? "text-amber-600" : "text-slate-400"}`}>
         {score}
       </span>
     </div>
@@ -94,12 +94,12 @@ export default function LeadScoringPage() {
     <div className="space-y-6" dir="rtl">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
             <Flame size={22} className="text-red-500" /> ציון לידים
           </h1>
-          <p className="text-sm text-gray-500 mt-1">דירוג לידים לפי חום — פוקוס על הלידים הכי שווים</p>
+          <p className="text-sm text-slate-500 mt-1">דירוג לידים לפי חום — פוקוס על הלידים הכי שווים</p>
         </div>
-        <button onClick={load} disabled={loading} className="flex items-center gap-1.5 text-sm text-gray-500 border border-gray-200 px-3 py-2 rounded-lg hover:bg-gray-50 transition">
+        <button onClick={load} disabled={loading} className="flex items-center gap-1.5 text-sm text-slate-500 border border-slate-200 px-3 py-2 rounded-lg hover:bg-slate-50 transition">
           <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> רענן
         </button>
       </div>
@@ -114,7 +114,7 @@ export default function LeadScoringPage() {
           <button
             key={s.filter}
             onClick={() => setFilter(filter === s.filter ? "all" : s.filter)}
-            className={`rounded-xl border p-4 text-right transition-all ${s.color} ${filter === s.filter ? "ring-2 ring-offset-1 ring-indigo-400" : "hover:opacity-80"}`}
+            className={`rounded-xl border p-4 text-right transition-all ${s.color} ${filter === s.filter ? "ring-2 ring-offset-1 ring-blue-400" : "hover:opacity-80"}`}
           >
             <p className="text-2xl font-bold">{s.count}</p>
             <p className="text-xs font-medium mt-0.5">{s.label}</p>
@@ -125,16 +125,16 @@ export default function LeadScoringPage() {
       {/* Focus box */}
       {topFive.length > 0 && (
         <div className="bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 rounded-xl p-5">
-          <h3 className="font-semibold text-gray-900 text-sm mb-3 flex items-center gap-2">
+          <h3 className="font-semibold text-slate-900 text-sm mb-3 flex items-center gap-2">
             <Flame size={16} className="text-red-500" /> 5 לידים שצריך לטפל בהם עכשיו
           </h3>
           <div className="space-y-2">
             {topFive.map((l, i) => (
               <div key={l.id} className="flex items-center gap-3 bg-white rounded-lg px-3 py-2 shadow-sm">
-                <span className="text-lg font-bold text-gray-300 w-5 flex-shrink-0">{i + 1}</span>
+                <span className="text-lg font-bold text-slate-300 w-5 flex-shrink-0">{i + 1}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">{l.firstName} {l.lastName}</p>
-                  <p className="text-xs text-gray-400 truncate">{l.client?.name} · {l.phone ?? l.email ?? "—"}</p>
+                  <p className="text-sm font-medium text-slate-900 truncate">{l.firstName} {l.lastName}</p>
+                  <p className="text-xs text-slate-400 truncate">{l.client?.name} · {l.phone ?? l.email ?? "—"}</p>
                 </div>
                 <ScoreBar score={l.leadScore} />
                 {l.phone && (
@@ -149,37 +149,37 @@ export default function LeadScoringPage() {
       )}
 
       {/* Main list */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="px-5 py-3 border-b border-gray-50 flex items-center gap-2 flex-wrap">
-          <span className="text-sm font-medium text-gray-700">{filtered.length} לידים</span>
+      <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+        <div className="px-5 py-3 border-b border-slate-50 flex items-center gap-2 flex-wrap">
+          <span className="text-sm font-medium text-slate-700">{filtered.length} לידים</span>
           {filter !== "all" && (
-            <button onClick={() => setFilter("all")} className="text-xs text-indigo-500 hover:underline">
+            <button onClick={() => setFilter("all")} className="text-xs text-blue-500 hover:underline">
               הצג הכל
             </button>
           )}
         </div>
         {loading ? (
           <div className="flex justify-center py-16">
-            <Loader2 size={24} className="animate-spin text-gray-300" />
+            <Loader2 size={24} className="animate-spin text-slate-300" />
           </div>
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center py-12 text-gray-300">
+          <div className="flex flex-col items-center py-12 text-slate-300">
             <Flame size={32} className="mb-2" />
             <p className="text-sm">אין לידים להצגה</p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-slate-50">
             {filtered.map((l) => (
-              <div key={l.id} className="px-5 py-3 flex items-center gap-4 hover:bg-gray-50 transition">
+              <div key={l.id} className="px-5 py-3 flex items-center gap-4 hover:bg-slate-50 transition">
                 <HeatBadge score={l.leadScore} />
                 <div className="flex-1 min-w-0">
-                  <Link href={`/admin/clients/${l.clientId}`} className="text-sm font-medium text-gray-900 hover:text-indigo-600">
+                  <Link href={`/admin/clients/${l.clientId}`} className="text-sm font-medium text-slate-900 hover:text-blue-600">
                     {l.firstName} {l.lastName}
                   </Link>
                   <div className="flex items-center gap-3 mt-0.5">
                     {l.phone && (
                       <span className="flex items-center gap-1.5">
-                        <span className="text-xs text-gray-400 flex items-center gap-1"><Phone size={10} />{l.phone}</span>
+                        <span className="text-xs text-slate-400 flex items-center gap-1"><Phone size={10} />{l.phone}</span>
                         <a
                           href={`tel:${l.phone.replace(/[^0-9+]/g, "")}`}
                           onClick={(e) => e.stopPropagation()}
@@ -190,20 +190,20 @@ export default function LeadScoringPage() {
                         </a>
                       </span>
                     )}
-                    {l.email && <span className="text-xs text-gray-400 flex items-center gap-1"><Mail size={10} />{l.email}</span>}
-                    {l.source && <span className="text-xs text-gray-400 flex items-center gap-1"><Tag size={10} />{l.source}</span>}
+                    {l.email && <span className="text-xs text-slate-400 flex items-center gap-1"><Mail size={10} />{l.email}</span>}
+                    {l.source && <span className="text-xs text-slate-400 flex items-center gap-1"><Tag size={10} />{l.source}</span>}
                   </div>
                 </div>
                 <div className="w-24 flex-shrink-0">
                   <ScoreBar score={l.leadScore} />
                 </div>
-                <span className="text-xs text-gray-400 hidden sm:block">
+                <span className="text-xs text-slate-400 hidden sm:block">
                   {STATUS_HE[l.status] ?? l.status}
                 </span>
-                <span className="text-xs text-gray-300 hidden sm:block flex items-center gap-1">
+                <span className="text-xs text-slate-300 hidden sm:block flex items-center gap-1">
                   <Clock size={10} />{new Date(l.createdAt).toLocaleDateString("he-IL")}
                 </span>
-                <span className="text-xs text-gray-400 hidden md:block truncate max-w-24">{l.client?.name}</span>
+                <span className="text-xs text-slate-400 hidden md:block truncate max-w-24">{l.client?.name}</span>
               </div>
             ))}
           </div>

@@ -67,19 +67,19 @@ export function WhatsAppSetup({ clientId }: { clientId: string }) {
     <div className="space-y-4" dir="rtl">
       {/* Status banner */}
       <div className={`flex items-center gap-3 rounded-xl border p-4 ${statusColor}`}>
-        {loading ? <Loader2 size={20} className="animate-spin text-gray-400" /> : statusIcon}
+        {loading ? <Loader2 size={20} className="animate-spin text-slate-400" /> : statusIcon}
         <div className="flex-1">
-          <p className="font-semibold text-sm text-gray-900">
+          <p className="font-semibold text-sm text-slate-900">
             {loading ? "בודק חיבור..." : statusText}
           </p>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-slate-500">
             סטטוס: {loading ? "..." : STATUS_LABELS[data?.status ?? ""] ?? data?.status}
           </p>
         </div>
         <button
           onClick={checkStatus}
           disabled={loading}
-          className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 border border-gray-200 rounded-lg px-2.5 py-1.5 transition-colors disabled:opacity-50"
+          className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 rounded-lg px-2.5 py-1.5 transition-colors disabled:opacity-50"
         >
           <RefreshCw size={12} className={loading ? "animate-spin" : ""} />
           בדוק
@@ -88,9 +88,9 @@ export function WhatsAppSetup({ clientId }: { clientId: string }) {
 
       {/* QR Code */}
       {data?.qrCode && !data.isConnected && (
-        <div className="bg-white rounded-xl border border-gray-200 p-5 text-center">
+        <div className="bg-white rounded-xl border border-slate-200 p-5 text-center">
           <Smartphone size={24} className="text-green-600 mx-auto mb-2" />
-          <p className="text-sm font-medium text-gray-900 mb-3">סרוק עם וואצאפ:</p>
+          <p className="text-sm font-medium text-slate-900 mb-3">סרוק עם וואצאפ:</p>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(data.qrCode)}`}
@@ -99,53 +99,53 @@ export function WhatsAppSetup({ clientId }: { clientId: string }) {
             width={200}
             height={200}
           />
-          <p className="text-xs text-gray-400 mt-3">WhatsApp → Settings → Linked Devices → Link a Device</p>
+          <p className="text-xs text-slate-400 mt-3">WhatsApp → Settings → Linked Devices → Link a Device</p>
         </div>
       )}
 
       {/* Credentials form */}
-      <div className="bg-gray-50 rounded-xl border border-gray-200 p-5 space-y-3">
-        <h4 className="font-semibold text-sm text-gray-900 flex items-center gap-2">
+      <div className="bg-slate-50 rounded-xl border border-slate-200 p-5 space-y-3">
+        <h4 className="font-semibold text-sm text-slate-900 flex items-center gap-2">
           <span className="text-lg">⚙️</span>
           הגדרות Green API
         </h4>
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-slate-500">
           צור חשבון חינמי ב-
-          <a href="https://green-api.com" target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline">
+          <a href="https://green-api.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
             green-api.com
           </a>
           {" "}← צור Instance ← העתק פרטים
         </p>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">Instance ID</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1">Instance ID</label>
           <input
             value={instanceId}
             onChange={(e) => setInstanceId(e.target.value)}
             placeholder="7107XXXXXX"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none"
+            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
             dir="ltr"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">API Token</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1">API Token</label>
           <input
             value={token}
             onChange={(e) => setToken(e.target.value)}
             placeholder="your-api-token"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none"
+            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
             dir="ltr"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">מספר וואצאפ</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1">מספר וואצאפ</label>
           <input
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="0501234567"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none"
+            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
             dir="ltr"
           />
         </div>

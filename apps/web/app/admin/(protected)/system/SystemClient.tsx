@@ -40,7 +40,7 @@ export function SystemClient() {
 
   useEffect(() => { load(); const t = setInterval(load, 60000); return () => clearInterval(t); }, []);
 
-  if (!health) return <div className="text-center py-12 text-gray-400">⚙️ טוען...</div>;
+  if (!health) return <div className="text-center py-12 text-slate-400">⚙️ טוען...</div>;
 
   const maxLeads = Math.max(...health.monthlyData.map((d) => d.leads), 1);
 
@@ -70,15 +70,15 @@ export function SystemClient() {
           { l: "תורים", v: health.stats.totalAppointments, i: "📅" },
           { l: "דוחות", v: health.stats.totalReports, i: "📋" },
         ].map((s) => (
-          <div key={s.l} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
+          <div key={s.l} className="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-3">
             <span className="text-2xl">{s.i}</span>
-            <div><div className="text-xl font-extrabold">{s.v}</div><div className="text-xs text-gray-500">{s.l}</div></div>
+            <div><div className="text-xl font-extrabold">{s.v}</div><div className="text-xs text-slate-500">{s.l}</div></div>
           </div>
         ))}
       </div>
 
       {/* Services */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
+      <div className="bg-white rounded-xl border border-slate-200 p-5">
         <p className="font-bold text-base mb-3">🔌 סטטוס שירותים</p>
         <div className="grid grid-cols-2 gap-2.5">
           {Object.entries(health.checks).map(([key, check]) => {
@@ -87,11 +87,11 @@ export function SystemClient() {
               <div key={key} className="rounded-lg px-3.5 py-3 flex items-center justify-between" style={{ background: st.bg, border: `1px solid ${st.border}` }}>
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full" style={{ background: st.dot, boxShadow: check.status === "ok" ? `0 0 6px ${st.dot}` : "none" }} />
-                  <span className="text-sm font-semibold text-gray-700">{SERVICE_LABELS[key] ?? key}</span>
+                  <span className="text-sm font-semibold text-slate-700">{SERVICE_LABELS[key] ?? key}</span>
                 </div>
                 <div className="text-left">
                   <span className="text-xs font-semibold" style={{ color: st.text }}>{check.message}</span>
-                  {check.latencyMs != null && <div className="text-[10px] text-gray-400">{check.latencyMs}ms</div>}
+                  {check.latencyMs != null && <div className="text-[10px] text-slate-400">{check.latencyMs}ms</div>}
                 </div>
               </div>
             );
@@ -100,7 +100,7 @@ export function SystemClient() {
       </div>
 
       {/* Monthly graph */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
+      <div className="bg-white rounded-xl border border-slate-200 p-5">
         <p className="font-bold text-base mb-4">📈 לידים — 6 חודשים אחרונים</p>
         <div className="flex items-end gap-2" style={{ height: "130px" }}>
           {health.monthlyData.map((d, i) => {
@@ -108,9 +108,9 @@ export function SystemClient() {
             const isLast = i === health.monthlyData.length - 1;
             return (
               <div key={d.month} className="flex-1 flex flex-col items-center gap-1">
-                <span className={`text-xs font-bold ${isLast ? "text-indigo-600" : "text-gray-400"}`}>{d.leads}</span>
+                <span className={`text-xs font-bold ${isLast ? "text-blue-600" : "text-slate-400"}`}>{d.leads}</span>
                 <div className="w-full rounded-t-md" style={{ height: `${Math.max(pct, 4)}%`, minHeight: "6px", background: isLast ? "linear-gradient(135deg,#6366f1,#8b5cf6)" : "#e5e7eb", transition: "height 0.5s" }} />
-                <span className="text-[10px] text-gray-400">{d.month.slice(0, 3)}</span>
+                <span className="text-[10px] text-slate-400">{d.month.slice(0, 3)}</span>
               </div>
             );
           })}

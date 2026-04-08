@@ -194,9 +194,9 @@ export function PortalAiAgentClient({ client, stats }: Props) {
   );
 
   return (
-    <div className="flex flex-col h-[calc(100vh-80px)] bg-gray-50" dir="rtl">
+    <div className="flex flex-col h-[calc(100vh-80px)] bg-slate-50" dir="rtl">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-5 py-4">
+      <div className="bg-white border-b border-slate-200 px-5 py-4">
         <div className="flex items-center gap-3">
           <div
             className="w-11 h-11 rounded-full flex items-center justify-center shadow-md"
@@ -205,7 +205,7 @@ export function PortalAiAgentClient({ client, stats }: Props) {
             <Bot size={22} className="text-white" />
           </div>
           <div>
-            <h1 className="font-bold text-gray-900 text-base">הסוכן הדיגיטלי שלי</h1>
+            <h1 className="font-bold text-slate-900 text-base">הסוכן הדיגיטלי שלי</h1>
             <div className="flex items-center gap-1.5 text-xs text-green-600">
               <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
               מחובר ופעיל
@@ -214,7 +214,7 @@ export function PortalAiAgentClient({ client, stats }: Props) {
         </div>
 
         {/* Stats bar */}
-        <div className="flex flex-wrap gap-x-5 gap-y-1 mt-3 text-xs text-gray-500">
+        <div className="flex flex-wrap gap-x-5 gap-y-1 mt-3 text-xs text-slate-500">
           <span>🎯 {stats.totalLeads} לידים</span>
           <span>📊 {stats.conversionRate}% המרה</span>
           <span>👁 {stats.pageViews} צפיות</span>
@@ -234,15 +234,15 @@ export function PortalAiAgentClient({ client, stats }: Props) {
           >
             <div className="flex items-end gap-2 max-w-[80%]">
               {msg.role === "user" && (
-                <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                  <User size={14} className="text-gray-600" />
+                <div className="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0">
+                  <User size={14} className="text-slate-600" />
                 </div>
               )}
               <div
                 className={`rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
                   msg.role === "user"
-                    ? "bg-indigo-600 text-white rounded-br-sm whitespace-pre-wrap"
-                    : "bg-white text-gray-800 border border-gray-100 rounded-bl-sm"
+                    ? "bg-blue-600 text-white rounded-br-sm whitespace-pre-wrap"
+                    : "bg-white text-slate-800 border border-slate-100 rounded-bl-sm"
                 }`}
               >
                 {msg.content ? (
@@ -255,7 +255,7 @@ export function PortalAiAgentClient({ client, stats }: Props) {
                     />
                   )
                 ) : (
-                  <div className="flex items-center gap-2 text-gray-400">
+                  <div className="flex items-center gap-2 text-slate-400">
                     <Loader2 size={14} className="animate-spin" />
                     <span>מיכאל חושב...</span>
                   </div>
@@ -276,13 +276,13 @@ export function PortalAiAgentClient({ client, stats }: Props) {
       </div>
 
       {/* Quick actions */}
-      <div className="bg-white border-t border-gray-100 px-4 py-2.5 flex gap-2 overflow-x-auto scrollbar-hide">
+      <div className="bg-white border-t border-slate-100 px-4 py-2.5 flex gap-2 overflow-x-auto scrollbar-hide">
         {QUICK_ACTIONS.map((action) => (
           <button
             key={action.label}
             onClick={() => sendMessage(action.message)}
             disabled={loading}
-            className="flex-shrink-0 bg-gray-50 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-200 border border-gray-200 rounded-full px-3.5 py-1.5 text-xs text-gray-600 transition-all disabled:opacity-50"
+            className="flex-shrink-0 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 border border-slate-200 rounded-full px-3.5 py-1.5 text-xs text-slate-600 transition-all disabled:opacity-50"
           >
             {action.label}
           </button>
@@ -290,7 +290,7 @@ export function PortalAiAgentClient({ client, stats }: Props) {
       </div>
 
       {/* Input */}
-      <div className="bg-white border-t border-gray-200 px-4 py-3 flex items-center gap-2">
+      <div className="bg-white border-t border-slate-200 px-4 py-3 flex items-center gap-2">
         <input
           ref={inputRef}
           value={input}
@@ -303,7 +303,7 @@ export function PortalAiAgentClient({ client, stats }: Props) {
           }}
           placeholder="שאל אותי כל שאלה..."
           disabled={loading}
-          className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 transition-all disabled:opacity-60"
+          className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all disabled:opacity-60"
         />
         <button
           onClick={() => sendMessage()}

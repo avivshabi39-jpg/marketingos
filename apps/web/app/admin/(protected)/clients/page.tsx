@@ -31,8 +31,8 @@ const INDUSTRY_HE: Record<string, string> = {
 };
 
 const PLAN_COLORS: Record<string, string> = {
-  BASIC:  "bg-gray-100 text-gray-600",
-  PRO:    "bg-indigo-100 text-indigo-700",
+  BASIC:  "bg-slate-100 text-slate-600",
+  PRO:    "bg-blue-100 text-blue-700",
   AGENCY: "bg-amber-100 text-amber-700",
 };
 
@@ -97,10 +97,10 @@ export default async function ClientsPage() {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-semibold text-gray-900">👥 הלקוחות שלי</h1>
+            <h1 className="text-2xl font-semibold text-slate-900">👥 הלקוחות שלי</h1>
             <HelpButton page="clients" />
           </div>
-          <p className="text-sm text-gray-500 mt-0.5">{clients.length} לקוחות בסה"כ</p>
+          <p className="text-sm text-slate-500 mt-0.5">{clients.length} לקוחות בסה"כ</p>
         </div>
         <Link href="/admin/clients/new">
           <Button className="flex items-center gap-2">
@@ -112,7 +112,7 @@ export default async function ClientsPage() {
 
       {/* Cards grid */}
       {clients.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm">
           <EmptyState
             icon="🏢"
             title="אין לקוחות עדיין"
@@ -126,7 +126,7 @@ export default async function ClientsPage() {
           {clients.map((client) => (
             <div
               key={client.id}
-              className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+              className="bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="p-5">
                 {/* Top row */}
@@ -140,10 +140,10 @@ export default async function ClientsPage() {
                       {initials(client.name)}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 text-sm leading-tight">
+                      <h3 className="font-semibold text-slate-900 text-sm leading-tight">
                         {client.name}
                       </h3>
-                      <p className="text-xs text-gray-400 mt-0.5">{client.slug}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{client.slug}</p>
                     </div>
                   </div>
                   {/* Status dot */}
@@ -151,7 +151,7 @@ export default async function ClientsPage() {
                     className={`text-xs px-2 py-1 rounded-full font-medium ${
                       client.isActive
                         ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-500"
+                        : "bg-slate-100 text-slate-500"
                     }`}
                   >
                     {client.isActive ? "פעיל" : "לא פעיל"}
@@ -177,35 +177,35 @@ export default async function ClientsPage() {
                 {/* Stats row */}
                 <div className="grid grid-cols-3 gap-2 mb-4">
                   <div className="text-center">
-                    <div className="flex items-center justify-center gap-1 text-gray-500 mb-0.5">
+                    <div className="flex items-center justify-center gap-1 text-slate-500 mb-0.5">
                       <Users size={13} />
                     </div>
-                    <p className="text-sm font-bold text-gray-900">{client._count.leads}</p>
-                    <p className="text-xs text-gray-400">לידים</p>
+                    <p className="text-sm font-bold text-slate-900">{client._count.leads}</p>
+                    <p className="text-xs text-slate-400">לידים</p>
                   </div>
-                  <div className="text-center border-x border-gray-100">
-                    <div className="flex items-center justify-center gap-1 text-gray-500 mb-0.5">
+                  <div className="text-center border-x border-slate-100">
+                    <div className="flex items-center justify-center gap-1 text-slate-500 mb-0.5">
                       <FileText size={13} />
                     </div>
-                    <p className="text-sm font-bold text-gray-900">{client._count.landingPages}</p>
-                    <p className="text-xs text-gray-400">דפים</p>
+                    <p className="text-sm font-bold text-slate-900">{client._count.landingPages}</p>
+                    <p className="text-xs text-slate-400">דפים</p>
                   </div>
                   <div className="text-center">
-                    <div className="flex items-center justify-center gap-1 text-gray-500 mb-0.5">
+                    <div className="flex items-center justify-center gap-1 text-slate-500 mb-0.5">
                       <GitBranch size={13} />
                     </div>
-                    <p className="text-sm font-bold text-gray-900">{client._count.workflows}</p>
-                    <p className="text-xs text-gray-400">אוטומציות</p>
+                    <p className="text-sm font-bold text-slate-900">{client._count.workflows}</p>
+                    <p className="text-xs text-slate-400">אוטומציות</p>
                   </div>
                 </div>
 
                 {/* Footer */}
-                <div className="pt-3 border-t border-gray-50">
-                  <p className="text-xs text-gray-400 mb-2">{client.email}</p>
+                <div className="pt-3 border-t border-slate-50">
+                  <p className="text-xs text-slate-400 mb-2">{client.email}</p>
                   <div className="flex items-center justify-between">
                     <Link
                       href={`/admin/clients/${client.id}`}
-                      className="flex items-center gap-1.5 text-sm text-indigo-500 hover:text-indigo-700 font-medium"
+                      className="flex items-center gap-1.5 text-sm text-blue-500 hover:text-blue-700 font-medium"
                     >
                       צפה בפרטים
                       <ArrowLeft size={14} />
@@ -225,7 +225,7 @@ export default async function ClientsPage() {
                             className={`w-3 h-3 rounded-full ${scoreColor}`}
                             title={`ציון בריאות: ${score}/100`}
                           />
-                          <span className="text-xs text-gray-500">{score}</span>
+                          <span className="text-xs text-slate-500">{score}</span>
                         </div>
                       );
                     })()}

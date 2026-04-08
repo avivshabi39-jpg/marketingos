@@ -126,7 +126,7 @@ export default async function DashboardPage() {
       delta: `${Math.abs(leadDelta)}%`,
       positive: leadDelta >= 0,
       iconName: "Users",
-      color: "bg-indigo-50 text-indigo-600",
+      color: "bg-blue-50 text-blue-600",
     },
     {
       title: "אחוז המרה",

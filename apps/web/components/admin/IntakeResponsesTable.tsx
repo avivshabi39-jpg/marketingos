@@ -28,7 +28,7 @@ type IntakeForm = {
 };
 
 const FORM_TYPE_LABEL: Record<string, { label: string; color: string }> = {
-  CLIENT_ONBOARDING: { label: "טופס קבלת לקוח", color: "bg-indigo-50 text-indigo-700 border-indigo-200" },
+  CLIENT_ONBOARDING: { label: "טופס קבלת לקוח", color: "bg-blue-50 text-blue-700 border-blue-200" },
   LANDING_PAGE:      { label: "טופס אפיון לאתר",  color: "bg-green-50 text-green-700 border-green-200" },
 };
 
@@ -122,11 +122,11 @@ function ExpandedRow({ form }: { form: IntakeForm }) {
   ].filter((r) => r.value);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-5 bg-gray-50 border-t border-gray-100">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-5 bg-slate-50 border-t border-slate-100">
       {rows.map(({ label, value }) => (
-        <div key={label} className="bg-white rounded-lg p-3 border border-gray-100">
-          <p className="text-xs font-semibold text-gray-400 mb-1">{label}</p>
-          <p className="text-sm text-gray-800 whitespace-pre-wrap">{value}</p>
+        <div key={label} className="bg-white rounded-lg p-3 border border-slate-100">
+          <p className="text-xs font-semibold text-slate-400 mb-1">{label}</p>
+          <p className="text-sm text-slate-800 whitespace-pre-wrap">{value}</p>
         </div>
       ))}
     </div>
@@ -214,17 +214,17 @@ export function IntakeResponsesTable({
       {/* Toolbar */}
       <div className="flex gap-3 items-center flex-wrap">
         <div className="relative flex-1 max-w-xs">
-          <Search size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="חפש לפי שם / אימייל..."
-            className="w-full rounded-lg border border-gray-200 pr-9 pl-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-lg border border-slate-200 pr-9 pl-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
         <button
           onClick={() => exportToCSV(forms, clientName)}
-          className="flex items-center gap-2 border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-2 border border-slate-200 text-slate-600 text-sm font-medium px-4 py-2 rounded-lg hover:bg-slate-50 transition-colors"
         >
           <Download size={15} />
           ייצוא CSV
@@ -239,25 +239,25 @@ export function IntakeResponsesTable({
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
         {filtered.length === 0 ? (
-          <p className="text-center py-12 text-sm text-gray-500">לא נמצאו תגובות.</p>
+          <p className="text-center py-12 text-sm text-slate-500">לא נמצאו תגובות.</p>
         ) : (
           filtered.map((form) => {
             const isOpen = expanded.has(form.id);
             return (
-              <div key={form.id} className="border-b border-gray-100 last:border-0">
+              <div key={form.id} className="border-b border-slate-100 last:border-0">
                 <button
                   onClick={() => toggle(form.id)}
-                  className="w-full flex items-center gap-4 px-5 py-4 hover:bg-gray-50/60 transition-colors text-right"
+                  className="w-full flex items-center gap-4 px-5 py-4 hover:bg-slate-50/60 transition-colors text-right"
                 >
                   {/* Avatar */}
-                  <div className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm flex-shrink-0">
+                  <div className="w-9 h-9 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm flex-shrink-0">
                     {form.fullName?.[0] ?? "?"}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <p className="text-sm font-semibold text-gray-900">{form.fullName}</p>
+                      <p className="text-sm font-semibold text-slate-900">{form.fullName}</p>
                       {(() => {
                         const ft = FORM_TYPE_LABEL[form.formType];
                         return ft ? (
@@ -267,22 +267,22 @@ export function IntakeResponsesTable({
                         ) : null;
                       })()}
                     </div>
-                    <p className="text-xs text-gray-500">{form.businessName} · {form.email}</p>
+                    <p className="text-xs text-slate-500">{form.businessName} · {form.email}</p>
                   </div>
-                  <div className="hidden sm:flex items-center gap-3 text-xs text-gray-400">
+                  <div className="hidden sm:flex items-center gap-3 text-xs text-slate-400">
                     {form.budgetRange && (
                       <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-medium">
                         {form.budgetRange}
                       </span>
                     )}
                     {form.businessType && (
-                      <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                      <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
                         {form.businessType}
                       </span>
                     )}
                     <span>{new Date(form.createdAt).toLocaleDateString("he-IL")}</span>
                   </div>
-                  {isOpen ? <ChevronUp size={15} className="text-gray-400 flex-shrink-0" /> : <ChevronDown size={15} className="text-gray-400 flex-shrink-0" />}
+                  {isOpen ? <ChevronUp size={15} className="text-slate-400 flex-shrink-0" /> : <ChevronDown size={15} className="text-slate-400 flex-shrink-0" />}
                 </button>
                 {isOpen && <ExpandedRow form={form} />}
               </div>

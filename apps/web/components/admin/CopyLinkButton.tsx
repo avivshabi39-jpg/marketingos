@@ -35,7 +35,7 @@ export function CopyLinkButton({ url, label = "העתק קישור" }: Props) {
       className={`text-xs border rounded px-2.5 py-1 transition-colors font-medium ${
         copied
           ? "text-green-700 border-green-300 bg-green-50"
-          : "text-gray-500 border-gray-200 hover:text-gray-800 hover:border-gray-400 bg-white"
+          : "text-slate-500 border-slate-200 hover:text-slate-800 hover:border-slate-400 bg-white"
       }`}
     >
       {copied ? "✓ הועתק" : label}

@@ -79,7 +79,7 @@ const PROPERTY_TYPE_LABELS: Record<string, string> = {
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   AVAILABLE:      { label: "זמין",         color: "bg-green-100 text-green-700" },
   UNDER_CONTRACT: { label: "בתהליך מכירה", color: "bg-amber-100 text-amber-700" },
-  SOLD:           { label: "נמכר",          color: "bg-gray-100 text-gray-600"   },
+  SOLD:           { label: "נמכר",          color: "bg-slate-100 text-slate-600"   },
   OFF_MARKET:     { label: "לא פעיל",       color: "bg-red-100 text-red-600"     },
 };
 
@@ -165,8 +165,8 @@ function LeadForm({
         >
           <CheckCircle2 size={28} className="text-white" />
         </div>
-        <h3 className="font-bold text-gray-900">תודה רבה!</h3>
-        <p className="text-gray-500 text-sm">קיבלנו את הפנייה שלך ונחזור אליך בהקדם.</p>
+        <h3 className="font-bold text-slate-900">תודה רבה!</h3>
+        <p className="text-slate-500 text-sm">קיבלנו את הפנייה שלך ונחזור אליך בהקדם.</p>
       </div>
     );
   }
@@ -175,11 +175,11 @@ function LeadForm({
     <form onSubmit={handleSubmit} className="space-y-3">
       {/* Full name */}
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">
+        <label className="block text-xs font-medium text-slate-600 mb-1">
           שם מלא <span className="text-red-500">*</span>
         </label>
         <div className="relative">
-          <User size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          <User size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
             type="text"
             value={values.fullName}
@@ -188,7 +188,7 @@ function LeadForm({
             className={`w-full rounded-lg border pr-9 px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
               errors.fullName
                 ? "border-red-300 focus:ring-red-300"
-                : "border-gray-200 focus:ring-indigo-300"
+                : "border-slate-200 focus:ring-blue-300"
             }`}
           />
         </div>
@@ -197,11 +197,11 @@ function LeadForm({
 
       {/* Phone */}
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">
+        <label className="block text-xs font-medium text-slate-600 mb-1">
           טלפון <span className="text-red-500">*</span>
         </label>
         <div className="relative">
-          <Phone size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          <Phone size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
             type="tel"
             dir="ltr"
@@ -211,7 +211,7 @@ function LeadForm({
             className={`w-full rounded-lg border pr-9 px-3 py-2 text-sm focus:outline-none focus:ring-2 ${
               errors.phone
                 ? "border-red-300 focus:ring-red-300"
-                : "border-gray-200 focus:ring-indigo-300"
+                : "border-slate-200 focus:ring-blue-300"
             }`}
           />
         </div>
@@ -220,13 +220,13 @@ function LeadForm({
 
       {/* Message */}
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">הודעה</label>
+        <label className="block text-xs font-medium text-slate-600 mb-1">הודעה</label>
         <textarea
           rows={3}
           value={values.message}
           onChange={(e) => setValues((p) => ({ ...p, message: e.target.value }))}
           placeholder={`אני מתעניין בנכס: ${property.title}`}
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
       </div>
 
@@ -269,7 +269,7 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
   const waLink = waNumber ? `https://wa.me/${waNumber}?text=${waText}` : null;
 
   const phoneNumber = client.agentPhone ?? client.phone;
-  const statusInfo = STATUS_LABELS[property.status] ?? { label: property.status, color: "bg-gray-100 text-gray-600" };
+  const statusInfo = STATUS_LABELS[property.status] ?? { label: property.status, color: "bg-slate-100 text-slate-600" };
   const typeLabel = PROPERTY_TYPE_LABELS[property.propertyType] ?? property.propertyType;
 
   function handleWaClick() {
@@ -277,24 +277,24 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
   }
 
   return (
-    <div dir="rtl" className="min-h-screen bg-gray-50">
+    <div dir="rtl" className="min-h-screen bg-slate-50">
       {/* ── Breadcrumb ──────────────────────────────────────────────────────── */}
-      <nav className="bg-white border-b border-gray-100">
+      <nav className="bg-white border-b border-slate-100">
         <div className="max-w-6xl mx-auto px-4 py-3">
-          <ol className="flex items-center gap-1.5 text-xs text-gray-500 flex-wrap">
+          <ol className="flex items-center gap-1.5 text-xs text-slate-500 flex-wrap">
             <li>
-              <Link href={`/${client.slug}`} className="hover:text-gray-800 transition-colors font-medium">
+              <Link href={`/${client.slug}`} className="hover:text-slate-800 transition-colors font-medium">
                 {client.name}
               </Link>
             </li>
-            <li><ChevronRight size={12} className="text-gray-300 rotate-180" /></li>
+            <li><ChevronRight size={12} className="text-slate-300 rotate-180" /></li>
             <li>
-              <Link href={`/${client.slug}`} className="hover:text-gray-800 transition-colors">
+              <Link href={`/${client.slug}`} className="hover:text-slate-800 transition-colors">
                 {property.city}
               </Link>
             </li>
-            <li><ChevronRight size={12} className="text-gray-300 rotate-180" /></li>
-            <li className="text-gray-800 font-medium truncate max-w-[200px]">{property.title}</li>
+            <li><ChevronRight size={12} className="text-slate-300 rotate-180" /></li>
+            <li className="text-slate-800 font-medium truncate max-w-[200px]">{property.title}</li>
           </ol>
         </div>
       </nav>
@@ -304,7 +304,7 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
         {property.images.length > 0 ? (
           <div className="space-y-3">
             {/* Main image */}
-            <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-gray-100 shadow-sm">
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-100 shadow-sm">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={property.images[activeImage]}
@@ -331,7 +331,7 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
                     onClick={() => setActiveImage(idx)}
                     className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${
                       idx === activeImage
-                        ? "border-indigo-500 opacity-100"
+                        ? "border-blue-500 opacity-100"
                         : "border-transparent opacity-60 hover:opacity-100"
                     }`}
                   >
@@ -364,7 +364,7 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
           {/* ── Left: main content ──────────────────────────────────────────── */}
           <div className="flex-1 space-y-6 min-w-0">
             {/* Price + badges */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 space-y-3">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 space-y-3">
               <div className="flex items-start justify-between gap-3 flex-wrap">
                 <p
                   className="text-3xl font-bold"
@@ -382,15 +382,15 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
                     </span>
                   )}
                   {property.isFeatured && (
-                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 flex items-center gap-1">
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-600 flex items-center gap-1">
                       <Star size={11} fill="currentColor" /> מומלץ
                     </span>
                   )}
                 </div>
               </div>
-              <h1 className="text-xl font-bold text-gray-900 leading-snug">{property.title}</h1>
+              <h1 className="text-xl font-bold text-slate-900 leading-snug">{property.title}</h1>
               {(property.city || property.neighborhood || property.street) && (
-                <p className="text-sm text-gray-500 flex items-center gap-1.5">
+                <p className="text-sm text-slate-500 flex items-center gap-1.5">
                   <MapPin size={14} className="flex-shrink-0" />
                   {[property.street, property.neighborhood, property.city].filter(Boolean).join(", ")}
                 </p>
@@ -398,52 +398,52 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
             </div>
 
             {/* Details grid */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-              <h2 className="font-bold text-gray-900 mb-4">פרטי הנכס</h2>
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+              <h2 className="font-bold text-slate-900 mb-4">פרטי הנכס</h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {property.rooms != null && (
-                  <div className="text-center p-3 bg-gray-50 rounded-xl">
-                    <BedDouble size={20} className="mx-auto text-gray-400 mb-1" />
-                    <p className="text-lg font-bold text-gray-900">{property.rooms}</p>
-                    <p className="text-xs text-gray-500">חדרים</p>
+                  <div className="text-center p-3 bg-slate-50 rounded-xl">
+                    <BedDouble size={20} className="mx-auto text-slate-400 mb-1" />
+                    <p className="text-lg font-bold text-slate-900">{property.rooms}</p>
+                    <p className="text-xs text-slate-500">חדרים</p>
                   </div>
                 )}
                 {property.area != null && (
-                  <div className="text-center p-3 bg-gray-50 rounded-xl">
-                    <Maximize size={20} className="mx-auto text-gray-400 mb-1" />
-                    <p className="text-lg font-bold text-gray-900">{property.area}</p>
-                    <p className="text-xs text-gray-500">מ״ר</p>
+                  <div className="text-center p-3 bg-slate-50 rounded-xl">
+                    <Maximize size={20} className="mx-auto text-slate-400 mb-1" />
+                    <p className="text-lg font-bold text-slate-900">{property.area}</p>
+                    <p className="text-xs text-slate-500">מ״ר</p>
                   </div>
                 )}
                 {property.floor != null && (
-                  <div className="text-center p-3 bg-gray-50 rounded-xl">
-                    <Layers size={20} className="mx-auto text-gray-400 mb-1" />
-                    <p className="text-lg font-bold text-gray-900">
+                  <div className="text-center p-3 bg-slate-50 rounded-xl">
+                    <Layers size={20} className="mx-auto text-slate-400 mb-1" />
+                    <p className="text-lg font-bold text-slate-900">
                       {property.floor}
                       {property.totalFloors != null && (
-                        <span className="text-sm font-normal text-gray-500">/{property.totalFloors}</span>
+                        <span className="text-sm font-normal text-slate-500">/{property.totalFloors}</span>
                       )}
                     </p>
-                    <p className="text-xs text-gray-500">קומה</p>
+                    <p className="text-xs text-slate-500">קומה</p>
                   </div>
                 )}
-                <div className="text-center p-3 bg-gray-50 rounded-xl">
-                  <Building size={20} className="mx-auto text-gray-400 mb-1" />
-                  <p className="text-sm font-bold text-gray-900">{typeLabel}</p>
-                  <p className="text-xs text-gray-500">סוג</p>
+                <div className="text-center p-3 bg-slate-50 rounded-xl">
+                  <Building size={20} className="mx-auto text-slate-400 mb-1" />
+                  <p className="text-sm font-bold text-slate-900">{typeLabel}</p>
+                  <p className="text-xs text-slate-500">סוג</p>
                 </div>
               </div>
             </div>
 
             {/* Features */}
             {property.features.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-                <h2 className="font-bold text-gray-900 mb-3">מאפיינים</h2>
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                <h2 className="font-bold text-slate-900 mb-3">מאפיינים</h2>
                 <div className="flex flex-wrap gap-2">
                   {property.features.map((f) => (
                     <span
                       key={f}
-                      className="inline-flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-full border border-gray-200 bg-gray-50 text-gray-700"
+                      className="inline-flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-full border border-slate-200 bg-slate-50 text-slate-700"
                     >
                       <CheckCircle2 size={12} className="text-green-500" /> {f}
                     </span>
@@ -454,9 +454,9 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
 
             {/* Description */}
             {property.description && (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-                <h2 className="font-bold text-gray-900 mb-3">תיאור</h2>
-                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                <h2 className="font-bold text-slate-900 mb-3">תיאור</h2>
+                <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
                   {property.description}
                 </p>
               </div>
@@ -466,7 +466,7 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
           {/* ── Right: sticky sidebar ────────────────────────────────────────── */}
           <div className="w-full lg:w-80 flex-shrink-0 space-y-4 lg:sticky lg:top-4">
             {/* Agent card */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
               <div className="flex items-center gap-3 mb-4">
                 {client.agentPhoto ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -484,21 +484,21 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
                   </div>
                 )}
                 <div className="min-w-0">
-                  <p className="font-bold text-gray-900 text-sm leading-tight">{client.name}</p>
+                  <p className="font-bold text-slate-900 text-sm leading-tight">{client.name}</p>
                   {client.agentCity && (
-                    <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                    <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
                       <MapPin size={11} /> {client.agentCity}
                     </p>
                   )}
                   {client.agentExperience != null && (
-                    <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                    <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
                       <Star size={11} /> {client.agentExperience} שנות ניסיון
                     </p>
                   )}
                 </div>
               </div>
               {client.agentBio && (
-                <p className="text-xs text-gray-600 leading-relaxed line-clamp-3 mb-4 border-t border-gray-100 pt-3">
+                <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 mb-4 border-t border-slate-100 pt-3">
                   {client.agentBio}
                 </p>
               )}
@@ -519,7 +519,7 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
               {phoneNumber && (
                 <a
                   href={`tel:${phoneNumber}`}
-                  className="flex items-center justify-center gap-2 w-full border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium rounded-xl py-2.5 text-sm transition-colors"
+                  className="flex items-center justify-center gap-2 w-full border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium rounded-xl py-2.5 text-sm transition-colors"
                 >
                   <Phone size={15} /> {phoneNumber}
                 </a>
@@ -539,8 +539,8 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
             </div>
 
             {/* Lead form */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-              <h3 className="font-bold text-gray-900 mb-3 text-sm">השאר פרטים לקבלת מידע</h3>
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+              <h3 className="font-bold text-slate-900 mb-3 text-sm">השאר פרטים לקבלת מידע</h3>
               <LeadForm client={client} property={property} />
             </div>
           </div>
@@ -549,13 +549,13 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
         {/* ── Similar Properties ────────────────────────────────────────────── */}
         {similarProperties.length > 0 && (
           <section className="pt-2">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">נכסים דומים</h2>
+            <h2 className="text-lg font-bold text-slate-900 mb-4">נכסים דומים</h2>
             <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
               {similarProperties.map((p) => (
                 <Link
                   key={p.id}
                   href={`/${client.slug}/property/${p.slug}`}
-                  className="flex-shrink-0 w-60 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow snap-start group"
+                  className="flex-shrink-0 w-60 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow snap-start group"
                 >
                   <div className="relative aspect-video overflow-hidden">
                     {p.images[0] ? (
@@ -575,21 +575,21 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
                     )}
                   </div>
                   <div className="p-3 space-y-1">
-                    <p className="font-bold text-gray-900 text-sm">{formatPrice(p.price)}</p>
-                    <p className="text-xs text-gray-700 line-clamp-1">{p.title}</p>
+                    <p className="font-bold text-slate-900 text-sm">{formatPrice(p.price)}</p>
+                    <p className="text-xs text-slate-700 line-clamp-1">{p.title}</p>
                     <div className="flex items-center gap-2 flex-wrap">
                       {p.rooms != null && (
-                        <span className="text-xs text-gray-500 flex items-center gap-0.5">
+                        <span className="text-xs text-slate-500 flex items-center gap-0.5">
                           <BedDouble size={11} /> {p.rooms} חד׳
                         </span>
                       )}
                       {p.area != null && (
-                        <span className="text-xs text-gray-500 flex items-center gap-0.5">
+                        <span className="text-xs text-slate-500 flex items-center gap-0.5">
                           <Maximize size={11} /> {p.area} מ״ר
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-indigo-600 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
+                    <p className="text-xs text-blue-600 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
                       לפרטים נוספים <ArrowRight size={11} className="rotate-180" />
                     </p>
                   </div>
@@ -601,8 +601,8 @@ export function PropertyPageClient({ property, client, similarProperties }: Prop
       </div>
 
       {/* ── Footer ────────────────────────────────────────────────────────────── */}
-      <footer className="mt-10 bg-white border-t border-gray-100 py-5 text-center">
-        <p className="text-xs text-gray-400">
+      <footer className="mt-10 bg-white border-t border-slate-100 py-5 text-center">
+        <p className="text-xs text-slate-400">
           מופעל על ידי <span className="font-medium">MarketingOS</span>
         </p>
       </footer>

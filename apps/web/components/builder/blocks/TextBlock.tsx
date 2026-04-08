@@ -34,7 +34,7 @@ export default function TextBlock({
       style={{ textAlign: alignment, backgroundColor: block.settings.backgroundColor }}
     >
       <textarea
-        className="w-full min-h-[120px] p-3 border border-gray-200 rounded-lg resize-y text-base outline-none focus:ring-2 focus:ring-indigo-300"
+        className="w-full min-h-[120px] p-3 border border-slate-200 rounded-lg resize-y text-base outline-none focus:ring-2 focus:ring-blue-300"
         style={{ textAlign: alignment, color: block.settings.textColor }}
         dir="rtl"
         value={block.content.text || ""}

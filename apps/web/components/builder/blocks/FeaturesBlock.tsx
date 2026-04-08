@@ -28,7 +28,7 @@ export default function FeaturesBlock({
             <div key={f.prefix} className="text-center p-6 rounded-xl bg-white/80 shadow-sm">
               <span className="text-4xl mb-3 block">{f.emoji}</span>
               <h3 className="text-lg font-bold mb-2">{f.title}</h3>
-              <p className="text-gray-600 text-sm">{f.desc}</p>
+              <p className="text-slate-600 text-sm">{f.desc}</p>
             </div>
           ))}
         </div>
@@ -40,7 +40,7 @@ export default function FeaturesBlock({
     <section className="w-full px-4 py-6">
       <div className="grid grid-cols-3 gap-3">
         {features.map((f) => (
-          <div key={f.prefix} className="text-center p-3 rounded-lg border border-gray-200 space-y-1">
+          <div key={f.prefix} className="text-center p-3 rounded-lg border border-slate-200 space-y-1">
             <input
               className="text-2xl text-center bg-transparent outline-none w-full"
               value={f.emoji || ""}
@@ -50,7 +50,7 @@ export default function FeaturesBlock({
               }
             />
             <input
-              className="text-sm font-bold text-center bg-transparent outline-none w-full border-b border-dashed border-gray-200"
+              className="text-sm font-bold text-center bg-transparent outline-none w-full border-b border-dashed border-slate-200"
               value={f.title || ""}
               placeholder="כותרת"
               onChange={(e) =>
@@ -58,7 +58,7 @@ export default function FeaturesBlock({
               }
             />
             <input
-              className="text-xs text-gray-500 text-center bg-transparent outline-none w-full"
+              className="text-xs text-slate-500 text-center bg-transparent outline-none w-full"
               value={f.desc || ""}
               placeholder="תיאור"
               onChange={(e) =>

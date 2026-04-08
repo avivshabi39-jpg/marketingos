@@ -52,9 +52,9 @@ export default function OfficesPage() {
   if (loading) {
     return (
       <div className="space-y-4 animate-pulse" dir="rtl">
-        <div className="h-8 w-48 bg-gray-200 rounded-lg" />
+        <div className="h-8 w-48 bg-slate-200 rounded-lg" />
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-28 bg-white rounded-xl border border-gray-200" />
+          <div key={i} className="h-28 bg-white rounded-xl border border-slate-200" />
         ))}
       </div>
     );
@@ -65,14 +65,14 @@ export default function OfficesPage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Building2 size={22} className="text-indigo-500" /> משרדים
+          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+            <Building2 size={22} className="text-blue-500" /> משרדים
           </h1>
-          <p className="text-sm text-gray-500 mt-1">ניהול משרדי נדל"ן וסוכנים</p>
+          <p className="text-sm text-slate-500 mt-1">ניהול משרדי נדל"ן וסוכנים</p>
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700"
         >
           <Plus size={16} /> צור משרד
         </button>
@@ -80,27 +80,27 @@ export default function OfficesPage() {
 
       {/* Create form */}
       {showForm && (
-        <div className="bg-white rounded-xl border border-indigo-200 p-5 shadow-sm">
-          <h3 className="text-sm font-semibold text-gray-800 mb-3">משרד חדש</h3>
+        <div className="bg-white rounded-xl border border-blue-200 p-5 shadow-sm">
+          <h3 className="text-sm font-semibold text-slate-800 mb-3">משרד חדש</h3>
           <div className="flex gap-3">
             <input
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && createOffice()}
               placeholder="שם המשרד"
-              className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-indigo-300"
+              className="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-300"
               autoFocus
             />
             <button
               onClick={createOffice}
               disabled={creating || !newName.trim()}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm disabled:opacity-50"
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm disabled:opacity-50"
             >
               {creating ? "יוצר..." : "צור"}
             </button>
             <button
               onClick={() => setShowForm(false)}
-              className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50"
+              className="px-4 py-2 border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50"
             >
               ביטול
             </button>
@@ -110,10 +110,10 @@ export default function OfficesPage() {
 
       {/* Empty state */}
       {offices.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center py-20">
-          <Building2 size={40} className="text-gray-200 mb-4" />
-          <p className="text-gray-500 font-medium">אין משרדים עדיין</p>
-          <p className="text-sm text-gray-400 mt-1">לחץ על "צור משרד" להתחיל</p>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm flex flex-col items-center py-20">
+          <Building2 size={40} className="text-slate-200 mb-4" />
+          <p className="text-slate-500 font-medium">אין משרדים עדיין</p>
+          <p className="text-sm text-slate-400 mt-1">לחץ על "צור משרד" להתחיל</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -123,35 +123,35 @@ export default function OfficesPage() {
               <Link
                 key={o.id}
                 href={`/admin/offices/${o.id}`}
-                className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:border-indigo-200 transition-all group"
+                className="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md hover:border-blue-200 transition-all group"
               >
                 {/* Logo + name */}
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-700 font-bold text-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 font-bold text-lg flex items-center justify-center flex-shrink-0">
                     {o.name.slice(0, 2)}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900 truncate">{o.name}</p>
+                    <p className="font-semibold text-slate-900 truncate">{o.name}</p>
                   </div>
-                  <ChevronRight size={16} className="text-gray-300 group-hover:text-indigo-400 flex-shrink-0" />
+                  <ChevronRight size={16} className="text-slate-300 group-hover:text-blue-400 flex-shrink-0" />
                 </div>
 
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="bg-gray-50 rounded-lg py-2">
-                    <Users size={14} className="text-gray-400 mx-auto mb-1" />
-                    <p className="text-sm font-bold text-gray-900">{o.agents.length}</p>
-                    <p className="text-[10px] text-gray-400">סוכנים</p>
+                  <div className="bg-slate-50 rounded-lg py-2">
+                    <Users size={14} className="text-slate-400 mx-auto mb-1" />
+                    <p className="text-sm font-bold text-slate-900">{o.agents.length}</p>
+                    <p className="text-[10px] text-slate-400">סוכנים</p>
                   </div>
-                  <div className="bg-gray-50 rounded-lg py-2">
+                  <div className="bg-slate-50 rounded-lg py-2">
                     <TrendingUp size={14} className="text-green-400 mx-auto mb-1" />
-                    <p className="text-sm font-bold text-gray-900">{o.monthlyLeads}</p>
-                    <p className="text-[10px] text-gray-400">לידים/חודש</p>
+                    <p className="text-sm font-bold text-slate-900">{o.monthlyLeads}</p>
+                    <p className="text-[10px] text-slate-400">לידים/חודש</p>
                   </div>
-                  <div className="bg-gray-50 rounded-lg py-2">
+                  <div className="bg-slate-50 rounded-lg py-2">
                     <Home size={14} className="text-blue-400 mx-auto mb-1" />
-                    <p className="text-sm font-bold text-gray-900">{totalProperties}</p>
-                    <p className="text-[10px] text-gray-400">נכסים</p>
+                    <p className="text-sm font-bold text-slate-900">{totalProperties}</p>
+                    <p className="text-[10px] text-slate-400">נכסים</p>
                   </div>
                 </div>
               </Link>

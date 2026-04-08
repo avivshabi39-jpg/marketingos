@@ -104,37 +104,37 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
     <div className="space-y-5" dir="rtl">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">🎯 הלידים שלי</h1>
-        <p className="text-gray-500 text-sm mt-0.5">{stats.total} לידים בסה"כ</p>
+        <h1 className="text-2xl font-bold text-slate-900">🎯 הלידים שלי</h1>
+        <p className="text-slate-500 text-sm mt-0.5">{stats.total} לידים בסה"כ</p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: 'סה"כ', value: stats.total, color: "text-indigo-600", bg: "bg-indigo-50" },
+          { label: 'סה"כ', value: stats.total, color: "text-blue-600", bg: "bg-blue-50" },
           { label: "חדשים", value: stats.new, color: "text-blue-600", bg: "bg-blue-50" },
           { label: "נוצר קשר", value: stats.contacted, color: "text-yellow-600", bg: "bg-yellow-50" },
           { label: "נסגרו", value: stats.won, color: "text-green-600", bg: "bg-green-50" },
         ].map((s) => (
           <div key={s.label} className={`${s.bg} rounded-xl p-3 text-center`}>
             <p className={`text-xl font-bold ${s.color}`}>{s.value}</p>
-            <p className="text-xs text-gray-500">{s.label}</p>
+            <p className="text-xs text-slate-500">{s.label}</p>
           </div>
         ))}
       </div>
 
       {/* Auto-reply toggle */}
-      <div className={`flex items-center justify-between rounded-xl border p-4 ${autoReply ? "bg-green-50 border-green-200" : "bg-white border-gray-200"}`}>
+      <div className={`flex items-center justify-between rounded-xl border p-4 ${autoReply ? "bg-green-50 border-green-200" : "bg-white border-slate-200"}`}>
         <div>
-          <p className="font-semibold text-sm text-gray-900">📱 חזרה אוטומטית ללידים</p>
-          <p className="text-xs text-gray-500">
+          <p className="font-semibold text-sm text-slate-900">📱 חזרה אוטומטית ללידים</p>
+          <p className="text-xs text-slate-500">
             {autoReply ? "וואצאפ יוצא אוטומטית לכל ליד חדש" : "כבוי — תחזור ללידים באופן ידני"}
           </p>
         </div>
         <Tooltip content={autoReply ? "כבה תגובה אוטומטית" : "הפעל תגובה אוטומטית"} position="top">
         <button
           onClick={toggleAutoReply}
-          className={`relative w-12 h-6 rounded-full transition-colors ${autoReply ? "bg-green-500" : "bg-gray-300"}`}
+          className={`relative w-12 h-6 rounded-full transition-colors ${autoReply ? "bg-green-500" : "bg-slate-300"}`}
         >
           <div
             className="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all"
@@ -147,20 +147,20 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
       {/* Search + Filter */}
       <div className="flex gap-2">
         <div className="flex-1 relative">
-          <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="חפש לפי שם, טלפון או עיר..."
-            className="w-full pr-10 pl-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none"
+            className="w-full pr-10 pl-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
           />
         </div>
         <div className="relative">
-          <Filter size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          <Filter size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="pr-10 pl-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-white appearance-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 outline-none"
+            className="pr-10 pl-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-white appearance-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
           >
             <option value="ALL">הכל</option>
             <option value="NEW">חדשים</option>
@@ -174,7 +174,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
 
       {/* Leads */}
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100">
+        <div className="bg-white rounded-2xl border border-slate-100">
           <EmptyState
             icon="🎯"
             title={filter !== "ALL" ? "אין לידים בקטגוריה זו" : "אין לידים עדיין"}
@@ -186,18 +186,18 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
       ) : (
         <div className="space-y-3">
           {filtered.map((lead) => (
-            <div key={lead.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+            <div key={lead.id} className="bg-white rounded-xl border border-slate-100 shadow-sm p-4">
               {/* Row 1: Name + Status */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-lg flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-lg flex-shrink-0">
                     {lead.gender === "male" ? "👨" : lead.gender === "female" ? "👩" : "👤"}
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900 text-sm">
+                    <p className="font-semibold text-slate-900 text-sm">
                       {lead.firstName} {lead.lastName}
                     </p>
-                    <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">
+                    <div className="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
                       {lead.ageRange && <span>{lead.ageRange}</span>}
                       {lead.city && <span>{lead.city}</span>}
                       <span>{new Date(lead.createdAt).toLocaleDateString("he-IL")}</span>
@@ -205,7 +205,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                     </div>
                   </div>
                 </div>
-                <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"}`}>
+                <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_COLORS[lead.status] ?? "bg-slate-100 text-slate-600"}`}>
                   {STATUS_LABELS[lead.status] ?? lead.status}
                 </span>
               </div>
@@ -216,7 +216,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                   <>
                     <a
                       href={`tel:${lead.phone}`}
-                      className="inline-flex items-center gap-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
+                      className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
                     >
                       <Phone size={12} />
                       {lead.phone}
@@ -235,7 +235,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                 {lead.email && (
                   <a
                     href={`mailto:${lead.email}`}
-                    className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-indigo-600"
+                    className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-blue-600"
                   >
                     📧 {lead.email}
                   </a>
@@ -248,7 +248,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
               </div>
 
               {/* Row 3: Status buttons */}
-              <div className="flex gap-1.5 mt-3 pt-3 border-t border-gray-50">
+              <div className="flex gap-1.5 mt-3 pt-3 border-t border-slate-50">
                 {(["CONTACTED", "QUALIFIED", "WON", "LOST"] as const).map((s) => (
                   <button
                     key={s}
@@ -256,8 +256,8 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                     disabled={lead.status === s || updatingId === lead.id}
                     className={`px-2.5 py-1 rounded-md text-[11px] font-medium border transition-colors ${
                       lead.status === s
-                        ? "bg-gray-100 text-gray-400 border-gray-100 cursor-default"
-                        : "bg-white text-gray-600 border-gray-200 hover:border-indigo-300 hover:text-indigo-600 cursor-pointer"
+                        ? "bg-slate-100 text-slate-400 border-slate-100 cursor-default"
+                        : "bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
                     }`}
                   >
                     {STATUS_LABELS[s]}

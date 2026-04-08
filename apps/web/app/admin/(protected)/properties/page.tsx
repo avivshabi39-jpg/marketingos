@@ -18,7 +18,7 @@ const TYPE_HE: Record<string, string> = {
 const STATUS_COLORS: Record<string, string> = {
   AVAILABLE:      "bg-green-100 text-green-700",
   UNDER_CONTRACT: "bg-yellow-100 text-yellow-700",
-  SOLD:           "bg-gray-100 text-gray-500",
+  SOLD:           "bg-slate-100 text-slate-500",
 };
 
 const STATUS_HE: Record<string, string> = {
@@ -83,12 +83,12 @@ export default async function PropertiesPage({
     <div className="space-y-6" dir="rtl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">נכסים</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{properties.length} נכסים</p>
+          <h1 className="text-2xl font-semibold text-slate-900">נכסים</h1>
+          <p className="text-sm text-slate-500 mt-0.5">{properties.length} נכסים</p>
         </div>
         <Link
           href="/admin/properties/new"
-          className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
         >
           <Plus size={16} />
           נכס חדש
@@ -96,12 +96,12 @@ export default async function PropertiesPage({
       </div>
 
       {/* Filters */}
-      <form className="flex flex-wrap gap-3 bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
+      <form className="flex flex-wrap gap-3 bg-white border border-slate-100 rounded-xl p-4 shadow-sm">
         {!session?.clientId && (
           <select
             name="clientId"
             defaultValue={searchParams.clientId ?? ""}
-            className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             <option value="">כל הלקוחות</option>
             {clients.map((c) => (
@@ -112,7 +112,7 @@ export default async function PropertiesPage({
         <select
           name="status"
           defaultValue={searchParams.status ?? ""}
-          className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          className="rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           <option value="">כל הסטטוסים</option>
           <option value="AVAILABLE">זמין</option>
@@ -124,11 +124,11 @@ export default async function PropertiesPage({
           type="text"
           placeholder="עיר..."
           defaultValue={searchParams.city ?? ""}
-          className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          className="rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         <button
           type="submit"
-          className="px-4 py-2 rounded-lg bg-indigo-500 text-white text-sm font-medium hover:bg-indigo-600 transition-colors"
+          className="px-4 py-2 rounded-lg bg-blue-500 text-white text-sm font-medium hover:bg-blue-600 transition-colors"
         >
           סנן
         </button>
@@ -136,9 +136,9 @@ export default async function PropertiesPage({
 
       {/* Grid */}
       {properties.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center py-20">
-          <Home size={32} className="text-gray-300 mb-3" />
-          <p className="text-gray-500 text-sm">לא נמצאו נכסים.</p>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm flex flex-col items-center justify-center py-20">
+          <Home size={32} className="text-slate-300 mb-3" />
+          <p className="text-slate-500 text-sm">לא נמצאו נכסים.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -147,36 +147,36 @@ export default async function PropertiesPage({
             return (
               <div
                 key={p.id}
-                className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
               >
                 {/* Image placeholder */}
-                <div className="h-40 bg-gradient-to-br from-gray-100 to-gray-200 rounded-t-xl flex items-center justify-center">
-                  <Icon size={36} className="text-gray-400" />
+                <div className="h-40 bg-gradient-to-br from-slate-100 to-slate-200 rounded-t-xl flex items-center justify-center">
+                  <Icon size={36} className="text-slate-400" />
                 </div>
 
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900 text-sm leading-tight flex-1 ml-2">
+                    <h3 className="font-semibold text-slate-900 text-sm leading-tight flex-1 ml-2">
                       {p.title}
                     </h3>
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${STATUS_COLORS[p.status] ?? "bg-gray-100 text-gray-500"}`}>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${STATUS_COLORS[p.status] ?? "bg-slate-100 text-slate-500"}`}>
                       {STATUS_HE[p.status] ?? p.status}
                     </span>
                   </div>
 
-                  <p className="text-xl font-bold text-gray-900 mb-1">
+                  <p className="text-xl font-bold text-slate-900 mb-1">
                     ₪{p.price.toLocaleString("he-IL")}
                   </p>
 
-                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 mb-3">
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500 mb-3">
                     <span>{p.city}{p.neighborhood ? `, ${p.neighborhood}` : ""}</span>
                     {p.rooms && <span>{p.rooms} חדרים</span>}
                     {p.area && <span>{p.area} מ"ר</span>}
-                    <span className="text-gray-400">{TYPE_HE[p.propertyType] ?? p.propertyType}</span>
+                    <span className="text-slate-400">{TYPE_HE[p.propertyType] ?? p.propertyType}</span>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-gray-50">
-                    <span className="text-xs text-gray-400">
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-50">
+                    <span className="text-xs text-slate-400">
                       {p._count.propertyLeads} לידים מתאימים
                     </span>
                     <span
@@ -189,7 +189,7 @@ export default async function PropertiesPage({
 
                   {/* Broadcast button — only for available properties */}
                   {p.status === "AVAILABLE" && (
-                    <div className="mt-3 pt-3 border-t border-gray-50">
+                    <div className="mt-3 pt-3 border-t border-slate-50">
                       <PropertyBroadcastButton propertyId={p.id} />
                     </div>
                   )}

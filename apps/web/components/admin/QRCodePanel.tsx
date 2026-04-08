@@ -32,28 +32,28 @@ export function QRCodePanel({ slug, clientName }: { slug: string; clientName: st
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mt-4 flex flex-col items-center gap-4">
-      <h4 className="text-base font-semibold text-gray-900 flex items-center gap-2">
+    <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 mt-4 flex flex-col items-center gap-4">
+      <h4 className="text-base font-semibold text-slate-900 flex items-center gap-2">
         📲 QR Code לדף הנחיתה
       </h4>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={qrUrl}
         alt="QR Code"
-        className="w-40 h-40 rounded-xl border border-gray-200"
+        className="w-40 h-40 rounded-xl border border-slate-200"
       />
-      <p className="text-xs text-gray-500 text-center">הדפס והצב בעסק שלך</p>
+      <p className="text-xs text-slate-500 text-center">הדפס והצב בעסק שלך</p>
       <div className="flex items-center gap-3">
         <a
           href={qrUrl}
           download={`qr-${slug}.png`}
-          className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           ⬇️ הורד PNG
         </a>
         <button
           onClick={handlePrint}
-          className="flex items-center gap-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-2 rounded-lg border border-gray-200 transition-colors"
+          className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold px-4 py-2 rounded-lg border border-slate-200 transition-colors"
         >
           🖨️ הדפס
         </button>

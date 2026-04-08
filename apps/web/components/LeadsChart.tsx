@@ -55,7 +55,7 @@ export function LeadsChart({
   if (loading) {
     return (
       <div className="h-48 flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-indigo-200 border-t-indigo-500 rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-blue-200 border-t-blue-500 rounded-full animate-spin" />
       </div>
     );
   }
@@ -87,8 +87,8 @@ export function LeadsChart({
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between">
-        <span className="text-xs text-gray-500">לידים — {days} ימים אחרונים</span>
-        <span className="text-xs font-semibold text-indigo-600">{total} סה"כ</span>
+        <span className="text-xs text-slate-500">לידים — {days} ימים אחרונים</span>
+        <span className="text-xs font-semibold text-blue-600">{total} סה"כ</span>
       </div>
       <div className="relative w-full" style={{ paddingBottom: `${(H / W) * 100}%` }}>
         <svg

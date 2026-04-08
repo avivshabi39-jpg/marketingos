@@ -85,7 +85,7 @@ function PropertyCard({
   return (
     <Link
       href={`/${clientSlug}/property/${prop.slug}`}
-      className="group block bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+      className="group block bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow"
     >
       {/* Image */}
       <div className="relative aspect-video overflow-hidden">
@@ -118,25 +118,25 @@ function PropertyCard({
 
       {/* Content */}
       <div className="p-4 space-y-2">
-        <p className="text-lg font-bold text-gray-900">{formatPrice(prop.price)}</p>
-        <p className="text-sm font-medium text-gray-800 leading-snug line-clamp-2">{prop.title}</p>
-        <p className="text-xs text-gray-500 flex items-center gap-1">
+        <p className="text-lg font-bold text-slate-900">{formatPrice(prop.price)}</p>
+        <p className="text-sm font-medium text-slate-800 leading-snug line-clamp-2">{prop.title}</p>
+        <p className="text-xs text-slate-500 flex items-center gap-1">
           <MapPin size={12} />
           {prop.city}
           {prop.neighborhood ? ` · ${prop.neighborhood}` : ""}
         </p>
         <div className="flex items-center gap-2 flex-wrap pt-1">
           {prop.rooms != null && (
-            <span className="inline-flex items-center gap-1 bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full">
+            <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded-full">
               <BedDouble size={11} /> {prop.rooms} חד׳
             </span>
           )}
           {prop.area != null && (
-            <span className="inline-flex items-center gap-1 bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full">
+            <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded-full">
               <Maximize size={11} /> {prop.area} מ״ר
             </span>
           )}
-          <span className="inline-flex items-center gap-1 bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full">
+          <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded-full">
             <Home size={11} /> {PROPERTY_TYPE_LABELS[prop.propertyType] ?? prop.propertyType}
           </span>
         </div>
@@ -204,8 +204,8 @@ function ContactForm({ client }: { client: AgentPageProps["client"] }) {
         >
           <CheckCircle2 size={32} className="text-white" />
         </div>
-        <h3 className="text-xl font-bold text-gray-900">תודה רבה!</h3>
-        <p className="text-gray-500 text-sm">קיבלנו את הפנייה שלך ונחזור אליך בהקדם.</p>
+        <h3 className="text-xl font-bold text-slate-900">תודה רבה!</h3>
+        <p className="text-slate-500 text-sm">קיבלנו את הפנייה שלך ונחזור אליך בהקדם.</p>
       </div>
     );
   }
@@ -214,18 +214,18 @@ function ContactForm({ client }: { client: AgentPageProps["client"] }) {
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Full name */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-slate-700 mb-1">
           שם מלא <span className="text-red-500">*</span>
         </label>
         <div className="relative">
-          <User size={15} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          <User size={15} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
             type="text"
             value={values.fullName}
             onChange={(e) => setValues((p) => ({ ...p, fullName: e.target.value }))}
             placeholder="ישראל ישראלי"
             className={`w-full rounded-xl border pr-9 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${
-              errors.fullName ? "border-red-300 focus:ring-red-300" : "border-gray-200 focus:ring-indigo-300"
+              errors.fullName ? "border-red-300 focus:ring-red-300" : "border-slate-200 focus:ring-blue-300"
             }`}
           />
         </div>
@@ -234,11 +234,11 @@ function ContactForm({ client }: { client: AgentPageProps["client"] }) {
 
       {/* Phone */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-slate-700 mb-1">
           טלפון <span className="text-red-500">*</span>
         </label>
         <div className="relative">
-          <Phone size={15} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+          <Phone size={15} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           <input
             type="tel"
             dir="ltr"
@@ -246,7 +246,7 @@ function ContactForm({ client }: { client: AgentPageProps["client"] }) {
             onChange={(e) => setValues((p) => ({ ...p, phone: e.target.value }))}
             placeholder="050-0000000"
             className={`w-full rounded-xl border pr-9 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 ${
-              errors.phone ? "border-red-300 focus:ring-red-300" : "border-gray-200 focus:ring-indigo-300"
+              errors.phone ? "border-red-300 focus:ring-red-300" : "border-slate-200 focus:ring-blue-300"
             }`}
           />
         </div>
@@ -255,13 +255,13 @@ function ContactForm({ client }: { client: AgentPageProps["client"] }) {
 
       {/* Message */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">הודעה</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1">הודעה</label>
         <textarea
           rows={3}
           value={values.message}
           onChange={(e) => setValues((p) => ({ ...p, message: e.target.value }))}
           placeholder="מה מחפשים? נשמח לעזור..."
-          className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-300"
         />
       </div>
 
@@ -329,10 +329,10 @@ export function AgentPageView({ client, properties, stats }: AgentPageProps) {
     : null;
 
   return (
-    <div dir="rtl" className="min-h-screen bg-gray-50">
+    <div dir="rtl" className="min-h-screen bg-slate-50">
       <PageViewTracker clientSlug={client.slug} page="agent" />
       {/* ── Sticky Header ─────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+      <header className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-3">
             {client.landingPageLogo ? (
@@ -351,9 +351,9 @@ export function AgentPageView({ client, properties, stats }: AgentPageProps) {
               </div>
             )}
             <div>
-              <p className="font-bold text-gray-900 leading-tight text-sm sm:text-base">{client.name}</p>
+              <p className="font-bold text-slate-900 leading-tight text-sm sm:text-base">{client.name}</p>
               {client.agentCity && (
-                <p className="text-xs text-gray-500 flex items-center gap-1">
+                <p className="text-xs text-slate-500 flex items-center gap-1">
                   <MapPin size={11} /> {client.agentCity}
                 </p>
               )}
@@ -364,7 +364,7 @@ export function AgentPageView({ client, properties, stats }: AgentPageProps) {
             {phoneNumber && (
               <a
                 href={`tel:${phoneNumber}`}
-                className="inline-flex items-center gap-1.5 border border-gray-200 text-gray-700 text-sm font-medium px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center gap-1.5 border border-slate-200 text-slate-700 text-sm font-medium px-3 py-1.5 rounded-lg hover:bg-slate-50 transition-colors"
               >
                 <Phone size={14} />
                 <span className="hidden sm:inline">{phoneNumber}</span>
@@ -451,15 +451,15 @@ export function AgentPageView({ client, properties, stats }: AgentPageProps) {
       </section>
 
       {/* ── Filter Bar ────────────────────────────────────────────────────────── */}
-      <div className="sticky top-[57px] z-20 bg-white border-b border-gray-200 shadow-sm">
+      <div className="sticky top-[57px] z-20 bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center gap-3">
-          <span className="text-sm font-medium text-gray-700 hidden sm:inline">סינון:</span>
+          <span className="text-sm font-medium text-slate-700 hidden sm:inline">סינון:</span>
 
           {/* Property type */}
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="border border-slate-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-300"
           >
             <option value="">כל הסוגים</option>
             <option value="APARTMENT">דירה</option>
@@ -476,7 +476,7 @@ export function AgentPageView({ client, properties, stats }: AgentPageProps) {
           <select
             value={priceFilter}
             onChange={(e) => setPriceFilter(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="border border-slate-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-300"
           >
             <option value="">כל המחירים</option>
             <option value="1M">עד ₪1M</option>
@@ -490,7 +490,7 @@ export function AgentPageView({ client, properties, stats }: AgentPageProps) {
           <select
             value={roomsFilter}
             onChange={(e) => setRoomsFilter(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            className="border border-slate-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-300"
           >
             <option value="">כל החדרים</option>
             <option value="1-2">1-2</option>
@@ -499,7 +499,7 @@ export function AgentPageView({ client, properties, stats }: AgentPageProps) {
             <option value="5+">5+</option>
           </select>
 
-          <span className="text-xs text-gray-400 mr-auto">
+          <span className="text-xs text-slate-400 mr-auto">
             {filtered.length} נכסים
           </span>
         </div>
@@ -507,9 +507,9 @@ export function AgentPageView({ client, properties, stats }: AgentPageProps) {
 
       {/* ── Available Properties Grid ─────────────────────────────────────────── */}
       <section className="max-w-6xl mx-auto px-4 py-10">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">נכסים זמינים</h2>
+        <h2 className="text-xl font-bold text-slate-900 mb-6">נכסים זמינים</h2>
         {filtered.length === 0 ? (
-          <div className="text-center py-16 text-gray-400">
+          <div className="text-center py-16 text-slate-400">
             <Building size={48} className="mx-auto mb-3 opacity-30" />
             <p className="text-sm">לא נמצאו נכסים התואמים לסינון</p>
           </div>
@@ -530,14 +530,14 @@ export function AgentPageView({ client, properties, stats }: AgentPageProps) {
       {/* ── Sold Properties ───────────────────────────────────────────────────── */}
       {sold.length > 0 && (
         <section className="max-w-6xl mx-auto px-4 pb-10">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">נמכרו</h2>
+          <h2 className="text-xl font-bold text-slate-900 mb-6">נמכרו</h2>
           <div className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory">
             {sold.map((prop) => {
               const mainImage = prop.images[0];
               return (
                 <div
                   key={prop.id}
-                  className="flex-shrink-0 w-56 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden snap-start"
+                  className="flex-shrink-0 w-56 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden snap-start"
                 >
                   <div className="relative aspect-video">
                     {mainImage ? (
@@ -548,20 +548,20 @@ export function AgentPageView({ client, properties, stats }: AgentPageProps) {
                         className="w-full h-full object-cover grayscale"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                        <Building size={28} className="text-gray-400" />
+                      <div className="w-full h-full bg-slate-200 flex items-center justify-center">
+                        <Building size={28} className="text-slate-400" />
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gray-900/40 flex items-center justify-center">
-                      <span className="bg-gray-900 text-white text-xs font-bold px-3 py-1 rounded-full">
+                    <div className="absolute inset-0 bg-slate-900/40 flex items-center justify-center">
+                      <span className="bg-slate-900 text-white text-xs font-bold px-3 py-1 rounded-full">
                         נמכר
                       </span>
                     </div>
                   </div>
                   <div className="p-3">
-                    <p className="text-sm font-bold text-gray-900">{formatPrice(prop.price)}</p>
-                    <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{prop.title}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{prop.city}</p>
+                    <p className="text-sm font-bold text-slate-900">{formatPrice(prop.price)}</p>
+                    <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{prop.title}</p>
+                    <p className="text-xs text-slate-400 mt-0.5">{prop.city}</p>
                   </div>
                 </div>
               );
@@ -571,21 +571,21 @@ export function AgentPageView({ client, properties, stats }: AgentPageProps) {
       )}
 
       {/* ── Contact Form ──────────────────────────────────────────────────────── */}
-      <section className="bg-gray-100 border-t border-gray-200">
+      <section className="bg-slate-100 border-t border-slate-200">
         <div className="max-w-xl mx-auto px-4 py-12">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900">צור קשר</h2>
-            <p className="text-gray-500 text-sm mt-2">השאר פרטים ונחזור אליך בהקדם</p>
+            <h2 className="text-2xl font-bold text-slate-900">צור קשר</h2>
+            <p className="text-slate-500 text-sm mt-2">השאר פרטים ונחזור אליך בהקדם</p>
           </div>
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
             <ContactForm client={client} />
           </div>
         </div>
       </section>
 
       {/* ── Footer ────────────────────────────────────────────────────────────── */}
-      <footer className="bg-white border-t border-gray-100 py-5 text-center">
-        <p className="text-xs text-gray-400">
+      <footer className="bg-white border-t border-slate-100 py-5 text-center">
+        <p className="text-xs text-slate-400">
           מופעל על ידי <span className="font-medium">MarketingOS</span>
         </p>
       </footer>
@@ -605,7 +605,7 @@ export function AgentPageView({ client, properties, stats }: AgentPageProps) {
         {phoneNumber && (
           <a
             href={`tel:${phoneNumber}`}
-            className="flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 text-sm font-bold px-4 py-2.5 rounded-full shadow-lg border border-gray-200 transition-all hover:scale-105"
+            className="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 text-sm font-bold px-4 py-2.5 rounded-full shadow-lg border border-slate-200 transition-all hover:scale-105"
           >
             <Calendar size={16} /> קבעו ביקור
           </a>

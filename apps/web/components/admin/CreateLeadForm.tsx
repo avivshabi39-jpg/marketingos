@@ -105,14 +105,14 @@ export function CreateLeadForm({ clients }: Props) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="source" className="text-sm font-medium text-gray-700">
+        <label htmlFor="source" className="text-sm font-medium text-slate-700">
           Source
         </label>
         <select
           id="source"
           value={form.source}
           onChange={(e) => set("source", e.target.value)}
-          className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="block w-full rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         >
           {SOURCE_OPTIONS.map((o) => (
             <option key={o.value} value={o.value}>
@@ -123,7 +123,7 @@ export function CreateLeadForm({ clients }: Props) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor="clientId" className="text-sm font-medium text-gray-700">
+        <label htmlFor="clientId" className="text-sm font-medium text-slate-700">
           Client
         </label>
         <select
@@ -131,7 +131,7 @@ export function CreateLeadForm({ clients }: Props) {
           required
           value={form.clientId}
           onChange={(e) => set("clientId", e.target.value)}
-          className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="block w-full rounded-md border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         >
           <option value="" disabled>Select a client…</option>
           {clients.map((c) => (

@@ -183,13 +183,13 @@ export function LeadFormClient({ client, form, utmParams }: Props) {
       : null;
 
     return (
-      <div dir="rtl" className="min-h-screen flex items-center justify-center px-4 bg-gray-50">
+      <div dir="rtl" className="min-h-screen flex items-center justify-center px-4 bg-slate-50">
         <div className="text-center space-y-5 max-w-sm w-full">
           <CheckCircle2 size={64} className="mx-auto" style={{ color }} />
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-slate-900">
             {form.thankYouMessage ?? "תודה! ניצור איתך קשר בהקדם."}
           </h2>
-          <p className="text-gray-500 text-sm">
+          <p className="text-slate-500 text-sm">
             {values.fullName && `שלום ${values.fullName.split(" ")[0]}!`} קיבלנו את הפנייה שלך.
           </p>
 
@@ -207,7 +207,7 @@ export function LeadFormClient({ client, form, utmParams }: Props) {
             )}
             <button
               onClick={copyPageUrl}
-              className="flex items-center justify-center gap-2 border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 font-medium rounded-xl py-2.5 text-sm transition-colors"
+              className="flex items-center justify-center gap-2 border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 font-medium rounded-xl py-2.5 text-sm transition-colors"
             >
               {copied ? <Check size={15} className="text-green-600" /> : <Copy size={15} />}
               {copied ? "הקישור הועתק!" : "שתף את הטופס"}
@@ -220,7 +220,7 @@ export function LeadFormClient({ client, form, utmParams }: Props) {
 
   // ── Form ──
   return (
-    <div dir="rtl" className="min-h-screen bg-gray-50 flex flex-col">
+    <div dir="rtl" className="min-h-screen bg-slate-50 flex flex-col">
       {/* Header */}
       <div className="py-8 text-center" style={{ background: color }}>
         <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-3">
@@ -234,8 +234,8 @@ export function LeadFormClient({ client, form, utmParams }: Props) {
       <div className="flex-1 flex items-start justify-center px-4 py-8">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6 space-y-5">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">מלא את הפרטים שלך</h2>
-            <p className="text-gray-500 text-sm mt-0.5">ונחזור אליך בהקדם</p>
+            <h2 className="text-lg font-semibold text-slate-900">מלא את הפרטים שלך</h2>
+            <p className="text-slate-500 text-sm mt-0.5">ונחזור אליך בהקדם</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -243,7 +243,7 @@ export function LeadFormClient({ client, form, utmParams }: Props) {
               const Icon = field.icon;
               return (
                 <div key={field.id}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">
                     {field.label}
                     {field.required && <span className="text-red-500 mr-1">*</span>}
                   </label>
@@ -257,7 +257,7 @@ export function LeadFormClient({ client, form, utmParams }: Props) {
                       className={`w-full rounded-xl border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 resize-none ${
                         errors[field.id]
                           ? "border-red-300 focus:ring-red-300"
-                          : "border-gray-200 focus:ring-indigo-300"
+                          : "border-slate-200 focus:ring-blue-300"
                       }`}
                     />
                   ) : field.type === "select" && field.options ? (
@@ -267,7 +267,7 @@ export function LeadFormClient({ client, form, utmParams }: Props) {
                       className={`w-full rounded-xl border px-4 py-2.5 text-sm focus:outline-none focus:ring-2 bg-white ${
                         errors[field.id]
                           ? "border-red-300 focus:ring-red-300"
-                          : "border-gray-200 focus:ring-indigo-300"
+                          : "border-slate-200 focus:ring-blue-300"
                       }`}
                     >
                       <option value="">בחר...</option>
@@ -278,7 +278,7 @@ export function LeadFormClient({ client, form, utmParams }: Props) {
                   ) : (
                     <div className="relative">
                       {Icon && (
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
                           <Icon size={16} />
                         </div>
                       )}
@@ -293,7 +293,7 @@ export function LeadFormClient({ client, form, utmParams }: Props) {
                         } ${
                           errors[field.id]
                             ? "border-red-300 focus:ring-red-300"
-                            : "border-gray-200 focus:ring-indigo-300"
+                            : "border-slate-200 focus:ring-blue-300"
                         }`}
                       />
                     </div>
@@ -325,7 +325,7 @@ export function LeadFormClient({ client, form, utmParams }: Props) {
               )}
             </button>
 
-            <p className="text-center text-gray-400 text-xs">
+            <p className="text-center text-slate-400 text-xs">
               הפרטים שלך מאובטחים ולא יועברו לצדדים שלישיים
             </p>
           </form>

@@ -50,12 +50,12 @@ function StepDot({ step, current }: { step: number; current: number }) {
     <div className="flex items-center gap-2">
       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
         done    ? "bg-green-500 text-white" :
-        active  ? "bg-indigo-500 text-white ring-4 ring-indigo-500/30" :
-                  "bg-white/10 text-indigo-400"
+        active  ? "bg-blue-500 text-white ring-4 ring-blue-500/30" :
+                  "bg-white/10 text-blue-400"
       }`}>
         {done ? "✓" : step}
       </div>
-      <span className={`text-sm hidden sm:block ${active ? "text-white font-medium" : "text-indigo-400"}`}>
+      <span className={`text-sm hidden sm:block ${active ? "text-white font-medium" : "text-blue-400"}`}>
         {STEP_LABELS[step - 1]}
       </span>
     </div>
@@ -127,7 +127,7 @@ export default function OnboardingPage() {
     >
       {/* Logo */}
       <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center">
           <TrendingUp size={20} className="text-white" />
         </div>
         <span className="text-white font-bold text-xl">MarketingOS</span>
@@ -137,7 +137,7 @@ export default function OnboardingPage() {
       <div className="flex items-center gap-4 mb-8">
         {[1, 2, 3].map((s, i) => (
           <div key={s} className="flex items-center gap-2">
-            {i > 0 && <div className={`w-8 h-px ${s <= step ? "bg-indigo-400" : "bg-white/20"}`} />}
+            {i > 0 && <div className={`w-8 h-px ${s <= step ? "bg-blue-400" : "bg-white/20"}`} />}
             <StepDot step={s} current={step} />
           </div>
         ))}
@@ -151,26 +151,26 @@ export default function OnboardingPage() {
             <form onSubmit={handleStep1Submit} className="space-y-5">
               <div>
                 <h2 className="text-2xl font-bold text-white">ברוכים הבאים! 👋</h2>
-                <p className="text-indigo-300 text-sm mt-1">בוא נגדיר כמה פרטים בסיסיים</p>
+                <p className="text-blue-300 text-sm mt-1">בוא נגדיר כמה פרטים בסיסיים</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-indigo-100 mb-1.5">שם הסוכנות / העסק</label>
+                <label className="block text-sm font-medium text-blue-100 mb-1.5">שם הסוכנות / העסק</label>
                 <input
                   type="text" required value={agencyName}
                   onChange={(e) => setAgencyName(e.target.value)}
                   placeholder="סוכנות השיווק שלי"
-                  className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-indigo-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-indigo-100 mb-1.5">מספר טלפון (אופציונלי)</label>
+                <label className="block text-sm font-medium text-blue-100 mb-1.5">מספר טלפון (אופציונלי)</label>
                 <input
                   type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
                   placeholder="050-000-0000" dir="ltr"
-                  className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-indigo-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                 />
               </div>
-              <button type="submit" className="w-full bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl py-3 text-sm transition-all">
+              <button type="submit" className="w-full bg-blue-500 hover:bg-blue-400 text-white font-semibold rounded-xl py-3 text-sm transition-all">
                 הבא →
               </button>
             </form>
@@ -181,21 +181,21 @@ export default function OnboardingPage() {
             <form onSubmit={handleStep2Submit} className="space-y-5">
               <div>
                 <h2 className="text-2xl font-bold text-white">הוסף לקוח ראשון</h2>
-                <p className="text-indigo-300 text-sm mt-1">זה הלקוח שתנהל עבורו לידים ודוחות</p>
+                <p className="text-blue-300 text-sm mt-1">זה הלקוח שתנהל עבורו לידים ודוחות</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-indigo-100 mb-1.5">שם העסק של הלקוח</label>
+                <label className="block text-sm font-medium text-blue-100 mb-1.5">שם העסק של הלקוח</label>
                 <input
                   type="text" required value={clientName}
                   onChange={(e) => { setClientName(e.target.value); setClientSlug(slugFromName(e.target.value)); }}
                   placeholder="גיא גגות בע״מ"
-                  className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-indigo-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-indigo-100 mb-1.5">כתובת קישור (slug)</label>
+                <label className="block text-sm font-medium text-blue-100 mb-1.5">כתובת קישור (slug)</label>
                 <div className="flex items-center gap-2 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5">
-                  <span className="text-indigo-400 text-sm">yourdomain.com/</span>
+                  <span className="text-blue-400 text-sm">yourdomain.com/</span>
                   <input
                     type="text" value={clientSlug}
                     onChange={(e) => setClientSlug(e.target.value)}
@@ -206,10 +206,10 @@ export default function OnboardingPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-indigo-100 mb-1.5">תחום עיסוק</label>
+                <label className="block text-sm font-medium text-blue-100 mb-1.5">תחום עיסוק</label>
                 <select
                   value={clientIndustry} onChange={(e) => setClientIndustry(e.target.value)}
-                  className="w-full rounded-xl bg-white/10 border border-white/20 text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                 >
                   <option value="ROOFING">גגות</option>
                   <option value="ALUMINUM">אלומיניום</option>
@@ -229,19 +229,19 @@ export default function OnboardingPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-indigo-100 mb-1.5">סיסמת פורטל לקוח (אופציונלי)</label>
+                <label className="block text-sm font-medium text-blue-100 mb-1.5">סיסמת פורטל לקוח (אופציונלי)</label>
                 <input
                   type="text" value={portalPass} onChange={(e) => setPortalPass(e.target.value)}
                   placeholder="הלקוח ישתמש בזה להיכנס לפורטל"
-                  className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-indigo-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+                  className="w-full rounded-xl bg-white/10 border border-white/20 text-white placeholder-blue-400 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400/60"
                 />
               </div>
               {error && <p className="text-red-300 text-sm">{error}</p>}
               <div className="flex gap-3">
-                <button type="button" onClick={() => setStep(1)} className="flex-1 bg-white/10 hover:bg-white/15 text-indigo-200 font-medium rounded-xl py-3 text-sm transition-all">
+                <button type="button" onClick={() => setStep(1)} className="flex-1 bg-white/10 hover:bg-white/15 text-blue-200 font-medium rounded-xl py-3 text-sm transition-all">
                   ← חזרה
                 </button>
-                <button type="submit" disabled={loading} className="flex-1 flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl py-3 text-sm">
+                <button type="submit" disabled={loading} className="flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-400 text-white font-semibold rounded-xl py-3 text-sm">
                   {loading ? <><Loader2 size={14} className="animate-spin" /> יוצר...</> : "צור לקוח"}
                 </button>
               </div>
@@ -256,17 +256,17 @@ export default function OnboardingPage() {
                 <CheckCircle2 size={56} className="text-green-400 mx-auto" />
                 <div>
                   <h2 className="text-2xl font-bold text-white">הכל מוכן! 🎉</h2>
-                  <p className="text-indigo-300 text-sm mt-1">המערכת שלך מוכנה לקבל לידים</p>
+                  <p className="text-blue-300 text-sm mt-1">המערכת שלך מוכנה לקבל לידים</p>
                 </div>
                 <div className="space-y-2 text-right">
                   {["✅ המערכת הוגדרה", "✅ לקוח ראשון נוצר", "✅ פורטל לקוח זמין"].map((item) => (
                     <div key={item} className="flex items-center gap-2 bg-white/5 rounded-xl px-4 py-2.5">
-                      <span className="text-sm text-indigo-200">{item}</span>
+                      <span className="text-sm text-blue-200">{item}</span>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-4 bg-indigo-900/40 border border-indigo-500/30 rounded-xl p-4 text-right space-y-3">
+                <div className="mt-4 bg-blue-900/40 border border-blue-500/30 rounded-xl p-4 text-right space-y-3">
                   <p className="text-sm font-semibold text-white mb-2">הצעדים הבאים:</p>
                   {[
                     { label: "חבר Green API לשליחת וואצאפ",       href: "/admin/settings" },
@@ -275,11 +275,11 @@ export default function OnboardingPage() {
                     { label: "צפה בלוח הבקרה ועקוב אחר לידים",    href: "/admin/dashboard" },
                   ].map(({ label, href }) => (
                     <div key={label} className="flex items-center justify-between gap-2">
-                      <span className="text-sm text-indigo-200 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0" />
+                      <span className="text-sm text-blue-200 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" />
                         {label}
                       </span>
-                      <a href={href} className="text-xs text-indigo-400 hover:text-indigo-200 flex items-center gap-1 shrink-0">
+                      <a href={href} className="text-xs text-blue-400 hover:text-blue-200 flex items-center gap-1 shrink-0">
                         <ArrowLeft size={12} />
                       </a>
                     </div>
@@ -289,7 +289,7 @@ export default function OnboardingPage() {
                 <button
                   onClick={completeOnboarding}
                   disabled={loading}
-                  className="w-full flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl py-3 text-sm"
+                  className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-400 text-white font-semibold rounded-xl py-3 text-sm"
                 >
                   {loading ? <><Loader2 size={14} className="animate-spin" /> טוען...</> : "עבור ללוח הבקרה"}
                 </button>

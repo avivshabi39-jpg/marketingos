@@ -141,22 +141,22 @@ export function LandingPageEditor({ client }: Props) {
   return (
     <div className="space-y-8 max-w-xl" dir="rtl">
       {/* Status + live link */}
-      <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
+      <div className="flex items-center justify-between bg-slate-50 rounded-xl px-4 py-3 border border-slate-100">
         <div className="flex items-center gap-3">
           <button
             onClick={() => setForm(f => ({ ...f, landingPageActive: !f.landingPageActive }))}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${form.landingPageActive ? "bg-green-500" : "bg-gray-300"}`}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${form.landingPageActive ? "bg-green-500" : "bg-slate-300"}`}
           >
             <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${form.landingPageActive ? "translate-x-6" : "translate-x-1"}`} />
           </button>
-          <span className="text-sm font-medium text-gray-700">
+          <span className="text-sm font-medium text-slate-700">
             {form.landingPageActive ? "דף פעיל" : "דף מושבת"}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <CopyLinkButton url={publicUrl} label="העתק קישור" />
           <a href={`/${client.slug}`} target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-xs text-indigo-500 hover:text-indigo-700 font-medium">
+            className="flex items-center gap-1.5 text-xs text-blue-500 hover:text-blue-700 font-medium">
             <ExternalLink size={13} /> צפה בדף
           </a>
         </div>
@@ -168,18 +168,18 @@ export function LandingPageEditor({ client }: Props) {
         <img
           src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(publicUrl)}`}
           alt="QR"
-          className="w-24 h-24 rounded-xl border border-gray-200"
+          className="w-24 h-24 rounded-xl border border-slate-200"
         />
       </div>
 
       {/* Content fields */}
       <div className="space-y-5">
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-gray-900 text-sm">תוכן הדף</h3>
+          <h3 className="font-semibold text-slate-900 text-sm">תוכן הדף</h3>
           <button
             onClick={handleAiContent}
             disabled={aiLoading}
-            className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg transition-colors disabled:opacity-60"
+            className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors disabled:opacity-60"
           >
             {aiLoading
               ? <><Loader2 size={12} className="animate-spin" /> מייצר תוכן...</>
@@ -199,57 +199,57 @@ export function LandingPageEditor({ client }: Props) {
         )}
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1.5">כותרת ראשית</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1.5">כותרת ראשית</label>
           <input
             value={form.landingPageTitle}
             onChange={e => setForm(f => ({ ...f, landingPageTitle: e.target.value }))}
             placeholder={`הכנס כותרת ל-${client.slug}`}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1.5">כותרת משנה</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1.5">כותרת משנה</label>
           <textarea
             rows={2}
             value={form.landingPageSubtitle}
             onChange={e => setForm(f => ({ ...f, landingPageSubtitle: e.target.value }))}
             placeholder="מלא את הטופס ונחזור אליך בהקדם"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1.5">טקסט כפתור</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1.5">טקסט כפתור</label>
           <input
             value={form.landingPageCta}
             onChange={e => setForm(f => ({ ...f, landingPageCta: e.target.value }))}
             placeholder="השאר פרטים"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
         </div>
       </div>
 
       {/* Design */}
       <div className="space-y-5">
-        <h3 className="font-semibold text-gray-900 text-sm">עיצוב</h3>
+        <h3 className="font-semibold text-slate-900 text-sm">עיצוב</h3>
 
         <div className="flex items-center gap-3">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">צבע ראשי</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1.5">צבע ראשי</label>
             <div className="flex items-center gap-2">
               <input
                 type="color"
                 value={form.landingPageColor || client.primaryColor}
                 onChange={e => setForm(f => ({ ...f, landingPageColor: e.target.value }))}
-                className="w-10 h-10 rounded-lg border border-gray-200 cursor-pointer p-0.5"
+                className="w-10 h-10 rounded-lg border border-slate-200 cursor-pointer p-0.5"
               />
               <input
                 type="text"
                 value={form.landingPageColor || client.primaryColor}
                 onChange={e => setForm(f => ({ ...f, landingPageColor: e.target.value }))}
                 dir="ltr"
-                className="w-28 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-28 rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
           </div>
@@ -266,7 +266,7 @@ export function LandingPageEditor({ client }: Props) {
 
         {/* Logo upload */}
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1.5">לוגו</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1.5">לוגו</label>
           <div className="flex items-center gap-3">
             {form.landingPageLogo ? (
               <div className="relative">
@@ -274,7 +274,7 @@ export function LandingPageEditor({ client }: Props) {
                 <img
                   src={form.landingPageLogo}
                   alt="לוגו"
-                  className="w-14 h-14 rounded-xl object-contain border border-gray-200 bg-gray-50"
+                  className="w-14 h-14 rounded-xl object-contain border border-slate-200 bg-slate-50"
                 />
                 <button
                   onClick={() => setForm(f => ({ ...f, landingPageLogo: "" }))}
@@ -284,20 +284,20 @@ export function LandingPageEditor({ client }: Props) {
                 </button>
               </div>
             ) : (
-              <div className="w-14 h-14 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center bg-gray-50">
-                <ImageIcon size={20} className="text-gray-300" />
+              <div className="w-14 h-14 rounded-xl border-2 border-dashed border-slate-200 flex items-center justify-center bg-slate-50">
+                <ImageIcon size={20} className="text-slate-300" />
               </div>
             )}
             <div>
               <button
                 onClick={() => fileRef.current?.click()}
                 disabled={uploading}
-                className="flex items-center gap-1.5 text-sm border border-gray-200 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 disabled:opacity-60"
+                className="flex items-center gap-1.5 text-sm border border-slate-200 text-slate-700 px-3 py-2 rounded-lg hover:bg-slate-50 disabled:opacity-60"
               >
                 {uploading ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
                 {uploading ? "מעלה..." : "העלה לוגו"}
               </button>
-              <p className="text-xs text-gray-400 mt-1">PNG, JPG — עד 2MB</p>
+              <p className="text-xs text-slate-400 mt-1">PNG, JPG — עד 2MB</p>
             </div>
           </div>
           <input
@@ -311,15 +311,15 @@ export function LandingPageEditor({ client }: Props) {
       </div>
 
       {/* WhatsApp auto-reply */}
-      <div className="space-y-4 border-t border-gray-100 pt-6">
+      <div className="space-y-4 border-t border-slate-100 pt-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-gray-900 text-sm">הודעה אוטומטית לליד</h3>
-            <p className="text-xs text-gray-500 mt-0.5">נשלחת ל-n8n בעת ליד חדש</p>
+            <h3 className="font-semibold text-slate-900 text-sm">הודעה אוטומטית לליד</h3>
+            <p className="text-xs text-slate-500 mt-0.5">נשלחת ל-n8n בעת ליד חדש</p>
           </div>
           <button
             onClick={() => setForm(f => ({ ...f, autoReplyActive: !f.autoReplyActive }))}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${form.autoReplyActive ? "bg-green-500" : "bg-gray-300"}`}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${form.autoReplyActive ? "bg-green-500" : "bg-slate-300"}`}
           >
             <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${form.autoReplyActive ? "translate-x-6" : "translate-x-1"}`} />
           </button>
@@ -327,11 +327,11 @@ export function LandingPageEditor({ client }: Props) {
 
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="block text-xs font-medium text-gray-600">תוכן ההודעה</label>
+            <label className="block text-xs font-medium text-slate-600">תוכן ההודעה</label>
             <button
               onClick={handleAiWhatsapp}
               disabled={aiWaLoading}
-              className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-700 font-medium disabled:opacity-60"
+              className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-700 font-medium disabled:opacity-60"
             >
               {aiWaLoading
                 ? <><Loader2 size={11} className="animate-spin" /> יוצר...</>
@@ -344,9 +344,9 @@ export function LandingPageEditor({ client }: Props) {
             value={form.whatsappTemplate}
             onChange={e => setForm(f => ({ ...f, whatsappTemplate: e.target.value }))}
             placeholder="שלום {name}! קיבלנו את פנייתך ונחזור אליך בהקדם 😊"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-          <p className="text-xs text-gray-400 mt-1">משתנים: {"{name}"} {"{phone}"}</p>
+          <p className="text-xs text-slate-400 mt-1">משתנים: {"{name}"} {"{phone}"}</p>
         </div>
       </div>
 
@@ -354,7 +354,7 @@ export function LandingPageEditor({ client }: Props) {
       <button
         onClick={handleSave}
         disabled={saving}
-        className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-semibold px-6 py-3 rounded-xl transition-colors shadow"
+        className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white text-sm font-semibold px-6 py-3 rounded-xl transition-colors shadow"
       >
         {saving  ? <><Loader2 size={14} className="animate-spin" /> שומר...</>
          : saved  ? <><Check size={14} /> נשמר!</>

@@ -73,7 +73,7 @@ function CopyBtn({ text }: { text: string }) {
   return (
     <button
       onClick={copy}
-      className="flex items-center gap-1 text-xs text-gray-400 hover:text-indigo-600 transition"
+      className="flex items-center gap-1 text-xs text-slate-400 hover:text-blue-600 transition"
     >
       {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
     </button>
@@ -119,31 +119,31 @@ function TemplatesTab() {
       {/* Pre-built templates grid */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-gray-900">תבניות מוכנות</h2>
+          <h2 className="font-semibold text-slate-900">תבניות מוכנות</h2>
           <button
             onClick={() => {
               setAiResult(null);
               setAiTopic("");
               setShowAiModal(true);
             }}
-            className="flex items-center gap-2 bg-indigo-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+            className="flex items-center gap-2 bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition"
           >
             <Sparkles size={15} /> + צור תבנית עם AI
           </button>
         </div>
 
-        <p className="text-xs text-gray-400 mb-4">
+        <p className="text-xs text-slate-400 mb-4">
           משתנים זמינים:{" "}
-          <code className="bg-gray-100 px-1 py-0.5 rounded text-xs">
+          <code className="bg-slate-100 px-1 py-0.5 rounded text-xs">
             {"{name}"}
           </code>{" "}
-          <code className="bg-gray-100 px-1 py-0.5 rounded text-xs">
+          <code className="bg-slate-100 px-1 py-0.5 rounded text-xs">
             {"{phone}"}
           </code>{" "}
-          <code className="bg-gray-100 px-1 py-0.5 rounded text-xs">
+          <code className="bg-slate-100 px-1 py-0.5 rounded text-xs">
             {"{businessName}"}
           </code>{" "}
-          <code className="bg-gray-100 px-1 py-0.5 rounded text-xs">
+          <code className="bg-slate-100 px-1 py-0.5 rounded text-xs">
             {"{leadsCount}"}
           </code>
         </p>
@@ -152,24 +152,24 @@ function TemplatesTab() {
           {DEFAULT_TEMPLATES.map((tpl) => (
             <div
               key={tpl.id}
-              className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col gap-3 hover:border-indigo-200 transition-all"
+              className="bg-white rounded-xl border border-slate-100 shadow-sm p-5 flex flex-col gap-3 hover:border-blue-200 transition-all"
             >
               <div className="flex items-start gap-3">
                 <span className="text-2xl">{tpl.icon}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 text-sm">{tpl.name}</p>
-                  <p className="text-xs text-gray-500 mt-0.5 truncate">
+                  <p className="font-semibold text-slate-900 text-sm">{tpl.name}</p>
+                  <p className="text-xs text-slate-500 mt-0.5 truncate">
                     {tpl.subject}
                   </p>
                 </div>
               </div>
-              <p className="text-xs text-gray-400 line-clamp-3 whitespace-pre-wrap">
+              <p className="text-xs text-slate-400 line-clamp-3 whitespace-pre-wrap">
                 {tpl.body}
               </p>
               <div className="flex gap-2 mt-auto">
                 <button
                   onClick={() => setSelectedTemplate(tpl)}
-                  className="flex-1 text-xs border border-gray-200 rounded-lg py-1.5 text-gray-600 hover:border-indigo-300 hover:text-indigo-600 transition"
+                  className="flex-1 text-xs border border-slate-200 rounded-lg py-1.5 text-slate-600 hover:border-blue-300 hover:text-blue-600 transition"
                 >
                   ערוך
                 </button>
@@ -180,7 +180,7 @@ function TemplatesTab() {
                     );
                     toast.success("תבנית הועתקה!");
                   }}
-                  className="flex-1 text-xs bg-indigo-50 border border-indigo-200 rounded-lg py-1.5 text-indigo-600 hover:bg-indigo-100 transition"
+                  className="flex-1 text-xs bg-blue-50 border border-blue-200 rounded-lg py-1.5 text-blue-600 hover:bg-blue-100 transition"
                 >
                   השתמש
                 </button>
@@ -192,32 +192,32 @@ function TemplatesTab() {
 
       {/* Template preview/edit drawer */}
       {selectedTemplate && (
-        <div className="bg-white rounded-xl border border-indigo-200 shadow-sm p-6" dir="rtl">
+        <div className="bg-white rounded-xl border border-blue-200 shadow-sm p-6" dir="rtl">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900">
+            <h3 className="font-semibold text-slate-900">
               {selectedTemplate.icon} {selectedTemplate.name}
             </h3>
             <button
               onClick={() => setSelectedTemplate(null)}
-              className="text-gray-400 hover:text-gray-600 text-xl leading-none"
+              className="text-slate-400 hover:text-slate-600 text-xl leading-none"
             >
               ×
             </button>
           </div>
-          <label className="text-xs text-gray-500 block mb-1">נושא</label>
+          <label className="text-xs text-slate-500 block mb-1">נושא</label>
           <div className="flex items-center gap-2 mb-3">
             <input
               defaultValue={selectedTemplate.subject}
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200"
+              className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
             />
             <CopyBtn text={selectedTemplate.subject} />
           </div>
-          <label className="text-xs text-gray-500 block mb-1">גוף המייל</label>
+          <label className="text-xs text-slate-500 block mb-1">גוף המייל</label>
           <div className="flex gap-2">
             <textarea
               defaultValue={selectedTemplate.body}
               rows={6}
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 resize-vertical"
+              className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 resize-vertical"
             />
             <CopyBtn text={selectedTemplate.body} />
           </div>
@@ -236,25 +236,25 @@ function TemplatesTab() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-                <Sparkles size={16} className="text-indigo-500" /> יצירת תבנית עם AI
+              <h3 className="font-semibold text-slate-900 flex items-center gap-2">
+                <Sparkles size={16} className="text-blue-500" /> יצירת תבנית עם AI
               </h3>
               <button
                 onClick={() => setShowAiModal(false)}
-                className="text-gray-400 hover:text-gray-600 text-xl leading-none"
+                className="text-slate-400 hover:text-slate-600 text-xl leading-none"
               >
                 ×
               </button>
             </div>
 
-            <label className="text-xs text-gray-500 block mb-1">
+            <label className="text-xs text-slate-500 block mb-1">
               נושא התבנית
             </label>
             <input
               value={aiTopic}
               onChange={(e) => setAiTopic(e.target.value)}
               placeholder="לדוגמה: ברכת שנה חדשה ללקוחות..."
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-blue-200"
               autoFocus
               onKeyDown={(e) =>
                 e.key === "Enter" && !aiGenerating && generateAiTemplate()
@@ -264,7 +264,7 @@ function TemplatesTab() {
             <button
               onClick={generateAiTemplate}
               disabled={aiGenerating || !aiTopic.trim()}
-              className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white text-sm font-medium py-2.5 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition"
+              className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white text-sm font-medium py-2.5 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
             >
               {aiGenerating ? (
                 <>
@@ -279,19 +279,19 @@ function TemplatesTab() {
 
             {aiResult && (
               <div className="mt-4 space-y-3">
-                <div className="bg-gray-50 rounded-lg p-4">
+                <div className="bg-slate-50 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-medium text-gray-500">נושא</span>
+                    <span className="text-xs font-medium text-slate-500">נושא</span>
                     <CopyBtn text={aiResult.subject} />
                   </div>
-                  <p className="text-sm text-gray-800">{aiResult.subject}</p>
+                  <p className="text-sm text-slate-800">{aiResult.subject}</p>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-4">
+                <div className="bg-slate-50 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-medium text-gray-500">גוף המייל</span>
+                    <span className="text-xs font-medium text-slate-500">גוף המייל</span>
                     <CopyBtn text={aiResult.body} />
                   </div>
-                  <p className="text-sm text-gray-800 whitespace-pre-wrap">
+                  <p className="text-sm text-slate-800 whitespace-pre-wrap">
                     {aiResult.body}
                   </p>
                 </div>
@@ -322,24 +322,24 @@ export function EmailPageClient({ clients, initialTab }: Props) {
   return (
     <div className="space-y-6" dir="rtl">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <Mail size={22} className="text-indigo-500" /> מיילים
+        <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <Mail size={22} className="text-blue-500" /> מיילים
         </h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-slate-500 mt-1">
           תבניות מייל ורצפי שיווק אוטומטיים
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-gray-100 rounded-xl p-1 w-fit">
+      <div className="flex gap-1 bg-slate-100 rounded-xl p-1 w-fit">
         {TABS.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
               activeTab === tab.id
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-500 hover:text-gray-700"
+                ? "bg-white text-slate-900 shadow-sm"
+                : "text-slate-500 hover:text-slate-700"
             }`}
           >
             {tab.label}

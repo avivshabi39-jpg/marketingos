@@ -110,21 +110,21 @@ export default function PropertyAlertsPage() {
   return (
     <div className="space-y-6" dir="rtl">
       <div className="flex items-center gap-3">
-        <Link href={`/admin/clients/${clientId}`} className="text-gray-400 hover:text-gray-600">
+        <Link href={`/admin/clients/${clientId}`} className="text-slate-400 hover:text-slate-600">
           <ArrowRight size={18} />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
             <Bell size={22} className="text-amber-500" /> התראות נכסים
           </h1>
-          <p className="text-sm text-gray-500 mt-0.5">רשימת קונים פוטנציאלים לקבלת התראה כשמתווסף נכס מתאים</p>
+          <p className="text-sm text-slate-500 mt-0.5">רשימת קונים פוטנציאלים לקבלת התראה כשמתווסף נכס מתאים</p>
         </div>
       </div>
 
       <div className="flex gap-3 flex-wrap">
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+          className="flex items-center gap-2 text-sm bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
         >
           <Plus size={15} /> הוסף מנוי
         </button>
@@ -140,12 +140,12 @@ export default function PropertyAlertsPage() {
 
       {showSendAll && (
         <div className="bg-white rounded-xl border border-green-200 p-5 shadow-sm">
-          <h3 className="font-semibold text-gray-800 mb-3 text-sm">שלח עדכון נכס לכל המנויים</h3>
+          <h3 className="font-semibold text-slate-800 mb-3 text-sm">שלח עדכון נכס לכל המנויים</h3>
           <div className="flex gap-3">
             <select
               value={selectedPropertyId}
               onChange={(e) => setSelectedPropertyId(e.target.value)}
-              className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-green-300 outline-none"
+              className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-green-300 outline-none"
             >
               <option value="">בחר נכס...</option>
               {properties.map((p) => (
@@ -164,20 +164,20 @@ export default function PropertyAlertsPage() {
             </button>
             <button
               onClick={() => setShowSendAll(false)}
-              className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50"
+              className="px-4 py-2 border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50"
             >
               ביטול
             </button>
           </div>
-          <p className="text-xs text-gray-400 mt-2">
+          <p className="text-xs text-slate-400 mt-2">
             ישלח הודעת וואטסאפ ל-{alerts.length} מנויים שהנכס תואם לקריטריונים שלהם (סובלנות 20% על תקציב)
           </p>
         </div>
       )}
 
       {showForm && (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-          <h3 className="font-semibold text-gray-900 mb-4 text-sm">מנוי חדש</h3>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+          <h3 className="font-semibold text-slate-900 mb-4 text-sm">מנוי חדש</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               { key: "name", label: "שם מלא *", icon: User, placeholder: "ישראל ישראלי", type: "text" },
@@ -187,14 +187,14 @@ export default function PropertyAlertsPage() {
               { key: "rooms", label: "מספר חדרים", icon: BedDouble, placeholder: "4", type: "number" },
             ].map(({ key, label, placeholder, type }) => (
               <div key={key}>
-                <label className="text-xs font-medium text-gray-600 block mb-1">{label}</label>
+                <label className="text-xs font-medium text-slate-600 block mb-1">{label}</label>
                 <input
                   type={type}
                   value={form[key as keyof typeof form]}
                   onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
                   placeholder={placeholder}
                   dir={type === "tel" || type === "number" ? "ltr" : "rtl"}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-300 outline-none"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none"
                 />
               </div>
             ))}
@@ -203,14 +203,14 @@ export default function PropertyAlertsPage() {
             <button
               onClick={handleAdd}
               disabled={saving}
-              className="flex items-center gap-2 text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition"
+              className="flex items-center gap-2 text-sm bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition"
             >
               {saving ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
               הוסף מנוי
             </button>
             <button
               onClick={() => setShowForm(false)}
-              className="text-sm text-gray-600 border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+              className="text-sm text-slate-600 border border-slate-200 px-4 py-2 rounded-lg hover:bg-slate-50 transition"
             >
               ביטול
             </button>
@@ -220,35 +220,35 @@ export default function PropertyAlertsPage() {
 
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 size={24} className="animate-spin text-gray-300" />
+          <Loader2 size={24} className="animate-spin text-slate-300" />
         </div>
       ) : alerts.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center py-16">
-          <Bell size={36} className="text-gray-200 mb-3" />
-          <p className="text-sm text-gray-500">אין מנויים להתראות</p>
-          <p className="text-xs text-gray-400 mt-1">הוסף קונים פוטנציאלים שיקבלו וואצאפ כשמתווסף נכס מתאים</p>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm flex flex-col items-center py-16">
+          <Bell size={36} className="text-slate-200 mb-3" />
+          <p className="text-sm text-slate-500">אין מנויים להתראות</p>
+          <p className="text-xs text-slate-400 mt-1">הוסף קונים פוטנציאלים שיקבלו וואצאפ כשמתווסף נכס מתאים</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="px-5 py-3 border-b border-gray-50">
-            <span className="text-sm font-medium text-gray-700">{alerts.length} מנויים פעילים</span>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+          <div className="px-5 py-3 border-b border-slate-50">
+            <span className="text-sm font-medium text-slate-700">{alerts.length} מנויים פעילים</span>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-slate-50">
             {alerts.map((a) => (
               <div key={a.id} className="px-5 py-3 flex items-center gap-4">
                 <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
                   <Bell size={14} className="text-amber-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">{a.name}</p>
+                  <p className="text-sm font-medium text-slate-900">{a.name}</p>
                   <div className="flex items-center gap-3 mt-0.5 flex-wrap">
-                    <span className="text-xs text-gray-400">{a.phone}</span>
-                    {a.city && <span className="text-xs text-gray-400">📍 {a.city}</span>}
-                    {a.budget && <span className="text-xs text-gray-400">💰 עד ₪{a.budget.toLocaleString()}</span>}
-                    {a.rooms && <span className="text-xs text-gray-400">🛏 {a.rooms} חד׳</span>}
+                    <span className="text-xs text-slate-400">{a.phone}</span>
+                    {a.city && <span className="text-xs text-slate-400">📍 {a.city}</span>}
+                    {a.budget && <span className="text-xs text-slate-400">💰 עד ₪{a.budget.toLocaleString()}</span>}
+                    {a.rooms && <span className="text-xs text-slate-400">🛏 {a.rooms} חד׳</span>}
                   </div>
                 </div>
-                <span className="text-xs text-gray-300">{new Date(a.createdAt).toLocaleDateString("he-IL")}</span>
+                <span className="text-xs text-slate-300">{new Date(a.createdAt).toLocaleDateString("he-IL")}</span>
                 <button
                   onClick={() => handleDelete(a.id)}
                   className="text-red-400 hover:text-red-600 transition flex-shrink-0"

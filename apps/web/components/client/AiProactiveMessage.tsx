@@ -28,8 +28,8 @@ export function AiProactiveMessage({
       message: "אין לך עדיין דף נחיתה. רוצה שה-AI יבנה לך אחד עכשיו?",
       actionLabel: "בנה דף עכשיו",
       onAction: onBuildPage,
-      bg: "bg-indigo-50 border-indigo-200",
-      textColor: "text-indigo-800",
+      bg: "bg-blue-50 border-blue-200",
+      textColor: "text-blue-800",
     },
     no_leads: {
       emoji: "💡",
@@ -75,7 +75,7 @@ export function AiProactiveMessage({
       </div>
       <button
         onClick={() => setDismissed(true)}
-        className="text-gray-400 hover:text-gray-600 flex-shrink-0 mt-0.5"
+        className="text-slate-400 hover:text-slate-600 flex-shrink-0 mt-0.5"
         aria-label="סגור"
       >
         <X size={16} />

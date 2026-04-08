@@ -32,7 +32,7 @@ function Sparkline({ data }: { data: number[] }) {
       {data.map((v, i) => (
         <div
           key={i}
-          className="flex-1 bg-indigo-200 rounded-sm min-h-[2px] transition-all"
+          className="flex-1 bg-blue-200 rounded-sm min-h-[2px] transition-all"
           style={{ height: `${Math.max(2, (v / max) * 32)}px` }}
         />
       ))}
@@ -72,7 +72,7 @@ export function PerformanceSection({ slug, onOpenAiAgent }: Props) {
   }, [slug, perf]);
 
   const TrendIcon = perf?.trend === "up" ? TrendingUp : perf?.trend === "down" ? TrendingDown : Minus;
-  const trendColor = perf?.trend === "up" ? "text-green-600" : perf?.trend === "down" ? "text-red-500" : "text-gray-400";
+  const trendColor = perf?.trend === "up" ? "text-green-600" : perf?.trend === "down" ? "text-red-500" : "text-slate-400";
 
   const stats = perf ? [
     { label: "לידים היום",    value: perf.leads.today,    sub: `${perf.leads.week} השבוע` },
@@ -84,9 +84,9 @@ export function PerformanceSection({ slug, onOpenAiAgent }: Props) {
   return (
     <div className="space-y-5">
       {/* Performance header */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="font-semibold text-gray-900">ביצועי הדף שלך השבוע</h2>
+          <h2 className="font-semibold text-slate-900">ביצועי הדף שלך השבוע</h2>
           {perf && (
             <div className={`flex items-center gap-1 text-sm font-medium ${trendColor}`}>
               <TrendIcon size={16} />
@@ -97,22 +97,22 @@ export function PerformanceSection({ slug, onOpenAiAgent }: Props) {
 
         {loadingPerf ? (
           <div className="flex justify-center py-8">
-            <Loader2 size={24} className="animate-spin text-gray-300" />
+            <Loader2 size={24} className="animate-spin text-slate-300" />
           </div>
         ) : (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
               {stats.map(({ label, value, sub }) => (
-                <div key={label} className="bg-gray-50 rounded-xl p-4">
-                  <p className="text-2xl font-bold text-gray-900">{value}</p>
-                  <p className="text-xs font-medium text-gray-600 mt-0.5">{label}</p>
-                  <p className="text-xs text-gray-400 mt-0.5">{sub}</p>
+                <div key={label} className="bg-slate-50 rounded-xl p-4">
+                  <p className="text-2xl font-bold text-slate-900">{value}</p>
+                  <p className="text-xs font-medium text-slate-600 mt-0.5">{label}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">{sub}</p>
                 </div>
               ))}
             </div>
             {perf?.sparkline && (
               <div>
-                <p className="text-xs text-gray-400 mb-2">לידים 7 ימים אחרונים</p>
+                <p className="text-xs text-slate-400 mb-2">לידים 7 ימים אחרונים</p>
                 <Sparkline data={perf.sparkline} />
               </div>
             )}
@@ -122,16 +122,16 @@ export function PerformanceSection({ slug, onOpenAiAgent }: Props) {
 
       {/* AI Recommendations */}
       {(loadingRecs || recs.length > 0) && (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-              <Wand2 size={15} className="text-indigo-600" />
+            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+              <Wand2 size={15} className="text-blue-600" />
             </div>
             <div>
-              <h2 className="font-semibold text-gray-900">המלצות AI</h2>
-              <p className="text-xs text-gray-400">מבוסס על ביצועי הדף שלך</p>
+              <h2 className="font-semibold text-slate-900">המלצות AI</h2>
+              <p className="text-xs text-slate-400">מבוסס על ביצועי הדף שלך</p>
             </div>
-            {loadingRecs && <Loader2 size={14} className="animate-spin text-gray-300 mr-auto" />}
+            {loadingRecs && <Loader2 size={14} className="animate-spin text-slate-300 mr-auto" />}
           </div>
 
           <div className="space-y-3">
@@ -145,14 +145,14 @@ export function PerformanceSection({ slug, onOpenAiAgent }: Props) {
                         <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${cfg.badge}`}>
                           {cfg.label}
                         </span>
-                        <p className="font-semibold text-gray-900 text-sm">{rec.title}</p>
+                        <p className="font-semibold text-slate-900 text-sm">{rec.title}</p>
                       </div>
-                      <p className="text-sm text-gray-600 leading-relaxed">{rec.description}</p>
+                      <p className="text-sm text-slate-600 leading-relaxed">{rec.description}</p>
                     </div>
                     {onOpenAiAgent && (
                       <button
                         onClick={() => onOpenAiAgent(rec.action)}
-                        className="flex-shrink-0 flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-800 border border-indigo-200 hover:border-indigo-400 rounded-lg px-2.5 py-1.5 transition whitespace-nowrap"
+                        className="flex-shrink-0 flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 border border-blue-200 hover:border-blue-400 rounded-lg px-2.5 py-1.5 transition whitespace-nowrap"
                       >
                         <Wand2 size={11} />
                         בצע עם AI

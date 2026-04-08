@@ -33,10 +33,10 @@ export default async function EmailSequencesPage() {
   return (
     <div className="space-y-6" dir="rtl">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <Mail size={22} className="text-indigo-500" /> רצפי מייל
+        <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <Mail size={22} className="text-blue-500" /> רצפי מייל
         </h1>
-        <p className="text-sm text-gray-500 mt-1">אוטומציות מייל מבוססות טריגר</p>
+        <p className="text-sm text-slate-500 mt-1">אוטומציות מייל מבוססות טריגר</p>
       </div>
 
       <EmailSequencesClient

@@ -222,17 +222,17 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
   return (
     <div className="flex h-[calc(100vh-64px)]" dir="rtl">
       {/* Sidebar */}
-      <div className="hidden lg:block w-[280px] bg-white border-l border-gray-200 overflow-y-auto flex-shrink-0">
+      <div className="hidden lg:block w-[280px] bg-white border-l border-slate-200 overflow-y-auto flex-shrink-0">
         <div className="p-4">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">💡 פעולות מהירות</p>
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">💡 פעולות מהירות</p>
           {SUGGESTED_ACTIONS.map((cat) => (
             <div key={cat.category} className="mb-4">
-              <p className="text-xs font-semibold text-gray-700 mb-1.5">{cat.category}</p>
+              <p className="text-xs font-semibold text-slate-700 mb-1.5">{cat.category}</p>
               {cat.items.map((item) => (
                 <button
                   key={item.label}
                   onClick={() => handleSidebarAction(item.msg)}
-                  className="w-full text-right px-2.5 py-1.5 mb-0.5 text-xs text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg border border-transparent hover:border-indigo-200 transition-all"
+                  className="w-full text-right px-2.5 py-1.5 mb-0.5 text-xs text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg border border-transparent hover:border-blue-200 transition-all"
                 >
                   {item.label}
                 </button>
@@ -245,13 +245,13 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
       {/* Main chat */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-5 py-3 flex items-center justify-between flex-shrink-0">
+        <div className="bg-white border-b border-slate-200 px-5 py-3 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
               <Bot size={20} className="text-white" />
             </div>
             <div>
-              <p className="font-bold text-gray-900 text-sm">סוכן AI — MarketingOS</p>
+              <p className="font-bold text-slate-900 text-sm">סוכן AI — MarketingOS</p>
               <p className="text-xs text-green-600 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" /> פעיל ומוכן
               </p>
@@ -261,14 +261,14 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
             <a
               href={selectedClientId ? `/admin/page-builder/${selectedClientId}` : "#"}
               onClick={(e) => { if (!selectedClientId) { e.preventDefault(); alert("בחר לקוח תחילה"); } }}
-              className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-l from-indigo-600 to-purple-600 text-white rounded-lg text-xs font-bold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all whitespace-nowrap"
+              className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-l from-blue-600 to-purple-600 text-white rounded-lg text-xs font-bold shadow-md shadow-blue-500/20 hover:shadow-blue-500/30 transition-all whitespace-nowrap"
             >
               🧙 בנה דף נחיתה
             </a>
             <select
               value={selectedClientId}
               onChange={(e) => setSelectedClientId(e.target.value)}
-              className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:ring-2 focus:ring-indigo-200 outline-none min-w-[150px]"
+              className="border border-slate-200 rounded-lg px-3 py-1.5 text-sm bg-white focus:ring-2 focus:ring-blue-200 outline-none min-w-[150px]"
             >
               <option value="">בחר לקוח...</option>
               {clients.map((c) => (
@@ -283,8 +283,8 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
           {messages.length === 0 && (
             <div className="text-center py-16">
               <div className="text-6xl mb-4">🤖</div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">שלום! אני הסוכן האישי שלך</h2>
-              <p className="text-gray-500 text-sm mb-8 max-w-md mx-auto">
+              <h2 className="text-xl font-bold text-slate-900 mb-2">שלום! אני הסוכן האישי שלך</h2>
+              <p className="text-slate-500 text-sm mb-8 max-w-md mx-auto">
                 אני יכול לבנות דפים, לשלוח שידורים, ליצור דוחות, לנהל לידים ועוד.
                 <br />בחר לקוח ושאל אותי כל שאלה.
               </p>
@@ -293,7 +293,7 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
                   <button
                     key={q}
                     onClick={() => sendMessage(q)}
-                    className="px-4 py-2 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-full text-xs font-medium hover:bg-indigo-100 transition-colors"
+                    className="px-4 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-full text-xs font-medium hover:bg-blue-100 transition-colors"
                   >
                     {q}
                   </button>
@@ -305,19 +305,19 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
           {messages.map((msg) => (
             <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "justify-start" : "justify-end"}`}>
               {msg.role === "user" && (
-                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                  <User size={14} className="text-gray-600" />
+                <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0">
+                  <User size={14} className="text-slate-600" />
                 </div>
               )}
               <div
                 className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap shadow-sm ${
                   msg.role === "user"
-                    ? "bg-indigo-600 text-white rounded-br-sm"
-                    : "bg-white text-gray-800 border border-gray-100 rounded-bl-sm"
+                    ? "bg-blue-600 text-white rounded-br-sm"
+                    : "bg-white text-slate-800 border border-slate-100 rounded-bl-sm"
                 }`}
               >
                 {msg.content || (
-                  <div className="flex items-center gap-2 text-gray-400">
+                  <div className="flex items-center gap-2 text-slate-400">
                     <Loader2 size={14} className="animate-spin" />
                     <span>חושב...</span>
                   </div>
@@ -329,7 +329,7 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
                 )}
               </div>
               {msg.role === "assistant" && (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
                   <Bot size={14} className="text-white" />
                 </div>
               )}
@@ -337,23 +337,23 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
           ))}
           {/* Clarifying questions */}
           {pendingAction && (
-            <div className="bg-white border border-indigo-200 rounded-2xl p-5 shadow-sm" dir="rtl">
+            <div className="bg-white border border-blue-200 rounded-2xl p-5 shadow-sm" dir="rtl">
               <div className="flex items-center gap-2.5 mb-4">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-sm">🤖</div>
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-sm">🤖</div>
                 <div>
-                  <p className="font-bold text-sm text-gray-900">{pendingAction.title}</p>
-                  <p className="text-[11px] text-gray-400">שאלה {pendingAction.currentQ + 1} מתוך {pendingAction.questions.length}</p>
+                  <p className="font-bold text-sm text-slate-900">{pendingAction.title}</p>
+                  <p className="text-[11px] text-slate-400">שאלה {pendingAction.currentQ + 1} מתוך {pendingAction.questions.length}</p>
                 </div>
               </div>
               {/* Previous answers */}
               {pendingAction.answers.map((a, i) => (
-                <div key={i} className="text-xs text-gray-500 mb-1 flex items-center gap-1.5">
+                <div key={i} className="text-xs text-slate-500 mb-1 flex items-center gap-1.5">
                   <span className="text-green-500">✅</span>
-                  {pendingAction.questions[i]}: <strong className="text-gray-700">{a}</strong>
+                  {pendingAction.questions[i]}: <strong className="text-slate-700">{a}</strong>
                 </div>
               ))}
               {/* Current question */}
-              <div className="bg-gray-50 rounded-xl p-3 text-sm font-medium text-gray-800 mb-3 mt-2 leading-relaxed">
+              <div className="bg-slate-50 rounded-xl p-3 text-sm font-medium text-slate-800 mb-3 mt-2 leading-relaxed">
                 {pendingAction.questions[pendingAction.currentQ]}
               </div>
               <div className="flex gap-2">
@@ -363,18 +363,18 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
                   onChange={(e) => setCurrentAnswer(e.target.value)}
                   onKeyDown={(e) => { if (e.key === "Enter") submitAnswer(); }}
                   placeholder="כתוב את תשובתך..."
-                  className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                  className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
                 />
                 <button
                   onClick={submitAnswer}
                   disabled={!currentAnswer.trim()}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold disabled:opacity-40 transition-colors hover:bg-indigo-500"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold disabled:opacity-40 transition-colors hover:bg-blue-500"
                 >
                   {pendingAction.currentQ < pendingAction.questions.length - 1 ? "הבא →" : "✨ צור!"}
                 </button>
                 <button
                   onClick={() => { setPendingAction(null); setCurrentAnswer(""); }}
-                  className="px-3 py-2 border border-gray-200 rounded-lg text-xs text-gray-500 hover:bg-gray-50"
+                  className="px-3 py-2 border border-slate-200 rounded-lg text-xs text-slate-500 hover:bg-slate-50"
                 >
                   ביטול
                 </button>
@@ -385,7 +385,7 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
         </div>
 
         {/* Input */}
-        <div className="bg-white border-t border-gray-200 px-5 py-3 flex-shrink-0">
+        <div className="bg-white border-t border-slate-200 px-5 py-3 flex-shrink-0">
           <div className="flex gap-3 items-end">
             <textarea
               ref={inputRef}
@@ -405,7 +405,7 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
               placeholder="שאל אותי כל שאלה או בקש ממני לבצע פעולה..."
               rows={1}
               disabled={loading}
-              className="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm resize-none outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 transition-all disabled:opacity-60"
+              className="flex-1 border border-slate-200 rounded-xl px-4 py-3 text-sm resize-none outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition-all disabled:opacity-60"
               style={{ maxHeight: "120px" }}
             />
             <button
@@ -420,7 +420,7 @@ export function AiAgentPage({ clients }: { clients: Client[] }) {
               {loading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} className="rotate-180" />}
             </button>
           </div>
-          <p className="text-[10px] text-gray-400 mt-1.5 text-center">
+          <p className="text-[10px] text-slate-400 mt-1.5 text-center">
             Enter לשליחה · Shift+Enter לשורה חדשה · בחר לקוח למעלה לפעולות ספציפיות
           </p>
         </div>

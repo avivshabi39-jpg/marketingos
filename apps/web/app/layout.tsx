@@ -65,7 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
-      <body className="bg-gray-50 text-gray-900 antialiased" style={{ fontFamily: "var(--font-rubik), var(--font-inter), system-ui, sans-serif" }}>
+      <body className="bg-slate-50 text-slate-900 antialiased" style={{ fontFamily: "var(--font-rubik), var(--font-inter), system-ui, sans-serif" }}>
         {children}
         <ToastProvider />
         <Analytics />

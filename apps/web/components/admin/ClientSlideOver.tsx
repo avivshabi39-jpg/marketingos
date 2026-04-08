@@ -88,7 +88,7 @@ const INDUSTRY_COLORS: Record<string, string> = {
   BEAUTY: "bg-pink-100 text-pink-700",
   CLEANING: "bg-green-100 text-green-700",
   SOLAR: "bg-yellow-100 text-yellow-700",
-  OTHER: "bg-gray-100 text-gray-600",
+  OTHER: "bg-slate-100 text-slate-600",
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -123,7 +123,7 @@ function CopyButton({ text }: { text: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       }}
-      className="flex items-center gap-1.5 text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-medium px-2.5 py-1.5 rounded-lg transition-colors flex-shrink-0"
+      className="flex items-center gap-1.5 text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 font-medium px-2.5 py-1.5 rounded-lg transition-colors flex-shrink-0"
       title="העתק"
     >
       {copied ? <Check size={12} /> : <Copy size={12} />}
@@ -258,7 +258,7 @@ export default function ClientSlideOver({
     .toUpperCase();
 
   const industryLabel = INDUSTRY_LABELS[client.industry ?? ""] ?? "כללי";
-  const industryColor = INDUSTRY_COLORS[client.industry ?? ""] ?? "bg-gray-100 text-gray-600";
+  const industryColor = INDUSTRY_COLORS[client.industry ?? ""] ?? "bg-slate-100 text-slate-600";
   const conversionRate = client.totalLeads > 0
     ? Math.round((client.wonLeads / client.totalLeads) * 100)
     : 0;
@@ -294,7 +294,7 @@ export default function ClientSlideOver({
           }`}
         >
           {/* Header */}
-          <div className="flex items-start gap-4 px-6 py-5 border-b border-gray-100">
+          <div className="flex items-start gap-4 px-6 py-5 border-b border-slate-100">
             <div
               className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
               style={{ backgroundColor: client.primaryColor }}
@@ -303,10 +303,10 @@ export default function ClientSlideOver({
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <p className="font-bold text-gray-900 text-lg truncate">{client.name}</p>
+                <p className="font-bold text-slate-900 text-lg truncate">{client.name}</p>
                 <Link
                   href={`/admin/clients/${client.id}`}
-                  className="text-gray-400 hover:text-indigo-500 transition-colors"
+                  className="text-slate-400 hover:text-blue-500 transition-colors"
                 >
                   <ExternalLink size={15} />
                 </Link>
@@ -317,22 +317,22 @@ export default function ClientSlideOver({
             </div>
             <button
               onClick={handleClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-lg hover:bg-gray-100"
+              className="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-lg hover:bg-slate-100"
             >
               <X size={20} />
             </button>
           </div>
 
           {/* Tabs */}
-          <div className="flex border-b border-gray-100 px-4 sticky top-0 bg-white z-10 overflow-x-auto">
+          <div className="flex border-b border-slate-100 px-4 sticky top-0 bg-white z-10 overflow-x-auto">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => handleTabClick(tab.id)}
                 className={`px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
                   activeTab === tab.id
-                    ? "border-indigo-500 text-indigo-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700"
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-slate-500 hover:text-slate-700"
                 }`}
               >
                 {tab.label}
@@ -347,9 +347,9 @@ export default function ClientSlideOver({
             {activeTab === "overview" && (
               <div className="p-6 space-y-6">
                 <div className="grid grid-cols-3 gap-3">
-                  <div className="bg-indigo-50 rounded-xl p-4 text-center">
-                    <p className="text-2xl font-bold text-indigo-700 tabular-nums">{client.leadsThisMonth}</p>
-                    <p className="text-xs text-indigo-500 mt-1">לידים החודש</p>
+                  <div className="bg-blue-50 rounded-xl p-4 text-center">
+                    <p className="text-2xl font-bold text-blue-700 tabular-nums">{client.leadsThisMonth}</p>
+                    <p className="text-xs text-blue-500 mt-1">לידים החודש</p>
                   </div>
                   <div className="bg-green-50 rounded-xl p-4 text-center">
                     <p className="text-2xl font-bold text-green-700 tabular-nums">{client.wonLeads}</p>
@@ -363,10 +363,10 @@ export default function ClientSlideOver({
 
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-gray-900 text-sm">לידים אחרונים</h3>
+                    <h3 className="font-semibold text-slate-900 text-sm">לידים אחרונים</h3>
                     <Link
                       href={`/admin/leads?clientId=${client.id}`}
-                      className="text-xs text-indigo-500 hover:text-indigo-700 font-medium flex items-center gap-1"
+                      className="text-xs text-blue-500 hover:text-blue-700 font-medium flex items-center gap-1"
                     >
                       כל הלידים <ChevronRight size={12} />
                     </Link>
@@ -374,16 +374,16 @@ export default function ClientSlideOver({
 
                   {loadingLeads ? (
                     <div className="flex items-center justify-center py-8">
-                      <Loader2 size={20} className="animate-spin text-gray-400" />
+                      <Loader2 size={20} className="animate-spin text-slate-400" />
                     </div>
                   ) : leads.length === 0 ? (
-                    <div className="text-center py-8 text-sm text-gray-400">אין לידים עדיין</div>
+                    <div className="text-center py-8 text-sm text-slate-400">אין לידים עדיין</div>
                   ) : (
                     <div className="space-y-2">
                       {leads.map((lead) => (
                         <div
                           key={lead.id}
-                          className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
+                          className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition-colors"
                         >
                           <div
                             className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
@@ -392,12 +392,12 @@ export default function ClientSlideOver({
                             {`${lead.firstName[0] ?? ""}${lead.lastName[0] ?? ""}`.toUpperCase()}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">
+                            <p className="text-sm font-medium text-slate-900 truncate">
                               {lead.firstName} {lead.lastName}
                             </p>
-                            <p className="text-xs text-gray-400">{lead.phone ?? lead.email ?? "—"}</p>
+                            <p className="text-xs text-slate-400">{lead.phone ?? lead.email ?? "—"}</p>
                           </div>
-                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLORS[lead.status] ?? "bg-gray-100 text-gray-600"}`}>
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLORS[lead.status] ?? "bg-slate-100 text-slate-600"}`}>
                             {STATUS_HE[lead.status] ?? lead.status}
                           </span>
                         </div>
@@ -412,10 +412,10 @@ export default function ClientSlideOver({
             {activeTab === "properties" && (
               <div className="p-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-gray-900 text-sm">נכסים</h3>
+                  <h3 className="font-semibold text-slate-900 text-sm">נכסים</h3>
                   <Link
                     href={`/client/${client.slug}/properties/new`}
-                    className="flex items-center gap-1.5 text-xs text-indigo-500 hover:text-indigo-700 font-medium"
+                    className="flex items-center gap-1.5 text-xs text-blue-500 hover:text-blue-700 font-medium"
                   >
                     <Plus size={13} /> הוסף נכס
                   </Link>
@@ -423,15 +423,15 @@ export default function ClientSlideOver({
 
                 {loadingProperties ? (
                   <div className="flex items-center justify-center py-8">
-                    <Loader2 size={20} className="animate-spin text-gray-400" />
+                    <Loader2 size={20} className="animate-spin text-slate-400" />
                   </div>
                 ) : properties.length === 0 ? (
                   <div className="text-center py-12">
-                    <Home size={32} className="text-gray-200 mx-auto mb-3" />
-                    <p className="text-sm text-gray-400">אין נכסים עדיין</p>
+                    <Home size={32} className="text-slate-200 mx-auto mb-3" />
+                    <p className="text-sm text-slate-400">אין נכסים עדיין</p>
                     <Link
                       href={`/client/${client.slug}/properties/new`}
-                      className="mt-3 inline-flex items-center gap-1.5 text-xs text-indigo-500 hover:text-indigo-700 font-medium"
+                      className="mt-3 inline-flex items-center gap-1.5 text-xs text-blue-500 hover:text-blue-700 font-medium"
                     >
                       <Plus size={13} /> הוסף נכס ראשון
                     </Link>
@@ -439,7 +439,7 @@ export default function ClientSlideOver({
                 ) : (
                   <div className="grid grid-cols-2 gap-3">
                     {properties.map((property) => (
-                      <div key={property.id} className="bg-gray-50 rounded-xl overflow-hidden border border-gray-100 hover:border-indigo-200 transition-colors">
+                      <div key={property.id} className="bg-slate-50 rounded-xl overflow-hidden border border-slate-100 hover:border-blue-200 transition-colors">
                         {property.images.length > 0 ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
@@ -448,19 +448,19 @@ export default function ClientSlideOver({
                             className="w-full h-24 object-cover"
                           />
                         ) : (
-                          <div className="w-full h-24 bg-gray-200 flex items-center justify-center">
-                            <Home size={24} className="text-gray-400" />
+                          <div className="w-full h-24 bg-slate-200 flex items-center justify-center">
+                            <Home size={24} className="text-slate-400" />
                           </div>
                         )}
                         <div className="p-2.5">
-                          <p className="text-xs font-semibold text-gray-900 truncate">{property.title}</p>
-                          <p className="text-xs text-indigo-600 font-medium mt-0.5">{formatPrice(property.price)}</p>
+                          <p className="text-xs font-semibold text-slate-900 truncate">{property.title}</p>
+                          <p className="text-xs text-blue-600 font-medium mt-0.5">{formatPrice(property.price)}</p>
                           <span className={`inline-block mt-1 text-xs px-1.5 py-0.5 rounded font-medium ${
                             property.status === "SOLD"
                               ? "bg-red-100 text-red-600"
                               : property.status === "AVAILABLE"
                               ? "bg-green-100 text-green-600"
-                              : "bg-gray-100 text-gray-600"
+                              : "bg-slate-100 text-slate-600"
                           }`}>
                             {property.status === "SOLD" ? "נמכר" : property.status === "AVAILABLE" ? "זמין" : property.status}
                           </span>
@@ -475,14 +475,14 @@ export default function ClientSlideOver({
             {/* ─── Landing Page ─────────────────────────────────────────── */}
             {activeTab === "landing" && (
               <div className="p-6 space-y-4">
-                <h3 className="font-semibold text-gray-900 text-sm">דף נחיתה</h3>
+                <h3 className="font-semibold text-slate-900 text-sm">דף נחיתה</h3>
 
                 {/* Public URL */}
-                <div className="bg-gray-50 rounded-xl p-4 space-y-3">
-                  <p className="text-xs font-medium text-gray-500">כתובת ציבורית</p>
-                  <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2">
-                    <Globe size={13} className="text-gray-400 flex-shrink-0" />
-                    <p className="text-sm text-gray-700 font-mono truncate flex-1 text-left" dir="ltr">
+                <div className="bg-slate-50 rounded-xl p-4 space-y-3">
+                  <p className="text-xs font-medium text-slate-500">כתובת ציבורית</p>
+                  <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2">
+                    <Globe size={13} className="text-slate-400 flex-shrink-0" />
+                    <p className="text-sm text-slate-700 font-mono truncate flex-1 text-left" dir="ltr">
                       {publicUrl}
                     </p>
                     <CopyButton text={publicUrl} />
@@ -491,7 +491,7 @@ export default function ClientSlideOver({
                     href={`/${client.slug}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 w-full justify-center bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
+                    className="flex items-center gap-2 w-full justify-center bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
                   >
                     <ExternalLink size={15} />
                     פתח דף ציבורי
@@ -499,11 +499,11 @@ export default function ClientSlideOver({
                 </div>
 
                 {/* Client Portal */}
-                <div className="bg-gray-50 rounded-xl p-4 space-y-3">
-                  <p className="text-xs font-medium text-gray-500">פורטל לקוח</p>
-                  <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2">
-                    <Globe size={13} className="text-gray-400 flex-shrink-0" />
-                    <p className="text-sm text-gray-700 font-mono truncate flex-1 text-left" dir="ltr">
+                <div className="bg-slate-50 rounded-xl p-4 space-y-3">
+                  <p className="text-xs font-medium text-slate-500">פורטל לקוח</p>
+                  <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2">
+                    <Globe size={13} className="text-slate-400 flex-shrink-0" />
+                    <p className="text-sm text-slate-700 font-mono truncate flex-1 text-left" dir="ltr">
                       {typeof window !== "undefined" ? `${window.location.origin}/client/${client.slug}` : `/client/${client.slug}`}
                     </p>
                     <CopyButton text={typeof window !== "undefined" ? `${window.location.origin}/client/${client.slug}` : `/client/${client.slug}`} />
@@ -511,7 +511,7 @@ export default function ClientSlideOver({
                   <Link
                     href={`/client/${client.slug}`}
                     target="_blank"
-                    className="flex items-center gap-2 w-full justify-center bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
+                    className="flex items-center gap-2 w-full justify-center bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
                   >
                     <ExternalLink size={15} />
                     פתח פורטל לקוח
@@ -519,11 +519,11 @@ export default function ClientSlideOver({
                 </div>
 
                 {/* Page Builder */}
-                <div className="bg-indigo-50 rounded-xl p-4 space-y-3">
-                  <p className="text-xs font-medium text-indigo-600">בונה דפים</p>
+                <div className="bg-blue-50 rounded-xl p-4 space-y-3">
+                  <p className="text-xs font-medium text-blue-600">בונה דפים</p>
                   <Link
                     href={`/admin/clients/${client.id}/builder`}
-                    className="flex items-center gap-2 w-full justify-center bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
+                    className="flex items-center gap-2 w-full justify-center bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
                   >
                     <Paintbrush size={15} />
                     פתח בונה הדפים &larr;
@@ -531,11 +531,11 @@ export default function ClientSlideOver({
                 </div>
 
                 {/* Intake Form */}
-                <div className="bg-gray-50 rounded-xl p-4 space-y-3">
-                  <p className="text-xs font-medium text-gray-500">טופס קבלת לידים</p>
-                  <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2">
-                    <Globe size={13} className="text-gray-400 flex-shrink-0" />
-                    <p className="text-sm text-gray-700 font-mono truncate flex-1 text-left" dir="ltr">
+                <div className="bg-slate-50 rounded-xl p-4 space-y-3">
+                  <p className="text-xs font-medium text-slate-500">טופס קבלת לידים</p>
+                  <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2">
+                    <Globe size={13} className="text-slate-400 flex-shrink-0" />
+                    <p className="text-sm text-slate-700 font-mono truncate flex-1 text-left" dir="ltr">
                       {typeof window !== "undefined" ? `${window.location.origin}/intake/${client.slug}` : `/intake/${client.slug}`}
                     </p>
                     <CopyButton text={typeof window !== "undefined" ? `${window.location.origin}/intake/${client.slug}` : `/intake/${client.slug}`} />
@@ -548,10 +548,10 @@ export default function ClientSlideOver({
             {activeTab === "settings" && (
               <div className="p-6 space-y-5">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-gray-900 text-sm">הגדרות לקוח</h3>
+                  <h3 className="font-semibold text-slate-900 text-sm">הגדרות לקוח</h3>
                   <Link
                     href={`/admin/clients/${client.id}`}
-                    className="text-xs text-indigo-500 hover:text-indigo-700 font-medium flex items-center gap-1"
+                    className="text-xs text-blue-500 hover:text-blue-700 font-medium flex items-center gap-1"
                   >
                     עמוד מלא <ChevronRight size={12} />
                   </Link>
@@ -559,13 +559,13 @@ export default function ClientSlideOver({
 
                 {loadingDetails ? (
                   <div className="flex items-center justify-center py-8">
-                    <Loader2 size={20} className="animate-spin text-gray-400" />
+                    <Loader2 size={20} className="animate-spin text-slate-400" />
                   </div>
                 ) : (
                   <div className="space-y-4">
                     {/* Phone */}
                     <div>
-                      <label className="flex items-center gap-1.5 text-xs font-medium text-gray-600 mb-1.5">
+                      <label className="flex items-center gap-1.5 text-xs font-medium text-slate-600 mb-1.5">
                         <Phone size={12} /> טלפון
                       </label>
                       <input
@@ -574,13 +574,13 @@ export default function ClientSlideOver({
                         onChange={(e) => setDetails((d) => ({ ...d, phone: e.target.value }))}
                         placeholder="050-0000000"
                         dir="ltr"
-                        className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 text-left"
+                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-left"
                       />
                     </div>
 
                     {/* Email */}
                     <div>
-                      <label className="flex items-center gap-1.5 text-xs font-medium text-gray-600 mb-1.5">
+                      <label className="flex items-center gap-1.5 text-xs font-medium text-slate-600 mb-1.5">
                         <Mail size={12} /> אימייל
                       </label>
                       <input
@@ -589,13 +589,13 @@ export default function ClientSlideOver({
                         onChange={(e) => setDetails((d) => ({ ...d, email: e.target.value }))}
                         placeholder="client@example.com"
                         dir="ltr"
-                        className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 text-left"
+                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-left"
                       />
                     </div>
 
                     {/* WhatsApp */}
                     <div>
-                      <label className="flex items-center gap-1.5 text-xs font-medium text-gray-600 mb-1.5">
+                      <label className="flex items-center gap-1.5 text-xs font-medium text-slate-600 mb-1.5">
                         <Phone size={12} /> WhatsApp
                       </label>
                       <input
@@ -604,14 +604,14 @@ export default function ClientSlideOver({
                         onChange={(e) => setDetails((d) => ({ ...d, whatsappNumber: e.target.value }))}
                         placeholder="972501234567"
                         dir="ltr"
-                        className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 text-left"
+                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-left"
                       />
-                      <p className="text-xs text-gray-400 mt-1">כולל קידומת מדינה ללא +</p>
+                      <p className="text-xs text-slate-400 mt-1">כולל קידומת מדינה ללא +</p>
                     </div>
 
                     {/* n8n Webhook */}
                     <div>
-                      <label className="flex items-center gap-1.5 text-xs font-medium text-gray-600 mb-1.5">
+                      <label className="flex items-center gap-1.5 text-xs font-medium text-slate-600 mb-1.5">
                         <Webhook size={12} /> n8n Webhook URL
                       </label>
                       <input
@@ -620,13 +620,13 @@ export default function ClientSlideOver({
                         onChange={(e) => setDetails((d) => ({ ...d, n8nWebhookUrl: e.target.value }))}
                         placeholder="https://n8n.example.com/webhook/..."
                         dir="ltr"
-                        className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300 text-left"
+                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-left"
                       />
                     </div>
 
                     {/* Portal Password */}
                     <div>
-                      <label className="flex items-center gap-1.5 text-xs font-medium text-gray-600 mb-1.5">
+                      <label className="flex items-center gap-1.5 text-xs font-medium text-slate-600 mb-1.5">
                         <Lock size={12} /> סיסמת פורטל
                       </label>
                       <input
@@ -634,7 +634,7 @@ export default function ClientSlideOver({
                         value={details.portalPassword ?? ""}
                         onChange={(e) => setDetails((d) => ({ ...d, portalPassword: e.target.value }))}
                         placeholder="הזן סיסמה חדשה..."
-                        className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                        className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
                       />
                     </div>
 
@@ -650,23 +650,23 @@ export default function ClientSlideOver({
                     <button
                       onClick={handleSaveSettings}
                       disabled={savingSettings}
-                      className="w-full flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-lg transition-colors"
+                      className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white text-sm font-medium py-2.5 rounded-lg transition-colors"
                     >
                       {savingSettings ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
                       {savingSettings ? "שומר..." : "שמור הגדרות"}
                     </button>
 
-                    <div className="pt-2 border-t border-gray-100">
+                    <div className="pt-2 border-t border-slate-100">
                       <Link
                         href={`/admin/clients/${client.id}`}
-                        className="flex items-center gap-3 p-3 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors"
+                        className="flex items-center gap-3 p-3 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors"
                       >
-                        <Settings size={16} className="text-gray-400" />
+                        <Settings size={16} className="text-slate-400" />
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-700">הגדרות מתקדמות</p>
-                          <p className="text-xs text-gray-400">לוגו, צבעים, תבנית</p>
+                          <p className="text-sm font-medium text-slate-700">הגדרות מתקדמות</p>
+                          <p className="text-xs text-slate-400">לוגו, צבעים, תבנית</p>
                         </div>
-                        <ChevronRight size={14} className="text-gray-300" />
+                        <ChevronRight size={14} className="text-slate-300" />
                       </Link>
                     </div>
                   </div>

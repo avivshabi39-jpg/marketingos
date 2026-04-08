@@ -14,14 +14,14 @@ type AnalyticsData = {
 
 function StatCard({ label, value, icon: Icon, color }: { label: string; value: string | number; icon: LucideIcon; color: string }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
+    <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
       <div className="flex items-center gap-3">
         <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${color}`}>
           <Icon size={18} />
         </div>
         <div>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
-          <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+          <p className="text-2xl font-bold text-slate-900">{value}</p>
+          <p className="text-xs text-slate-500 mt-0.5">{label}</p>
         </div>
       </div>
     </div>
@@ -45,7 +45,7 @@ export function ClientAnalyticsTab({ clientId }: { clientId: string }) {
   if (loading) {
     return (
       <div className="flex justify-center py-16">
-        <Loader2 size={24} className="animate-spin text-gray-300" />
+        <Loader2 size={24} className="animate-spin text-slate-300" />
       </div>
     );
   }
@@ -70,12 +70,12 @@ export function ClientAnalyticsTab({ clientId }: { clientId: string }) {
     <div className="space-y-6" dir="rtl">
       {/* Range selector */}
       <div className="flex items-center gap-2">
-        <span className="text-sm text-gray-500">תקופה:</span>
+        <span className="text-sm text-slate-500">תקופה:</span>
         {[7, 14, 30, 60, 90].map((d) => (
           <button
             key={d}
             onClick={() => setDays(d)}
-            className={`px-3 py-1 text-sm rounded-lg border transition-all ${days === d ? "border-indigo-500 bg-indigo-50 text-indigo-700 font-medium" : "border-gray-200 text-gray-500 hover:border-gray-300"}`}
+            className={`px-3 py-1 text-sm rounded-lg border transition-all ${days === d ? "border-blue-500 bg-blue-50 text-blue-700 font-medium" : "border-slate-200 text-slate-500 hover:border-slate-300"}`}
           >
             {d} ימים
           </button>
@@ -92,10 +92,10 @@ export function ClientAnalyticsTab({ clientId }: { clientId: string }) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Bar chart */}
-        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-          <h3 className="font-semibold text-gray-900 text-sm mb-4">צפיות לפי יום</h3>
+        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+          <h3 className="font-semibold text-slate-900 text-sm mb-4">צפיות לפי יום</h3>
           {dayEntries.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-10 text-gray-300">
+            <div className="flex flex-col items-center justify-center py-10 text-slate-300">
               <Eye size={32} className="mb-2" />
               <p className="text-sm">אין נתוני צפיות עדיין</p>
             </div>
@@ -104,10 +104,10 @@ export function ClientAnalyticsTab({ clientId }: { clientId: string }) {
               {dayEntries.map(([day, count]) => (
                 <div key={day} className="flex-1 flex flex-col items-center gap-1 group relative">
                   <div
-                    className="w-full bg-indigo-400 hover:bg-indigo-500 rounded-t transition-all"
+                    className="w-full bg-blue-400 hover:bg-blue-500 rounded-t transition-all"
                     style={{ height: `${Math.max((count / maxViews) * 100, 4)}%` }}
                   />
-                  <div className="absolute bottom-full mb-1 hidden group-hover:flex bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                  <div className="absolute bottom-full mb-1 hidden group-hover:flex bg-slate-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
                     {new Date(day).toLocaleDateString("he-IL", { day: "numeric", month: "short" })}: {count}
                   </div>
                 </div>
@@ -117,21 +117,21 @@ export function ClientAnalyticsTab({ clientId }: { clientId: string }) {
         </div>
 
         {/* Sources */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-          <h3 className="font-semibold text-gray-900 text-sm mb-4">מקורות תנועה</h3>
+        <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5">
+          <h3 className="font-semibold text-slate-900 text-sm mb-4">מקורות תנועה</h3>
           {sourceEntries.length === 0 ? (
-            <p className="text-sm text-gray-400 text-center py-8">אין נתונים</p>
+            <p className="text-sm text-slate-400 text-center py-8">אין נתונים</p>
           ) : (
             <div className="space-y-3">
               {sourceEntries.slice(0, 6).map(([src, count]) => (
                 <div key={src}>
-                  <div className="flex justify-between text-xs text-gray-600 mb-1">
+                  <div className="flex justify-between text-xs text-slate-600 mb-1">
                     <span>{SOURCE_LABELS[src] ?? src}</span>
                     <span className="font-medium">{count}</span>
                   </div>
-                  <div className="h-1.5 bg-gray-100 rounded-full">
+                  <div className="h-1.5 bg-slate-100 rounded-full">
                     <div
-                      className="h-full bg-indigo-400 rounded-full"
+                      className="h-full bg-blue-400 rounded-full"
                       style={{ width: `${(count / maxSource) * 100}%` }}
                     />
                   </div>

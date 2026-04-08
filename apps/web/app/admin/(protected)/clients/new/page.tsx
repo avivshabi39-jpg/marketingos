@@ -30,49 +30,49 @@ function SetupSuccessOverlay({ clientId, clientName, setupActions, slug }: {
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
         <div className="text-center mb-6">
           <div className="text-5xl mb-3">🎉</div>
-          <h2 className="text-xl font-bold text-gray-900">הלקוח נוסף!</h2>
-          <p className="text-gray-500 text-sm mt-1">{clientName} מוכן לפעולה</p>
+          <h2 className="text-xl font-bold text-slate-900">הלקוח נוסף!</h2>
+          <p className="text-slate-500 text-sm mt-1">{clientName} מוכן לפעולה</p>
         </div>
-        <div className="bg-gray-50 rounded-xl p-4 mb-5">
-          <p className="text-xs font-semibold text-gray-500 mb-3">הנה מה שהכנתי אוטומטית:</p>
+        <div className="bg-slate-50 rounded-xl p-4 mb-5">
+          <p className="text-xs font-semibold text-slate-500 mb-3">הנה מה שהכנתי אוטומטית:</p>
           <ul className="space-y-2">
             {setupActions.map((action, i) => (
-              <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+              <li key={i} className="flex items-center gap-2 text-sm text-slate-700">
                 <span className="text-green-500">✅</span>
                 {action}
               </li>
             ))}
-            <li className="flex items-center gap-2 text-sm text-gray-700">
+            <li className="flex items-center gap-2 text-sm text-slate-700">
               <span className="text-green-500">✅</span>
-              פורטל לקוח מוכן <span className="text-gray-400">(סיסמה: portal123)</span>
+              פורטל לקוח מוכן <span className="text-slate-400">(סיסמה: portal123)</span>
             </li>
           </ul>
         </div>
         <div className="space-y-2 mb-6">
-          <div className="flex items-center gap-2 bg-indigo-50 rounded-lg px-3 py-2">
-            <span className="text-xs text-gray-500 flex-1 truncate">🔗 פורטל: {portalUrl}</span>
+          <div className="flex items-center gap-2 bg-blue-50 rounded-lg px-3 py-2">
+            <span className="text-xs text-slate-500 flex-1 truncate">🔗 פורטל: {portalUrl}</span>
             <button
               onClick={() => navigator.clipboard.writeText(portalUrl)}
-              className="text-xs text-indigo-600 font-medium hover:text-indigo-700"
+              className="text-xs text-blue-600 font-medium hover:text-blue-700"
             >העתק</button>
           </div>
-          <div className="flex items-center gap-2 bg-indigo-50 rounded-lg px-3 py-2">
-            <span className="text-xs text-gray-500 flex-1 truncate">🌐 דף: {pageUrl}</span>
+          <div className="flex items-center gap-2 bg-blue-50 rounded-lg px-3 py-2">
+            <span className="text-xs text-slate-500 flex-1 truncate">🌐 דף: {pageUrl}</span>
             <button
               onClick={() => navigator.clipboard.writeText(pageUrl)}
-              className="text-xs text-indigo-600 font-medium hover:text-indigo-700"
+              className="text-xs text-blue-600 font-medium hover:text-blue-700"
             >העתק</button>
           </div>
         </div>
         <a
           href={`/admin/page-builder/${clientId}`}
-          className="block w-full bg-gradient-to-l from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-center font-bold py-3.5 rounded-xl transition-colors shadow-lg shadow-indigo-500/20"
+          className="block w-full bg-gradient-to-l from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-center font-bold py-3.5 rounded-xl transition-colors shadow-lg shadow-blue-500/20"
         >
           🧙 בנה דף נחיתה עכשיו →
         </a>
         <a
           href={`/admin/clients/${clientId}`}
-          className="block w-full text-center text-sm text-gray-400 hover:text-gray-600 mt-2 py-2"
+          className="block w-full text-center text-sm text-slate-400 hover:text-slate-600 mt-2 py-2"
         >
           דלג — אבנה אחר כך
         </a>
@@ -88,11 +88,11 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-slate-700 mb-1">
         {label}
         {required && <span className="text-red-500 mr-1">*</span>}
       </label>
-      {hint && <p className="text-xs text-gray-400 mb-1">{hint}</p>}
+      {hint && <p className="text-xs text-slate-400 mb-1">{hint}</p>}
       {children}
       {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
     </div>
@@ -100,13 +100,13 @@ function Field({
 }
 
 const inputCls = (err?: string) =>
-  `w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-colors ${
-    err ? "border-red-300 bg-red-50" : "border-gray-200 bg-white"
+  `w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors ${
+    err ? "border-red-300 bg-red-50" : "border-slate-200 bg-white"
   }`;
 
 const selectCls = (err?: string) =>
-  `w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white transition-colors ${
-    err ? "border-red-300" : "border-gray-200"
+  `w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white transition-colors ${
+    err ? "border-red-300" : "border-slate-200"
   }`;
 
 type SetupResult = { clientId: string; clientName: string; setupActions: string[]; slug: string };
@@ -231,20 +231,20 @@ export default function NewClientPage() {
     <div className="max-w-3xl" dir="rtl">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
-        <Link href="/admin/clients" className="text-gray-400 hover:text-gray-600 transition-colors">
+        <Link href="/admin/clients" className="text-slate-400 hover:text-slate-600 transition-colors">
           <ArrowRight size={18} />
         </Link>
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">לקוח חדש</h1>
-          <p className="text-sm text-gray-500 mt-0.5">הוסף לקוח/עסק חדש למערכת</p>
+          <h1 className="text-2xl font-semibold text-slate-900">לקוח חדש</h1>
+          <p className="text-sm text-slate-500 mt-0.5">הוסף לקוח/עסק חדש למערכת</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
 
         {/* Section: Basic Info */}
-        <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900 text-sm uppercase tracking-wide text-gray-500">פרטים בסיסיים</h2>
+        <section className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+          <h2 className="font-semibold text-slate-900 text-sm uppercase tracking-wide text-slate-500">פרטים בסיסיים</h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="שם העסק" required error={errors.name}>
@@ -269,13 +269,13 @@ export default function NewClientPage() {
                   <button
                     type="button"
                     onClick={() => { setSlugManual(false); set("slug", slugify(form.name)); }}
-                    className="text-xs text-gray-400 hover:text-gray-600 whitespace-nowrap"
+                    className="text-xs text-slate-400 hover:text-slate-600 whitespace-nowrap"
                   >
                     איפוס
                   </button>
                 )}
               </div>
-              {form.slug && <p className="text-xs text-gray-400 mt-1">/{form.slug}/intake</p>}
+              {form.slug && <p className="text-xs text-slate-400 mt-1">/{form.slug}/intake</p>}
             </Field>
 
             <Field label="תחום עיסוק" error={errors.industry}>
@@ -315,17 +315,17 @@ export default function NewClientPage() {
                   type="color"
                   value={form.primaryColor}
                   onChange={(e) => set("primaryColor", e.target.value)}
-                  className="h-9 w-16 rounded-lg border border-gray-200 cursor-pointer p-0.5"
+                  className="h-9 w-16 rounded-lg border border-slate-200 cursor-pointer p-0.5"
                 />
-                <span className="text-sm text-gray-500 font-mono">{form.primaryColor}</span>
+                <span className="text-sm text-slate-500 font-mono">{form.primaryColor}</span>
               </div>
             </Field>
           </div>
         </section>
 
         {/* Section: Contact */}
-        <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900 text-sm uppercase tracking-wide text-gray-500">פרטי יצירת קשר</h2>
+        <section className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+          <h2 className="font-semibold text-slate-900 text-sm uppercase tracking-wide text-slate-500">פרטי יצירת קשר</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="אימייל" required error={errors.email}>
               <input
@@ -361,8 +361,8 @@ export default function NewClientPage() {
         </section>
 
         {/* Section: Budget & Reports */}
-        <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900 text-sm uppercase tracking-wide text-gray-500">תקציב ודוחות</h2>
+        <section className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+          <h2 className="font-semibold text-slate-900 text-sm uppercase tracking-wide text-slate-500">תקציב ודוחות</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="תקציב חודשי (₪)" error={errors.monthlyBudget}>
               <input
@@ -395,8 +395,8 @@ export default function NewClientPage() {
         </section>
 
         {/* Section: Integrations */}
-        <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
-          <h2 className="font-semibold text-gray-900 text-sm uppercase tracking-wide text-gray-500">אינטגרציות</h2>
+        <section className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
+          <h2 className="font-semibold text-slate-900 text-sm uppercase tracking-wide text-slate-500">אינטגרציות</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="n8n Webhook URL" error={errors.n8nWebhookUrl} hint="לאוטומציות">
               <input
@@ -429,10 +429,10 @@ export default function NewClientPage() {
         </section>
 
         {/* Section: Client Portal */}
-        <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-4">
+        <section className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-4">
           <div>
-            <h2 className="font-semibold text-gray-900 text-sm uppercase tracking-wide text-gray-500">פורטל לקוח</h2>
-            <p className="text-xs text-gray-400 mt-0.5">סיסמה לכניסת הלקוח לפורטל צפייה בנתונים — /client/{form.slug || "slug"}</p>
+            <h2 className="font-semibold text-slate-900 text-sm uppercase tracking-wide text-slate-500">פורטל לקוח</h2>
+            <p className="text-xs text-slate-400 mt-0.5">סיסמה לכניסת הלקוח לפורטל צפייה בנתונים — /client/{form.slug || "slug"}</p>
           </div>
           <div className="max-w-sm">
             <Field label="סיסמת פורטל" error={errors.portalPassword} hint="לפחות 6 תווים. ניתן לשנות בהגדרות הלקוח.">
@@ -459,14 +459,14 @@ export default function NewClientPage() {
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium px-6 py-2.5 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white text-sm font-medium px-6 py-2.5 rounded-lg transition-colors"
           >
             {loading && <Loader2 size={15} className="animate-spin" />}
             {loading ? "שומר..." : "צור לקוח"}
           </button>
           <Link
             href="/admin/clients"
-            className="border border-gray-200 text-gray-600 text-sm font-medium px-6 py-2.5 rounded-lg hover:bg-gray-50 transition-colors"
+            className="border border-slate-200 text-slate-600 text-sm font-medium px-6 py-2.5 rounded-lg hover:bg-slate-50 transition-colors"
           >
             ביטול
           </Link>

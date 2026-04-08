@@ -21,12 +21,12 @@ export default function TestimonialBlock({
         style={{ backgroundColor: block.settings.backgroundColor || "#f9fafb" }}
       >
         <div className="max-w-2xl mx-auto text-center">
-          <Quote size={32} className="mx-auto mb-4 text-indigo-400" />
-          <blockquote className="text-xl font-medium text-gray-800 mb-4 leading-relaxed">
+          <Quote size={32} className="mx-auto mb-4 text-blue-400" />
+          <blockquote className="text-xl font-medium text-slate-800 mb-4 leading-relaxed">
             &ldquo;{quote}&rdquo;
           </blockquote>
-          <p className="font-semibold text-gray-700">{author}</p>
-          {role && <p className="text-sm text-gray-500">{role}</p>}
+          <p className="font-semibold text-slate-700">{author}</p>
+          {role && <p className="text-sm text-slate-500">{role}</p>}
         </div>
       </section>
     );
@@ -34,22 +34,22 @@ export default function TestimonialBlock({
 
   return (
     <section className="w-full px-4 py-6 space-y-2">
-      <Quote size={20} className="mx-auto text-indigo-400" />
+      <Quote size={20} className="mx-auto text-blue-400" />
       <textarea
-        className="w-full text-center bg-transparent border-b border-dashed border-gray-200 outline-none resize-none text-base"
+        className="w-full text-center bg-transparent border-b border-dashed border-slate-200 outline-none resize-none text-base"
         value={quote || ""}
         placeholder="ציטוט / המלצה"
         rows={2}
         onChange={(e) => onUpdate?.({ ...block.content, quote: e.target.value })}
       />
       <input
-        className="w-full text-sm font-semibold text-center bg-transparent border-b border-dashed border-gray-200 outline-none"
+        className="w-full text-sm font-semibold text-center bg-transparent border-b border-dashed border-slate-200 outline-none"
         value={author || ""}
         placeholder="שם הממליץ"
         onChange={(e) => onUpdate?.({ ...block.content, author: e.target.value })}
       />
       <input
-        className="w-full text-xs text-gray-500 text-center bg-transparent outline-none"
+        className="w-full text-xs text-slate-500 text-center bg-transparent outline-none"
         value={role || ""}
         placeholder="תפקיד / כותרת"
         onChange={(e) => onUpdate?.({ ...block.content, role: e.target.value })}

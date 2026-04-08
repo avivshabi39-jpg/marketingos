@@ -48,7 +48,7 @@ export function LoginForm({
     <form onSubmit={handleSubmit} className="space-y-5">
       {/* Password field */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+        <label className="block text-sm font-medium text-slate-700 mb-1.5">
           סיסמה
         </label>
         <div className="relative">
@@ -59,12 +59,12 @@ export function LoginForm({
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
             autoFocus
-            className="w-full rounded-xl border border-gray-200 bg-gray-50 text-gray-900 placeholder-gray-400 px-4 py-3 text-sm pr-11 focus:outline-none focus:ring-2 focus:ring-indigo-400/60 focus:border-indigo-400 focus:bg-white transition-all"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 px-4 py-3 text-sm pr-11 focus:outline-none focus:ring-2 focus:ring-blue-400/60 focus:border-blue-400 focus:bg-white transition-all"
           />
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
             tabIndex={-1}
           >
             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}

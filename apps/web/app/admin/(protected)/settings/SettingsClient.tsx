@@ -47,8 +47,8 @@ const ROLE_LABELS: Record<string, string> = {
 
 const ROLE_COLORS: Record<string, string> = {
   SUPER_ADMIN: "bg-purple-100 text-purple-700",
-  ADMIN: "bg-indigo-100 text-indigo-700",
-  AGENT: "bg-gray-100 text-gray-600",
+  ADMIN: "bg-blue-100 text-blue-700",
+  AGENT: "bg-slate-100 text-slate-600",
 };
 
 // ─── General Tab ──────────────────────────────────────────────────────────
@@ -72,33 +72,33 @@ function GeneralTab() {
   return (
     <div className="max-w-lg space-y-6">
       <div>
-        <h3 className="text-base font-semibold text-gray-900 mb-4">הגדרות מערכת</h3>
+        <h3 className="text-base font-semibold text-slate-900 mb-4">הגדרות מערכת</h3>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">שם המערכת</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">שם המערכת</label>
             <input
               value={form.systemName}
               onChange={(e) => setForm((f) => ({ ...f, systemName: e.target.value }))}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">אימייל מנהל</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">אימייל מנהל</label>
             <input
               type="email"
               dir="ltr"
               value={form.adminEmail}
               onChange={(e) => setForm((f) => ({ ...f, adminEmail: e.target.value }))}
               placeholder="admin@example.com"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">אזור זמן</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">אזור זמן</label>
             <select
               value={form.timezone}
               onChange={(e) => setForm((f) => ({ ...f, timezone: e.target.value }))}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option value="Asia/Jerusalem">ישראל (UTC+2/+3)</option>
               <option value="Europe/London">לונדון (UTC+0/+1)</option>
@@ -108,11 +108,11 @@ function GeneralTab() {
         </div>
       </div>
 
-      <div className="pt-2 border-t border-gray-100">
+      <div className="pt-2 border-t border-slate-100">
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
         >
           {saving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
           {saving ? "שומר..." : "שמור הגדרות"}
@@ -120,31 +120,31 @@ function GeneralTab() {
       </div>
 
       {/* Subdomain guide */}
-      <div className="mt-8 pt-6 border-t border-gray-100">
-        <h3 className="text-base font-semibold text-gray-900 mb-4">הגדרת תת-דומיינים</h3>
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 space-y-3">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">מדריך הגדרה שלב אחר שלב</p>
+      <div className="mt-8 pt-6 border-t border-slate-100">
+        <h3 className="text-base font-semibold text-slate-900 mb-4">הגדרת תת-דומיינים</h3>
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3">
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">מדריך הגדרה שלב אחר שלב</p>
           <div className="space-y-3">
             <div className="flex gap-3">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center">1</span>
-              <p className="text-sm text-gray-700 pt-0.5">קנה דומיין <span className="font-mono font-semibold">marketingos.co.il</span></p>
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center">1</span>
+              <p className="text-sm text-slate-700 pt-0.5">קנה דומיין <span className="font-mono font-semibold">marketingos.co.il</span></p>
             </div>
             <div className="flex gap-3">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center">2</span>
-              <p className="text-sm text-gray-700 pt-0.5">
-                הוסף ב-DNS: <span className="font-mono bg-white border border-gray-200 rounded px-1.5 py-0.5 text-xs">CNAME *.marketingos.co.il → cname.vercel-dns.com</span>
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center">2</span>
+              <p className="text-sm text-slate-700 pt-0.5">
+                הוסף ב-DNS: <span className="font-mono bg-white border border-slate-200 rounded px-1.5 py-0.5 text-xs">CNAME *.marketingos.co.il → cname.vercel-dns.com</span>
               </p>
             </div>
             <div className="flex gap-3">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center">3</span>
-              <p className="text-sm text-gray-700 pt-0.5">
-                הוסף ב-Vercel: wildcard domain <span className="font-mono bg-white border border-gray-200 rounded px-1.5 py-0.5 text-xs">*.marketingos.co.il</span>
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center">3</span>
+              <p className="text-sm text-slate-700 pt-0.5">
+                הוסף ב-Vercel: wildcard domain <span className="font-mono bg-white border border-slate-200 rounded px-1.5 py-0.5 text-xs">*.marketingos.co.il</span>
               </p>
             </div>
             <div className="flex gap-3">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center">4</span>
-              <p className="text-sm text-gray-700 pt-0.5">
-                כל לקוח מקבל אוטומטית <span className="font-mono bg-white border border-gray-200 rounded px-1.5 py-0.5 text-xs">{"{slug}"}.marketingos.co.il</span>
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center">4</span>
+              <p className="text-sm text-slate-700 pt-0.5">
+                כל לקוח מקבל אוטומטית <span className="font-mono bg-white border border-slate-200 rounded px-1.5 py-0.5 text-xs">{"{slug}"}.marketingos.co.il</span>
               </p>
             </div>
           </div>
@@ -199,20 +199,20 @@ function IntegrationsTab() {
       content: (
         <div className="mt-4 space-y-3">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">כתובת Webhook ברירת מחדל</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1.5">כתובת Webhook ברירת מחדל</label>
             <input
               dir="ltr"
               value={n8nUrl}
               onChange={(e) => setN8nUrl(e.target.value)}
               placeholder="https://n8n.example.com/webhook/..."
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={testN8nConnection}
               disabled={testingN8n}
-              className="flex items-center gap-2 border border-gray-200 text-gray-700 text-sm px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-60"
+              className="flex items-center gap-2 border border-slate-200 text-slate-700 text-sm px-4 py-2 rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-60"
             >
               {testingN8n ? <Loader2 size={13} className="animate-spin" /> : <Zap size={13} />}
               בדוק חיבור
@@ -239,24 +239,24 @@ function IntegrationsTab() {
       content: (
         <div className="mt-4 space-y-3">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">מפתח API</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1.5">מפתח API</label>
             <div className="relative">
               <input
                 dir="ltr"
                 type={showResend ? "text" : "password"}
                 defaultValue=""
                 placeholder="re_xxxxxxxxxxxx"
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
               <button
                 type="button"
                 onClick={() => setShowResend(!showResend)}
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
               >
                 {showResend ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-1">ניתן לשנות רק בקובץ .env.local</p>
+            <p className="text-xs text-slate-400 mt-1">ניתן לשנות רק בקובץ .env.local</p>
           </div>
         </div>
       ),
@@ -264,19 +264,19 @@ function IntegrationsTab() {
     {
       name: "Facebook Ads",
       description: "טפסי לידים ו-Pixel מ-Facebook",
-      color: "bg-indigo-100",
-      iconColor: "text-indigo-600",
+      color: "bg-blue-100",
+      iconColor: "text-blue-600",
       content: (
         <div className="mt-4 space-y-3">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">App ID</label>
-            <input dir="ltr" placeholder="123456789" className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            <label className="block text-xs font-medium text-slate-600 mb-1.5">App ID</label>
+            <input dir="ltr" placeholder="123456789" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">App Secret</label>
-            <input dir="ltr" type="password" placeholder="••••••••••••••••" className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            <label className="block text-xs font-medium text-slate-600 mb-1.5">App Secret</label>
+            <input dir="ltr" type="password" placeholder="••••••••••••••••" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
-          <p className="text-xs text-gray-400">הגדרות אלו נשמרות בקובץ .env.local</p>
+          <p className="text-xs text-slate-400">הגדרות אלו נשמרות בקובץ .env.local</p>
         </div>
       ),
     },
@@ -288,10 +288,10 @@ function IntegrationsTab() {
       content: (
         <div className="mt-4 space-y-3">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Developer Token</label>
-            <input dir="ltr" placeholder="ABCdEfGhIjKlMnOp" className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            <label className="block text-xs font-medium text-slate-600 mb-1.5">Developer Token</label>
+            <input dir="ltr" placeholder="ABCdEfGhIjKlMnOp" className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </div>
-          <p className="text-xs text-gray-400">הגדרות אלו נשמרות בקובץ .env.local</p>
+          <p className="text-xs text-slate-400">הגדרות אלו נשמרות בקובץ .env.local</p>
         </div>
       ),
     },
@@ -299,18 +299,18 @@ function IntegrationsTab() {
 
   return (
     <div className="space-y-6 max-w-2xl">
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-slate-500">
         הגדרות אינטגרציות ברמת המערכת. לאינטגרציות ספציפיות ללקוח, כנס לדף הלקוח ← הגדרות.
       </p>
       {integrations.map((intg) => (
-        <div key={intg.name} className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+        <div key={intg.name} className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm">
           <div className="flex items-start gap-3">
             <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0", intg.color)}>
               <Zap size={16} className={intg.iconColor} />
             </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-gray-900 text-sm">{intg.name}</h4>
-              <p className="text-xs text-gray-500 mt-0.5">{intg.description}</p>
+              <h4 className="font-semibold text-slate-900 text-sm">{intg.name}</h4>
+              <p className="text-xs text-slate-500 mt-0.5">{intg.description}</p>
               {intg.content}
             </div>
           </div>
@@ -340,77 +340,77 @@ function TemplatesTab() {
 
   return (
     <div className="max-w-2xl space-y-6">
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-slate-500">
         תבניות הודעות עם משתנים דינמיים. השתמש ב-{"{"}name{"}"}, {"{"}phone{"}"}, {"{"}clientName{"}"} וכו׳
       </p>
 
       {/* WhatsApp */}
-      <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+      <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-7 h-7 rounded-lg bg-green-100 flex items-center justify-center">
             <MessageSquare size={14} className="text-green-600" />
           </div>
-          <h4 className="font-semibold text-gray-900 text-sm">WhatsApp — ליד חדש</h4>
+          <h4 className="font-semibold text-slate-900 text-sm">WhatsApp — ליד חדש</h4>
         </div>
         <textarea
           rows={3}
           value={templates.whatsappNewLead}
           onChange={(e) => setTemplates((t) => ({ ...t, whatsappNewLead: e.target.value }))}
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
         />
-        <p className="text-xs text-gray-400 mt-1">משתנים: {"{"}name{"}"}, {"{"}phone{"}"}, {"{"}email{"}"}, {"{"}clientName{"}"}</p>
+        <p className="text-xs text-slate-400 mt-1">משתנים: {"{"}name{"}"}, {"{"}phone{"}"}, {"{"}email{"}"}, {"{"}clientName{"}"}</p>
       </div>
 
       {/* SMS */}
-      <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+      <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center">
             <MessageSquare size={14} className="text-blue-600" />
           </div>
-          <h4 className="font-semibold text-gray-900 text-sm">SMS — ליד חדש</h4>
+          <h4 className="font-semibold text-slate-900 text-sm">SMS — ליד חדש</h4>
         </div>
         <textarea
           rows={2}
           value={templates.smsNewLead}
           onChange={(e) => setTemplates((t) => ({ ...t, smsNewLead: e.target.value }))}
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
         />
       </div>
 
       {/* Email */}
-      <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+      <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm">
         <div className="flex items-center gap-2 mb-3">
-          <div className="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center">
-            <MessageSquare size={14} className="text-indigo-600" />
+          <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center">
+            <MessageSquare size={14} className="text-blue-600" />
           </div>
-          <h4 className="font-semibold text-gray-900 text-sm">מייל — דוח שבועי</h4>
+          <h4 className="font-semibold text-slate-900 text-sm">מייל — דוח שבועי</h4>
         </div>
         <div className="space-y-3">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">נושא</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1">נושא</label>
             <input
               value={templates.emailSubject}
               onChange={(e) => setTemplates((t) => ({ ...t, emailSubject: e.target.value }))}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">תוכן</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1">תוכן</label>
             <textarea
               rows={6}
               value={templates.emailBody}
               onChange={(e) => setTemplates((t) => ({ ...t, emailBody: e.target.value }))}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none font-mono"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none font-mono"
             />
           </div>
-          <p className="text-xs text-gray-400">משתנים: {"{"}clientName{"}"}, {"{"}period{"}"}, {"{"}totalLeads{"}"}, {"{"}conversionRate{"}"}</p>
+          <p className="text-xs text-slate-400">משתנים: {"{"}clientName{"}"}, {"{"}period{"}"}, {"{"}totalLeads{"}"}, {"{"}conversionRate{"}"}</p>
         </div>
       </div>
 
       <button
         onClick={handleSave}
         disabled={saving}
-        className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
+        className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
       >
         {saving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
         {saving ? "שומר..." : "שמור תבניות"}
@@ -519,12 +519,12 @@ function UsersTab({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-base font-semibold text-gray-900">משתמשי מערכת</h3>
-          <p className="text-sm text-gray-500 mt-0.5">{users.length} משתמשים פעילים</p>
+          <h3 className="text-base font-semibold text-slate-900">משתמשי מערכת</h3>
+          <p className="text-sm text-slate-500 mt-0.5">{users.length} משתמשים פעילים</p>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
         >
           <Plus size={15} />
           הוסף משתמש
@@ -533,35 +533,35 @@ function UsersTab({
 
       {/* Add user form */}
       {showAddForm && (
-        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5">
-          <h4 className="font-semibold text-gray-900 text-sm mb-4">משתמש חדש</h4>
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-5">
+          <h4 className="font-semibold text-slate-900 text-sm mb-4">משתמש חדש</h4>
           <form onSubmit={handleAddUser} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">שם מלא *</label>
+                <label className="block text-xs font-medium text-slate-700 mb-1">שם מלא *</label>
                 <input
                   value={newUser.name}
                   onChange={(e) => setNewUser((f) => ({ ...f, name: e.target.value }))}
                   placeholder="ישראל ישראלי"
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">אימייל *</label>
+                <label className="block text-xs font-medium text-slate-700 mb-1">אימייל *</label>
                 <input
                   type="email"
                   dir="ltr"
                   value={newUser.email}
                   onChange={(e) => setNewUser((f) => ({ ...f, email: e.target.value }))}
                   placeholder="user@example.com"
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">סיסמה *</label>
+                <label className="block text-xs font-medium text-slate-700 mb-1">סיסמה *</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -569,23 +569,23 @@ function UsersTab({
                     value={newUser.password}
                     onChange={(e) => setNewUser((f) => ({ ...f, password: e.target.value }))}
                     placeholder="לפחות 8 תווים"
-                    className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-blue-400"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400"
                   >
                     {showPassword ? <EyeOff size={13} /> : <Eye size={13} />}
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">תפקיד</label>
+                <label className="block text-xs font-medium text-slate-700 mb-1">תפקיד</label>
                 <select
                   value={newUser.role}
                   onChange={(e) => setNewUser((f) => ({ ...f, role: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
                   <option value="AGENT">סוכן</option>
                   <option value="ADMIN">אדמין</option>
@@ -596,13 +596,13 @@ function UsersTab({
 
             {clients.length > 0 && (
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label className="block text-xs font-medium text-slate-700 mb-1">
                   שייך ללקוח (ריק = גישה לכל הלקוחות)
                 </label>
                 <select
                   value={newUser.clientId}
                   onChange={(e) => setNewUser((f) => ({ ...f, clientId: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                 >
                   <option value="">— כל הלקוחות —</option>
                   {clients.map((c) => (
@@ -620,7 +620,7 @@ function UsersTab({
               <button
                 type="submit"
                 disabled={addLoading}
-                className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors"
+                className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2 rounded-lg transition-colors"
               >
                 {addLoading && <Loader2 size={13} className="animate-spin" />}
                 {addLoading ? "יוצר..." : "צור משתמש"}
@@ -628,7 +628,7 @@ function UsersTab({
               <button
                 type="button"
                 onClick={() => { setShowAddForm(false); setAddError(null); }}
-                className="border border-gray-200 text-gray-600 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+                className="border border-slate-200 text-slate-600 text-sm font-medium px-4 py-2 rounded-lg hover:bg-slate-50 transition-colors"
               >
                 ביטול
               </button>
@@ -638,47 +638,47 @@ function UsersTab({
       )}
 
       {/* Users list */}
-      <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
-        <table className="min-w-full divide-y divide-gray-100">
-          <thead className="bg-gray-50">
+      <div className="bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm">
+        <table className="min-w-full divide-y divide-slate-100">
+          <thead className="bg-slate-50">
             <tr>
               {["משתמש", "תפקיד", "לקוח", "כניסה אחרונה", "סטטוס", "פעולות"].map((h) => (
-                <th key={h} className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">
+                <th key={h} className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase">
                   {h}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody className="divide-y divide-slate-50">
             {users.map((user) => (
-              <tr key={user.id} className={cn("hover:bg-gray-50/60 transition-colors", !user.isActive && "opacity-50")}>
+              <tr key={user.id} className={cn("hover:bg-slate-50/60 transition-colors", !user.isActive && "opacity-50")}>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                      <UserCircle size={16} className="text-indigo-500" />
+                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                      <UserCircle size={16} className="text-blue-500" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                      <p className="text-xs text-gray-400">{user.email}</p>
+                      <p className="text-sm font-medium text-slate-900">{user.name}</p>
+                      <p className="text-xs text-slate-400">{user.email}</p>
                     </div>
                   </div>
                 </td>
                 <td className="px-4 py-3">
-                  <span className={cn("text-xs px-2 py-1 rounded-full font-medium", ROLE_COLORS[user.role] ?? "bg-gray-100 text-gray-600")}>
+                  <span className={cn("text-xs px-2 py-1 rounded-full font-medium", ROLE_COLORS[user.role] ?? "bg-slate-100 text-slate-600")}>
                     {ROLE_LABELS[user.role] ?? user.role}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-500">
-                  {user.client?.name ?? <span className="text-gray-300">כולם</span>}
+                <td className="px-4 py-3 text-sm text-slate-500">
+                  {user.client?.name ?? <span className="text-slate-300">כולם</span>}
                 </td>
-                <td className="px-4 py-3 text-xs text-gray-400">
+                <td className="px-4 py-3 text-xs text-slate-400">
                   {user.lastLoginAt
                     ? new Date(user.lastLoginAt).toLocaleDateString("he-IL")
                     : "מעולם לא"}
                 </td>
                 <td className="px-4 py-3">
                   <span className={cn("text-xs px-2 py-1 rounded-full font-medium",
-                    user.isActive ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
+                    user.isActive ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-500"
                   )}>
                     {user.isActive ? "פעיל" : "מושבת"}
                   </span>
@@ -688,7 +688,7 @@ function UsersTab({
                     <button
                       onClick={() => handleToggleActive(user.id, user.isActive)}
                       title={user.isActive ? "השבת" : "הפעל"}
-                      className="p-1.5 text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 rounded-lg transition-colors"
+                      className="p-1.5 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
                     >
                       <Shield size={14} />
                     </button>
@@ -696,7 +696,7 @@ function UsersTab({
                       <button
                         onClick={() => handleDelete(user.id)}
                         disabled={deleting === user.id}
-                        className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-40"
+                        className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-40"
                       >
                         {deleting === user.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
                       </button>
@@ -710,8 +710,8 @@ function UsersTab({
 
         {users.length === 0 && (
           <div className="px-6 py-12 text-center">
-            <Users size={32} className="mx-auto text-gray-200 mb-3" />
-            <p className="text-sm text-gray-500">אין משתמשים במערכת עדיין</p>
+            <Users size={32} className="mx-auto text-slate-200 mb-3" />
+            <p className="text-sm text-slate-500">אין משתמשים במערכת עדיין</p>
           </div>
         )}
       </div>
@@ -767,23 +767,23 @@ function IntegrationsTabDB({
 
   return (
     <div className="space-y-5 max-w-xl">
-      <p className="text-sm text-gray-500">הגדרות אינטגרציות ברמת המשתמש. לאינטגרציות ספציפיות ללקוח — כנס לדף הלקוח.</p>
+      <p className="text-sm text-slate-500">הגדרות אינטגרציות ברמת המשתמש. לאינטגרציות ספציפיות ללקוח — כנס לדף הלקוח.</p>
 
       {/* n8n */}
-      <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm space-y-3">
+      <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm space-y-3">
         <div className="flex items-center gap-2 mb-1">
           <div className="w-7 h-7 rounded-lg bg-orange-100 flex items-center justify-center"><Zap size={14} className="text-orange-600"/></div>
-          <h4 className="font-semibold text-gray-900 text-sm">n8n Webhooks</h4>
+          <h4 className="font-semibold text-slate-900 text-sm">n8n Webhooks</h4>
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1.5">Webhook ברירת מחדל</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1.5">Webhook ברירת מחדל</label>
           <input dir="ltr" value={n8nUrl} onChange={(e) => setN8nUrl(e.target.value)}
             placeholder="https://n8n.example.com/webhook/..."
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
         </div>
         <div className="flex items-center gap-3">
           <button onClick={testN8n} disabled={testing}
-            className="flex items-center gap-1.5 border border-gray-200 text-gray-700 text-sm px-4 py-2 rounded-lg hover:bg-gray-50 disabled:opacity-60">
+            className="flex items-center gap-1.5 border border-slate-200 text-slate-700 text-sm px-4 py-2 rounded-lg hover:bg-slate-50 disabled:opacity-60">
             {testing ? <Loader2 size={13} className="animate-spin"/> : <Zap size={13}/>} בדוק חיבור
           </button>
           {n8nStatus === "ok"    && <span className="text-xs text-green-600 flex items-center gap-1"><Check size={12}/> מחובר</span>}
@@ -792,19 +792,19 @@ function IntegrationsTabDB({
       </div>
 
       {/* Resend */}
-      <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm space-y-3">
+      <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm space-y-3">
         <div className="flex items-center gap-2 mb-1">
           <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center"><MessageSquare size={14} className="text-blue-600"/></div>
-          <h4 className="font-semibold text-gray-900 text-sm">Resend (מיילים)</h4>
+          <h4 className="font-semibold text-slate-900 text-sm">Resend (מיילים)</h4>
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1.5">מפתח API</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1.5">מפתח API</label>
           <div className="relative">
             <input dir="ltr" type={showResend ? "text" : "password"} value={resendKey}
               onChange={(e) => setResendKey(e.target.value)} placeholder="re_xxxxxxxxxxxx"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-blue-400" />
             <button type="button" onClick={() => setShowResend(!showResend)}
-              className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400">
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400">
               {showResend ? <EyeOff size={13}/> : <Eye size={13}/>}
             </button>
           </div>
@@ -812,7 +812,7 @@ function IntegrationsTabDB({
       </div>
 
       <button onClick={handleSave} disabled={saving}
-        className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-lg">
+        className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-lg">
         {saving ? <Loader2 size={14} className="animate-spin"/> : <Check size={14}/>}
         {saving ? "שומר..." : "שמור הגדרות"}
       </button>
@@ -867,51 +867,51 @@ function TemplatesTabDB({ initial }: { initial: TemplateRow[] }) {
 
   return (
     <div className="max-w-2xl space-y-5">
-      <p className="text-sm text-gray-500">תבניות הודעות. השתמש ב-{"{"}leadName{"}"}, {"{"}leadPhone{"}"}, {"{"}clientName{"}"} וכו׳</p>
+      <p className="text-sm text-slate-500">תבניות הודעות. השתמש ב-{"{"}leadName{"}"}, {"{"}leadPhone{"}"}, {"{"}clientName{"}"} וכו׳</p>
 
       {/* WhatsApp */}
-      <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm space-y-3">
+      <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-green-100 flex items-center justify-center"><MessageSquare size={14} className="text-green-600"/></div>
-            <h4 className="font-semibold text-gray-900 text-sm">WhatsApp — ליד חדש</h4>
+            <h4 className="font-semibold text-slate-900 text-sm">WhatsApp — ליד חדש</h4>
           </div>
           <button onClick={() => saveTemplate("WHATSAPP_NEW_LEAD")} disabled={saving}
-            className="text-xs bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1.5 rounded-lg disabled:opacity-60">
+            className="text-xs bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg disabled:opacity-60">
             {saving ? "שומר..." : "שמור"}
           </button>
         </div>
         <textarea rows={3} value={templates.WHATSAPP_NEW_LEAD?.content ?? ""}
           onChange={(e) => update("WHATSAPP_NEW_LEAD", "content", e.target.value)}
-          className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"/>
-        <p className="text-xs text-gray-400">משתנים: {"{"}leadName{"}"}, {"{"}leadPhone{"}"}, {"{"}clientName{"}"}, {"{"}source{"}"}</p>
+          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"/>
+        <p className="text-xs text-slate-400">משתנים: {"{"}leadName{"}"}, {"{"}leadPhone{"}"}, {"{"}clientName{"}"}, {"{"}source{"}"}</p>
       </div>
 
       {/* Email report */}
-      <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm space-y-3">
+      <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center"><MessageSquare size={14} className="text-indigo-600"/></div>
-            <h4 className="font-semibold text-gray-900 text-sm">מייל — דוח שבועי</h4>
+            <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center"><MessageSquare size={14} className="text-blue-600"/></div>
+            <h4 className="font-semibold text-slate-900 text-sm">מייל — דוח שבועי</h4>
           </div>
           <button onClick={() => saveTemplate("EMAIL_REPORT")} disabled={saving}
-            className="text-xs bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1.5 rounded-lg disabled:opacity-60">
+            className="text-xs bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg disabled:opacity-60">
             {saving ? "שומר..." : "שמור"}
           </button>
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">נושא</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1">נושא</label>
           <input value={templates.EMAIL_REPORT?.subject ?? ""}
             onChange={(e) => update("EMAIL_REPORT", "subject", e.target.value)}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"/>
+            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"/>
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">תוכן</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1">תוכן</label>
           <textarea rows={5} value={templates.EMAIL_REPORT?.content ?? ""}
             onChange={(e) => update("EMAIL_REPORT", "content", e.target.value)}
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none font-mono"/>
+            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none font-mono"/>
         </div>
-        <p className="text-xs text-gray-400">משתנים: {"{"}clientName{"}"}, {"{"}period{"}"}, {"{"}totalLeads{"}"}, {"{"}conversionRate{"}"}</p>
+        <p className="text-xs text-slate-400">משתנים: {"{"}clientName{"}"}, {"{"}period{"}"}, {"{"}totalLeads{"}"}, {"{"}conversionRate{"}"}</p>
       </div>
     </div>
   );
@@ -951,30 +951,30 @@ function TeamWebhookTab({ userId }: { userId: string }) {
   return (
     <div className="space-y-6" dir="rtl">
       {/* Team */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
+      <div className="bg-white rounded-xl border border-slate-200 p-5">
         <h3 className="font-bold text-base mb-1">👥 חברי צוות</h3>
-        <p className="text-xs text-gray-500 mb-4">הוסף סוכנים שיוכלו לנהל לקוחות</p>
+        <p className="text-xs text-slate-500 mb-4">הוסף סוכנים שיוכלו לנהל לקוחות</p>
         <div className="flex gap-2 mb-3">
-          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="אימייל חבר הצוות" className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-indigo-400" />
-          <select value={role} onChange={(e) => setRole(e.target.value)} className="border border-gray-200 rounded-lg px-2 py-2 text-sm">
+          <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="אימייל חבר הצוות" className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-400" />
+          <select value={role} onChange={(e) => setRole(e.target.value)} className="border border-slate-200 rounded-lg px-2 py-2 text-sm">
             <option value="AGENT">סוכן</option>
             <option value="MANAGER">מנהל</option>
           </select>
-          <button onClick={invite} disabled={!email} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold disabled:opacity-40">+ הזמן</button>
+          <button onClick={invite} disabled={!email} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold disabled:opacity-40">+ הזמן</button>
         </div>
         {msg && <div className="text-sm text-green-600 font-medium mb-2">{msg}</div>}
         {members.length === 0 ? (
-          <p className="text-sm text-gray-400 text-center py-4">אין חברי צוות עדיין</p>
+          <p className="text-sm text-slate-400 text-center py-4">אין חברי צוות עדיין</p>
         ) : (
           <div className="space-y-2">
             {members.map((m) => (
-              <div key={m.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2.5">
+              <div key={m.id} className="flex items-center justify-between bg-slate-50 rounded-lg px-3 py-2.5">
                 <div>
                   <p className="font-semibold text-sm">{m.member.name ?? m.member.email}</p>
-                  <p className="text-xs text-gray-500">{m.member.email}</p>
+                  <p className="text-xs text-slate-500">{m.member.email}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full font-semibold">{m.role === "MANAGER" ? "מנהל" : "סוכן"}</span>
+                  <span className="text-[11px] px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full font-semibold">{m.role === "MANAGER" ? "מנהל" : "סוכן"}</span>
                   <button onClick={() => remove(m.member.id)} className="text-red-400 hover:text-red-600 text-lg leading-none">×</button>
                 </div>
               </div>
@@ -986,8 +986,8 @@ function TeamWebhookTab({ userId }: { userId: string }) {
       {/* Webhook */}
       <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
         <h4 className="font-bold text-sm mb-1">🔗 Zapier / Make.com Webhook</h4>
-        <p className="text-xs text-gray-600 mb-3">חבר כלים חיצוניים — לידים מגיעים אוטומטית</p>
-        <div className="bg-white border border-blue-200 rounded-lg px-3 py-2 font-mono text-[11px] text-gray-600 break-all mb-2">{webhookUrl}</div>
+        <p className="text-xs text-slate-600 mb-3">חבר כלים חיצוניים — לידים מגיעים אוטומטית</p>
+        <div className="bg-white border border-blue-200 rounded-lg px-3 py-2 font-mono text-[11px] text-slate-600 break-all mb-2">{webhookUrl}</div>
         <button onClick={() => navigator.clipboard.writeText(webhookUrl)} className="px-4 py-1.5 bg-blue-500 text-white rounded-lg text-xs font-semibold">📋 העתק URL</button>
       </div>
     </div>
@@ -1048,20 +1048,20 @@ function WhiteLabelTab() {
     setTimeout(() => setSaved(false), 2500);
   }
 
-  if (loading) return <p className="text-center text-gray-400 py-8">טוען...</p>;
+  if (loading) return <p className="text-center text-slate-400 py-8">טוען...</p>;
 
   return (
     <div className="space-y-6" dir="rtl">
       <div>
         <h2 className="font-bold text-lg">🏷️ White Label</h2>
-        <p className="text-sm text-gray-500">מכור MarketingOS תחת המותג שלך</p>
+        <p className="text-sm text-slate-500">מכור MarketingOS תחת המותג שלך</p>
       </div>
 
       {/* Enable toggle */}
-      <div className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
+      <div className="flex justify-between items-center p-4 bg-slate-50 rounded-xl">
         <div>
           <p className="font-bold text-sm">הפעל White Label</p>
-          <p className="text-xs text-gray-500">הלקוחות שלך יראו את המותג שלך</p>
+          <p className="text-xs text-slate-500">הלקוחות שלך יראו את המותג שלך</p>
         </div>
         <div
           onClick={() => setWl((w) => ({ ...w, enabled: !w.enabled }))}
@@ -1084,20 +1084,20 @@ function WhiteLabelTab() {
             { key: "fromEmail", label: "📧 מייל שולח", placeholder: "support@agency.co.il", dir: "ltr" },
           ] as const).map((f) => (
             <div key={f.key}>
-              <label className="block text-xs font-bold text-gray-500 mb-1.5">{f.label}</label>
+              <label className="block text-xs font-bold text-slate-500 mb-1.5">{f.label}</label>
               <input
                 value={wl[f.key]}
                 onChange={(e) => setWl((w) => ({ ...w, [f.key]: e.target.value }))}
                 placeholder={f.placeholder}
                 dir={f.dir}
-                className="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-indigo-400"
+                className="w-full border-2 border-slate-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-blue-400"
               />
             </div>
           ))}
 
           {/* Color picker */}
           <div>
-            <label className="block text-xs font-bold text-gray-500 mb-1.5">🎨 צבע ראשי</label>
+            <label className="block text-xs font-bold text-slate-500 mb-1.5">🎨 צבע ראשי</label>
             <div className="flex gap-2 items-center">
               <input
                 type="color"
@@ -1108,7 +1108,7 @@ function WhiteLabelTab() {
               <input
                 value={wl.color}
                 onChange={(e) => setWl((w) => ({ ...w, color: e.target.value }))}
-                className="border-2 border-gray-200 rounded-xl px-3 py-2 text-sm font-mono w-32 outline-none"
+                className="border-2 border-slate-200 rounded-xl px-3 py-2 text-sm font-mono w-32 outline-none"
                 dir="ltr"
               />
               <div className="h-10 flex-1 rounded-lg" style={{ background: wl.color }} />
@@ -1127,8 +1127,8 @@ function WhiteLabelTab() {
           </label>
 
           {/* Preview */}
-          <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-            <p className="text-xs font-bold text-gray-400 mb-2">תצוגה מקדימה:</p>
+          <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <p className="text-xs font-bold text-slate-400 mb-2">תצוגה מקדימה:</p>
             <div className="flex items-center gap-3">
               {wl.logo ? (
                 // Dynamic user URL — next/image requires remotePatterns for unknown hosts
@@ -1141,7 +1141,7 @@ function WhiteLabelTab() {
               )}
             </div>
             {!wl.hideFooter && (
-              <p className="text-[10px] text-gray-400 mt-3">
+              <p className="text-[10px] text-slate-400 mt-3">
                 Powered by {wl.name || "MarketingOS"}
               </p>
             )}
@@ -1154,7 +1154,7 @@ function WhiteLabelTab() {
         disabled={saving}
         className={cn(
           "px-6 py-2.5 rounded-xl font-bold text-sm transition-all",
-          saved ? "bg-green-500 text-white" : saving ? "bg-gray-200 text-gray-400" : "bg-indigo-600 text-white"
+          saved ? "bg-green-500 text-white" : saving ? "bg-slate-200 text-slate-400" : "bg-blue-600 text-white"
         )}
       >
         {saving ? "⏳ שומר..." : saved ? "✅ נשמר!" : "💾 שמור"}
@@ -1187,7 +1187,7 @@ function AuditLogTab() {
       <div className="text-center py-12">
         <button
           onClick={load}
-          className="flex items-center gap-2 mx-auto bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-medium text-sm px-5 py-2.5 rounded-lg transition-colors"
+          className="flex items-center gap-2 mx-auto bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium text-sm px-5 py-2.5 rounded-lg transition-colors"
         >
           {loading ? <Loader2 size={15} className="animate-spin" /> : <ScrollText size={15} />}
           {loading ? "טוען..." : "טען יומן פעילות"}
@@ -1200,48 +1200,48 @@ function AuditLogTab() {
     "login.success":   "bg-green-100 text-green-700",
     "login.failed":    "bg-red-100 text-red-700",
     "user.registered": "bg-blue-100 text-blue-700",
-    "client.create":   "bg-indigo-100 text-indigo-700",
+    "client.create":   "bg-blue-100 text-blue-700",
     "client.delete":   "bg-red-100 text-red-700",
   };
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-500">{logs.length} רשומות אחרונות</p>
+        <p className="text-sm text-slate-500">{logs.length} רשומות אחרונות</p>
         <button
           onClick={load}
           disabled={loading}
-          className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 border border-gray-200 px-3 py-1.5 rounded-lg transition-colors"
+          className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-700 border border-slate-200 px-3 py-1.5 rounded-lg transition-colors"
         >
           {loading ? <Loader2 size={12} className="animate-spin" /> : null}
           רענן
         </button>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-100">
-          <thead className="bg-gray-50">
+      <div className="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+        <table className="min-w-full divide-y divide-slate-100">
+          <thead className="bg-slate-50">
             <tr>
               {["פעולה", "ישות", "IP / מידע", "זמן"].map((h) => (
-                <th key={h} className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase">{h}</th>
+                <th key={h} className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase">{h}</th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody className="divide-y divide-slate-50">
             {logs.map((log) => (
-              <tr key={log.id} className="hover:bg-gray-50/50">
+              <tr key={log.id} className="hover:bg-slate-50/50">
                 <td className="px-4 py-3">
-                  <span className={cn("text-xs px-2 py-1 rounded-full font-medium", ACTION_COLORS[log.action] ?? "bg-gray-100 text-gray-600")}>
+                  <span className={cn("text-xs px-2 py-1 rounded-full font-medium", ACTION_COLORS[log.action] ?? "bg-slate-100 text-slate-600")}>
                     {log.action}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-xs text-gray-500 font-mono">{log.entityId ?? "—"}</td>
-                <td className="px-4 py-3 text-xs text-gray-500">
+                <td className="px-4 py-3 text-xs text-slate-500 font-mono">{log.entityId ?? "—"}</td>
+                <td className="px-4 py-3 text-xs text-slate-500">
                   {log.meta ? (
                     <span className="font-mono">{(log.meta as {ip?:string}).ip ?? JSON.stringify(log.meta).slice(0, 60)}</span>
                   ) : "—"}
                 </td>
-                <td className="px-4 py-3 text-xs text-gray-400">
+                <td className="px-4 py-3 text-xs text-slate-400">
                   {new Date(log.createdAt).toLocaleString("he-IL")}
                 </td>
               </tr>
@@ -1249,7 +1249,7 @@ function AuditLogTab() {
           </tbody>
         </table>
         {logs.length === 0 && (
-          <p className="px-6 py-10 text-center text-sm text-gray-500">אין רשומות ביומן.</p>
+          <p className="px-6 py-10 text-center text-sm text-slate-500">אין רשומות ביומן.</p>
         )}
       </div>
     </div>
@@ -1295,7 +1295,7 @@ function AiUsageTab() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <Loader2 size={24} className="animate-spin text-indigo-400" />
+        <Loader2 size={24} className="animate-spin text-blue-400" />
       </div>
     );
   }
@@ -1307,11 +1307,11 @@ function AiUsageTab() {
   return (
     <div className="space-y-6 max-w-xl">
       <div>
-        <h3 className="text-base font-semibold text-gray-900 mb-4">שימוש AI החודש</h3>
+        <h3 className="text-base font-semibold text-slate-900 mb-4">שימוש AI החודש</h3>
         <div className="grid grid-cols-3 gap-4">
-          <div className="bg-indigo-50 rounded-xl p-4 text-center">
-            <p className="text-3xl font-bold text-indigo-700">{data?.totalThisMonth ?? 0}</p>
-            <p className="text-xs text-indigo-500 mt-1">קריאות החודש</p>
+          <div className="bg-blue-50 rounded-xl p-4 text-center">
+            <p className="text-3xl font-bold text-blue-700">{data?.totalThisMonth ?? 0}</p>
+            <p className="text-xs text-blue-500 mt-1">קריאות החודש</p>
           </div>
           <div className="bg-purple-50 rounded-xl p-4 text-center">
             <p className="text-3xl font-bold text-purple-700">{data?.todayCount ?? 0}</p>
@@ -1326,22 +1326,22 @@ function AiUsageTab() {
 
       {data?.byType && data.byType.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold text-gray-700 mb-3">לפי סוג</h4>
-          <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+          <h4 className="text-sm font-semibold text-slate-700 mb-3">לפי סוג</h4>
+          <div className="bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="text-right px-4 py-2.5 text-xs font-semibold text-gray-500">סוג</th>
-                  <th className="text-right px-4 py-2.5 text-xs font-semibold text-gray-500">קריאות</th>
-                  <th className="text-right px-4 py-2.5 text-xs font-semibold text-gray-500">טוקנים</th>
+                <tr className="border-b border-slate-100 bg-slate-50">
+                  <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500">סוג</th>
+                  <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500">קריאות</th>
+                  <th className="text-right px-4 py-2.5 text-xs font-semibold text-slate-500">טוקנים</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-slate-50">
                 {data.byType.map((b) => (
-                  <tr key={b.type} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-3 text-gray-700">{TYPE_LABELS[b.type] ?? b.type}</td>
-                    <td className="px-4 py-3 font-medium text-gray-900">{b.count}</td>
-                    <td className="px-4 py-3 text-gray-500">{b.tokens.toLocaleString()}</td>
+                  <tr key={b.type} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-3 text-slate-700">{TYPE_LABELS[b.type] ?? b.type}</td>
+                    <td className="px-4 py-3 font-medium text-slate-900">{b.count}</td>
+                    <td className="px-4 py-3 text-slate-500">{b.tokens.toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
@@ -1352,9 +1352,9 @@ function AiUsageTab() {
 
       {(!data?.byType || data.byType.length === 0) && (
         <div className="text-center py-10">
-          <Sparkles size={32} className="mx-auto text-gray-200 mb-3" />
-          <p className="text-sm text-gray-500">עדיין לא נעשה שימוש ב-AI החודש</p>
-          <p className="text-xs text-gray-400 mt-1">לחץ על ✨ בעורך דף הנחיתה כדי להתחיל</p>
+          <Sparkles size={32} className="mx-auto text-slate-200 mb-3" />
+          <p className="text-sm text-slate-500">עדיין לא נעשה שימוש ב-AI החודש</p>
+          <p className="text-xs text-slate-400 mt-1">לחץ על ✨ בעורך דף הנחיתה כדי להתחיל</p>
         </div>
       )}
 
@@ -1397,12 +1397,12 @@ export function SettingsClient({
     <div className="space-y-6" dir="rtl">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900">הגדרות</h1>
-        <p className="text-sm text-gray-500 mt-0.5">ניהול מערכת, אינטגרציות ומשתמשים</p>
+        <h1 className="text-2xl font-semibold text-slate-900">הגדרות</h1>
+        <p className="text-sm text-slate-500 mt-0.5">ניהול מערכת, אינטגרציות ומשתמשים</p>
       </div>
 
       {/* Tab bar */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-slate-200">
         <div className="flex gap-0">
           {visibleTabs.map((tab) => {
             const Icon = tab.icon;
@@ -1414,8 +1414,8 @@ export function SettingsClient({
                 className={cn(
                   "flex items-center gap-2 px-5 py-3 text-sm font-medium border-b-2 transition-all",
                   active
-                    ? "border-indigo-500 text-indigo-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
                 )}
               >
                 <Icon size={15} />

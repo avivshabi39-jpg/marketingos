@@ -54,27 +54,27 @@ export function NewPropertyForm({ clients }: Props) {
 
   return (
     <div className="max-w-2xl mx-auto" dir="rtl">
-      <h1 className="text-2xl font-semibold text-gray-900 mb-6">נכס חדש</h1>
+      <h1 className="text-2xl font-semibold text-slate-900 mb-6">נכס חדש</h1>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 space-y-5"
+        className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-5"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               כותרת הנכס *
             </label>
             <input
               name="title"
               required
               placeholder="דירה 4 חדרים בתל אביב"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               מחיר (₪) *
             </label>
             <input
@@ -83,18 +83,18 @@ export function NewPropertyForm({ clients }: Props) {
               required
               min="0"
               placeholder="2000000"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               סוג נכס *
             </label>
             <select
               name="propertyType"
               required
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option value="APARTMENT">דירה</option>
               <option value="HOUSE">בית פרטי</option>
@@ -108,30 +108,30 @@ export function NewPropertyForm({ clients }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               עיר *
             </label>
             <input
               name="city"
               required
               placeholder="תל אביב"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               שכונה
             </label>
             <input
               name="neighborhood"
               placeholder="פלורנטין"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               חדרים
             </label>
             <input
@@ -140,12 +140,12 @@ export function NewPropertyForm({ clients }: Props) {
               step="0.5"
               min="0"
               placeholder="4"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               שטח (מ"ר)
             </label>
             <input
@@ -153,17 +153,17 @@ export function NewPropertyForm({ clients }: Props) {
               type="number"
               min="0"
               placeholder="90"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               סטטוס
             </label>
             <select
               name="status"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option value="AVAILABLE">זמין</option>
               <option value="UNDER_CONTRACT">בתהליך</option>
@@ -172,13 +172,13 @@ export function NewPropertyForm({ clients }: Props) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               לקוח *
             </label>
             <select
               name="clientId"
               required
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option value="">בחר לקוח...</option>
               {clients.map((c) => (
@@ -190,14 +190,14 @@ export function NewPropertyForm({ clients }: Props) {
           </div>
 
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               תיאור
             </label>
             <textarea
               name="description"
               rows={4}
               placeholder="תיאור הנכס..."
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
             />
           </div>
         </div>
@@ -212,7 +212,7 @@ export function NewPropertyForm({ clients }: Props) {
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
           >
             {loading && <Loader2 size={15} className="animate-spin" />}
             {loading ? "מפרסם..." : "פרסם נכס"}
@@ -220,7 +220,7 @@ export function NewPropertyForm({ clients }: Props) {
           <button
             type="button"
             onClick={() => router.back()}
-            className="border border-gray-200 text-gray-600 text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-gray-50 transition-colors"
+            className="border border-slate-200 text-slate-600 text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-slate-50 transition-colors"
           >
             ביטול
           </button>

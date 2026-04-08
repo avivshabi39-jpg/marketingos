@@ -77,10 +77,10 @@ const INTEGRATIONS = [
 
 function Section({ title, icon: Icon, children }: { title: string; icon: React.ElementType; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-      <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-100 bg-gray-50">
-        <Icon size={18} className="text-indigo-500" />
-        <h2 className="font-bold text-gray-900">{title}</h2>
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      <div className="flex items-center gap-3 px-6 py-4 border-b border-slate-100 bg-slate-50">
+        <Icon size={18} className="text-blue-500" />
+        <h2 className="font-bold text-slate-900">{title}</h2>
       </div>
       <div className="overflow-x-auto">
         {children}
@@ -121,19 +121,19 @@ export default async function SystemReportPage() {
   return (
     <div className="space-y-6 max-w-5xl" dir="rtl">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <LayoutDashboard size={22} className="text-indigo-500" />
+        <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <LayoutDashboard size={22} className="text-blue-500" />
           דוח מערכת
         </h1>
-        <p className="text-sm text-gray-500 mt-1">סקירה כוללת — מאפייני מערכת, API routes, מודלים ואבטחה</p>
+        <p className="text-sm text-slate-500 mt-1">סקירה כוללת — מאפייני מערכת, API routes, מודלים ואבטחה</p>
       </div>
 
       {/* Live stats */}
       <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
         {stats.map(({ label, value }) => (
-          <div key={label} className="bg-white border border-gray-100 rounded-xl p-4 text-center shadow-sm">
-            <p className="text-2xl font-bold text-gray-900">{value.toLocaleString()}</p>
-            <p className="text-xs text-gray-500 mt-0.5">{label}</p>
+          <div key={label} className="bg-white border border-slate-100 rounded-xl p-4 text-center shadow-sm">
+            <p className="text-2xl font-bold text-slate-900">{value.toLocaleString()}</p>
+            <p className="text-xs text-slate-500 mt-0.5">{label}</p>
           </div>
         ))}
       </div>
@@ -142,7 +142,7 @@ export default async function SystemReportPage() {
       <Section title="פיצ'רים" icon={BookOpen}>
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-right text-xs text-gray-500 border-b border-gray-100">
+            <tr className="text-right text-xs text-slate-500 border-b border-slate-100">
               <th className="px-4 py-2 font-medium">פיצ'ר</th>
               <th className="px-4 py-2 font-medium">סטטוס</th>
               <th className="px-4 py-2 font-medium">תיאור</th>
@@ -150,10 +150,10 @@ export default async function SystemReportPage() {
           </thead>
           <tbody>
             {FEATURES.map((f) => (
-              <tr key={f.name} className="border-b border-gray-50 hover:bg-gray-50/50">
-                <td className="px-4 py-2.5 font-medium text-gray-800 whitespace-nowrap">{f.name}</td>
+              <tr key={f.name} className="border-b border-slate-50 hover:bg-slate-50/50">
+                <td className="px-4 py-2.5 font-medium text-slate-800 whitespace-nowrap">{f.name}</td>
                 <td className="px-4 py-2.5 whitespace-nowrap">{f.status}</td>
-                <td className="px-4 py-2.5 text-gray-500 text-xs">{f.desc}</td>
+                <td className="px-4 py-2.5 text-slate-500 text-xs">{f.desc}</td>
               </tr>
             ))}
           </tbody>
@@ -164,7 +164,7 @@ export default async function SystemReportPage() {
       <Section title={`מודלי DB (${DB_MODELS.length})`} icon={Database}>
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-right text-xs text-gray-500 border-b border-gray-100">
+            <tr className="text-right text-xs text-slate-500 border-b border-slate-100">
               <th className="px-4 py-2 font-medium">מודל</th>
               <th className="px-4 py-2 font-medium">תיאור</th>
               <th className="px-4 py-2 font-medium hidden lg:table-cell">שדות עיקריים</th>
@@ -172,10 +172,10 @@ export default async function SystemReportPage() {
           </thead>
           <tbody>
             {DB_MODELS.map((m) => (
-              <tr key={m.name} className="border-b border-gray-50 hover:bg-gray-50/50">
-                <td className="px-4 py-2.5 font-mono text-xs text-indigo-700 whitespace-nowrap">{m.name}</td>
-                <td className="px-4 py-2.5 text-gray-700 text-xs">{m.description}</td>
-                <td className="px-4 py-2.5 text-gray-400 text-[10px] font-mono hidden lg:table-cell max-w-xs truncate">{m.fields}</td>
+              <tr key={m.name} className="border-b border-slate-50 hover:bg-slate-50/50">
+                <td className="px-4 py-2.5 font-mono text-xs text-blue-700 whitespace-nowrap">{m.name}</td>
+                <td className="px-4 py-2.5 text-slate-700 text-xs">{m.description}</td>
+                <td className="px-4 py-2.5 text-slate-400 text-[10px] font-mono hidden lg:table-cell max-w-xs truncate">{m.fields}</td>
               </tr>
             ))}
           </tbody>
@@ -186,16 +186,16 @@ export default async function SystemReportPage() {
       <Section title="שכבות אבטחה" icon={Shield}>
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-right text-xs text-gray-500 border-b border-gray-100">
+            <tr className="text-right text-xs text-slate-500 border-b border-slate-100">
               <th className="px-4 py-2 font-medium">שכבה</th>
               <th className="px-4 py-2 font-medium">פרטים</th>
             </tr>
           </thead>
           <tbody>
             {SECURITY_LAYERS.map((s) => (
-              <tr key={s.layer} className="border-b border-gray-50 hover:bg-gray-50/50">
-                <td className="px-4 py-2.5 font-medium text-gray-800 whitespace-nowrap">✅ {s.layer}</td>
-                <td className="px-4 py-2.5 text-gray-500 text-xs">{s.detail}</td>
+              <tr key={s.layer} className="border-b border-slate-50 hover:bg-slate-50/50">
+                <td className="px-4 py-2.5 font-medium text-slate-800 whitespace-nowrap">✅ {s.layer}</td>
+                <td className="px-4 py-2.5 text-slate-500 text-xs">{s.detail}</td>
               </tr>
             ))}
           </tbody>
@@ -206,7 +206,7 @@ export default async function SystemReportPage() {
       <Section title="אינטגרציות" icon={Plug}>
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-right text-xs text-gray-500 border-b border-gray-100">
+            <tr className="text-right text-xs text-slate-500 border-b border-slate-100">
               <th className="px-4 py-2 font-medium">שירות</th>
               <th className="px-4 py-2 font-medium">ENV</th>
               <th className="px-4 py-2 font-medium">שימוש</th>
@@ -214,10 +214,10 @@ export default async function SystemReportPage() {
           </thead>
           <tbody>
             {INTEGRATIONS.map((i) => (
-              <tr key={i.name} className="border-b border-gray-50 hover:bg-gray-50/50">
-                <td className="px-4 py-2.5 font-medium text-gray-800 whitespace-nowrap">{i.status} {i.name}</td>
-                <td className="px-4 py-2.5 font-mono text-[10px] text-gray-500 whitespace-nowrap">{i.env}</td>
-                <td className="px-4 py-2.5 text-gray-500 text-xs">{i.desc}</td>
+              <tr key={i.name} className="border-b border-slate-50 hover:bg-slate-50/50">
+                <td className="px-4 py-2.5 font-medium text-slate-800 whitespace-nowrap">{i.status} {i.name}</td>
+                <td className="px-4 py-2.5 font-mono text-[10px] text-slate-500 whitespace-nowrap">{i.env}</td>
+                <td className="px-4 py-2.5 text-slate-500 text-xs">{i.desc}</td>
               </tr>
             ))}
           </tbody>
@@ -228,7 +228,7 @@ export default async function SystemReportPage() {
       <Section title="API Routes — קטגוריות" icon={Server}>
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-right text-xs text-gray-500 border-b border-gray-100">
+            <tr className="text-right text-xs text-slate-500 border-b border-slate-100">
               <th className="px-4 py-2 font-medium">קטגוריה</th>
               <th className="px-4 py-2 font-medium">נתיבים</th>
             </tr>
@@ -246,16 +246,16 @@ export default async function SystemReportPage() {
               { cat: "Real Estate", routes: "/api/properties, /api/properties/[id], /api/properties/[id]/stats, /api/offices, /api/property-alerts" },
               { cat: "Misc",      routes: "/api/broadcast, /api/intake/[clientSlug], /api/snapshots/apply, /api/upload, /api/search, /api/settings, /api/system/health, /api/track, /api/audit-logs" },
             ].map(({ cat, routes }) => (
-              <tr key={cat} className="border-b border-gray-50 hover:bg-gray-50/50 align-top">
-                <td className="px-4 py-2.5 font-medium text-gray-800 whitespace-nowrap">{cat}</td>
-                <td className="px-4 py-2.5 text-gray-500 text-[10px] font-mono leading-relaxed">{routes}</td>
+              <tr key={cat} className="border-b border-slate-50 hover:bg-slate-50/50 align-top">
+                <td className="px-4 py-2.5 font-medium text-slate-800 whitespace-nowrap">{cat}</td>
+                <td className="px-4 py-2.5 text-slate-500 text-[10px] font-mono leading-relaxed">{routes}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </Section>
 
-      <p className="text-xs text-gray-400 text-center pb-4">
+      <p className="text-xs text-slate-400 text-center pb-4">
         נוצר אוטומטית · {new Date().toLocaleDateString("he-IL")}
       </p>
     </div>

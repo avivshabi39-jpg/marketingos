@@ -214,8 +214,8 @@ export default async function ClientDashboardPage({
       label: "לידים החודש",
       value: leadsThisMonth,
       icon: TrendingUp,
-      color: "text-indigo-600",
-      bg: "bg-indigo-50",
+      color: "text-blue-600",
+      bg: "bg-blue-50",
       tooltip: "כמות הלידים שהגיעו מדף הנחיתה שלך החודש",
     },
     {
@@ -255,10 +255,10 @@ export default async function ClientDashboardPage({
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-slate-900">
               שלום {client.name}! 👋
             </h1>
-            <p className="text-gray-500 mt-1">{dateHe}</p>
+            <p className="text-slate-500 mt-1">{dateHe}</p>
           </div>
           <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-full px-3 py-1.5 flex-shrink-0">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
@@ -275,24 +275,24 @@ export default async function ClientDashboardPage({
 
         {/* Smart Welcome — first-time user */}
         {isFirstTime && (
-          <div className="bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-2xl p-8 text-white text-center">
+          <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-8 text-white text-center">
             <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Rocket size={32} className="text-white" />
             </div>
             <h2 className="text-2xl font-bold mb-2">ברוכים הבאים ל-MarketingOS!</h2>
-            <p className="text-indigo-200 mb-6 max-w-md mx-auto">
+            <p className="text-blue-200 mb-6 max-w-md mx-auto">
               עדיין אין לך דף נחיתה. בנה אחד עכשיו תוך 2 דקות עם AI — והתחל לקבל לידים.
             </p>
             <div className="flex gap-3 justify-center flex-wrap">
               <Link
                 href={`/admin/clients/${client.id}/builder`}
-                className="bg-white text-indigo-700 font-semibold px-6 py-3 rounded-xl hover:bg-indigo-50 transition-colors"
+                className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors"
               >
                 בנה דף נחיתה עם AI
               </Link>
               <Link
                 href={`/admin/clients/${client.id}/builder`}
-                className="bg-indigo-500/40 text-white font-medium px-6 py-3 rounded-xl hover:bg-indigo-500/60 transition-colors"
+                className="bg-blue-500/40 text-white font-medium px-6 py-3 rounded-xl hover:bg-blue-500/60 transition-colors"
               >
                 ראה דמו
               </Link>
@@ -316,15 +316,15 @@ export default async function ClientDashboardPage({
             <div
               key={label}
               title={tooltip}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 cursor-default"
+              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 cursor-default"
             >
               <div
                 className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center mb-4`}
               >
                 <Icon size={20} className={color} />
               </div>
-              <p className="text-3xl font-bold text-gray-900">{value}</p>
-              <p className="text-sm text-gray-500 mt-1">{label}</p>
+              <p className="text-3xl font-bold text-slate-900">{value}</p>
+              <p className="text-sm text-slate-500 mt-1">{label}</p>
             </div>
           ))}
         </div>
@@ -337,7 +337,7 @@ export default async function ClientDashboardPage({
               <p className="text-3xl font-extrabold text-green-800">
                 ₪{(pipelineOpen._sum.value ?? 0).toLocaleString("he-IL")}
               </p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-slate-500 mt-1">
                 {pipelineOpen._count._all} לידים פתוחים
               </p>
             </div>
@@ -377,12 +377,12 @@ export default async function ClientDashboardPage({
         )}
 
         {/* Recent leads */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-gray-900">לידים אחרונים</h2>
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+            <h2 className="font-semibold text-slate-900">לידים אחרונים</h2>
             <Link
               href={`/client/${params.slug}/leads`}
-              className="text-xs text-indigo-600 hover:text-indigo-700 font-medium"
+              className="text-xs text-blue-600 hover:text-blue-700 font-medium"
             >
               הצג הכל
             </Link>
@@ -390,13 +390,13 @@ export default async function ClientDashboardPage({
 
           {recentLeads.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="text-sm text-gray-400 mb-3">אין לידים עדיין</p>
-              <p className="text-xs text-gray-300">
+              <p className="text-sm text-slate-400 mb-3">אין לידים עדיין</p>
+              <p className="text-xs text-slate-300">
                 פרסם את דף הנחיתה שלך כדי להתחיל לקבל לידים
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-gray-50">
+            <div className="divide-y divide-slate-50">
               {recentLeads.map((lead) => (
                 <div
                   key={lead.id}
@@ -412,18 +412,18 @@ export default async function ClientDashboardPage({
 
                   {/* Name + contact */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-sm font-medium text-slate-900 truncate">
                       {lead.firstName} {lead.lastName}
                     </p>
                     <div className="flex items-center gap-3 mt-0.5">
                       {lead.email && (
-                        <span className="flex items-center gap-1 text-xs text-gray-400 truncate">
+                        <span className="flex items-center gap-1 text-xs text-slate-400 truncate">
                           <Mail size={10} />
                           {lead.email}
                         </span>
                       )}
                       {lead.phone && !lead.email && (
-                        <span className="flex items-center gap-1 text-xs text-gray-400">
+                        <span className="flex items-center gap-1 text-xs text-slate-400">
                           <Phone size={10} />
                           {lead.phone}
                         </span>
@@ -433,13 +433,13 @@ export default async function ClientDashboardPage({
 
                   {/* Date + status */}
                   <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
-                    <span className="text-xs text-gray-400 flex items-center gap-1">
+                    <span className="text-xs text-slate-400 flex items-center gap-1">
                       <Calendar size={11} />
                       {new Date(lead.createdAt).toLocaleDateString("he-IL")}
                     </span>
                     <span
                       className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                        STATUS_COLOR[lead.status] ?? "bg-gray-100 text-gray-600"
+                        STATUS_COLOR[lead.status] ?? "bg-slate-100 text-slate-600"
                       }`}
                     >
                       {STATUS_HE[lead.status] ?? lead.status}
@@ -453,27 +453,27 @@ export default async function ClientDashboardPage({
 
         {/* Reports (if any) */}
         {reports.length > 0 && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-              <h2 className="font-semibold text-gray-900">דוחות אחרונים</h2>
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+              <h2 className="font-semibold text-slate-900">דוחות אחרונים</h2>
               <Link
                 href={`/client/${params.slug}/reports`}
-                className="text-xs text-indigo-600 hover:text-indigo-700 font-medium"
+                className="text-xs text-blue-600 hover:text-blue-700 font-medium"
               >
                 הצג הכל
               </Link>
             </div>
-            <div className="divide-y divide-gray-50">
+            <div className="divide-y divide-slate-50">
               {reports.map((report) => (
                 <div
                   key={report.id}
                   className="px-6 py-3.5 flex items-center justify-between gap-3"
                 >
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-800 truncate">
+                    <p className="text-sm font-medium text-slate-800 truncate">
                       {report.period}
                     </p>
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-xs text-slate-400 mt-0.5">
                       {report.totalLeads} לידים · {report.conversionRate.toFixed(1)}%
                     </p>
                   </div>
@@ -513,22 +513,22 @@ export default async function ClientDashboardPage({
 
         {/* Landing page preview */}
         {client.pagePublished ? (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-              <h2 className="font-semibold text-gray-900">🌐 הדף שלי</h2>
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+              <h2 className="font-semibold text-slate-900">🌐 הדף שלי</h2>
               <div className="flex items-center gap-2">
                 <a
                   href={`${appUrl}/${client.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-indigo-600 hover:text-indigo-700 font-medium"
+                  className="text-xs text-blue-600 hover:text-blue-700 font-medium"
                 >
                   👁 צפה בדף ↗
                 </a>
                 <CopyButton text={`${appUrl}/${client.slug}`} />
               </div>
             </div>
-            <div className="h-[250px] overflow-hidden relative bg-gray-50">
+            <div className="h-[250px] overflow-hidden relative bg-slate-50">
               <iframe
                 src={`${appUrl}/${client.slug}`}
                 className="border-none pointer-events-none"
@@ -542,22 +542,22 @@ export default async function ClientDashboardPage({
                 title="תצוגה מקדימה של דף הנחיתה"
               />
             </div>
-            <div className="px-6 py-3 bg-gray-50 border-t border-gray-100">
+            <div className="px-6 py-3 bg-slate-50 border-t border-slate-100">
               <div className="flex items-center gap-3">
-                <p className="text-xs font-mono text-gray-500 flex-1 truncate text-left" dir="ltr">
+                <p className="text-xs font-mono text-slate-500 flex-1 truncate text-left" dir="ltr">
                   {appUrl}/{client.slug}
                 </p>
               </div>
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-8 text-center">
+          <div className="bg-white rounded-2xl border-2 border-dashed border-slate-200 p-8 text-center">
             <div className="text-4xl mb-3">🌐</div>
-            <p className="text-gray-600 font-medium mb-1">הדף שלך עדיין לא פורסם</p>
-            <p className="text-sm text-gray-400 mb-4">פרסם את דף הנחיתה כדי להתחיל לקבל לידים</p>
+            <p className="text-slate-600 font-medium mb-1">הדף שלך עדיין לא פורסם</p>
+            <p className="text-sm text-slate-400 mb-4">פרסם את דף הנחיתה כדי להתחיל לקבל לידים</p>
             <Link
               href={`/client/${params.slug}/settings`}
-              className="inline-flex items-center gap-2 bg-indigo-600 text-white font-semibold px-5 py-2.5 rounded-xl text-sm hover:bg-indigo-500 transition-colors"
+              className="inline-flex items-center gap-2 bg-blue-600 text-white font-semibold px-5 py-2.5 rounded-xl text-sm hover:bg-blue-500 transition-colors"
             >
               ✨ בנה את הדף שלי
             </Link>
@@ -565,14 +565,14 @@ export default async function ClientDashboardPage({
         )}
 
         {/* Lead form link */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h2 className="font-semibold text-gray-900 mb-2">טופס קבלת לידים</h2>
-          <p className="text-sm text-gray-500 mb-4">
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <h2 className="font-semibold text-slate-900 mb-2">טופס קבלת לידים</h2>
+          <p className="text-sm text-slate-500 mb-4">
             שתפו את הקישור הזה כדי לקבל לידים ישירות
           </p>
-          <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3">
+          <div className="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
             <p
-              className="text-sm font-mono text-gray-600 flex-1 truncate text-left"
+              className="text-sm font-mono text-slate-600 flex-1 truncate text-left"
               dir="ltr"
             >
               {intakeFormUrl}

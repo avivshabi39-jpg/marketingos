@@ -52,19 +52,19 @@ export function ShareCenter({ slug, clientName, appUrl }: ShareCenterProps) {
   };
 
   return (
-    <div id="share" className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
-      <h2 className="font-semibold text-gray-900">שתף את הדף שלך</h2>
+    <div id="share" className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 space-y-5">
+      <h2 className="font-semibold text-slate-900">שתף את הדף שלך</h2>
 
       {/* 1. Link */}
       <div className="space-y-2">
-        <p className="text-sm font-medium text-gray-700 flex items-center gap-2">
+        <p className="text-sm font-medium text-slate-700 flex items-center gap-2">
           <span>🔗</span> קישור לדף שלי
         </p>
-        <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5">
-          <p className="text-sm text-gray-600 flex-1 truncate font-mono" dir="ltr">{landingUrl}</p>
+        <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5">
+          <p className="text-sm text-slate-600 flex-1 truncate font-mono" dir="ltr">{landingUrl}</p>
           <button
             onClick={() => copy(landingUrl, setCopiedUrl)}
-            className="flex-shrink-0 flex items-center gap-1 text-xs font-medium px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg transition-colors"
+            className="flex-shrink-0 flex items-center gap-1 text-xs font-medium px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
           >
             {copiedUrl ? <Check size={13} /> : <Copy size={13} />}
             {copiedUrl ? "הועתק!" : "העתק"}
@@ -82,7 +82,7 @@ export function ShareCenter({ slug, clientName, appUrl }: ShareCenterProps) {
       {/* 2. Facebook Post */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-gray-700 flex items-center gap-2">
+          <p className="text-sm font-medium text-slate-700 flex items-center gap-2">
             <span>📋</span> פוסט לפייסבוק
           </p>
           <button
@@ -94,34 +94,34 @@ export function ShareCenter({ slug, clientName, appUrl }: ShareCenterProps) {
           </button>
         </div>
         {postText ? (
-          <div className="relative bg-gray-50 border border-gray-200 rounded-xl p-3">
-            <p className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">{postText}</p>
+          <div className="relative bg-slate-50 border border-slate-200 rounded-xl p-3">
+            <p className="text-sm text-slate-700 whitespace-pre-line leading-relaxed">{postText}</p>
             <button
               onClick={() => copy(postText, setCopiedPost)}
-              className="mt-2 flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-700"
+              className="mt-2 flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700"
             >
               {copiedPost ? <Check size={13} /> : <Copy size={13} />}
               {copiedPost ? "הועתק!" : "העתק פוסט"}
             </button>
           </div>
         ) : (
-          <p className="text-xs text-gray-400">לחץ על "AI כתוב פוסט" לייצור תוכן</p>
+          <p className="text-xs text-slate-400">לחץ על "AI כתוב פוסט" לייצור תוכן</p>
         )}
       </div>
 
       {/* 3. QR Code */}
       <div className="space-y-2">
-        <p className="text-sm font-medium text-gray-700 flex items-center gap-2">
+        <p className="text-sm font-medium text-slate-700 flex items-center gap-2">
           <span>📱</span> QR Code
         </p>
         <div className="flex items-center gap-4">
-          <Image src={qrUrl} alt="QR Code" width={96} height={96} className="rounded-lg border border-gray-200" />
+          <Image src={qrUrl} alt="QR Code" width={96} height={96} className="rounded-lg border border-slate-200" />
           <div className="space-y-2">
-            <p className="text-xs text-gray-500">סרוק כדי לפתוח את הדף ישירות</p>
+            <p className="text-xs text-slate-500">סרוק כדי לפתוח את הדף ישירות</p>
             <a
               href={qrUrl}
               download={`qr-${slug}.png`}
-              className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors"
+              className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200 rounded-lg transition-colors"
             >
               <Download size={13} />
               הורד QR

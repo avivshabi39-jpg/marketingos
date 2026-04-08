@@ -47,8 +47,8 @@ export default function GoogleAdsPage() {
             <TrendingUp size={20} className="text-blue-600" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-gray-900">Google Ads</h1>
-            <p className="text-sm text-gray-500">ניהול קמפיינים וניתוח ביצועים</p>
+            <h1 className="text-xl font-semibold text-slate-900">Google Ads</h1>
+            <p className="text-sm text-slate-500">ניהול קמפיינים וניתוח ביצועים</p>
           </div>
         </div>
         <button
@@ -65,16 +65,16 @@ export default function GoogleAdsPage() {
       </div>
 
       {/* Campaigns list */}
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
-        <div className="px-5 py-3 border-b border-gray-100 bg-gray-50">
-          <h2 className="text-sm font-semibold text-gray-700">קמפיינים</h2>
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
+        <div className="px-5 py-3 border-b border-slate-100 bg-slate-50">
+          <h2 className="text-sm font-semibold text-slate-700">קמפיינים</h2>
         </div>
-        <div className="divide-y divide-gray-50">
+        <div className="divide-y divide-slate-50">
           {campaigns.map((c) => (
             <div key={c.id} className="px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-sm font-medium text-gray-900 truncate">{c.name}</span>
+                  <span className="text-sm font-medium text-slate-900 truncate">{c.name}</span>
                   <span
                     className={cn(
                       "text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0",
@@ -86,7 +86,7 @@ export default function GoogleAdsPage() {
                     {c.status === "active" ? "פעיל" : "מושהה"}
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-4 text-xs text-gray-500">
+                <div className="flex flex-wrap gap-4 text-xs text-slate-500">
                   <span>תקציב: ₪{c.budget}/יום</span>
                   <span>קליקים: {c.clicks.toLocaleString()}</span>
                   <span>לידים: {c.leads}</span>
@@ -98,7 +98,7 @@ export default function GoogleAdsPage() {
                 onClick={() => toggleCampaign(c.id)}
                 className={cn(
                   "relative inline-flex w-10 h-5 rounded-full transition-colors focus:outline-none flex-shrink-0",
-                  c.enabled ? "bg-indigo-500" : "bg-gray-200"
+                  c.enabled ? "bg-blue-500" : "bg-slate-200"
                 )}
                 title={c.enabled ? "השהה" : "הפעל"}
               >
@@ -115,11 +115,11 @@ export default function GoogleAdsPage() {
       </div>
 
       {/* Cost per lead calculator */}
-      <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-5">
-        <h2 className="text-sm font-semibold text-gray-900 mb-4">מחשבון עלות ליד</h2>
+      <div className="bg-white border border-slate-100 rounded-xl shadow-sm p-5">
+        <h2 className="text-sm font-semibold text-slate-900 mb-4">מחשבון עלות ליד</h2>
         <div className="flex flex-wrap gap-4 items-end">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">סה&quot;כ הוצאה (₪)</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1.5">סה&quot;כ הוצאה (₪)</label>
             <input
               dir="ltr"
               type="number"
@@ -127,11 +127,11 @@ export default function GoogleAdsPage() {
               value={totalSpend}
               onChange={(e) => setTotalSpend(e.target.value)}
               placeholder="1500"
-              className="w-36 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-36 rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">מספר לידים</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1.5">מספר לידים</label>
             <input
               dir="ltr"
               type="number"
@@ -139,20 +139,20 @@ export default function GoogleAdsPage() {
               value={numLeads}
               onChange={(e) => setNumLeads(e.target.value)}
               placeholder="30"
-              className="w-36 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-36 rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
           {costPerLead !== null && (
-            <div className="bg-indigo-50 border border-indigo-200 rounded-lg px-4 py-2">
-              <p className="text-xs text-indigo-600 font-medium">עלות ליד</p>
-              <p className="text-lg font-bold text-indigo-700">₪{costPerLead}</p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-2">
+              <p className="text-xs text-blue-600 font-medium">עלות ליד</p>
+              <p className="text-lg font-bold text-blue-700">₪{costPerLead}</p>
             </div>
           )}
         </div>
       </div>
 
       {/* Note */}
-      <p className="text-xs text-gray-400 text-center">
+      <p className="text-xs text-slate-400 text-center">
         הנתונים יועדכנו אוטומטית לאחר חיבור API
       </p>
     </div>

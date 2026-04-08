@@ -25,10 +25,10 @@ function timeAgo(dateStr: string): string {
 }
 
 function NotifIcon({ type }: { type: string }) {
-  if (type === "new_lead") return <UserPlus size={14} className="text-indigo-500" />;
+  if (type === "new_lead") return <UserPlus size={14} className="text-blue-500" />;
   if (type === "followup_due") return <AlertCircle size={14} className="text-amber-500" />;
   if (type === "webhook_failed") return <Webhook size={14} className="text-red-500" />;
-  return <Bell size={14} className="text-gray-400" />;
+  return <Bell size={14} className="text-slate-400" />;
 }
 
 export function NotificationBell() {
@@ -79,10 +79,10 @@ export function NotificationBell() {
     <div className="relative" ref={ref} dir="rtl">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        className="relative p-2 rounded-lg hover:bg-slate-100 transition-colors"
         aria-label="התראות"
       >
-        <Bell size={20} className="text-gray-600" />
+        <Bell size={20} className="text-slate-600" />
         {unreadCount > 0 && (
           <span className="absolute top-1 right-1 min-w-[16px] h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-0.5 leading-none">
             {unreadCount > 9 ? "9+" : unreadCount}
@@ -91,14 +91,14 @@ export function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-2 w-80 bg-white border border-gray-100 rounded-2xl shadow-xl z-50 overflow-hidden">
+        <div className="absolute top-full left-0 mt-2 w-80 bg-white border border-slate-100 rounded-2xl shadow-xl z-50 overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-            <span className="text-sm font-semibold text-gray-900">התראות</span>
+          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+            <span className="text-sm font-semibold text-slate-900">התראות</span>
             {unreadCount > 0 && (
               <button
                 onClick={markAllRead}
-                className="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
+                className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors"
               >
                 <CheckCheck size={13} />
                 סמן הכל כנקרא
@@ -108,7 +108,7 @@ export function NotificationBell() {
 
           {/* List */}
           {notifications.length === 0 ? (
-            <p className="text-sm text-gray-400 px-4 py-8 text-center">אין התראות</p>
+            <p className="text-sm text-slate-400 px-4 py-8 text-center">אין התראות</p>
           ) : (
             <div className="max-h-80 overflow-y-auto">
               {notifications.map((n) => (
@@ -116,22 +116,22 @@ export function NotificationBell() {
                   key={n.id}
                   href={n.href}
                   onClick={() => setOpen(false)}
-                  className={`flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 ${
-                    !n.isRead ? "bg-indigo-50/40" : ""
+                  className={`flex items-start gap-3 px-4 py-3 hover:bg-slate-50 transition-colors border-b border-slate-50 last:border-0 ${
+                    !n.isRead ? "bg-blue-50/40" : ""
                   }`}
                 >
-                  <div className="w-7 h-7 rounded-full bg-white border border-gray-100 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+                  <div className="w-7 h-7 rounded-full bg-white border border-slate-100 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
                     <NotifIcon type={n.type} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 leading-tight truncate">
+                    <p className="text-sm font-medium text-slate-900 leading-tight truncate">
                       {n.title}
                     </p>
-                    <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{n.body}</p>
-                    <p className="text-[10px] text-gray-400 mt-1">{timeAgo(n.createdAt)}</p>
+                    <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">{n.body}</p>
+                    <p className="text-[10px] text-slate-400 mt-1">{timeAgo(n.createdAt)}</p>
                   </div>
                   {!n.isRead && (
-                    <div className="w-2 h-2 rounded-full bg-indigo-500 mt-2 flex-shrink-0" />
+                    <div className="w-2 h-2 rounded-full bg-blue-500 mt-2 flex-shrink-0" />
                   )}
                 </Link>
               ))}
@@ -139,11 +139,11 @@ export function NotificationBell() {
           )}
 
           {/* Footer */}
-          <div className="border-t border-gray-100 px-4 py-2.5">
+          <div className="border-t border-slate-100 px-4 py-2.5">
             <Link
               href="/admin/inbox"
               onClick={() => setOpen(false)}
-              className="text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
+              className="text-xs text-blue-600 hover:text-blue-700 font-medium transition-colors"
             >
               כל ההודעות ←
             </Link>

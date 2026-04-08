@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getClientSession } from "@/lib/clientAuth";
-import { getSession } from "@/lib/auth";
+import { getSession, isSuperAdmin } from "@/lib/auth";
 
 export async function GET(
   _req: NextRequest,
@@ -15,10 +15,14 @@ export async function GET(
 
   const client = await prisma.client.findUnique({
     where: { slug: params.slug },
-    select: { id: true, isActive: true },
+    select: { id: true, isActive: true, ownerId: true },
   });
   if (!client || !client.isActive) {
     return NextResponse.json({ error: "לא נמצא" }, { status: 404 });
+  }
+  // Admin must own the client (super-admin exempt)
+  if (adminSession && !isSuperAdmin(adminSession) && client.ownerId !== adminSession.userId) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
   if (clientPortal && clientPortal.clientId !== client.id) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });

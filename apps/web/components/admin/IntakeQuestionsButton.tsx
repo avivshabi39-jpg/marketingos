@@ -75,7 +75,7 @@ export function IntakeQuestionsButton({ formType }: { formType: "CLIENT_ONBOARDI
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-1 text-xs text-gray-500 hover:text-indigo-600 border border-gray-200 hover:border-indigo-300 rounded-lg px-2 py-1.5 transition"
+        className="flex items-center gap-1 text-xs text-slate-500 hover:text-blue-600 border border-slate-200 hover:border-blue-300 rounded-lg px-2 py-1.5 transition"
       >
         <Eye size={12} />
         {totalQuestions} שאלות
@@ -87,12 +87,12 @@ export function IntakeQuestionsButton({ formType }: { formType: "CLIENT_ONBOARDI
             className="bg-white rounded-2xl shadow-2xl w-full max-w-lg my-4 relative"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 bg-white rounded-t-2xl border-b border-gray-100 px-6 py-4 flex items-center justify-between">
+            <div className="sticky top-0 bg-white rounded-t-2xl border-b border-slate-100 px-6 py-4 flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-gray-900">{typeLabel}</h3>
-                <p className="text-xs text-gray-500">{totalQuestions} שאלות</p>
+                <h3 className="font-bold text-slate-900">{typeLabel}</h3>
+                <p className="text-xs text-slate-500">{totalQuestions} שאלות</p>
               </div>
-              <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setOpen(false)} className="text-slate-400 hover:text-slate-600">
                 <X size={18} />
               </button>
             </div>
@@ -100,18 +100,18 @@ export function IntakeQuestionsButton({ formType }: { formType: "CLIENT_ONBOARDI
             <div className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
               {sections.map((sec) => (
                 <div key={sec.section}>
-                  <h4 className="text-xs font-bold text-indigo-600 uppercase tracking-wide mb-3">
+                  <h4 className="text-xs font-bold text-blue-600 uppercase tracking-wide mb-3">
                     {sec.section}
                   </h4>
                   <div className="space-y-2">
                     {sec.questions.map((q) => {
                       counter++;
                       return (
-                        <div key={q} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-                          <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <div key={q} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
+                          <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
                             {counter}
                           </span>
-                          <p className="text-sm text-gray-700">{q}</p>
+                          <p className="text-sm text-slate-700">{q}</p>
                         </div>
                       );
                     })}

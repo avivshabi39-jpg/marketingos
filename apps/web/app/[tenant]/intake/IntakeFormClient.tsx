@@ -35,9 +35,9 @@ const INITIAL: FormData = {
 const TOTAL_STEPS = 12;
 
 const inputBase =
-  "block w-full rounded-xl border border-gray-200 px-4 py-3 text-sm bg-white " +
-  "focus:outline-none focus:ring-2 focus:ring-offset-0 transition-all placeholder:text-gray-400 shadow-sm";
-const inputNormal = "focus:border-indigo-400 focus:ring-indigo-400/20";
+  "block w-full rounded-xl border border-slate-200 px-4 py-3 text-sm bg-white " +
+  "focus:outline-none focus:ring-2 focus:ring-offset-0 transition-all placeholder:text-slate-400 shadow-sm";
+const inputNormal = "focus:border-blue-400 focus:ring-blue-400/20";
 const inputErr    = "border-red-300 focus:border-red-400 focus:ring-red-400/20 bg-red-50";
 
 function Wrap({ label, error, children }: {
@@ -45,7 +45,7 @@ function Wrap({ label, error, children }: {
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-sm font-semibold text-gray-700">{label}</label>
+      <label className="text-sm font-semibold text-slate-700">{label}</label>
       {children}
       {error && <p className="text-xs text-red-600 mt-0.5">{error}</p>}
     </div>
@@ -113,7 +113,7 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
 
   if (submitted) {
     return (
-      <div dir="rtl" className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center p-6">
+      <div dir="rtl" className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex items-center justify-center p-6">
         <div className="text-center max-w-sm">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-3xl shadow-lg"
@@ -121,10 +121,10 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
           >
             ✓
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">תודה רבה!</h2>
-          <p className="text-gray-500 text-base leading-relaxed">
+          <h2 className="text-3xl font-bold text-slate-900 mb-3">תודה רבה!</h2>
+          <p className="text-slate-500 text-base leading-relaxed">
             הטופס נשלח בהצלחה.<br />
-            <strong className="text-gray-700">{clientName}</strong> יצרו איתך קשר בקרב.
+            <strong className="text-slate-700">{clientName}</strong> יצרו איתך קשר בקרב.
           </p>
         </div>
       </div>
@@ -137,7 +137,7 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
   const progressPct = Math.round((step / (TOTAL_STEPS - 1)) * 100);
 
   return (
-    <div dir="rtl" className="min-h-screen bg-gray-50">
+    <div dir="rtl" className="min-h-screen bg-slate-50">
 
       {/* Header */}
       <div className="relative overflow-hidden" style={{ backgroundColor: primaryColor }}>
@@ -153,15 +153,15 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
       </div>
 
       {/* Progress bar */}
-      <div className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-10">
+      <div className="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-gray-700">
+            <span className="text-xs font-semibold text-slate-700">
               {step === 0 ? "פרטי קשר" : isReview ? "סיכום ואישור" : `שאלה ${step} מתוך 10`}
             </span>
-            <span className="text-xs text-gray-400">שלב {step + 1} מתוך {TOTAL_STEPS}</span>
+            <span className="text-xs text-slate-400">שלב {step + 1} מתוך {TOTAL_STEPS}</span>
           </div>
-          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{ width: `${progressPct}%`, backgroundColor: primaryColor }}
@@ -172,9 +172,9 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
 
       {/* Form card */}
       <div className="max-w-2xl mx-auto px-4 py-8 pb-20">
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
           <div className="px-6 pt-7 pb-1">
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="text-xl font-bold text-slate-900">
               {step === 0 ? "פרטי יצירת קשר" : isReview ? "סיכום ואישור" : currentQ?.label}
             </h2>
           </div>
@@ -226,17 +226,17 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
             {/* Step 11: Review */}
             {isReview && (
               <>
-                <div className="bg-gray-50 rounded-xl border border-gray-100 p-5 space-y-2 max-h-72 overflow-y-auto">
-                  <p className="text-sm font-bold text-gray-700 mb-3">סיכום הטופס</p>
+                <div className="bg-slate-50 rounded-xl border border-slate-100 p-5 space-y-2 max-h-72 overflow-y-auto">
+                  <p className="text-sm font-bold text-slate-700 mb-3">סיכום הטופס</p>
                   {([
                     ["שם מלא", form.fullName],
                     ["אימייל", form.email],
                     ["טלפון", form.phone],
                     ...QUESTIONS.map((q) => [q.label.replace("?", ""), (form as Record<string, string>)[q.id] ?? ""] as [string, string]),
                   ] as [string, string][]).filter(([, v]) => v).map(([label, value]) => (
-                    <div key={label} className="flex items-start justify-between gap-4 py-1.5 border-b border-gray-100 last:border-0">
-                      <span className="text-xs text-gray-500 flex-shrink-0 max-w-[40%]">{label}</span>
-                      <span className="text-xs text-gray-900 font-medium text-left break-words max-w-[55%]">{value}</span>
+                    <div key={label} className="flex items-start justify-between gap-4 py-1.5 border-b border-slate-100 last:border-0">
+                      <span className="text-xs text-slate-500 flex-shrink-0 max-w-[40%]">{label}</span>
+                      <span className="text-xs text-slate-900 font-medium text-left break-words max-w-[55%]">{value}</span>
                     </div>
                   ))}
                 </div>
@@ -246,12 +246,12 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
                     <input type="checkbox" className="sr-only" checked={agreed}
                       onChange={(e) => { setAgreed(e.target.checked); if (serverError) setServerError(""); }} />
                     <div
-                      className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${agreed ? "border-transparent" : "border-gray-300 bg-white group-hover:border-gray-400"}`}
+                      className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${agreed ? "border-transparent" : "border-slate-300 bg-white group-hover:border-slate-400"}`}
                       style={agreed ? { backgroundColor: primaryColor, borderColor: primaryColor } : {}}>
                       {agreed && <span className="text-white text-xs font-bold leading-none">✓</span>}
                     </div>
                   </div>
-                  <span className="text-sm text-gray-600 leading-relaxed">
+                  <span className="text-sm text-slate-600 leading-relaxed">
                     אני מסכים/ה שהמידע שמסרתי ישמש לצורך יצירת קשר ומתן שירות שיווקי.
                   </span>
                 </label>
@@ -265,10 +265,10 @@ export function IntakeFormClient({ clientSlug, clientName, primaryColor }: Props
             </div>
           )}
 
-          <div className="px-6 pb-6 pt-4 mt-2 border-t border-gray-100 flex items-center justify-between">
+          <div className="px-6 pb-6 pt-4 mt-2 border-t border-slate-100 flex items-center justify-between">
             {step > 0 ? (
               <button type="button" onClick={goBack}
-                className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">
+                className="text-sm text-slate-500 hover:text-slate-800 font-medium transition-colors">
                 חזרה
               </button>
             ) : <div />}

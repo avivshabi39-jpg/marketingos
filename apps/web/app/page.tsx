@@ -11,21 +11,21 @@ export default function HomePage() {
       {/* ── Navbar ── */}
       <nav className="flex items-center justify-between px-8 py-5 max-w-6xl mx-auto">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-indigo-500 flex items-center justify-center">
+          <div className="w-9 h-9 rounded-xl bg-blue-500 flex items-center justify-center">
             <TrendingUp size={18} className="text-white" />
           </div>
           <span className="text-white font-bold text-lg">MarketingOS</span>
         </div>
         <div className="flex items-center gap-4">
-          <Link href="/pricing" className="text-indigo-300 hover:text-white text-sm transition-colors">
+          <Link href="/pricing" className="text-blue-300 hover:text-white text-sm transition-colors">
             תמחור
           </Link>
-          <Link href="/admin/login" className="text-indigo-300 hover:text-white text-sm transition-colors">
+          <Link href="/admin/login" className="text-blue-300 hover:text-white text-sm transition-colors">
             כניסה
           </Link>
           <Link
             href="/register"
-            className="bg-indigo-500 hover:bg-indigo-400 text-white font-medium rounded-xl px-4 py-2 text-sm transition-all shadow-lg shadow-indigo-500/30"
+            className="bg-blue-500 hover:bg-blue-400 text-white font-medium rounded-xl px-4 py-2 text-sm transition-all shadow-lg shadow-blue-500/30"
           >
             התחל חינם
           </Link>
@@ -34,25 +34,25 @@ export default function HomePage() {
 
       {/* ── Hero ── */}
       <section className="max-w-5xl mx-auto px-8 pt-16 pb-20 text-center">
-        <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 rounded-full px-4 py-1.5 mb-8">
-          <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
-          <span className="text-indigo-300 text-sm">מערכת SaaS לסוכנויות שיווק</span>
+        <div className="inline-flex items-center gap-2 bg-blue-500/15 border border-blue-500/30 rounded-full px-4 py-1.5 mb-8">
+          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+          <span className="text-blue-300 text-sm">מערכת SaaS לסוכנויות שיווק</span>
         </div>
 
         <h1 className="text-5xl sm:text-6xl font-bold text-white leading-tight mb-6">
           נהל את כל הלידים<br />
-          <span className="text-indigo-300">של הלקוחות שלך</span><br />
+          <span className="text-blue-300">של הלקוחות שלך</span><br />
           במקום אחד
         </h1>
 
-        <p className="text-indigo-200 text-xl max-w-2xl mx-auto leading-relaxed mb-10">
+        <p className="text-blue-200 text-xl max-w-2xl mx-auto leading-relaxed mb-10">
           פלטפורמה all-in-one לסוכנויות שיווק — ניהול לידים, טפסי קבלה, אוטומציות n8n, ודוחות ביצועים אוטומטיים ללקוחות.
         </p>
 
         <div className="flex items-center justify-center gap-4 flex-wrap">
           <Link
             href="/register"
-            className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-2xl px-8 py-4 text-lg transition-all shadow-xl shadow-indigo-500/40"
+            className="flex items-center gap-2 bg-blue-500 hover:bg-blue-400 text-white font-bold rounded-2xl px-8 py-4 text-lg transition-all shadow-xl shadow-blue-500/40"
           >
             התחל חינם — ללא כרטיס אשראי
             <ArrowLeft size={20} />
@@ -66,7 +66,7 @@ export default function HomePage() {
         </div>
 
         {/* Social proof */}
-        <p className="text-indigo-400 text-sm mt-8">
+        <p className="text-blue-400 text-sm mt-8">
           ✓ ניסיון חינם 14 יום · ✓ ביטול בכל עת · ✓ תמיכה בעברית
         </p>
       </section>
@@ -82,7 +82,7 @@ export default function HomePage() {
               icon:  Users,
               title: "ניהול לידים חכם",
               desc:  "קנבן ויזואלי, פאנל פרטי ליד, ציון איכות ועסקה",
-              color: "bg-indigo-500/20 text-indigo-300",
+              color: "bg-blue-500/20 text-blue-300",
             },
             {
               icon:  FileText,
@@ -112,7 +112,7 @@ export default function HomePage() {
                 <Icon size={18} />
               </div>
               <h3 className="text-white font-semibold mb-2">{title}</h3>
-              <p className="text-indigo-300 text-sm leading-relaxed">{desc}</p>
+              <p className="text-blue-300 text-sm leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>
@@ -121,7 +121,7 @@ export default function HomePage() {
       {/* ── Pricing preview ── */}
       <section className="max-w-3xl mx-auto px-8 py-16 text-center">
         <h2 className="text-3xl font-bold text-white mb-4">מחירים פשוטים ושקופים</h2>
-        <p className="text-indigo-300 mb-8">התחל חינם, שדרג כשצומחים</p>
+        <p className="text-blue-300 mb-8">התחל חינם, שדרג כשצומחים</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           {[
@@ -132,34 +132,34 @@ export default function HomePage() {
             <div
               key={p.name}
               className={`rounded-2xl border p-5 text-center relative ${
-                p.popular ? "border-indigo-500 bg-indigo-500/10" : "border-white/15 bg-white/5"
+                p.popular ? "border-blue-500 bg-blue-500/10" : "border-white/15 bg-white/5"
               }`}
             >
               {p.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-500 text-white text-xs px-3 py-0.5 rounded-full font-bold">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-xs px-3 py-0.5 rounded-full font-bold">
                   הכי פופולרי
                 </span>
               )}
               <p className="text-white font-bold text-lg">{p.name}</p>
-              <p className={`text-2xl font-bold mt-1 ${p.popular ? "text-indigo-300" : "text-white"}`}>{p.price}</p>
-              <p className="text-indigo-400 text-sm mt-1">{p.note}</p>
+              <p className={`text-2xl font-bold mt-1 ${p.popular ? "text-blue-300" : "text-white"}`}>{p.price}</p>
+              <p className="text-blue-400 text-sm mt-1">{p.note}</p>
             </div>
           ))}
         </div>
 
-        <Link href="/pricing" className="text-indigo-400 hover:text-indigo-200 text-sm underline underline-offset-2">
+        <Link href="/pricing" className="text-blue-400 hover:text-blue-200 text-sm underline underline-offset-2">
           השווה תוכניות מלאות →
         </Link>
       </section>
 
       {/* ── CTA ── */}
       <section className="max-w-2xl mx-auto px-8 py-16 text-center">
-        <div className="rounded-3xl border border-indigo-500/30 bg-indigo-500/10 p-10 backdrop-blur-sm">
+        <div className="rounded-3xl border border-blue-500/30 bg-blue-500/10 p-10 backdrop-blur-sm">
           <h2 className="text-3xl font-bold text-white mb-4">מוכן להתחיל?</h2>
-          <p className="text-indigo-300 mb-8">צור חשבון חינמי תוך דקה. ללא כרטיס אשראי.</p>
+          <p className="text-blue-300 mb-8">צור חשבון חינמי תוך דקה. ללא כרטיס אשראי.</p>
           <Link
             href="/register"
-            className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-2xl px-8 py-4 text-lg transition-all shadow-xl shadow-indigo-500/40"
+            className="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-400 text-white font-bold rounded-2xl px-8 py-4 text-lg transition-all shadow-xl shadow-blue-500/40"
           >
             צור חשבון חינמי
             <ArrowLeft size={20} />
@@ -169,7 +169,7 @@ export default function HomePage() {
 
       {/* ── Footer ── */}
       <footer className="border-t border-white/10 px-8 py-8 text-center">
-        <p className="text-indigo-500 text-sm">
+        <p className="text-blue-500 text-sm">
           © {new Date().getFullYear()} MarketingOS · בנוי עם ❤️ לסוכנויות שיווק ישראליות
         </p>
       </footer>

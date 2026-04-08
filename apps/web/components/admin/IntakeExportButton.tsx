@@ -92,14 +92,14 @@ export function IntakeExportButton({ forms, clientName }: Props) {
     <div className="flex items-center gap-2">
       <button
         onClick={exportCSV}
-        className="text-xs text-gray-500 hover:text-gray-800 border border-gray-200 rounded px-2 py-1 hover:border-gray-400 transition-colors"
+        className="text-xs text-slate-500 hover:text-slate-800 border border-slate-200 rounded px-2 py-1 hover:border-slate-400 transition-colors"
         title="Download as CSV spreadsheet"
       >
         ↓ CSV
       </button>
       <button
         onClick={exportJSON}
-        className="text-xs text-gray-500 hover:text-gray-800 border border-gray-200 rounded px-2 py-1 hover:border-gray-400 transition-colors"
+        className="text-xs text-slate-500 hover:text-slate-800 border border-slate-200 rounded px-2 py-1 hover:border-slate-400 transition-colors"
         title="Download as JSON"
       >
         ↓ JSON

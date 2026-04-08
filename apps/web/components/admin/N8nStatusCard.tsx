@@ -38,16 +38,16 @@ export function N8nStatusCard() {
   const isOnline = data?.status === "online";
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span style={{ fontSize: "20px" }}>🔄</span>
-          <span className="font-bold text-sm text-gray-900">n8n Automation</span>
+          <span className="font-bold text-sm text-slate-900">n8n Automation</span>
         </div>
         <button
           onClick={fetchStatus}
           disabled={loading}
-          className="text-xs text-gray-400 hover:text-indigo-600 transition-colors disabled:opacity-50"
+          className="text-xs text-slate-400 hover:text-blue-600 transition-colors disabled:opacity-50"
         >
           {loading ? "⏳" : "🔄 רענן"}
         </button>
@@ -67,12 +67,12 @@ export function N8nStatusCard() {
           {loading ? "בודק..." : isOnline ? "Online" : "Offline"}
         </span>
         {!loading && data && data.responseMs > 0 && (
-          <span className="text-[11px] text-gray-400">{data.responseMs}ms</span>
+          <span className="text-[11px] text-slate-400">{data.responseMs}ms</span>
         )}
       </div>
 
       {data?.url && data.url !== "not configured" && (
-        <p className="text-[11px] text-gray-400 truncate" dir="ltr">
+        <p className="text-[11px] text-slate-400 truncate" dir="ltr">
           {data.url}
         </p>
       )}
@@ -82,7 +82,7 @@ export function N8nStatusCard() {
       )}
 
       {data?.checkedAt && (
-        <p className="text-[10px] text-gray-300 mt-1">
+        <p className="text-[10px] text-slate-300 mt-1">
           נבדק: {new Date(data.checkedAt).toLocaleTimeString("he-IL")}
         </p>
       )}

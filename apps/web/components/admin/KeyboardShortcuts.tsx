@@ -63,7 +63,7 @@ export function KeyboardShortcuts() {
     return (
       <button
         onClick={() => setShowHelp(true)}
-        className="fixed bottom-20 left-4 z-30 lg:bottom-6 w-9 h-9 rounded-full bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center justify-center shadow-lg transition-colors"
+        className="fixed bottom-20 left-4 z-30 lg:bottom-6 w-9 h-9 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center shadow-lg transition-colors"
         title="קיצורי מקלדת (?)"
         aria-label="קיצורי מקלדת"
       >
@@ -75,24 +75,24 @@ export function KeyboardShortcuts() {
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50" dir="rtl">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
           <div className="flex items-center gap-2">
-            <Keyboard size={16} className="text-indigo-500" />
-            <h2 className="font-semibold text-gray-900">קיצורי מקלדת</h2>
+            <Keyboard size={16} className="text-blue-500" />
+            <h2 className="font-semibold text-slate-900">קיצורי מקלדת</h2>
           </div>
-          <button onClick={() => setShowHelp(false)} className="text-gray-400 hover:text-gray-600">
+          <button onClick={() => setShowHelp(false)} className="text-slate-400 hover:text-slate-600">
             <X size={18} />
           </button>
         </div>
         <div className="p-4 space-y-2">
           {SHORTCUTS.filter((s) => s.action !== "escape" && s.action !== "help").map((s) => (
             <div key={s.action} className="flex items-center justify-between">
-              <span className="text-sm text-gray-700">{s.label}</span>
+              <span className="text-sm text-slate-700">{s.label}</span>
               <div className="flex gap-1">
                 {s.keys.map((k) => (
                   <kbd
                     key={k}
-                    className="px-2 py-1 bg-gray-100 border border-gray-200 rounded text-xs font-mono text-gray-600 shadow-[0_1px_0_0_rgba(0,0,0,.15)]"
+                    className="px-2 py-1 bg-slate-100 border border-slate-200 rounded text-xs font-mono text-slate-600 shadow-[0_1px_0_0_rgba(0,0,0,.15)]"
                   >
                     {k}
                   </kbd>
@@ -100,9 +100,9 @@ export function KeyboardShortcuts() {
               </div>
             </div>
           ))}
-          <div className="border-t border-gray-100 pt-2 mt-2 flex items-center justify-between">
-            <span className="text-sm text-gray-500">סגור</span>
-            <kbd className="px-2 py-1 bg-gray-100 border border-gray-200 rounded text-xs font-mono text-gray-600">
+          <div className="border-t border-slate-100 pt-2 mt-2 flex items-center justify-between">
+            <span className="text-sm text-slate-500">סגור</span>
+            <kbd className="px-2 py-1 bg-slate-100 border border-slate-200 rounded text-xs font-mono text-slate-600">
               Esc
             </kbd>
           </div>

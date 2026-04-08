@@ -73,8 +73,8 @@ export function PortalBroadcastClient({ clientId, clientName, stats, broadcasts 
       <div className="max-w-lg mx-auto text-center py-16" dir="rtl">
         <div className="text-6xl mb-4">🎉</div>
         <h2 className="text-2xl font-extrabold mb-2">השידור נשלח!</h2>
-        <p className="text-gray-500 mb-6">ההודעה נשלחה ל-{count} נמענים</p>
-        <button onClick={() => { setStep(1); setMessage(""); setDone(false); }} className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold text-sm">📢 שידור חדש</button>
+        <p className="text-slate-500 mb-6">ההודעה נשלחה ל-{count} נמענים</p>
+        <button onClick={() => { setStep(1); setMessage(""); setDone(false); }} className="px-6 py-3 bg-blue-600 text-white rounded-xl font-bold text-sm">📢 שידור חדש</button>
       </div>
     );
   }
@@ -83,7 +83,7 @@ export function PortalBroadcastClient({ clientId, clientName, stats, broadcasts 
     <div className="max-w-lg mx-auto space-y-5" dir="rtl">
       <div>
         <h1 className="text-xl font-bold">📢 שידור WhatsApp</h1>
-        <p className="text-sm text-gray-500">שלח הודעה לכל הלידים שלך</p>
+        <p className="text-sm text-slate-500">שלח הודעה לכל הלידים שלך</p>
       </div>
 
       {/* Stats */}
@@ -93,9 +93,9 @@ export function PortalBroadcastClient({ clientId, clientName, stats, broadcasts 
           { l: "חדשים", v: stats.newLeads, c: "#3b82f6" },
           { l: "נוצר קשר", v: stats.contactedLeads, c: "#f59e0b" },
         ].map((s) => (
-          <div key={s.l} className="bg-white rounded-xl border border-gray-200 p-3 text-center">
+          <div key={s.l} className="bg-white rounded-xl border border-slate-200 p-3 text-center">
             <div className="text-xl font-extrabold" style={{ color: s.c }}>{s.v}</div>
-            <div className="text-[11px] text-gray-500">{s.l}</div>
+            <div className="text-[11px] text-slate-500">{s.l}</div>
           </div>
         ))}
       </div>
@@ -103,40 +103,40 @@ export function PortalBroadcastClient({ clientId, clientName, stats, broadcasts 
       {/* Step 1 — Audience */}
       {step === 1 && (
         <div className="space-y-3">
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
             <p className="font-bold text-sm mb-3">👥 בחר קהל יעד</p>
             <div className="space-y-2">
               {AUDIENCES.map((a) => (
-                <button key={a.value} onClick={() => setAudience(a.value)} className={`w-full px-4 py-3 rounded-xl border-2 text-right flex justify-between items-center transition-all ${audience === a.value ? "border-indigo-500 bg-indigo-50" : "border-gray-200"}`}>
-                  <span className={`font-semibold text-sm ${audience === a.value ? "text-indigo-700" : "text-gray-700"}`}>{a.icon} {a.label}</span>
-                  <span className="text-sm font-bold text-gray-500">{a.value === "all" ? stats.totalLeads : a.value === "new" ? stats.newLeads : stats.contactedLeads}</span>
+                <button key={a.value} onClick={() => setAudience(a.value)} className={`w-full px-4 py-3 rounded-xl border-2 text-right flex justify-between items-center transition-all ${audience === a.value ? "border-blue-500 bg-blue-50" : "border-slate-200"}`}>
+                  <span className={`font-semibold text-sm ${audience === a.value ? "text-blue-700" : "text-slate-700"}`}>{a.icon} {a.label}</span>
+                  <span className="text-sm font-bold text-slate-500">{a.value === "all" ? stats.totalLeads : a.value === "new" ? stats.newLeads : stats.contactedLeads}</span>
                 </button>
               ))}
             </div>
           </div>
           {count > 0 && <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-sm text-green-700 font-medium">✅ ישלח ל-{count} נמענים</div>}
-          <button onClick={() => setStep(2)} disabled={count === 0} className="w-full py-3.5 bg-indigo-600 text-white rounded-xl font-bold text-sm disabled:opacity-40">הבא →</button>
+          <button onClick={() => setStep(2)} disabled={count === 0} className="w-full py-3.5 bg-blue-600 text-white rounded-xl font-bold text-sm disabled:opacity-40">הבא →</button>
         </div>
       )}
 
       {/* Step 2 — Message */}
       {step === 2 && (
         <div className="space-y-3">
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
             <div className="flex justify-between items-center mb-3">
               <p className="font-bold text-sm">✍️ כתוב הודעה</p>
-              <button onClick={generateAI} disabled={generating} className="px-3 py-1.5 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded-lg text-xs font-semibold">
+              <button onClick={generateAI} disabled={generating} className="px-3 py-1.5 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg text-xs font-semibold">
                 {generating ? "⏳" : "✨ AI"}
               </button>
             </div>
-            <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="כתוב את ההודעה..." rows={5} className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm resize-none outline-none focus:border-indigo-400 leading-relaxed" />
-            <p className="text-[10px] text-gray-400 mt-1">{message.length} תווים</p>
+            <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="כתוב את ההודעה..." rows={5} className="w-full border-2 border-slate-200 rounded-xl px-4 py-3 text-sm resize-none outline-none focus:border-blue-400 leading-relaxed" />
+            <p className="text-[10px] text-slate-400 mt-1">{message.length} תווים</p>
           </div>
-          <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <p className="text-xs font-semibold text-gray-500 mb-2">📋 תבניות</p>
+          <div className="bg-white rounded-xl border border-slate-200 p-4">
+            <p className="text-xs font-semibold text-slate-500 mb-2">📋 תבניות</p>
             <div className="flex gap-1.5 flex-wrap">
               {TEMPLATES.map((t) => (
-                <button key={t.label} onClick={() => setMessage(t.text)} className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-colors">{t.label}</button>
+                <button key={t.label} onClick={() => setMessage(t.text)} className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-600 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 transition-colors">{t.label}</button>
               ))}
             </div>
           </div>
@@ -147,7 +147,7 @@ export function PortalBroadcastClient({ clientId, clientName, stats, broadcasts 
             </div>
           )}
           <div className="flex gap-2">
-            <button onClick={() => setStep(1)} className="flex-1 py-3 bg-gray-100 rounded-xl text-sm font-semibold">← חזור</button>
+            <button onClick={() => setStep(1)} className="flex-1 py-3 bg-slate-100 rounded-xl text-sm font-semibold">← חזור</button>
             <button onClick={send} disabled={!message.trim() || sending} className="flex-[2] py-3 bg-green-600 text-white rounded-xl font-bold text-sm disabled:opacity-40">
               {sending ? "⏳ שולח..." : `💬 שלח ל-${count} נמענים`}
             </button>
@@ -157,7 +157,7 @@ export function PortalBroadcastClient({ clientId, clientName, stats, broadcasts 
 
       {/* Past broadcasts */}
       {step === 1 && broadcasts.length === 0 && (
-        <div className="bg-white rounded-xl border border-gray-200">
+        <div className="bg-white rounded-xl border border-slate-200">
           <EmptyState
             icon="📢"
             title="לא נשלחו שידורים עדיין"
@@ -167,13 +167,13 @@ export function PortalBroadcastClient({ clientId, clientName, stats, broadcasts 
       )}
 
       {step === 1 && broadcasts.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="bg-white rounded-xl border border-slate-200 p-4">
           <p className="font-bold text-sm mb-3">📋 שידורים קודמים</p>
           {broadcasts.slice(0, 5).map((b) => (
-            <div key={b.id} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
+            <div key={b.id} className="flex justify-between items-center py-2 border-b border-slate-50 last:border-0">
               <div className="flex-1 min-w-0">
-                <p className="text-xs text-gray-700 truncate">{b.message}</p>
-                <p className="text-[10px] text-gray-400">{new Date(b.createdAt).toLocaleDateString("he-IL")}</p>
+                <p className="text-xs text-slate-700 truncate">{b.message}</p>
+                <p className="text-[10px] text-slate-400">{new Date(b.createdAt).toLocaleDateString("he-IL")}</p>
               </div>
               <span className="text-xs font-bold text-green-600 mr-3">✅ {b.sentCount}/{b.totalCount}</span>
             </div>
