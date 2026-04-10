@@ -257,21 +257,23 @@ export default async function ClientDashboardPage({
           pipelineValue={pipelineOpen._sum.value ?? 0}
         />
 
-        {/* Quick Design Controls */}
-        <QuickDesignControls
-          clientId={client.id}
-          slug={params.slug}
-          initialColor={client.primaryColor ?? "#4f46e5"}
-          initialTitle={client.landingPageTitle ?? ""}
-          initialCta={client.landingPageCta ?? ""}
-        />
-
-        {/* Share Center */}
-        <ShareCenter
-          slug={params.slug}
-          clientName={client.name}
-          appUrl={appUrl}
-        />
+        {/* ── Secondary widgets: only show when page is published ── */}
+        {client.pagePublished && (
+          <>
+            <QuickDesignControls
+              clientId={client.id}
+              slug={params.slug}
+              initialColor={client.primaryColor ?? "#4f46e5"}
+              initialTitle={client.landingPageTitle ?? ""}
+              initialCta={client.landingPageCta ?? ""}
+            />
+            <ShareCenter
+              slug={params.slug}
+              clientName={client.name}
+              appUrl={appUrl}
+            />
+          </>
+        )}
 
         {/* WhatsApp Setup Guide (only when no whatsapp configured) */}
         {!hasWhatsapp && (
@@ -294,11 +296,20 @@ export default async function ClientDashboardPage({
           </div>
 
           {recentLeads.length === 0 ? (
-            <div className="py-12 text-center">
-              <p className="text-sm text-slate-400 mb-3">אין לידים עדיין</p>
-              <p className="text-xs text-slate-300">
-                פרסם את דף הנחיתה שלך כדי להתחיל לקבל לידים
+            <div className="py-10 text-center px-6">
+              <p className="text-3xl mb-3">🎯</p>
+              <p className="text-sm font-medium text-slate-600 mb-1">אין לידים עדיין</p>
+              <p className="text-xs text-slate-400 mb-4">
+                {client.pagePublished
+                  ? "הדף שלך באוויר — שתף את הקישור כדי להתחיל לקבל לידים"
+                  : "בנה דף נחיתה ושתף אותו כדי להתחיל לקבל לידים"}
               </p>
+              <Link
+                href={client.pagePublished ? `/client/${params.slug}/settings` : `/client/${params.slug}/build-page`}
+                className="inline-flex items-center gap-2 bg-blue-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl hover:bg-blue-700 transition-colors"
+              >
+                {client.pagePublished ? "🔗 שתף את הקישור" : "🌐 בנה דף נחיתה"}
+              </Link>
             </div>
           ) : (
             <div className="divide-y divide-slate-50">

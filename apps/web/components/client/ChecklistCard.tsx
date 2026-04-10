@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Circle, ChevronDown, ChevronUp } from "lucide-react";
+import { CheckCircle2, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 interface ChecklistItem {
@@ -11,8 +11,7 @@ interface ChecklistItem {
   description: string;
   done: boolean;
   actionLabel: string;
-  href?: string;
-  onAction?: () => void;
+  href: string;
 }
 
 interface ChecklistCardProps {
@@ -22,7 +21,6 @@ interface ChecklistCardProps {
   hasReports: boolean;
   slug: string;
   clientId: string;
-  onBuildPage?: () => void;
 }
 
 export function ChecklistCard({
@@ -31,52 +29,52 @@ export function ChecklistCard({
   hasLeads,
   hasReports,
   slug,
-  onBuildPage,
+  clientId,
 }: ChecklistCardProps) {
   const items: ChecklistItem[] = [
     {
       id: "page",
       icon: "🌐",
       label: "בנה דף נחיתה",
-      description: "הדף שלך יהיה חי באינטרנט",
+      description: "הדף שלך יהיה חי באינטרנט ויתחיל לקבל לידים",
       done: pagePublished,
-      actionLabel: "בנה עכשיו",
-      onAction: onBuildPage,
+      actionLabel: "בנה עכשיו →",
+      href: `/client/${slug}/build-page`,
     },
     {
       id: "whatsapp",
       icon: "📱",
       label: "חבר וואצאפ",
-      description: "קבל התראות על לידים חדשים",
+      description: "קבל התראה מיידית על כל ליד חדש",
       done: hasWhatsapp,
-      actionLabel: "חבר עכשיו",
+      actionLabel: "חבר →",
       href: `/client/${slug}/settings`,
     },
     {
       id: "share",
       icon: "🔗",
       label: "שתף את הקישור",
-      description: "שלח ללקוחות שלך",
-      done: false,
+      description: "שלח את הדף ללקוחות ולרשתות החברתיות",
+      done: pagePublished && hasLeads, // If page exists and leads came = link was shared
       actionLabel: "שתף →",
-      href: `#share`,
+      href: `/client/${slug}/settings`,
     },
     {
       id: "lead",
       icon: "🎯",
       label: "קבל ליד ראשון",
-      description: "הגדרות הושלמו!",
+      description: "כשמישהו ישאיר פרטים — תקבל התראה",
       done: hasLeads,
-      actionLabel: "צפה בלידים",
+      actionLabel: "צפה בלידים →",
       href: `/client/${slug}/leads`,
     },
     {
       id: "report",
       icon: "📊",
-      label: "צפה בדוח ראשון",
-      description: "הבן מה עובד",
+      label: "צפה בדוח ביצועים",
+      description: "הבן מה עובד ומה צריך לשפר",
       done: hasReports,
-      actionLabel: "צפה בדוחות",
+      actionLabel: "צפה →",
       href: `/client/${slug}/reports`,
     },
   ];
@@ -85,6 +83,10 @@ export function ChecklistCard({
   const allDone = completed === items.length;
   const [collapsed, setCollapsed] = useState(allDone);
 
+  // Find the first uncompleted item — this is the "current step"
+  const currentStepId = items.find((i) => !i.done)?.id ?? null;
+
+  // Don't render at all once everything is done and collapsed
   if (allDone && collapsed) {
     return (
       <div
@@ -95,7 +97,7 @@ export function ChecklistCard({
           <span className="text-2xl">🎉</span>
           <div>
             <p className="font-semibold text-green-800">כל המשימות הושלמו!</p>
-            <p className="text-xs text-green-600">5/5 הושלם</p>
+            <p className="text-xs text-green-600">{completed}/{items.length} הושלם</p>
           </div>
         </div>
         <ChevronDown size={16} className="text-green-600" />
@@ -111,15 +113,15 @@ export function ChecklistCard({
         onClick={() => setCollapsed(!collapsed)}
       >
         <div>
-          <h2 className="font-semibold text-slate-900">רשימת משימות להצלחה</h2>
-          <div className="flex items-center gap-2 mt-1">
-            <div className="flex-1 h-1.5 bg-slate-100 rounded-full w-32 overflow-hidden">
+          <h2 className="font-semibold text-slate-900">🚀 התחל כאן — {items.length - completed} צעדים נשארו</h2>
+          <div className="flex items-center gap-2 mt-1.5">
+            <div className="flex-1 h-2 bg-slate-100 rounded-full w-40 overflow-hidden">
               <div
-                className="h-full bg-blue-500 rounded-full transition-all"
+                className="h-full bg-blue-500 rounded-full transition-all duration-500"
                 style={{ width: `${(completed / items.length) * 100}%` }}
               />
             </div>
-            <span className="text-xs text-slate-500">{completed}/{items.length} הושלם</span>
+            <span className="text-xs font-medium text-slate-500">{completed}/{items.length}</span>
           </div>
         </div>
         {collapsed ? <ChevronDown size={16} className="text-slate-400" /> : <ChevronUp size={16} className="text-slate-400" />}
@@ -127,37 +129,48 @@ export function ChecklistCard({
 
       {!collapsed && (
         <div className="divide-y divide-slate-50">
-          {items.map((item) => (
-            <div
-              key={item.id}
-              className={`flex items-center gap-4 px-6 py-3.5 transition-colors ${item.done ? "bg-green-50/40" : ""}`}
-            >
-              <span className="text-xl flex-shrink-0">{item.icon}</span>
-              <div className="flex-1 min-w-0">
-                <p className={`text-sm font-medium ${item.done ? "text-slate-400 line-through" : "text-slate-800"}`}>
-                  {item.label}
-                </p>
-                <p className="text-xs text-slate-400 mt-0.5">{item.description}</p>
+          {items.map((item) => {
+            const isCurrent = item.id === currentStepId;
+            return (
+              <div
+                key={item.id}
+                className={`flex items-center gap-4 px-6 py-4 transition-colors ${
+                  item.done
+                    ? "bg-green-50/30"
+                    : isCurrent
+                    ? "bg-blue-50/50 border-r-4 border-r-blue-500"
+                    : ""
+                }`}
+              >
+                <span className="text-xl flex-shrink-0">{item.icon}</span>
+                <div className="flex-1 min-w-0">
+                  <p className={`text-sm font-semibold ${
+                    item.done ? "text-slate-400 line-through" : isCurrent ? "text-blue-800" : "text-slate-700"
+                  }`}>
+                    {item.label}
+                  </p>
+                  <p className={`text-xs mt-0.5 ${isCurrent ? "text-blue-600" : "text-slate-400"}`}>
+                    {item.description}
+                  </p>
+                </div>
+                {item.done ? (
+                  <CheckCircle2 size={20} className="text-green-500 flex-shrink-0" />
+                ) : (
+                  <Link
+                    href={item.href}
+                    className={`flex-shrink-0 inline-flex items-center gap-1 text-xs font-semibold px-3.5 py-2 rounded-lg transition-colors ${
+                      isCurrent
+                        ? "bg-blue-600 text-white hover:bg-blue-700"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    }`}
+                  >
+                    {item.actionLabel}
+                    {isCurrent && <ArrowLeft size={12} />}
+                  </Link>
+                )}
               </div>
-              {item.done ? (
-                <CheckCircle2 size={20} className="text-green-500 flex-shrink-0" />
-              ) : item.href ? (
-                <Link
-                  href={item.href}
-                  className="flex-shrink-0 text-xs font-medium px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
-                >
-                  {item.actionLabel}
-                </Link>
-              ) : (
-                <button
-                  onClick={item.onAction}
-                  className="flex-shrink-0 text-xs font-medium px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
-                >
-                  {item.actionLabel}
-                </button>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
