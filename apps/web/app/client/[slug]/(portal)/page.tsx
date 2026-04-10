@@ -14,7 +14,6 @@ import { AiProactiveMessage } from "@/components/client/AiProactiveMessage";
 import { QuickDesignControls } from "@/components/client/QuickDesignControls";
 import { WhatsAppSetupGuide } from "@/components/client/WhatsAppSetupGuide";
 import { DashboardAiSection } from "@/components/client/DashboardAiSection";
-import { NoPageWelcome } from "./NoPageWelcome";
 import { OnboardingTour } from "@/components/portal/OnboardingTour";
 
 const STATUS_HE: Record<string, string> = {
@@ -189,24 +188,6 @@ export default async function ClientDashboardPage({
     month: "long",
     year: "numeric",
   });
-
-  const pageBlocks = client.pageBlocks as unknown[] | null;
-
-  // Full-screen build experience when no page exists at all
-  const hasPage =
-    client.pagePublished &&
-    Array.isArray(pageBlocks) &&
-    pageBlocks.length > 0;
-
-  if (!hasPage) {
-    return (
-      <NoPageWelcome
-        clientId={client.id}
-        clientName={client.name}
-        industry={client.industry ?? null}
-      />
-    );
-  }
 
   const statsCards = [
     {
