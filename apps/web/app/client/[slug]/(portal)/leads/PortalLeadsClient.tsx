@@ -1,10 +1,33 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, MessageCircle, Search, Filter } from "lucide-react";
+import { Phone, MessageCircle, Search, Filter, Clock } from "lucide-react";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Tooltip } from "@/components/ui/Tooltip";
 import toast from "react-hot-toast";
+
+// Time-ago helper (Hebrew)
+function timeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "עכשיו";
+  if (mins < 60) return `לפני ${mins} דק׳`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `לפני ${hrs} שעות`;
+  const days = Math.floor(hrs / 24);
+  if (days === 1) return "אתמול";
+  if (days < 7) return `לפני ${days} ימים`;
+  return new Date(dateStr).toLocaleDateString("he-IL");
+}
+
+const SOURCE_LABELS: Record<string, string> = {
+  facebook: "פייסבוק",
+  google: "גוגל",
+  organic: "אורגני",
+  manual: "ידני",
+  landing_page: "דף נחיתה",
+  ai_agent: "סוכן AI",
+};
 
 interface Lead {
   id: string;
@@ -166,6 +189,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
             <option value="NEW">חדשים</option>
             <option value="CONTACTED">נוצר קשר</option>
             <option value="QUALIFIED">מתאימים</option>
+            <option value="PROPOSAL">הצעה</option>
             <option value="WON">נסגרו</option>
             <option value="LOST">אבודים</option>
           </select>
@@ -185,29 +209,62 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
         </div>
       ) : (
         <div className="space-y-3">
-          {filtered.map((lead) => (
-            <div key={lead.id} className="bg-white rounded-xl border border-slate-100 shadow-sm p-4">
-              {/* Row 1: Name + Status */}
+          {filtered.map((lead) => {
+            const isNew = lead.status === "NEW";
+            const isUrgent = isNew && (Date.now() - new Date(lead.createdAt).getTime()) < 24 * 3600000;
+            const srcLabel = SOURCE_LABELS[(lead.source ?? "").toLowerCase()] ?? lead.source;
+
+            return (
+            <div
+              key={lead.id}
+              className={`bg-white rounded-xl shadow-sm p-4 transition-colors ${
+                isUrgent
+                  ? "border-2 border-blue-300 bg-blue-50/30"
+                  : isNew
+                  ? "border-2 border-blue-200"
+                  : "border border-slate-100"
+              }`}
+            >
+              {/* Row 1: Name + Status + Time */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-lg flex-shrink-0">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg flex-shrink-0 ${isNew ? "bg-blue-100" : "bg-slate-50"}`}>
                     {lead.gender === "male" ? "👨" : lead.gender === "female" ? "👩" : "👤"}
                   </div>
                   <div>
                     <p className="font-semibold text-slate-900 text-sm">
                       {lead.firstName} {lead.lastName}
                     </p>
-                    <div className="flex items-center gap-2 text-xs text-slate-400 mt-0.5">
-                      {lead.ageRange && <span>{lead.ageRange}</span>}
+                    <div className="flex items-center gap-2 text-xs text-slate-400 mt-0.5 flex-wrap">
+                      <span className="inline-flex items-center gap-1">
+                        <Clock size={10} />
+                        {timeAgo(lead.createdAt)}
+                      </span>
+                      {srcLabel && (
+                        <span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded text-[10px]">
+                          {srcLabel}
+                        </span>
+                      )}
                       {lead.city && <span>{lead.city}</span>}
-                      <span>{new Date(lead.createdAt).toLocaleDateString("he-IL")}</span>
-                      {lead.autoReplied && <span className="text-green-500">✓ נשלח חזרה</span>}
+                      {lead.autoReplied && (
+                        <span className="text-green-600 font-medium">✓ וואצאפ נשלח</span>
+                      )}
+                      {!lead.autoReplied && isNew && lead.phone && (
+                        <span className="text-amber-600 font-medium">⏳ ממתין למענה</span>
+                      )}
                     </div>
                   </div>
                 </div>
-                <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_COLORS[lead.status] ?? "bg-slate-100 text-slate-600"}`}>
-                  {STATUS_LABELS[lead.status] ?? lead.status}
-                </span>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {isUrgent && (
+                    <span className="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full animate-pulse">
+                      חדש!
+                    </span>
+                  )}
+                  <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_COLORS[lead.status] ?? "bg-slate-100 text-slate-600"}`}>
+                    {STATUS_LABELS[lead.status] ?? lead.status}
+                  </span>
+                </div>
               </div>
 
               {/* Row 2: Actions */}
@@ -249,7 +306,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
 
               {/* Row 3: Status buttons */}
               <div className="flex gap-1.5 mt-3 pt-3 border-t border-slate-50">
-                {(["CONTACTED", "QUALIFIED", "WON", "LOST"] as const).map((s) => (
+                {(["CONTACTED", "QUALIFIED", "PROPOSAL", "WON", "LOST"] as const).map((s) => (
                   <button
                     key={s}
                     onClick={() => updateStatus(lead.id, s)}
@@ -257,6 +314,10 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                     className={`px-2.5 py-1 rounded-md text-[11px] font-medium border transition-colors ${
                       lead.status === s
                         ? "bg-slate-100 text-slate-400 border-slate-100 cursor-default"
+                        : s === "WON"
+                        ? "bg-white text-green-600 border-green-200 hover:bg-green-50 cursor-pointer"
+                        : s === "LOST"
+                        ? "bg-white text-red-500 border-red-200 hover:bg-red-50 cursor-pointer"
                         : "bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-blue-600 cursor-pointer"
                     }`}
                   >
@@ -265,7 +326,8 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                 ))}
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
