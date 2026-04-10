@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendWhatsApp } from "@/lib/whatsapp";
+import { decrypt } from "@/lib/encrypt";
 
 export async function GET(req: NextRequest) {
   const secret = req.headers.get("x-cron-secret") ?? req.nextUrl.searchParams.get("secret");
@@ -38,13 +39,13 @@ export async function GET(req: NextRequest) {
 פנית אלינו ב${lead.client.name} ורצינו לוודא שקיבלת מענה.
 אנחנו כאן לעזור — מתי נוח לך לדבר? 📞`;
 
-    const result = await sendWhatsApp(lead.phone, message, lead.client);
+    const rawToken = decrypt(lead.client.greenApiToken!);
+    const result = await sendWhatsApp(lead.phone, message, lead.client.greenApiInstanceId!, rawToken);
     if (result.ok) {
       await prisma.lead.update({
         where: { id: lead.id },
         data: { status: "CONTACTED" },
       });
-      // Log the follow-up as activity
       prisma.leadActivity.create({
         data: {
           leadId: lead.id,
@@ -87,9 +88,9 @@ export async function GET(req: NextRequest) {
 
 פשוט שלח/י "כן" ונחזור אליך.`;
 
-    const result = await sendWhatsApp(lead.phone, message, lead.client);
+    const rawToken3 = decrypt(lead.client.greenApiToken!);
+    const result = await sendWhatsApp(lead.phone, message, lead.client.greenApiInstanceId!, rawToken3);
     if (result.ok) {
-      // Log the follow-up as activity
       prisma.leadActivity.create({
         data: {
           leadId: lead.id,
