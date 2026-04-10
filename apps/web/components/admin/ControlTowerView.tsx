@@ -26,12 +26,19 @@ type ClientRow = {
   slug: string;
   primaryColor: string;
   industry: string | null;
+  plan: string;
   isActive: boolean;
   pagePublished: boolean;
   createdAt: Date;
   totalLeads: number;
   leads7d: number;
   wonLeads: number;
+};
+
+const PLAN_LABELS: Record<string, { label: string; color: string; price: string }> = {
+  BASIC:  { label: "ניסיון", color: "bg-slate-100 text-slate-600", price: "₪0" },
+  PRO:    { label: "Pro",    color: "bg-blue-50 text-blue-700",    price: "₪375" },
+  AGENCY: { label: 'נדל"ן',  color: "bg-emerald-50 text-emerald-700", price: "₪425" },
 };
 
 type Props = {
@@ -365,7 +372,17 @@ function ClientsTableSection({ clients }: { clients: ClientRow[] }) {
                           {client.name[0]}
                         </div>
                         <div className="min-w-0">
-                          <p className="font-medium text-slate-900 truncate">{client.name}</p>
+                          <div className="flex items-center gap-1.5">
+                            <p className="font-medium text-slate-900 truncate">{client.name}</p>
+                            {(() => {
+                              const p = PLAN_LABELS[client.plan] ?? PLAN_LABELS.BASIC;
+                              return (
+                                <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded ${p.color}`}>
+                                  {p.label}
+                                </span>
+                              );
+                            })()}
+                          </div>
                           <p className="text-[11px] text-slate-400 truncate">
                             {INDUSTRY_HE[client.industry ?? ""] ?? client.industry ?? "כללי"}
                           </p>

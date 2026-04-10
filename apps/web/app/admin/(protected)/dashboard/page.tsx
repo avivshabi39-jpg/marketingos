@@ -32,6 +32,7 @@ export default async function DashboardPage() {
       slug: true,
       primaryColor: true,
       industry: true,
+      plan: true,
       isActive: true,
       pagePublished: true,
       createdAt: true,

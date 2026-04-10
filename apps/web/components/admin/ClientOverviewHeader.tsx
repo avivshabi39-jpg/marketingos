@@ -25,6 +25,7 @@ interface Props {
     slug: string;
     primaryColor: string;
     industry: string | null;
+    plan: string;
     isActive: boolean;
     pagePublished: boolean;
     whatsappNumber: string | null;
@@ -127,6 +128,13 @@ export function ClientOverviewHeader({ client, stats }: Props) {
               <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold ${priority.color}`}>
                 <span className={`w-1.5 h-1.5 rounded-full ${priority.dot}`} />
                 {priority.label}
+              </span>
+              <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full ${
+                client.plan === "AGENCY" ? "bg-emerald-50 text-emerald-700" :
+                client.plan === "PRO" ? "bg-blue-50 text-blue-700" :
+                "bg-slate-100 text-slate-600"
+              }`}>
+                {client.plan === "AGENCY" ? '₪425 נדל"ן' : client.plan === "PRO" ? "₪375 Pro" : "ניסיון"}
               </span>
             </div>
             <p className="text-sm text-slate-500 mt-1">

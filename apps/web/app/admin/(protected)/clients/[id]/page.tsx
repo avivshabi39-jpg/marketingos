@@ -87,6 +87,7 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
           slug: client.slug,
           primaryColor: client.primaryColor,
           industry: client.industry,
+          plan: client.plan,
           isActive: client.isActive,
           pagePublished: client.pagePublished,
           whatsappNumber: client.whatsappNumber,
