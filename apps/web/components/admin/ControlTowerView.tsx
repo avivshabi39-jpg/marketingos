@@ -175,7 +175,10 @@ export function ControlTowerView({
 
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm">
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-            <h2 className="font-semibold text-slate-900">הלקוחות שלי</h2>
+            <div className="flex items-center gap-3">
+              <h2 className="font-semibold text-slate-900">הלקוחות שלי</h2>
+              <span className="text-xs text-slate-400">{clients.length} לקוחות</span>
+            </div>
             <Link
               href="/admin/clients"
               className="text-xs text-blue-600 hover:text-blue-700 font-medium"
@@ -199,93 +202,135 @@ export function ControlTowerView({
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-xs text-slate-500 border-b border-slate-50">
+                  <tr className="text-xs text-slate-500 border-b border-slate-50 bg-slate-50/50">
                     <th className="text-right px-6 py-3 font-medium">לקוח</th>
-                    <th className="text-right px-4 py-3 font-medium hidden sm:table-cell">תחום</th>
-                    <th className="text-center px-4 py-3 font-medium">לידים</th>
-                    <th className="text-center px-4 py-3 font-medium hidden md:table-cell">7 ימים</th>
-                    <th className="text-center px-4 py-3 font-medium hidden md:table-cell">דף</th>
+                    <th className="text-right px-3 py-3 font-medium hidden sm:table-cell">תחום</th>
+                    <th className="text-center px-3 py-3 font-medium">לידים</th>
+                    <th className="text-center px-3 py-3 font-medium hidden md:table-cell">7 ימים</th>
+                    <th className="text-center px-3 py-3 font-medium hidden md:table-cell">דף</th>
+                    <th className="text-center px-3 py-3 font-medium">סטטוס</th>
+                    <th className="text-center px-3 py-3 font-medium hidden lg:table-cell">עדיפות</th>
                     <th className="text-center px-4 py-3 font-medium">פעולות</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
-                  {clients.map((client) => (
-                    <tr key={client.id} className="hover:bg-slate-50/50 transition-colors">
-                      {/* Name */}
-                      <td className="px-6 py-3">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                            style={{ backgroundColor: client.primaryColor || "#6366f1" }}
-                          >
-                            {client.name[0]}
+                  {clients.map((client) => {
+                    // Activity status logic
+                    const status: { label: string; color: string } =
+                      !client.pagePublished
+                        ? { label: "דרוש הגדרה", color: "bg-slate-100 text-slate-600" }
+                        : client.leads7d > 0
+                        ? { label: "פעיל", color: "bg-green-50 text-green-700" }
+                        : client.totalLeads > 0
+                        ? { label: "שקט", color: "bg-amber-50 text-amber-700" }
+                        : { label: "לא פעיל", color: "bg-red-50 text-red-600" };
+
+                    // Priority logic: 3 levels
+                    const priority: { label: string; color: string; dot: string } =
+                      !client.pagePublished
+                        ? { label: "קריטי", color: "text-red-600", dot: "bg-red-500" }
+                        : client.pagePublished && client.totalLeads === 0
+                        ? { label: "קריטי", color: "text-red-600", dot: "bg-red-500" }
+                        : client.pagePublished && client.leads7d === 0
+                        ? { label: "מעקב", color: "text-amber-600", dot: "bg-amber-400" }
+                        : { label: "תקין", color: "text-green-600", dot: "bg-green-500" };
+
+                    return (
+                      <tr key={client.id} className="hover:bg-slate-50/50 transition-colors">
+                        {/* Name */}
+                        <td className="px-6 py-3.5">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                              style={{ backgroundColor: client.primaryColor || "#6366f1" }}
+                            >
+                              {client.name[0]}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="font-medium text-slate-900 truncate">{client.name}</p>
+                              <p className="text-[11px] text-slate-400 truncate">{client.slug}</p>
+                            </div>
                           </div>
-                          <div className="min-w-0">
-                            <p className="font-medium text-slate-900 truncate">{client.name}</p>
-                            <p className="text-xs text-slate-400 truncate">{client.slug}</p>
+                        </td>
+
+                        {/* Industry */}
+                        <td className="px-3 py-3.5 hidden sm:table-cell">
+                          <span className="text-xs text-slate-500">
+                            {INDUSTRY_HE[client.industry ?? ""] ?? client.industry ?? "—"}
+                          </span>
+                        </td>
+
+                        {/* Total leads */}
+                        <td className="px-3 py-3.5 text-center">
+                          <span className={`text-sm font-bold ${client.totalLeads > 0 ? "text-slate-900" : "text-slate-300"}`}>
+                            {client.totalLeads}
+                          </span>
+                        </td>
+
+                        {/* Leads 7d */}
+                        <td className="px-3 py-3.5 text-center hidden md:table-cell">
+                          {client.leads7d > 0 ? (
+                            <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+                              <TrendingUp size={10} />
+                              {client.leads7d}
+                            </span>
+                          ) : (
+                            <span className="text-xs text-slate-300">0</span>
+                          )}
+                        </td>
+
+                        {/* Page status */}
+                        <td className="px-3 py-3.5 text-center hidden md:table-cell">
+                          {client.pagePublished ? (
+                            <span className="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
+                              <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                              פורסם
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-xs text-slate-400">
+                              <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                              טיוטה
+                            </span>
+                          )}
+                        </td>
+
+                        {/* Activity status */}
+                        <td className="px-3 py-3.5 text-center">
+                          <span className={`inline-block text-[11px] font-semibold px-2.5 py-1 rounded-full ${status.color}`}>
+                            {status.label}
+                          </span>
+                        </td>
+
+                        {/* Priority */}
+                        <td className="px-3 py-3.5 text-center hidden lg:table-cell">
+                          <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold ${priority.color}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${priority.dot}`} />
+                            {priority.label}
+                          </span>
+                        </td>
+
+                        {/* Actions */}
+                        <td className="px-4 py-3.5">
+                          <div className="flex items-center justify-center gap-1.5">
+                            <Link
+                              href={`/admin/clients/${client.id}`}
+                              className="text-xs text-blue-600 hover:text-blue-700 font-semibold px-2.5 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
+                            >
+                              צפה
+                            </Link>
+                            <Link
+                              href={`/client/${client.slug}`}
+                              target="_blank"
+                              className="text-xs text-slate-400 hover:text-slate-600 px-2 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+                              title="כנס כלקוח"
+                            >
+                              <ExternalLink size={13} />
+                            </Link>
                           </div>
-                        </div>
-                      </td>
-
-                      {/* Industry */}
-                      <td className="px-4 py-3 hidden sm:table-cell">
-                        <span className="text-xs text-slate-500">
-                          {INDUSTRY_HE[client.industry ?? ""] ?? client.industry ?? "—"}
-                        </span>
-                      </td>
-
-                      {/* Total leads */}
-                      <td className="px-4 py-3 text-center">
-                        <span className={`text-sm font-semibold ${client.totalLeads > 0 ? "text-slate-900" : "text-slate-300"}`}>
-                          {client.totalLeads}
-                        </span>
-                      </td>
-
-                      {/* Leads 7d */}
-                      <td className="px-4 py-3 text-center hidden md:table-cell">
-                        {client.leads7d > 0 ? (
-                          <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 text-xs font-medium px-2 py-0.5 rounded-full">
-                            <TrendingUp size={10} />
-                            {client.leads7d}
-                          </span>
-                        ) : (
-                          <span className="text-xs text-slate-300">0</span>
-                        )}
-                      </td>
-
-                      {/* Page status */}
-                      <td className="px-4 py-3 text-center hidden md:table-cell">
-                        {client.pagePublished ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
-                            <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                            פורסם
-                          </span>
-                        ) : (
-                          <span className="text-xs text-slate-400">טיוטה</span>
-                        )}
-                      </td>
-
-                      {/* Actions */}
-                      <td className="px-4 py-3">
-                        <div className="flex items-center justify-center gap-2">
-                          <Link
-                            href={`/admin/clients/${client.id}`}
-                            className="text-xs text-blue-600 hover:text-blue-700 font-medium px-2.5 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
-                          >
-                            צפה
-                          </Link>
-                          <Link
-                            href={`/client/${client.slug}`}
-                            target="_blank"
-                            className="text-xs text-slate-500 hover:text-slate-700 px-2 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
-                            title="כנס כלקוח"
-                          >
-                            <ExternalLink size={13} />
-                          </Link>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
