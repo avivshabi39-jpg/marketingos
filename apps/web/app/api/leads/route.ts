@@ -247,8 +247,16 @@ export async function POST(req: NextRequest) {
       greenApiInstanceId: true, greenApiToken: true,
       autoReplyActive: true, whatsappTemplate: true,
     },
-  }).then((c) => {
-    if (c) sendAutoReply(lead, c).catch((err) => console.error("[lead-auto-reply] Failed for lead", lead.id, err));
+  }).then(async (c) => {
+    if (!c) return;
+    try {
+      const { leadReplied } = await sendAutoReply(lead, c);
+      if (leadReplied) {
+        await prisma.lead.update({ where: { id: lead.id }, data: { autoReplied: true } });
+      }
+    } catch (err) {
+      console.error("[lead-auto-reply] Failed for lead", lead.id, err);
+    }
   }).catch((err) => console.error("[lead-auto-reply-lookup] Failed for lead", lead.id, err));
 
   triggerN8nWebhook(lead.clientId, "lead.created", {

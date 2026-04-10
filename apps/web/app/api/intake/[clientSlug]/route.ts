@@ -216,11 +216,21 @@ export async function POST(
     intakeFormId: intake.id,
   }).catch((err) => console.error("[intake-n8n-webhook]", err));
 
-  // Auto-reply to lead
-  sendAutoReply(
-    { firstName, lastName, phone: phone ?? null, source: detectedSource, utmSource },
-    client
-  ).catch((err) => console.error("[intake-auto-reply]", err));
+  // Auto-reply to lead — awaited so we can mark autoReplied flag
+  try {
+    const { leadReplied } = await sendAutoReply(
+      { firstName, lastName, phone: phone ?? null, source: detectedSource, utmSource },
+      client
+    );
+    if (leadReplied) {
+      prisma.lead.update({
+        where: { id: lead.id },
+        data: { autoReplied: true },
+      }).catch((err) => console.error("[intake-auto-replied-flag]", err));
+    }
+  } catch (err) {
+    console.error("[intake-auto-reply]", err);
+  }
 
   // Push + email notification to admin
   if (client.ownerId) {

@@ -2,6 +2,8 @@
  * Auto-reply system — sends WhatsApp messages when a new lead is created.
  * 1. Confirmation to the lead ("we received your inquiry")
  * 2. Alert to the agent/client ("new lead!")
+ *
+ * Returns { leadReplied: boolean } so the caller can set autoReplied flag.
  */
 
 import { sendWhatsApp, normalizePhone } from "@/lib/whatsapp";
@@ -27,26 +29,40 @@ export interface AutoReplyClient {
   whatsappTemplate: string | null;
 }
 
+// Improved default template — friendly, short, includes clear next step
 const DEFAULT_LEAD_TEMPLATE =
-  "שלום {name}! קיבלנו את פנייתך ל{clientName}.\nנחזור אליך תוך זמן קצר 😊";
+  `שלום {name}! 👋
+
+תודה שפנית אלינו ב{clientName}.
+קיבלנו את הפנייה שלך ונחזור אליך בהקדם.
+
+אם זה דחוף — שלח לנו הודעה כאן ונטפל מיד 📱`;
 
 const DEFAULT_AGENT_TEMPLATE =
-  "ליד חדש! 🔔\nשם: {name}\nטלפון: {phone}\nמקור: {source}";
+  `🔔 ליד חדש!
+
+שם: {name}
+טלפון: {phone}
+מקור: {source}
+
+הגיב מהר — הלידים החמים נסגרים תוך 5 דקות ⏰`;
 
 export async function sendAutoReply(
   lead: AutoReplyLead,
   client: AutoReplyClient
-): Promise<void> {
-  if (!client.greenApiInstanceId || !client.greenApiToken) return;
+): Promise<{ leadReplied: boolean }> {
+  if (!client.greenApiInstanceId || !client.greenApiToken) {
+    return { leadReplied: false };
+  }
 
   const instanceId = client.greenApiInstanceId;
   const rawToken = decrypt(client.greenApiToken);
   const fullName = `${lead.firstName} ${lead.lastName}`.trim();
   const source = lead.source ?? lead.utmSource ?? "אורגני";
 
-  const promises: Promise<unknown>[] = [];
+  let leadReplied = false;
 
-  // 1. Send confirmation to the lead (if they have a phone)
+  // 1. Send confirmation to the lead (if they have a valid phone)
   if (lead.phone && normalizePhone(lead.phone)) {
     const template = client.autoReplyActive && client.whatsappTemplate
       ? client.whatsappTemplate
@@ -57,9 +73,12 @@ export async function sendAutoReply(
       .replace(/{clientName}/g, client.name)
       .replace(/{phone}/g, lead.phone ?? "");
 
-    promises.push(
-      sendWhatsApp(lead.phone, leadMessage, instanceId, rawToken).catch(() => {})
-    );
+    const result = await sendWhatsApp(lead.phone, leadMessage, instanceId, rawToken);
+    if (result.ok) {
+      leadReplied = true;
+    } else {
+      console.error(`[auto-reply] Failed to send to lead: ${result.error}`);
+    }
   }
 
   // 2. Send new lead alert to agent (whatsappNumber or agentPhone)
@@ -70,10 +89,11 @@ export async function sendAutoReply(
       .replace(/{phone}/g, lead.phone ?? "אין")
       .replace(/{source}/g, source);
 
-    promises.push(
-      sendWhatsApp(agentPhone, agentMessage, instanceId, rawToken).catch(() => {})
-    );
+    const result = await sendWhatsApp(agentPhone, agentMessage, instanceId, rawToken);
+    if (!result.ok) {
+      console.error(`[auto-reply] Failed to alert agent: ${result.error}`);
+    }
   }
 
-  await Promise.allSettled(promises);
+  return { leadReplied };
 }

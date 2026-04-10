@@ -9,8 +9,9 @@ export async function GET(req: NextRequest) {
   const now = Date.now();
   let sent = 0;
   let failed = 0;
+  let skipped = 0;
 
-  // Day 1 follow-up — NEW leads from ~24h ago
+  // ─── Day 1 follow-up: NEW leads from ~24h ago that got auto-reply ───
   const day1 = await prisma.lead.findMany({
     where: {
       status: "NEW",
@@ -18,15 +19,39 @@ export async function GET(req: NextRequest) {
       phone: { not: "" },
       createdAt: { gte: new Date(now - 25 * 3600000), lte: new Date(now - 23 * 3600000) },
     },
-    include: { client: { select: { name: true, greenApiInstanceId: true, greenApiToken: true } } },
+    include: {
+      client: {
+        select: { name: true, greenApiInstanceId: true, greenApiToken: true },
+      },
+    },
     take: 50,
   });
 
   for (const lead of day1) {
-    if (!lead.phone) continue;
-    const result = await sendWhatsApp(lead.phone, `שלום ${lead.firstName}! 👋\n\nראיתי שפנית אלינו ב${lead.client.name}.\nרצינו לוודא שקיבלת מענה — אנחנו כאן לעזור!\n\nמתי נוח לדבר? 📞`, lead.client);
+    if (!lead.phone || !lead.client.greenApiInstanceId || !lead.client.greenApiToken) {
+      skipped++;
+      continue;
+    }
+
+    const message = `שלום ${lead.firstName}! 👋
+
+פנית אלינו ב${lead.client.name} ורצינו לוודא שקיבלת מענה.
+אנחנו כאן לעזור — מתי נוח לך לדבר? 📞`;
+
+    const result = await sendWhatsApp(lead.phone, message, lead.client);
     if (result.ok) {
-      await prisma.lead.update({ where: { id: lead.id }, data: { status: "CONTACTED" } });
+      await prisma.lead.update({
+        where: { id: lead.id },
+        data: { status: "CONTACTED" },
+      });
+      // Log the follow-up as activity
+      prisma.leadActivity.create({
+        data: {
+          leadId: lead.id,
+          type: "status_change",
+          content: "מעקב אוטומטי יום 1 — הודעת וואצאפ נשלחה",
+        },
+      }).catch((err) => console.error("[drip-day1-activity]", err));
       sent++;
     } else {
       failed++;
@@ -34,21 +59,44 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  // Day 3 — CONTACTED leads from ~72h ago
+  // ─── Day 3 follow-up: CONTACTED leads from ~72h ago ───
   const day3 = await prisma.lead.findMany({
     where: {
       status: "CONTACTED",
       phone: { not: "" },
       createdAt: { gte: new Date(now - 73 * 3600000), lte: new Date(now - 71 * 3600000) },
     },
-    include: { client: { select: { name: true, greenApiInstanceId: true, greenApiToken: true } } },
+    include: {
+      client: {
+        select: { name: true, greenApiInstanceId: true, greenApiToken: true },
+      },
+    },
     take: 50,
   });
 
   for (const lead of day3) {
-    if (!lead.phone) continue;
-    const result = await sendWhatsApp(lead.phone, `שלום ${lead.firstName}! 😊\n\nאנחנו מ${lead.client.name}.\nפנית אלינו לפני מספר ימים — עדיין מתעניין/ת?\n\nנשמח לתאם שיחה קצרה 🙏`, lead.client);
+    if (!lead.phone || !lead.client.greenApiInstanceId || !lead.client.greenApiToken) {
+      skipped++;
+      continue;
+    }
+
+    const message = `שלום ${lead.firstName}! 😊
+
+פנית אלינו ב${lead.client.name} לפני כמה ימים.
+עדיין מתעניין/ת? נשמח לתאם שיחה קצרה 🙏
+
+פשוט שלח/י "כן" ונחזור אליך.`;
+
+    const result = await sendWhatsApp(lead.phone, message, lead.client);
     if (result.ok) {
+      // Log the follow-up as activity
+      prisma.leadActivity.create({
+        data: {
+          leadId: lead.id,
+          type: "status_change",
+          content: "מעקב אוטומטי יום 3 — הודעת תזכורת נשלחה",
+        },
+      }).catch((err) => console.error("[drip-day3-activity]", err));
       sent++;
     } else {
       failed++;
@@ -56,5 +104,11 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  return NextResponse.json({ ok: true, sent, failed });
+  return NextResponse.json({
+    ok: true,
+    sent,
+    failed,
+    skipped,
+    processed: { day1: day1.length, day3: day3.length },
+  });
 }
