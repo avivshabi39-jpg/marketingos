@@ -73,16 +73,28 @@ export async function POST(req: NextRequest) {
   const industryHe = INDUSTRY_HE[client.industry ?? ""] ?? client.industry ?? "לא ידוע";
   const currentBlocks = client.pageBlocks ? JSON.stringify(client.pageBlocks).slice(0, 1500) : "אין דף קיים";
 
-  // Fetch stats for context
+  // Fetch stats + recent leads for context
   const now = new Date();
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-  const [totalLeads, newLeads7d, wonLeads, leadsWithPhone] = await Promise.all([
+  const [totalLeads, newLeads7d, wonLeads, leadsWithPhone, recentLeads] = await Promise.all([
     prisma.lead.count({ where: { clientId } }),
     prisma.lead.count({ where: { clientId, status: "NEW", createdAt: { gte: sevenDaysAgo } } }),
     prisma.lead.count({ where: { clientId, status: "WON" } }),
     prisma.lead.count({ where: { clientId, phone: { not: "" } } }),
+    prisma.lead.findMany({
+      where: { clientId },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+      select: { firstName: true, lastName: true, phone: true, email: true, status: true, source: true, createdAt: true },
+    }),
   ]);
   const conversionRate = totalLeads > 0 ? Math.round((wonLeads / totalLeads) * 100) : 0;
+
+  const recentLeadsList = recentLeads.length > 0
+    ? recentLeads.map((l, i) =>
+        `${i + 1}. ${l.firstName} ${l.lastName} | ${l.phone ?? "אין טלפון"} | ${l.status} | ${l.source ?? "לא ידוע"} | ${new Date(l.createdAt).toLocaleDateString("he-IL")}`
+      ).join("\n")
+    : "אין לידים עדיין";
 
   const systemPrompt = `אתה מומחה שיווק בכיר עם 60 שנות ניסיון בשוק הישראלי.
 שמך הוא "מיכאל" — יועץ שיווקי אגדי שעבד עם אלפי עסקים ישראלים.
@@ -113,20 +125,30 @@ export async function POST(req: NextRequest) {
 - נסגרו: ${wonLeads} (${conversionRate}% המרה)
 - בלוקים: ${currentBlocks}
 
+לידים אחרונים (10 אחרונים):
+${recentLeadsList}
+
 פעולות זמינות (השתמש בהן כשהמשתמש מבקש!):
-- BUILD_PAGE: אל תבנה דף ישירות! הגד למשתמש: "כדי לבנות דף נחיתה מקצועי, לחץ על 'בנה דף' בתפריט."
+- BUILD_PAGE: בנה דף נחיתה חדש. אם כבר יש דף — שאל לפני: "יש לך כבר דף. להחליף?" ותחכה לאישור. השתמש ב-action: "NONE" עד שהמשתמש מאשר.
 - UPDATE_HERO: עדכן כותרת ראשית
 - UPDATE_COLOR: שנה צבע (updates: {color: "#hex"})
 - UPDATE_TITLE: שנה כותרת (updates: {title: "..."})
-- PUBLISH: פרסם דף נחיתה
+- PUBLISH: פרסם דף נחיתה. תמיד שאל לפני: "הדף שלך יהיה גלוי לכולם. לפרסם?" ותחכה לאישור.
 - CREATE_REPORT: צור דוח ביצועים
-- BROADCAST: שלח שידור וואצאפ (updates: {broadcastMessage: "..."})
+- BROADCAST: שלח שידור וואצאפ. תמיד הצג את ההודעה המוצעת + מספר הנמענים ושאל: "לשלוח ל-X נמענים?" ותחכה לאישור. אל תבצע ב-action עד שהמשתמש אומר כן.
 - ADD_LEAD: הוסף ליד (updates: {firstName: "...", phone: "..."})
 - GENERATE_POST: צור פוסט לסושיאל (updates: {content: "תוכן הפוסט", platform: "facebook"})
 - WRITE_SCRIPT: כתוב סקריפט מכירה טלפוני (פתיחה, SPIN, התנגדויות, סגירה)
 - SWOT: ניתוח SWOT לעסק (חוזקות, חולשות, הזדמנויות, איומים)
 - SHOW_STATS: הצג סטטיסטיקות
+- SHOW_LEADS: כשמבקשים "תראה לי את הלידים" — הצג את רשימת הלידים האחרונים מלמעלה בפורמט ברור עם שם, טלפון, סטטוס ותאריך. השתמש ב-action: "NONE".
 - NONE: רק תשובה טקסטואלית
+
+## כללי בטיחות (חובה!):
+- BUILD_PAGE כשיש דף קיים: תמיד שאל אישור לפני ביצוע
+- PUBLISH: תמיד שאל אישור לפני ביצוע
+- BROADCAST: תמיד הצג הודעה + מספר נמענים ושאל אישור לפני ביצוע
+- כשהמשתמש מאשר (כן/אישור/בוא/שלח) — אז תבצע את הפעולה עם ה-action המתאים
 
 כשכותב תוכן שיווקי:
 - השתמש במילות כוח: "בלעדי", "מוגבל", "מיידי", "מוכח"
@@ -250,11 +272,14 @@ export async function POST(req: NextRequest) {
             ...b,
             id: (b.id as string) || `block-${Date.now()}-${i}`,
           }));
+          // Safety: save blocks as draft. Only auto-publish if page was not previously published
+          // (for existing pages, user must explicitly PUBLISH via separate action)
+          const shouldAutoPublish = !client.pagePublished;
           await prisma.client.update({
             where: { id: clientId },
             data: {
               pageBlocks: JSON.parse(JSON.stringify(blocksWithIds)),
-              pagePublished: true,
+              ...(shouldAutoPublish ? { pagePublished: true } : {}),
               ...(parsed.action === "BUILD_PAGE" && parsed.updates?.landingPageColor
                 ? { landingPageColor: parsed.updates.landingPageColor as string }
                 : {}),
