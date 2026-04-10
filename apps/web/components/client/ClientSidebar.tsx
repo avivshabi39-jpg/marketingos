@@ -7,26 +7,32 @@ import { useState } from "react";
 import {
   LayoutDashboard,
   Users,
-  FileBarChart,
   Settings,
   LogOut,
   Menu,
   X,
   ChevronLeft,
+  ChevronDown,
   TrendingUp,
   Globe,
   Bot,
   Home,
-  Mail,
-  HelpCircle,
-  Palette,
-  Search,
-  CalendarDays,
+  Megaphone,
   Radio,
   Share2,
+  Mail,
   Zap,
+  Search,
+  FileBarChart,
+  CalendarDays,
+  Palette,
+  HelpCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
 
 type NavItem = {
   label: string;
@@ -34,50 +40,110 @@ type NavItem = {
   icon: React.ElementType;
 };
 
-function buildNav(slug: string, isRealEstate: boolean): NavItem[] {
-  const items: NavItem[] = [
-    { label: "ראשי",        href: `/client/${slug}`,              icon: LayoutDashboard },
-    { label: "לידים",       href: `/client/${slug}/leads`,        icon: Users },
-    { label: "דוחות",       href: `/client/${slug}/reports`,      icon: FileBarChart },
-    { label: "אנליטיקס",    href: `/client/${slug}/analytics`,    icon: TrendingUp },
-    { label: "SEO וגוגל",   href: `/client/${slug}/seo`,          icon: Search },
-    { label: "תורים",       href: `/client/${slug}/appointments`, icon: CalendarDays },
-    { label: "שידור",       href: `/client/${slug}/broadcast`,    icon: Radio },
-    { label: "פוסטים",      href: `/client/${slug}/social`,       icon: Share2 },
-    { label: "עיצוב AI",    href: `/client/${slug}/ai-designer`,  icon: Palette },
-    { label: "בנה דף",       href: `/client/${slug}/build-page`,   icon: Globe },
-    { label: "ערוך דף",     href: `/client/${slug}/edit-page`,    icon: Globe },
-    { label: "מיילים",       href: `/client/${slug}/email`,        icon: Mail },
-    { label: "אוטומציות",   href: `/client/${slug}/automations`,  icon: Zap },
-    { label: "הסוכן שלי",   href: `/client/${slug}/ai-agent`,     icon: Bot },
-    { label: "עזרה",        href: `/client/${slug}/help`,         icon: HelpCircle },
-    { label: "הגדרות",     href: `/client/${slug}/settings`,     icon: Settings },
+type NavGroup = {
+  label: string;
+  href: string;
+  icon: React.ElementType;
+  children?: NavItem[];
+};
+
+// ---------------------------------------------------------------------------
+// Navigation structure: 6 primary items (+ Properties for RE)
+// All 17 original routes are preserved inside hubs
+// ---------------------------------------------------------------------------
+
+function buildNav(slug: string, isRealEstate: boolean): NavGroup[] {
+  const base = `/client/${slug}`;
+
+  const items: NavGroup[] = [
+    // 1. Dashboard — no children
+    { label: "ראשי", href: base, icon: LayoutDashboard },
+
+    // 2. Leads — no children
+    { label: "לידים", href: `${base}/leads`, icon: Users },
+
+    // 3. My Page — groups: build, edit, SEO, AI designer
+    {
+      label: "הדף שלי",
+      href: `${base}/build-page`,
+      icon: Globe,
+      children: [
+        { label: "בנה דף",    href: `${base}/build-page`,  icon: Globe },
+        { label: "ערוך דף",   href: `${base}/edit-page`,   icon: Globe },
+        { label: "SEO וגוגל", href: `${base}/seo`,         icon: Search },
+        { label: "עיצוב AI",  href: `${base}/ai-designer`, icon: Palette },
+      ],
+    },
+
+    // 4. Marketing — groups: broadcast, social, email, automations
+    {
+      label: "שיווק",
+      href: `${base}/broadcast`,
+      icon: Megaphone,
+      children: [
+        { label: "שידור",      href: `${base}/broadcast`,   icon: Radio },
+        { label: "פוסטים",     href: `${base}/social`,      icon: Share2 },
+        { label: "מיילים",     href: `${base}/email`,       icon: Mail },
+        { label: "אוטומציות",  href: `${base}/automations`, icon: Zap },
+        { label: "קמפיינים",   href: `${base}/campaigns`,   icon: Megaphone },
+      ],
+    },
+
+    // 5. Michael (AI) — groups: agent, reports, analytics, appointments, help
+    {
+      label: "מיכאל",
+      href: `${base}/ai-agent`,
+      icon: Bot,
+      children: [
+        { label: "הסוכן שלי",  href: `${base}/ai-agent`,     icon: Bot },
+        { label: "דוחות",      href: `${base}/reports`,      icon: FileBarChart },
+        { label: "אנליטיקס",   href: `${base}/analytics`,    icon: TrendingUp },
+        { label: "תורים",      href: `${base}/appointments`, icon: CalendarDays },
+        { label: "עזרה",       href: `${base}/help`,         icon: HelpCircle },
+      ],
+    },
+
+    // 6. Settings — no children
+    { label: "הגדרות", href: `${base}/settings`, icon: Settings },
   ];
+
+  // Conditional: Properties for real estate (after Leads)
   if (isRealEstate) {
     items.splice(2, 0, {
-      label: "הנכסים שלי",
-      href: `/client/${slug}/properties`,
+      label: "נכסים",
+      href: `${base}/properties`,
       icon: Home,
     });
   }
+
   return items;
 }
+
+// ---------------------------------------------------------------------------
+// Logout handler
+// ---------------------------------------------------------------------------
 
 async function handleLogout(slug: string) {
   await fetch("/api/client-auth/login", { method: "DELETE" });
   window.location.href = `/client/${slug}/login`;
 }
 
+// ---------------------------------------------------------------------------
+// Single nav link
+// ---------------------------------------------------------------------------
+
 function NavLink({
   item,
   active,
   primaryColor,
   onClick,
+  compact,
 }: {
   item: NavItem;
   active: boolean;
   primaryColor: string;
   onClick?: () => void;
+  compact?: boolean;
 }) {
   const Icon = item.icon;
   return (
@@ -85,7 +151,8 @@ function NavLink({
       href={item.href}
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group min-h-[40px]",
+        "flex items-center gap-3 rounded-xl text-sm font-medium transition-all duration-150 group",
+        compact ? "px-3 py-2 mr-3" : "px-3 py-2.5 min-h-[40px]",
         active ? "shadow-md" : "text-slate-400 hover:text-white hover:bg-slate-800"
       )}
       style={
@@ -96,17 +163,114 @@ function NavLink({
       dir="rtl"
     >
       <Icon
-        size={18}
+        size={compact ? 15 : 18}
         className={cn(
           "flex-shrink-0 transition-colors",
           active ? "text-white" : "text-slate-500 group-hover:text-slate-300"
         )}
       />
       <span className="flex-1">{item.label}</span>
-      {active && <ChevronLeft size={14} className="mr-auto opacity-60 text-white" />}
+      {active && !compact && <ChevronLeft size={14} className="mr-auto opacity-60 text-white" />}
     </Link>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Expandable nav group
+// ---------------------------------------------------------------------------
+
+function NavGroupItem({
+  group,
+  pathname,
+  slug,
+  primaryColor,
+  onMobileClose,
+}: {
+  group: NavGroup;
+  pathname: string;
+  slug: string;
+  primaryColor: string;
+  onMobileClose: () => void;
+}) {
+  const base = `/client/${slug}`;
+
+  // Check if any child is active
+  const childActive = group.children?.some((c) => pathname.startsWith(c.href)) ?? false;
+  const selfActive = group.href === base
+    ? pathname === group.href
+    : pathname.startsWith(group.href);
+  const isActive = selfActive || childActive;
+
+  const [expanded, setExpanded] = useState(childActive);
+
+  // No children → simple link
+  if (!group.children) {
+    return (
+      <NavLink
+        item={group}
+        active={group.href === base ? pathname === base : pathname.startsWith(group.href)}
+        primaryColor={primaryColor}
+        onClick={onMobileClose}
+      />
+    );
+  }
+
+  // Has children → expandable group
+  const Icon = group.icon;
+  return (
+    <div>
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className={cn(
+          "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group min-h-[40px]",
+          isActive
+            ? "text-white bg-slate-800"
+            : "text-slate-400 hover:text-white hover:bg-slate-800"
+        )}
+        dir="rtl"
+      >
+        <Icon
+          size={18}
+          className={cn(
+            "flex-shrink-0 transition-colors",
+            isActive ? "text-white" : "text-slate-500 group-hover:text-slate-300"
+          )}
+        />
+        <span className="flex-1 text-right">{group.label}</span>
+        <ChevronDown
+          size={14}
+          className={cn(
+            "transition-transform duration-200 opacity-50",
+            expanded ? "rotate-180" : ""
+          )}
+        />
+      </button>
+
+      {/* Children */}
+      <div
+        className={cn(
+          "overflow-hidden transition-all duration-200",
+          expanded ? "max-h-[300px] opacity-100 mt-0.5" : "max-h-0 opacity-0"
+        )}
+      >
+        {group.children.map((child) => (
+          <NavLink
+            key={child.href}
+            item={child}
+            active={pathname.startsWith(child.href)}
+            primaryColor={primaryColor}
+            onClick={onMobileClose}
+            compact
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main sidebar component
+// ---------------------------------------------------------------------------
 
 export function ClientSidebar({
   slug,
@@ -123,7 +287,7 @@ export function ClientSidebar({
 }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const navItems = buildNav(slug, industry === "REAL_ESTATE");
+  const navGroups = buildNav(slug, industry === "REAL_ESTATE");
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-slate-900">
@@ -166,21 +330,16 @@ export function ClientSidebar({
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto sidebar-scroll" dir="rtl">
-        {navItems.map((item) => {
-          const isActive =
-            item.href === `/client/${slug}`
-              ? pathname === item.href
-              : pathname.startsWith(item.href);
-          return (
-            <NavLink
-              key={item.href}
-              item={item}
-              active={isActive}
-              primaryColor={primaryColor}
-              onClick={() => setMobileOpen(false)}
-            />
-          );
-        })}
+        {navGroups.map((group) => (
+          <NavGroupItem
+            key={group.label}
+            group={group}
+            pathname={pathname}
+            slug={slug}
+            primaryColor={primaryColor}
+            onMobileClose={() => setMobileOpen(false)}
+          />
+        ))}
       </nav>
 
       {/* Logout */}
