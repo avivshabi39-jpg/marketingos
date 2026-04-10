@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getClientSession } from "@/lib/clientAuth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { TrendingUp, CheckCircle2, BarChart2, Phone, Mail, Calendar, DollarSign } from "lucide-react";
+import { Phone, Mail, Calendar } from "lucide-react";
 import Link from "next/link";
 import { CopyButton } from "./CopyButton";
 import { ClientAiTools } from "@/components/client/ClientAiTools";
@@ -14,6 +14,7 @@ import { AiProactiveMessage } from "@/components/client/AiProactiveMessage";
 import { QuickDesignControls } from "@/components/client/QuickDesignControls";
 import { WhatsAppSetupGuide } from "@/components/client/WhatsAppSetupGuide";
 import { DashboardAiSection } from "@/components/client/DashboardAiSection";
+import { BusinessValueStrip } from "@/components/client/BusinessValueStrip";
 import { OnboardingTour } from "@/components/portal/OnboardingTour";
 
 const STATUS_HE: Record<string, string> = {
@@ -90,6 +91,7 @@ export default async function ClientDashboardPage({
     pipelineValue,
     pipelineOpen,
     wonThisMonth,
+    contactedCount,
   ] = await Promise.all([
     prisma.lead.findMany({
       where: { clientId: client.id },
@@ -150,6 +152,9 @@ export default async function ClientDashboardPage({
       where: { clientId: client.id, status: "WON", updatedAt: { gte: firstOfMonth } },
       _sum: { value: true },
     }),
+    prisma.lead.count({
+      where: { clientId: client.id, status: "CONTACTED" },
+    }),
   ]);
 
   const conversionRate =
@@ -188,45 +193,6 @@ export default async function ClientDashboardPage({
     month: "long",
     year: "numeric",
   });
-
-  const statsCards = [
-    {
-      label: "לידים החודש",
-      value: leadsThisMonth,
-      icon: TrendingUp,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
-      tooltip: "כמות הלידים שהגיעו מדף הנחיתה שלך החודש",
-    },
-    {
-      label: "לידים שנסגרו",
-      value: wonLeads,
-      icon: CheckCircle2,
-      color: "text-green-600",
-      bg: "bg-green-50",
-      tooltip: "לידים שהתקדמו לסטטוס נסגר — עסקאות שהפכו ללקוחות",
-    },
-    {
-      label: "שיעור המרה",
-      value: `${conversionRate}%`,
-      icon: BarChart2,
-      color: "text-blue-600",
-      bg: "bg-blue-50",
-      tooltip: "אחוז הלידים שנסגרו מתוך סה\"כ הלידים שהגיעו",
-    },
-    ...(totalPipelineValue > 0
-      ? [
-          {
-            label: "ערך פייפליין",
-            value: `₪${totalPipelineValue.toLocaleString("he-IL")}`,
-            icon: DollarSign,
-            color: "text-amber-600",
-            bg: "bg-amber-50",
-            tooltip: "סכום ערך כל הלידים הפתוחים שטרם נסגרו",
-          },
-        ]
-      : []),
-  ];
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] p-6 md:p-8" dir="rtl">
@@ -280,47 +246,16 @@ export default async function ClientDashboardPage({
           clientId={client.id}
         />
 
-        {/* Stats */}
-        <div className={`grid grid-cols-1 gap-4 ${statsCards.length === 4 ? "sm:grid-cols-4" : "sm:grid-cols-3"}`}>
-          {statsCards.map(({ label, value, icon: Icon, color, bg, tooltip }) => (
-            <div
-              key={label}
-              title={tooltip}
-              className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 cursor-default"
-            >
-              <div
-                className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center mb-4`}
-              >
-                <Icon size={20} className={color} />
-              </div>
-              <p className="text-3xl font-bold text-slate-900">{value}</p>
-              <p className="text-sm text-slate-500 mt-1">{label}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Pipeline Value Card */}
-        {(pipelineOpen._sum.value ?? 0) > 0 || (wonThisMonth._sum.value ?? 0) > 0 ? (
-          <div className="bg-gradient-to-l from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-5 flex items-center justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold text-green-700 mb-1">💰 כסף בצינור</p>
-              <p className="text-3xl font-extrabold text-green-800">
-                ₪{(pipelineOpen._sum.value ?? 0).toLocaleString("he-IL")}
-              </p>
-              <p className="text-xs text-slate-500 mt-1">
-                {pipelineOpen._count._all} לידים פתוחים
-              </p>
-            </div>
-            {(wonThisMonth._sum.value ?? 0) > 0 && (
-              <div className="text-center flex-shrink-0">
-                <p className="text-xs font-semibold text-green-700 mb-1">✅ נסגר החודש</p>
-                <p className="text-2xl font-extrabold text-green-800">
-                  ₪{(wonThisMonth._sum.value ?? 0).toLocaleString("he-IL")}
-                </p>
-              </div>
-            )}
-          </div>
-        ) : null}
+        {/* ── Business Value Strip — compact metrics + insight ── */}
+        <BusinessValueStrip
+          totalLeads={totalLeads}
+          leadsThisWeek={leadsLast7Days}
+          contactedCount={contactedCount}
+          wonLeads={wonLeads}
+          conversionRate={conversionRate}
+          newLeadsCount={newLeadsCount}
+          pipelineValue={pipelineOpen._sum.value ?? 0}
+        />
 
         {/* Quick Design Controls */}
         <QuickDesignControls
