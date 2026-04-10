@@ -13,6 +13,7 @@ import { AbTestResults } from "@/components/admin/AbTestResults";
 import { ClientAiAgentWithPreview } from "@/components/admin/ClientAiAgent";
 import { QRCodePanel } from "@/components/admin/QRCodePanel";
 import { WhatsAppSetup } from "@/components/admin/WhatsAppSetup";
+import { ClientOverviewHeader } from "@/components/admin/ClientOverviewHeader";
 
 const STATUS_COLORS: Record<string, string> = {
   NEW:       "bg-blue-100 text-blue-700",
@@ -65,7 +66,9 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
   // Stats
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   const leadsThisMonth = client.leads.filter((l) => l.createdAt >= startOfMonth).length;
+  const leads7d = client.leads.filter((l) => l.createdAt >= sevenDaysAgo).length;
   const wonLeads = client.leads.filter((l) => l.status === "WON").length;
   const conversionRate = client._count.leads > 0
     ? Math.round((wonLeads / client._count.leads) * 100)
@@ -74,65 +77,30 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
     .filter((l) => l.status === "WON")
     .reduce((s, l) => s + (l.value ?? 0), 0);
 
-  const initials = client.name.split(" ").slice(0, 2).map((w: string) => w[0]).join("").toUpperCase();
-
   return (
     <div className="space-y-6" dir="rtl">
-      {/* Header */}
-      <div className="flex items-start gap-4">
-        <Link href="/admin/clients" className="mt-1 text-slate-400 hover:text-slate-600">
-          <ArrowRight size={18} />
-        </Link>
-        <div className="flex items-center gap-4 flex-1 flex-wrap">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
-            style={{ backgroundColor: client.primaryColor }}
-          >
-            {initials}
-          </div>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-2xl font-semibold text-slate-900">{client.name}</h1>
-              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${client.isActive ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-500"}`}>
-                {client.isActive ? "פעיל" : "לא פעיל"}
-              </span>
-              {client.industry && (
-                <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-medium">
-                  {INDUSTRY_HE[client.industry] ?? client.industry}
-                </span>
-              )}
-              <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 font-medium">
-                {PLAN_HE[client.plan] ?? client.plan}
-              </span>
-            </div>
-            <p className="text-sm text-slate-500 mt-0.5">{client.slug} · {client.email}</p>
-            {client.subdomain && (
-              <p className="text-xs text-blue-500 mt-0.5">
-                {`${client.subdomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "localhost"}`}
-              </p>
-            )}
-          </div>
-          <div className="mr-auto flex items-center gap-2">
-            <CopyLinkButton url={`/${client.slug}/intake`} label="העתק קישור לטופס" />
-            <a
-              href={`/${client.slug}/intake`}
-              target="_blank"
-              className="flex items-center gap-1.5 text-sm text-blue-500 hover:text-blue-700 font-medium"
-            >
-              <ExternalLink size={14} />
-              פתח טופס
-            </a>
-            <Link
-              href={`/admin/clients/${client.id}/reviews`}
-              className="flex items-center gap-1.5 text-sm text-yellow-600 hover:text-yellow-700 font-medium"
-            >
-              <Star size={14} />
-              ביקורות
-            </Link>
-          </div>
-        </div>
-      </div>
+      {/* ── New: Client Overview Header with 4 sections ── */}
+      <ClientOverviewHeader
+        client={{
+          id: client.id,
+          name: client.name,
+          slug: client.slug,
+          primaryColor: client.primaryColor,
+          industry: client.industry,
+          isActive: client.isActive,
+          pagePublished: client.pagePublished,
+          whatsappNumber: client.whatsappNumber,
+        }}
+        stats={{
+          totalLeads: client._count.leads,
+          leadsThisMonth,
+          leads7d,
+          wonLeads,
+          conversionRate,
+        }}
+      />
 
+      {/* ── Tabs for detailed views ── */}
       <ClientTabs tabs={TABS} panels={{
         "overview": (
           <div className="space-y-6">
@@ -154,16 +122,6 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
                   </div>
                 );
               })}
-            </div>
-            <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-5 grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
-              <div><p className="text-xs text-slate-400 mb-1">טלפון</p><p className="font-medium text-slate-800">{client.phone ?? "—"}</p></div>
-              <div><p className="text-xs text-slate-400 mb-1">וואטסאפ</p><p className="font-medium text-slate-800">{client.whatsappNumber ?? "—"}</p></div>
-              <div><p className="text-xs text-slate-400 mb-1">תקציב חודשי</p><p className="font-medium text-slate-800">{client.monthlyBudget ? `₪${client.monthlyBudget.toLocaleString("he-IL")}` : "—"}</p></div>
-              <div><p className="text-xs text-slate-400 mb-1">פיקסל פייסבוק</p><p className="font-medium text-slate-800 truncate">{client.facebookPixelId ?? "—"}</p></div>
-              <div><p className="text-xs text-slate-400 mb-1">Google Ads ID</p><p className="font-medium text-slate-800 truncate">{client.googleAdsId ?? "—"}</p></div>
-              <div><p className="text-xs text-slate-400 mb-1">Google Analytics 4</p><p className="font-medium text-slate-800 truncate">{client.googleAnalyticsId ?? "—"}</p></div>
-              <div><p className="text-xs text-slate-400 mb-1">קישור Google Business</p><p className="font-medium text-slate-800 truncate">{client.googleBusinessUrl ?? "—"}</p></div>
-              <div><p className="text-xs text-slate-400 mb-1">דוחות לאימייל</p><p className="font-medium text-slate-800 truncate">{client.reportEmail ?? "—"}</p></div>
             </div>
           </div>
         ),
