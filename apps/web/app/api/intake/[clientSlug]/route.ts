@@ -7,6 +7,8 @@ import { sendPushNotification } from "@/lib/push";
 import { sendAutoReply } from "@/lib/autoReply";
 import { sendNewLeadEmail } from "@/lib/email";
 import { sanitizeText } from "@/lib/sanitize";
+import { computeLeadScore } from "@/lib/leadScoring";
+import { createNotification } from "@/lib/notifications";
 
 const schema = z.object({
   // Honeypot — bots fill this, humans leave it empty
@@ -14,8 +16,8 @@ const schema = z.object({
 
   // Intake form fields
   fullName:           z.string().min(1),
-  businessName:       z.string().min(1),
-  email:              z.string().email(),
+  businessName:       z.string().optional(),
+  email:              z.string().email().optional().or(z.literal("")),
   phone:              z.string().optional(),
   preferredContact:   z.string().optional(),
   businessType:       z.string().optional(),
@@ -124,14 +126,23 @@ export async function POST(
       fullName,
       email,
       phone: phone ?? null,
-      businessName: (businessName as string) ?? "",
+      businessName: (businessName as string) || fullName,
       ...(restFields as Record<string, string | null | undefined>),
       extraData: _extraData ?? undefined,
       clientId: client.id,
     },
   });
 
-  // Also create a Lead record for CRM tracking
+  // Compute lead score from available data
+  const leadScore = computeLeadScore({
+    phone,
+    email,
+    utmMedium,
+    utmSource,
+    metadata: { fromIntakeForm: true, businessName: intakeData.businessName },
+  });
+
+  // Create Lead record with explicit status and score
   const lead = await prisma.lead.create({
     data: {
       firstName,
@@ -139,6 +150,8 @@ export async function POST(
       email,
       phone,
       source: detectedSource,
+      status: "NEW",
+      leadScore,
       utmSource,
       utmMedium,
       utmCampaign,
@@ -156,7 +169,40 @@ export async function POST(
     },
   });
 
-  // Fire n8n webhook asynchronously
+  // --- Side effects: non-blocking, failures logged ---
+
+  // Lead activity record (audit trail)
+  prisma.leadActivity.create({
+    data: {
+      leadId: lead.id,
+      type: "created",
+      content: `ליד נוצר מטופס קבלה (${detectedSource})`,
+    },
+  }).catch((err) => console.error("[intake-lead-activity]", err));
+
+  // Inbox event for admin dashboard
+  if (client.ownerId) {
+    prisma.inboxEvent.create({
+      data: {
+        userId: client.ownerId,
+        type: "lead",
+        title: `${firstName} ${lastName}`,
+        description: `ליד חדש מטופס קבלה — ${detectedSource}`,
+        clientId: client.id,
+        phone: phone ?? undefined,
+      },
+    }).catch((err) => console.error("[intake-inbox-event]", err));
+  }
+
+  // In-app notification
+  createNotification({
+    clientId: client.id,
+    type: "lead_new",
+    title: "ליד חדש התקבל",
+    body: `${firstName} ${lastName} — ${detectedSource}`,
+  }).catch((err) => console.error("[intake-notification]", err));
+
+  // n8n webhook
   triggerN8nWebhook(client.id, "lead.created", {
     lead: {
       id: lead.id,
@@ -168,36 +214,36 @@ export async function POST(
       utmCampaign,
     },
     intakeFormId: intake.id,
-  }).catch(() => {/* fire and forget */});
+  }).catch((err) => console.error("[intake-n8n-webhook]", err));
 
-  // Auto-reply: confirm to lead + alert agent
+  // Auto-reply to lead
   sendAutoReply(
     { firstName, lastName, phone: phone ?? null, source: detectedSource, utmSource },
     client
-  ).catch(() => {});
+  ).catch((err) => console.error("[intake-auto-reply]", err));
 
-  // Push notification to admin
+  // Push + email notification to admin
   if (client.ownerId) {
     sendPushNotification(client.ownerId, {
       title: "🎯 ליד חדש הגיע!",
       body: `${firstName} ${lastName} — ${client.name}`,
       url: "/admin/leads",
-    }).catch(() => {});
+    }).catch((err) => console.error("[intake-push]", err));
 
-    // Email notification to admin
-    const adminUser = await prisma.user.findUnique({
+    prisma.user.findUnique({
       where: { id: client.ownerId },
       select: { email: true },
-    });
-    if (adminUser?.email) {
-      sendNewLeadEmail(adminUser.email, {
-        clientName: client.name,
-        leadName: `${firstName} ${lastName}`,
-        leadPhone: phone || "",
-        leadEmail: email || undefined,
-        source: detectedSource,
-      }).catch(() => {});
-    }
+    }).then((adminUser) => {
+      if (adminUser?.email) {
+        sendNewLeadEmail(adminUser.email, {
+          clientName: client.name,
+          leadName: `${firstName} ${lastName}`,
+          leadPhone: phone || "",
+          leadEmail: email || undefined,
+          source: detectedSource,
+        }).catch((err) => console.error("[intake-email]", err));
+      }
+    }).catch((err) => console.error("[intake-admin-lookup]", err));
   }
 
   return NextResponse.json({ intake, lead, clientName: client.name }, { status: 201 });
