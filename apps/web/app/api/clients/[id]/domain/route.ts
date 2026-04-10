@@ -1,21 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { getSession, isSuperAdmin } from "@/lib/auth";
 import { getClientSession } from "@/lib/clientAuth";
 import { prisma } from "@/lib/prisma";
+
+// Shared ownership check for all handlers in this route
+async function verifyAccess(params: { id: string }) {
+  const session = await getSession();
+  const clientSession = !session ? await getClientSession() : null;
+  if (!session && !clientSession) return { error: "Unauthorized", status: 401 } as const;
+
+  // Client portal: must match their own clientId
+  if (clientSession && clientSession.clientId !== params.id) {
+    return { error: "Forbidden", status: 403 } as const;
+  }
+
+  // Admin: super-admin can access any, regular admin must own the client
+  if (session && !isSuperAdmin(session)) {
+    const client = await prisma.client.findUnique({
+      where: { id: params.id },
+      select: { ownerId: true },
+    });
+    if (!client || client.ownerId !== session.userId) {
+      return { error: "Forbidden", status: 403 } as const;
+    }
+  }
+
+  return { ok: true } as const;
+}
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const session = await getSession();
-  const clientSession = !session ? await getClientSession() : null;
-  if (!session && !clientSession) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  if (clientSession && clientSession.clientId !== params.id) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const access = await verifyAccess(params);
+  if ("error" in access) return NextResponse.json({ error: access.error }, { status: access.status });
 
   const client = await prisma.client.findUnique({
     where: { id: params.id },
@@ -55,15 +73,8 @@ export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const session = await getSession();
-  const clientSession = !session ? await getClientSession() : null;
-  if (!session && !clientSession) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  if (clientSession && clientSession.clientId !== params.id) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const access = await verifyAccess(params);
+  if ("error" in access) return NextResponse.json({ error: access.error }, { status: access.status });
 
   const body = await req.json().catch(() => null);
   const customDomain = body?.customDomain as string | undefined;
@@ -113,15 +124,8 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const session = await getSession();
-  const clientSession = !session ? await getClientSession() : null;
-  if (!session && !clientSession) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  if (clientSession && clientSession.clientId !== params.id) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const access = await verifyAccess(params);
+  if ("error" in access) return NextResponse.json({ error: access.error }, { status: access.status });
 
   await prisma.client.update({
     where: { id: params.id },

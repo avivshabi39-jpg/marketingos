@@ -91,6 +91,20 @@ export async function POST(req: NextRequest) {
   }
 
   const { clientId, scheduledAt, name: rawName, phone: rawPhone, email: rawEmail, notes: rawNotes, ...rest } = parsed.data;
+
+  // Ownership check: verify caller has access to this clientId
+  if (clientPortal) {
+    if (clientPortal.clientId !== clientId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+  } else if (session && !isSuperAdmin(session)) {
+    const owned = await prisma.client.findFirst({
+      where: { id: clientId, ownerId: session.userId },
+      select: { id: true },
+    });
+    if (!owned) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const name = sanitizeText(rawName, 200);
   const phone = rawPhone ? sanitizePhone(rawPhone) : undefined;
   const email = rawEmail ? sanitizeEmail(rawEmail) : undefined;

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { getSession } from "@/lib/auth";
+import { getSession, isSuperAdmin } from "@/lib/auth";
 import { triggerN8nWebhook } from "@/lib/webhooks";
 
 const schema = z.object({
@@ -49,16 +49,21 @@ export async function POST(req: NextRequest) {
 
   const { clientId, period } = parsed.data;
 
-  // Scope check
+  // Scope check: scoped agent, super-admin, or verify ownership
   if (session.clientId && session.clientId !== clientId) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const client = await prisma.client.findUnique({
     where: { id: clientId },
-    select: { id: true, name: true, reportEmail: true },
+    select: { id: true, name: true, reportEmail: true, ownerId: true },
   });
   if (!client) return NextResponse.json({ error: "Client not found" }, { status: 404 });
+
+  // Regular admin must own the client
+  if (!session.clientId && !isSuperAdmin(session) && client.ownerId !== session.userId) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const { start, end, label } = getPeriodRange(period);
 
