@@ -55,7 +55,164 @@ const INDUSTRY_HE: Record<string, string> = {
 };
 
 // ---------------------------------------------------------------------------
-// Component
+// Owner AI Summary — rule-based recommendations from existing data
+// ---------------------------------------------------------------------------
+
+type Recommendation = {
+  text: string;
+  clientName: string;
+  clientId: string;
+  clientSlug: string;
+  level: "critical" | "watch" | "opportunity";
+};
+
+function buildRecommendations(clients: ClientRow[]): Recommendation[] {
+  const recs: Recommendation[] = [];
+
+  // Rule 1: No page published → critical
+  for (const c of clients) {
+    if (!c.pagePublished) {
+      recs.push({
+        text: "אין דף נחיתה — בנה דף כדי להתחיל לקבל לידים",
+        clientName: c.name,
+        clientId: c.id,
+        clientSlug: c.slug,
+        level: "critical",
+      });
+    }
+  }
+
+  // Rule 2: Page exists, 0 total leads → critical
+  for (const c of clients) {
+    if (c.pagePublished && c.totalLeads === 0) {
+      recs.push({
+        text: "דף מפורסם אבל 0 לידים — שתף את הקישור או שפר תנועה",
+        clientName: c.name,
+        clientId: c.id,
+        clientSlug: c.slug,
+        level: "critical",
+      });
+    }
+  }
+
+  // Rule 3: Has leads but 0 in 7d → watch
+  for (const c of clients) {
+    if (c.pagePublished && c.totalLeads > 0 && c.leads7d === 0) {
+      recs.push({
+        text: "אין לידים חדשים השבוע — בדוק תנועה ושיווק",
+        clientName: c.name,
+        clientId: c.id,
+        clientSlug: c.slug,
+        level: "watch",
+      });
+    }
+  }
+
+  // Rule 4: New leads in 7d → opportunity
+  for (const c of clients) {
+    if (c.leads7d > 0 && c.wonLeads === 0) {
+      recs.push({
+        text: `${c.leads7d} לידים חדשים — עקוב וסגור עסקאות`,
+        clientName: c.name,
+        clientId: c.id,
+        clientSlug: c.slug,
+        level: "opportunity",
+      });
+    }
+  }
+
+  // Sort: critical first, then watch, then opportunity. Max 3.
+  const order = { critical: 0, watch: 1, opportunity: 2 };
+  return recs.sort((a, b) => order[a.level] - order[b.level]).slice(0, 3);
+}
+
+const LEVEL_STYLES = {
+  critical: { dot: "bg-red-500", text: "text-red-700", bg: "bg-red-50", label: "דחוף" },
+  watch:    { dot: "bg-amber-400", text: "text-amber-700", bg: "bg-amber-50", label: "מעקב" },
+  opportunity: { dot: "bg-blue-500", text: "text-blue-700", bg: "bg-blue-50", label: "הזדמנות" },
+};
+
+function OwnerAiSummary({
+  clients,
+  totalClients,
+  totalLeadsToday,
+  totalLeads7d,
+  activeClientCount,
+  clientsWithNoPage,
+  clientsWithNoLeads,
+}: {
+  clients: ClientRow[];
+  totalClients: number;
+  totalLeadsToday: number;
+  totalLeads7d: number;
+  activeClientCount: number;
+  clientsWithNoPage: ClientRow[];
+  clientsWithNoLeads: ClientRow[];
+}) {
+  const recs = buildRecommendations(clients);
+  const needsAttention = clientsWithNoPage.length + clientsWithNoLeads.length;
+
+  // Build one-line summary
+  const summaryParts: string[] = [];
+  if (totalLeadsToday > 0) summaryParts.push(`${totalLeadsToday} לידים חדשים היום`);
+  else if (totalLeads7d > 0) summaryParts.push(`${totalLeads7d} לידים ב-7 ימים`);
+  summaryParts.push(`${activeClientCount} לקוחות פעילים`);
+  if (needsAttention > 0) summaryParts.push(`${needsAttention} דורשים תשומת לב`);
+  const summaryLine = summaryParts.join(" · ");
+
+  const allHealthy = recs.length === 0;
+
+  return (
+    <div className="bg-gradient-to-l from-slate-900 to-slate-800 rounded-2xl overflow-hidden">
+      {/* Header row */}
+      <div className="px-6 py-4 flex items-center gap-3">
+        <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+          <Bot size={20} className="text-white" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-white font-semibold text-sm">מיכאל — יועץ ניהולי</p>
+          <p className="text-slate-400 text-xs mt-0.5">{summaryLine}</p>
+        </div>
+        {allHealthy && (
+          <div className="flex items-center gap-1.5 bg-green-500/20 rounded-full px-3 py-1">
+            <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+            <span className="text-[11px] text-green-300 font-medium">הכל תקין</span>
+          </div>
+        )}
+      </div>
+
+      {/* Recommendations */}
+      {recs.length > 0 && (
+        <div className="border-t border-slate-700/50 px-6 py-3 space-y-2">
+          {recs.map((rec, i) => {
+            const style = LEVEL_STYLES[rec.level];
+            return (
+              <div key={i} className="flex items-center gap-3 group">
+                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${style.dot}`} />
+                <div className="flex-1 min-w-0">
+                  <span className="text-white text-xs font-medium">{rec.clientName}</span>
+                  <span className="text-slate-400 text-xs"> — {rec.text}</span>
+                </div>
+                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${style.bg} ${style.text}`}>
+                  {style.label}
+                </span>
+                <Link
+                  href={`/admin/clients/${rec.clientId}`}
+                  className="text-[11px] text-blue-400 hover:text-blue-300 font-medium opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                >
+                  צפה →
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main Component
 // ---------------------------------------------------------------------------
 
 export function ControlTowerView({
@@ -97,23 +254,16 @@ export function ControlTowerView({
           </Link>
         </div>
 
-        {/* ── Future: Owner AI Assistant placeholder ── */}
-        <div className="bg-gradient-to-l from-slate-900 to-slate-800 rounded-2xl px-6 py-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
-            <Bot size={20} className="text-white" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-white font-medium text-sm">
-              מיכאל — יועץ ניהולי
-            </p>
-            <p className="text-slate-400 text-xs">
-              {totalLeadsToday > 0
-                ? `${totalLeadsToday} לידים חדשים היום | ${activeClients.length} לקוחות פעילים`
-                : `${totalClients} לקוחות במערכת | ${totalLeads7d} לידים ב-7 ימים`}
-            </p>
-          </div>
-          <span className="text-slate-500 text-xs">בקרוב</span>
-        </div>
+        {/* ── Michael — Owner AI Summary Layer ── */}
+        <OwnerAiSummary
+          clients={clients}
+          totalClients={totalClients}
+          totalLeadsToday={totalLeadsToday}
+          totalLeads7d={totalLeads7d}
+          activeClientCount={activeClients.length}
+          clientsWithNoPage={clientsWithNoPage}
+          clientsWithNoLeads={clientsWithNoLeads}
+        />
 
         {/* ═══════════════════════════════════════════════════════════════════ */}
         {/* SECTION 1 — KPI Cards                                            */}
