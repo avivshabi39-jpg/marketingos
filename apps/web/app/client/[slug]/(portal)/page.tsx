@@ -88,9 +88,9 @@ export default async function ClientDashboardPage({
     leadsLast7Days,
     leadsPrev7Days,
     newLeadsCount,
-    pipelineValue,
+    ,  // pipelineValue (unused — kept for future)
     pipelineOpen,
-    wonThisMonth,
+    ,  // wonThisMonth (unused — kept for future)
     contactedCount,
   ] = await Promise.all([
     prisma.lead.findMany({
@@ -180,7 +180,7 @@ export default async function ClientDashboardPage({
   const hasWhatsapp = !!client.whatsappNumber;
   const hasLeads = totalLeads > 0;
   const hasReports = reports.length > 0;
-  const totalPipelineValue = pipelineValue._sum.value ?? 0;
+  // pipelineValue and wonThisMonth kept in query for future use (prefixed with _)
 
   const appUrl =
     process.env.NEXT_PUBLIC_APP_URL ?? process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
