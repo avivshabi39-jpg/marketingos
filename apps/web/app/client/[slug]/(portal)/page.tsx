@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getClientSession } from "@/lib/clientAuth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { TrendingUp, CheckCircle2, BarChart2, Phone, Mail, Calendar, DollarSign, Rocket } from "lucide-react";
+import { TrendingUp, CheckCircle2, BarChart2, Phone, Mail, Calendar, DollarSign } from "lucide-react";
 import Link from "next/link";
 import { CopyButton } from "./CopyButton";
 import { ClientAiTools } from "@/components/client/ClientAiTools";
@@ -13,6 +13,7 @@ import { ShareCenter } from "@/components/client/ShareCenter";
 import { AiProactiveMessage } from "@/components/client/AiProactiveMessage";
 import { QuickDesignControls } from "@/components/client/QuickDesignControls";
 import { WhatsAppSetupGuide } from "@/components/client/WhatsAppSetupGuide";
+import { DashboardAiSection } from "@/components/client/DashboardAiSection";
 import { NoPageWelcome } from "./NoPageWelcome";
 import { OnboardingTour } from "@/components/portal/OnboardingTour";
 
@@ -189,9 +190,7 @@ export default async function ClientDashboardPage({
     year: "numeric",
   });
 
-  // Smart welcome: no published page and no blocks at all
   const pageBlocks = client.pageBlocks as unknown[] | null;
-  const isFirstTime = !client.pagePublished && (!pageBlocks || pageBlocks.length === 0);
 
   // Full-screen build experience when no page exists at all
   const hasPage =
@@ -266,38 +265,28 @@ export default async function ClientDashboardPage({
           </div>
         </div>
 
-        {/* AI Proactive Message Banner */}
-        <AiProactiveMessage
-          type={aiMessageType}
-          newLeadsCount={newLeadsCount}
-          changePercent={changePercent}
+        {/* ── Michael AI Section — primary entry point ── */}
+        <DashboardAiSection
+          clientId={client.id}
+          clientName={client.name}
+          slug={params.slug}
+          pagePublished={client.pagePublished}
+          stats={{
+            totalLeads,
+            newLeads7d: leadsLast7Days,
+            leadsThisMonth,
+            wonLeads,
+            conversionRate,
+          }}
         />
 
-        {/* Smart Welcome — first-time user */}
-        {isFirstTime && (
-          <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-8 text-white text-center">
-            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Rocket size={32} className="text-white" />
-            </div>
-            <h2 className="text-2xl font-bold mb-2">ברוכים הבאים ל-MarketingOS!</h2>
-            <p className="text-blue-200 mb-6 max-w-md mx-auto">
-              עדיין אין לך דף נחיתה. בנה אחד עכשיו תוך 2 דקות עם AI — והתחל לקבל לידים.
-            </p>
-            <div className="flex gap-3 justify-center flex-wrap">
-              <Link
-                href={`/admin/clients/${client.id}/builder`}
-                className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors"
-              >
-                בנה דף נחיתה עם AI
-              </Link>
-              <Link
-                href={`/admin/clients/${client.id}/builder`}
-                className="bg-blue-500/40 text-white font-medium px-6 py-3 rounded-xl hover:bg-blue-500/60 transition-colors"
-              >
-                ראה דמו
-              </Link>
-            </div>
-          </div>
+        {/* AI Proactive Message Banner (secondary — only shows when AI section greeting doesn't cover the case) */}
+        {aiMessageType === "performance_up" && (
+          <AiProactiveMessage
+            type={aiMessageType}
+            newLeadsCount={newLeadsCount}
+            changePercent={changePercent}
+          />
         )}
 
         {/* Onboarding Checklist */}
