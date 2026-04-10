@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import {
   Building2,
@@ -12,6 +13,7 @@ import {
   ExternalLink,
   TrendingUp,
   Bot,
+  Search,
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -212,6 +214,235 @@ function OwnerAiSummary({
 }
 
 // ---------------------------------------------------------------------------
+// Clients Table with Filter Tabs + Search
+// ---------------------------------------------------------------------------
+
+type FilterKey = "all" | "critical" | "watch" | "active" | "no_page" | "no_leads";
+
+const FILTER_TABS: { key: FilterKey; label: string; color: string }[] = [
+  { key: "all",       label: "הכל",          color: "bg-slate-100 text-slate-700" },
+  { key: "critical",  label: "🔴 קריטי",     color: "bg-red-50 text-red-700" },
+  { key: "watch",     label: "🟡 מעקב",      color: "bg-amber-50 text-amber-700" },
+  { key: "active",    label: "🟢 פעיל",      color: "bg-green-50 text-green-700" },
+  { key: "no_page",   label: "ללא דף",       color: "bg-slate-100 text-slate-600" },
+  { key: "no_leads",  label: "ללא לידים",    color: "bg-slate-100 text-slate-600" },
+];
+
+function getClientPriority(c: ClientRow): "critical" | "watch" | "active" {
+  if (!c.pagePublished) return "critical";
+  if (c.pagePublished && c.totalLeads === 0) return "critical";
+  if (c.pagePublished && c.leads7d === 0) return "watch";
+  return "active";
+}
+
+function filterClients(clients: ClientRow[], filter: FilterKey, search: string): ClientRow[] {
+  let filtered = clients;
+  switch (filter) {
+    case "critical":  filtered = clients.filter((c) => getClientPriority(c) === "critical"); break;
+    case "watch":     filtered = clients.filter((c) => getClientPriority(c) === "watch"); break;
+    case "active":    filtered = clients.filter((c) => getClientPriority(c) === "active"); break;
+    case "no_page":   filtered = clients.filter((c) => !c.pagePublished); break;
+    case "no_leads":  filtered = clients.filter((c) => c.totalLeads === 0); break;
+  }
+  if (search) {
+    const q = search.toLowerCase();
+    filtered = filtered.filter((c) =>
+      c.name.toLowerCase().includes(q) || c.slug.toLowerCase().includes(q)
+    );
+  }
+  // Sort: critical first, then watch, then active
+  const order = { critical: 0, watch: 1, active: 2 };
+  return filtered.sort((a, b) => order[getClientPriority(a)] - order[getClientPriority(b)]);
+}
+
+function ClientsTableSection({ clients }: { clients: ClientRow[] }) {
+  const [filter, setFilter] = useState<FilterKey>("all");
+  const [search, setSearch] = useState("");
+  const filtered = filterClients(clients, filter, search);
+
+  // Count per filter for badges
+  const counts: Record<FilterKey, number> = {
+    all:       clients.length,
+    critical:  clients.filter((c) => getClientPriority(c) === "critical").length,
+    watch:     clients.filter((c) => getClientPriority(c) === "watch").length,
+    active:    clients.filter((c) => getClientPriority(c) === "active").length,
+    no_page:   clients.filter((c) => !c.pagePublished).length,
+    no_leads:  clients.filter((c) => c.totalLeads === 0).length,
+  };
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm">
+      {/* Header + Search */}
+      <div className="px-6 py-4 border-b border-slate-100">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <h2 className="font-semibold text-slate-900">הלקוחות שלי</h2>
+            <span className="text-xs text-slate-400">{filtered.length} מתוך {clients.length}</span>
+          </div>
+          <Link href="/admin/clients" className="text-xs text-blue-600 hover:text-blue-700 font-medium">
+            הצג הכל →
+          </Link>
+        </div>
+
+        {/* Filter tabs */}
+        <div className="flex gap-1.5 flex-wrap mb-3">
+          {FILTER_TABS.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setFilter(tab.key)}
+              className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-colors ${
+                filter === tab.key
+                  ? tab.color + " ring-1 ring-slate-300"
+                  : "bg-white text-slate-400 hover:bg-slate-50"
+              }`}
+            >
+              {tab.label}
+              {counts[tab.key] > 0 && filter !== tab.key && (
+                <span className="mr-1 text-[10px] opacity-60">({counts[tab.key]})</span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {/* Search */}
+        <div className="relative">
+          <Search size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="חפש לקוח..."
+            className="w-full pr-9 pl-3 py-2 border border-slate-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-200 focus:border-blue-400 outline-none"
+          />
+        </div>
+      </div>
+
+      {/* Table */}
+      {filtered.length === 0 ? (
+        <div className="py-12 text-center">
+          {clients.length === 0 ? (
+            <>
+              <Building2 size={32} className="mx-auto text-slate-300 mb-3" />
+              <p className="text-slate-500 font-medium mb-1">אין לקוחות עדיין</p>
+              <Link href="/admin/clients/new" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                + הוסף לקוח ראשון
+              </Link>
+            </>
+          ) : (
+            <p className="text-sm text-slate-400">אין לקוחות מתאימים לסינון</p>
+          )}
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-xs text-slate-500 border-b border-slate-50 bg-slate-50/50">
+                <th className="text-right px-6 py-3 font-medium">לקוח</th>
+                <th className="text-center px-3 py-3 font-medium">לידים</th>
+                <th className="text-center px-3 py-3 font-medium hidden md:table-cell">7 ימים</th>
+                <th className="text-center px-3 py-3 font-medium hidden md:table-cell">דף</th>
+                <th className="text-center px-3 py-3 font-medium">סטטוס</th>
+                <th className="text-center px-4 py-3 font-medium">פעולות</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {filtered.map((client) => {
+                const prio = getClientPriority(client);
+                const statusStyle = {
+                  critical: { label: prio === "critical" && !client.pagePublished ? "דרוש הגדרה" : "קריטי", color: "bg-red-50 text-red-600" },
+                  watch:    { label: "שקט", color: "bg-amber-50 text-amber-700" },
+                  active:   { label: "פעיל", color: "bg-green-50 text-green-700" },
+                }[prio];
+
+                return (
+                  <tr key={client.id} className={`hover:bg-slate-50/50 transition-colors ${prio === "critical" ? "bg-red-50/20" : ""}`}>
+                    {/* Name + industry */}
+                    <td className="px-6 py-3.5">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                          style={{ backgroundColor: client.primaryColor || "#6366f1" }}
+                        >
+                          {client.name[0]}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-medium text-slate-900 truncate">{client.name}</p>
+                          <p className="text-[11px] text-slate-400 truncate">
+                            {INDUSTRY_HE[client.industry ?? ""] ?? client.industry ?? "כללי"}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Total leads */}
+                    <td className="px-3 py-3.5 text-center">
+                      <span className={`text-sm font-bold ${client.totalLeads > 0 ? "text-slate-900" : "text-slate-300"}`}>
+                        {client.totalLeads}
+                      </span>
+                    </td>
+
+                    {/* 7d leads */}
+                    <td className="px-3 py-3.5 text-center hidden md:table-cell">
+                      {client.leads7d > 0 ? (
+                        <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+                          <TrendingUp size={10} />
+                          {client.leads7d}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-slate-300">0</span>
+                      )}
+                    </td>
+
+                    {/* Page */}
+                    <td className="px-3 py-3.5 text-center hidden md:table-cell">
+                      {client.pagePublished ? (
+                        <span className="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
+                          <span className="w-1.5 h-1.5 rounded-full bg-green-500" /> פורסם
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-xs text-slate-400">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-300" /> טיוטה
+                        </span>
+                      )}
+                    </td>
+
+                    {/* Status */}
+                    <td className="px-3 py-3.5 text-center">
+                      <span className={`inline-block text-[11px] font-semibold px-2.5 py-1 rounded-full ${statusStyle.color}`}>
+                        {statusStyle.label}
+                      </span>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="px-4 py-3.5">
+                      <div className="flex items-center justify-center gap-1.5">
+                        <Link
+                          href={`/admin/clients/${client.id}`}
+                          className="text-xs text-blue-600 hover:text-blue-700 font-semibold px-2.5 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
+                        >
+                          צפה
+                        </Link>
+                        <Link
+                          href={`/client/${client.slug}`}
+                          target="_blank"
+                          className="text-xs text-slate-400 hover:text-slate-600 px-2 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+                          title="כנס כלקוח"
+                        >
+                          <ExternalLink size={13} />
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Main Component
 // ---------------------------------------------------------------------------
 
@@ -320,172 +551,10 @@ export function ControlTowerView({
         </div>
 
         {/* ═══════════════════════════════════════════════════════════════════ */}
-        {/* SECTION 2 — Clients Table                                        */}
+        {/* SECTION 2 — Clients Table with filters                           */}
         {/* ═══════════════════════════════════════════════════════════════════ */}
 
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-            <div className="flex items-center gap-3">
-              <h2 className="font-semibold text-slate-900">הלקוחות שלי</h2>
-              <span className="text-xs text-slate-400">{clients.length} לקוחות</span>
-            </div>
-            <Link
-              href="/admin/clients"
-              className="text-xs text-blue-600 hover:text-blue-700 font-medium"
-            >
-              הצג הכל →
-            </Link>
-          </div>
-
-          {clients.length === 0 ? (
-            <div className="py-16 text-center">
-              <Building2 size={32} className="mx-auto text-slate-300 mb-3" />
-              <p className="text-slate-500 font-medium mb-1">אין לקוחות עדיין</p>
-              <Link
-                href="/admin/clients/new"
-                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-              >
-                + הוסף לקוח ראשון
-              </Link>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-xs text-slate-500 border-b border-slate-50 bg-slate-50/50">
-                    <th className="text-right px-6 py-3 font-medium">לקוח</th>
-                    <th className="text-right px-3 py-3 font-medium hidden sm:table-cell">תחום</th>
-                    <th className="text-center px-3 py-3 font-medium">לידים</th>
-                    <th className="text-center px-3 py-3 font-medium hidden md:table-cell">7 ימים</th>
-                    <th className="text-center px-3 py-3 font-medium hidden md:table-cell">דף</th>
-                    <th className="text-center px-3 py-3 font-medium">סטטוס</th>
-                    <th className="text-center px-3 py-3 font-medium hidden lg:table-cell">עדיפות</th>
-                    <th className="text-center px-4 py-3 font-medium">פעולות</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
-                  {clients.map((client) => {
-                    // Activity status logic
-                    const status: { label: string; color: string } =
-                      !client.pagePublished
-                        ? { label: "דרוש הגדרה", color: "bg-slate-100 text-slate-600" }
-                        : client.leads7d > 0
-                        ? { label: "פעיל", color: "bg-green-50 text-green-700" }
-                        : client.totalLeads > 0
-                        ? { label: "שקט", color: "bg-amber-50 text-amber-700" }
-                        : { label: "לא פעיל", color: "bg-red-50 text-red-600" };
-
-                    // Priority logic: 3 levels
-                    const priority: { label: string; color: string; dot: string } =
-                      !client.pagePublished
-                        ? { label: "קריטי", color: "text-red-600", dot: "bg-red-500" }
-                        : client.pagePublished && client.totalLeads === 0
-                        ? { label: "קריטי", color: "text-red-600", dot: "bg-red-500" }
-                        : client.pagePublished && client.leads7d === 0
-                        ? { label: "מעקב", color: "text-amber-600", dot: "bg-amber-400" }
-                        : { label: "תקין", color: "text-green-600", dot: "bg-green-500" };
-
-                    return (
-                      <tr key={client.id} className="hover:bg-slate-50/50 transition-colors">
-                        {/* Name */}
-                        <td className="px-6 py-3.5">
-                          <div className="flex items-center gap-3">
-                            <div
-                              className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                              style={{ backgroundColor: client.primaryColor || "#6366f1" }}
-                            >
-                              {client.name[0]}
-                            </div>
-                            <div className="min-w-0">
-                              <p className="font-medium text-slate-900 truncate">{client.name}</p>
-                              <p className="text-[11px] text-slate-400 truncate">{client.slug}</p>
-                            </div>
-                          </div>
-                        </td>
-
-                        {/* Industry */}
-                        <td className="px-3 py-3.5 hidden sm:table-cell">
-                          <span className="text-xs text-slate-500">
-                            {INDUSTRY_HE[client.industry ?? ""] ?? client.industry ?? "—"}
-                          </span>
-                        </td>
-
-                        {/* Total leads */}
-                        <td className="px-3 py-3.5 text-center">
-                          <span className={`text-sm font-bold ${client.totalLeads > 0 ? "text-slate-900" : "text-slate-300"}`}>
-                            {client.totalLeads}
-                          </span>
-                        </td>
-
-                        {/* Leads 7d */}
-                        <td className="px-3 py-3.5 text-center hidden md:table-cell">
-                          {client.leads7d > 0 ? (
-                            <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full">
-                              <TrendingUp size={10} />
-                              {client.leads7d}
-                            </span>
-                          ) : (
-                            <span className="text-xs text-slate-300">0</span>
-                          )}
-                        </td>
-
-                        {/* Page status */}
-                        <td className="px-3 py-3.5 text-center hidden md:table-cell">
-                          {client.pagePublished ? (
-                            <span className="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
-                              <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                              פורסם
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 text-xs text-slate-400">
-                              <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                              טיוטה
-                            </span>
-                          )}
-                        </td>
-
-                        {/* Activity status */}
-                        <td className="px-3 py-3.5 text-center">
-                          <span className={`inline-block text-[11px] font-semibold px-2.5 py-1 rounded-full ${status.color}`}>
-                            {status.label}
-                          </span>
-                        </td>
-
-                        {/* Priority */}
-                        <td className="px-3 py-3.5 text-center hidden lg:table-cell">
-                          <span className={`inline-flex items-center gap-1.5 text-[11px] font-semibold ${priority.color}`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${priority.dot}`} />
-                            {priority.label}
-                          </span>
-                        </td>
-
-                        {/* Actions */}
-                        <td className="px-4 py-3.5">
-                          <div className="flex items-center justify-center gap-1.5">
-                            <Link
-                              href={`/admin/clients/${client.id}`}
-                              className="text-xs text-blue-600 hover:text-blue-700 font-semibold px-2.5 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
-                            >
-                              צפה
-                            </Link>
-                            <Link
-                              href={`/client/${client.slug}`}
-                              target="_blank"
-                              className="text-xs text-slate-400 hover:text-slate-600 px-2 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
-                              title="כנס כלקוח"
-                            >
-                              <ExternalLink size={13} />
-                            </Link>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+        <ClientsTableSection clients={clients} />
 
         {/* ═══════════════════════════════════════════════════════════════════ */}
         {/* SECTION 3 — Alerts / Issues                                      */}
