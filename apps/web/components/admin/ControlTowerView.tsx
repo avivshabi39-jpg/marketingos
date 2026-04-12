@@ -33,6 +33,7 @@ type ClientRow = {
   totalLeads: number;
   leads7d: number;
   wonLeads: number;
+  newLeads: number;
 };
 
 const PLAN_LABELS: Record<string, { label: string; color: string; price: string }> = {
@@ -104,7 +105,28 @@ function buildRecommendations(clients: ClientRow[]): Recommendation[] {
     }
   }
 
-  // Rule 3: Has leads but 0 in 7d → watch
+  // Rule 3: Untreated leads (status=NEW) → critical if many, watch if few
+  for (const c of clients) {
+    if (c.newLeads >= 3) {
+      recs.push({
+        text: `${c.newLeads} לידים לא טופלו — הגב עכשיו לפני שיתקררו`,
+        clientName: c.name,
+        clientId: c.id,
+        clientSlug: c.slug,
+        level: "critical",
+      });
+    } else if (c.newLeads > 0) {
+      recs.push({
+        text: `${c.newLeads} לידים חדשים ממתינים למענה`,
+        clientName: c.name,
+        clientId: c.id,
+        clientSlug: c.slug,
+        level: "watch",
+      });
+    }
+  }
+
+  // Rule 4: Has leads but 0 in 7d → watch
   for (const c of clients) {
     if (c.pagePublished && c.totalLeads > 0 && c.leads7d === 0) {
       recs.push({
@@ -130,9 +152,9 @@ function buildRecommendations(clients: ClientRow[]): Recommendation[] {
     }
   }
 
-  // Sort: critical first, then watch, then opportunity. Max 3.
+  // Sort: critical first, then watch, then opportunity. Max 4.
   const order = { critical: 0, watch: 1, opportunity: 2 };
-  return recs.sort((a, b) => order[a.level] - order[b.level]).slice(0, 3);
+  return recs.sort((a, b) => order[a.level] - order[b.level]).slice(0, 4);
 }
 
 const LEVEL_STYLES = {

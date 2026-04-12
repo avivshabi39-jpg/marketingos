@@ -54,11 +54,12 @@ export default async function DashboardPage() {
     // Per-client: leads in 7d + won leads (batched)
     Promise.all(
       rawClients.map(async (c) => {
-        const [leads7d, wonLeads] = await Promise.all([
+        const [leads7d, wonLeads, newLeads] = await Promise.all([
           prisma.lead.count({ where: { clientId: c.id, createdAt: { gte: sevenDaysAgo } } }),
           prisma.lead.count({ where: { clientId: c.id, status: "WON" } }),
+          prisma.lead.count({ where: { clientId: c.id, status: "NEW" } }),
         ]);
-        return { id: c.id, leads7d, wonLeads };
+        return { id: c.id, leads7d, wonLeads, newLeads };
       })
     ),
   ]);
@@ -70,6 +71,7 @@ export default async function DashboardPage() {
     totalLeads: _count.leads,
     leads7d: leadMap.get(c.id)?.leads7d ?? 0,
     wonLeads: leadMap.get(c.id)?.wonLeads ?? 0,
+    newLeads: leadMap.get(c.id)?.newLeads ?? 0,
   }));
 
   const publishedCount = clients.filter((c) => c.pagePublished).length;

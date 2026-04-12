@@ -15,6 +15,8 @@ import { QuickDesignControls } from "@/components/client/QuickDesignControls";
 import { WhatsAppSetupGuide } from "@/components/client/WhatsAppSetupGuide";
 import { DashboardAiSection } from "@/components/client/DashboardAiSection";
 import { BusinessValueStrip } from "@/components/client/BusinessValueStrip";
+import { UntreatedLeadsAlert } from "@/components/client/UntreatedLeadsAlert";
+import { computeUntreatedStats } from "@/lib/untreatedLeads";
 import { OnboardingTour } from "@/components/portal/OnboardingTour";
 
 const STATUS_HE: Record<string, string> = {
@@ -160,6 +162,9 @@ export default async function ClientDashboardPage({
   const conversionRate =
     totalLeads > 0 ? Math.round((wonLeads / totalLeads) * 100) : 0;
 
+  // Untreated leads stats (computed from recent leads with createdAt + status)
+  const untreatedStats = computeUntreatedStats(recentLeads);
+
   // AI proactive message type
   let aiMessageType: "no_page" | "no_leads" | "new_leads" | "performance_up" | null = null;
   const changePercent =
@@ -255,6 +260,13 @@ export default async function ClientDashboardPage({
           conversionRate={conversionRate}
           newLeadsCount={newLeadsCount}
           pipelineValue={pipelineOpen._sum.value ?? 0}
+        />
+
+        {/* ── Untreated Leads Alert ── */}
+        <UntreatedLeadsAlert
+          untreatedCount={untreatedStats.untreatedCount}
+          criticalCount={untreatedStats.criticalCount}
+          slug={params.slug}
         />
 
         {/* ── Secondary widgets: only show when page is published ── */}
