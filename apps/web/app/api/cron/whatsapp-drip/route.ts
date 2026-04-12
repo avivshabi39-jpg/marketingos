@@ -67,7 +67,16 @@ export async function GET(req: NextRequest) {
 פנית אלינו ב${lead.client.name} ורצינו לוודא שקיבלת מענה.
 אנחנו כאן לעזור — מתי נוח לך לדבר? 📞`;
 
-    const rawToken = decrypt(lead.client.greenApiToken!);
+    let rawToken: string;
+    try {
+      rawToken = decrypt(lead.client.greenApiToken!);
+    } catch (err) {
+      skipped++;
+      skippedReasons.push(`${lead.id}: decrypt failed`);
+      console.error(`[whatsapp-drip] Day 1 decrypt failed for lead ${lead.id}:`, err);
+      continue;
+    }
+
     const result = await sendWhatsApp(lead.phone, message, lead.client.greenApiInstanceId!, rawToken);
     if (result.ok) {
       await prisma.lead.update({
@@ -126,13 +135,19 @@ export async function GET(req: NextRequest) {
     }
 
     // Stop condition: if lead was moved to CONTACTED manually (not by Day 1 drip)
-    // Check if there's a Day 1 activity — if not, the lead was manually contacted
-    const day1Activity = await prisma.leadActivity.findFirst({
-      where: { leadId: lead.id, content: { contains: "מעקב אוטומטי יום 1" } },
-      select: { id: true },
-    });
+    let day1Activity;
+    try {
+      day1Activity = await prisma.leadActivity.findFirst({
+        where: { leadId: lead.id, content: { contains: "מעקב אוטומטי יום 1" } },
+        select: { id: true },
+      });
+    } catch (err) {
+      skipped++;
+      skippedReasons.push(`${lead.id}: activity query failed`);
+      console.error(`[whatsapp-drip] Day 3 activity check failed for lead ${lead.id}:`, err);
+      continue;
+    }
     if (!day1Activity) {
-      // Lead was manually moved to CONTACTED — respect that, don't auto-follow-up
       skipped++;
       skippedReasons.push(`${lead.id}: manually contacted`);
       continue;
@@ -145,7 +160,16 @@ export async function GET(req: NextRequest) {
 
 פשוט שלח/י "כן" ונחזור אליך.`;
 
-    const rawToken3 = decrypt(lead.client.greenApiToken!);
+    let rawToken3: string;
+    try {
+      rawToken3 = decrypt(lead.client.greenApiToken!);
+    } catch (err) {
+      skipped++;
+      skippedReasons.push(`${lead.id}: decrypt failed`);
+      console.error(`[whatsapp-drip] Day 3 decrypt failed for lead ${lead.id}:`, err);
+      continue;
+    }
+
     const result = await sendWhatsApp(lead.phone, message, lead.client.greenApiInstanceId!, rawToken3);
     if (result.ok) {
       prisma.leadActivity.create({

@@ -56,7 +56,13 @@ export async function sendAutoReply(
   }
 
   const instanceId = client.greenApiInstanceId;
-  const rawToken = decrypt(client.greenApiToken);
+  let rawToken: string;
+  try {
+    rawToken = decrypt(client.greenApiToken);
+  } catch (err) {
+    console.error("[auto-reply] Failed to decrypt WhatsApp token:", err);
+    return { leadReplied: false };
+  }
   const fullName = `${lead.firstName} ${lead.lastName}`.trim();
   const source = lead.source ?? lead.utmSource ?? "אורגני";
 

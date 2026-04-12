@@ -67,8 +67,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   const { lostReason, ...updateFields } = parsed.data;
 
   // Merge lostReason into metadata JSON (avoids schema migration)
-  const metadataUpdate = lostReason
-    ? { metadata: { ...((lead.metadata as Record<string, unknown>) ?? {}), lostReason } }
+  // Guard: only merge if status is LOST, and safely handle non-object metadata
+  const existingMeta = (lead.metadata && typeof lead.metadata === "object" && !Array.isArray(lead.metadata))
+    ? (lead.metadata as Record<string, unknown>)
+    : {};
+  const metadataUpdate = (lostReason && parsed.data.status === "LOST")
+    ? { metadata: { ...existingMeta, lostReason } }
     : {};
 
   const updated = await prisma.lead.update({
