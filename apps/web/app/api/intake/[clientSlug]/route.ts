@@ -115,7 +115,7 @@ export async function POST(
   });
   const detectedSource = attribution.source;
   const utmSource = rawUtmSource;
-  const utmMedium = attribution.medium ?? rawUtmMedium;
+  const utmMedium = attribution.medium ?? undefined;
   const utmCampaign = attribution.campaign;
   const utmContent = attribution.utmContent;
   const utmTerm = attribution.utmTerm;

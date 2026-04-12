@@ -205,7 +205,7 @@ export async function POST(req: NextRequest) {
     data: {
       ...rest,
       source:      normalizeLeadSource(rest.source ?? "landing_page"),
-      utmMedium:   normalizeMedium(rest.utmMedium) ?? rest.utmMedium ?? undefined,
+      utmMedium:   normalizeMedium(rest.utmMedium) ?? undefined,
       utmCampaign: sanitizeCampaign(rest.utmCampaign),
       utmContent:  rest.utmContent?.trim().slice(0, 200) || undefined,
       utmTerm:     rest.utmTerm?.trim().slice(0, 200) || undefined,
