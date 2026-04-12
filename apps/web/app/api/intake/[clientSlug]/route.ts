@@ -126,7 +126,7 @@ export async function POST(
       fullName,
       email,
       phone: phone ?? null,
-      businessName: (businessName as string) || fullName,
+      businessName: businessName ?? fullName,
       ...(restFields as Record<string, string | null | undefined>),
       extraData: _extraData ?? undefined,
       clientId: client.id,
