@@ -18,6 +18,7 @@ import { DashboardAiSection } from "@/components/client/DashboardAiSection";
 import { BusinessValueStrip } from "@/components/client/BusinessValueStrip";
 import { UntreatedLeadsAlert } from "@/components/client/UntreatedLeadsAlert";
 import { ConversionInsightsBlock } from "@/components/client/ConversionInsightsBlock";
+import { TrafficActionBar } from "@/components/client/TrafficActionBar";
 import { computeUntreatedStats } from "@/lib/untreatedLeads";
 import { computeConversionInsights } from "@/lib/conversionInsights";
 import { OnboardingTour } from "@/components/portal/OnboardingTour";
@@ -296,6 +297,15 @@ export default async function ClientDashboardPage({
 
         {/* ── Conversion Insights ── */}
         <ConversionInsightsBlock insights={conversionInsights} />
+
+        {/* ── Traffic Action Bar: prominent share when page exists ── */}
+        {client.pagePublished && (
+          <TrafficActionBar
+            pageUrl={`${appUrl}/${client.slug}`}
+            clientName={client.name}
+            hasLeads={hasLeads}
+          />
+        )}
 
         {/* ── Secondary widgets: only show when page is published ── */}
         {client.pagePublished && (
