@@ -39,7 +39,24 @@ interface Props {
   leads: Lead[];
   stats: { total: number; new: number; contacted: number; won: number };
   clientId: string;
+  clientName: string;
   autoReplyActive: boolean;
+}
+
+// Centralized quick-message template — easy to change or replace with AI later
+function buildQuickWhatsAppMessage(leadName: string, businessName: string): string {
+  return `שלום ${leadName}! 👋
+ראיתי שפנית אלינו ב${businessName}.
+מתי נוח לדבר? נשמח לעזור 😊`;
+}
+
+// Normalize Israeli phone numbers to international format
+function normalizePhoneForWa(phone: string): string {
+  const digits = phone.replace(/[^0-9+]/g, "");
+  if (digits.startsWith("+972")) return digits.slice(1); // remove +
+  if (digits.startsWith("972")) return digits;
+  if (digits.startsWith("0")) return "972" + digits.slice(1);
+  return "972" + digits;
 }
 
 const STATUS_LABELS: Record<string, string> = {
@@ -67,7 +84,7 @@ const LOST_REASONS = [
   { key: "other", label: "אחר" },
 ] as const;
 
-export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoReplyActive: initialAutoReply }: Props) {
+export function PortalLeadsClient({ leads: initialLeads, stats, clientId, clientName, autoReplyActive: initialAutoReply }: Props) {
   const [leads, setLeads] = useState(initialLeads);
   const [filter, setFilter] = useState("ALL");
   const [search, setSearch] = useState("");
@@ -130,10 +147,21 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
 
   function openWhatsApp(lead: Lead) {
     if (!lead.phone) return;
-    const phone = lead.phone.replace(/[^0-9]/g, "").replace(/^0/, "");
-    const msg = encodeURIComponent(`שלום ${lead.firstName}! ראיתי שהשארת פרטים. אשמח לעזור 😊`);
-    window.open(`https://wa.me/972${phone}?text=${msg}`, "_blank");
-    if (lead.status === "NEW") updateStatus(lead.id, "CONTACTED");
+    const phone = normalizePhoneForWa(lead.phone);
+    const msg = encodeURIComponent(buildQuickWhatsAppMessage(lead.firstName, clientName));
+    window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+
+    // Move to CONTACTED if still NEW (user initiated contact)
+    if (lead.status === "NEW") {
+      updateStatus(lead.id, "CONTACTED");
+    }
+
+    // Log the WhatsApp action as activity (fire-and-forget)
+    fetch(`/api/leads/${lead.id}/note`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: "📱 נפתח וואצאפ ללקוח" }),
+    }).catch(() => {});
   }
 
   async function toggleAutoReply() {

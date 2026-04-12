@@ -61,6 +61,7 @@ export default async function ClientLeadsPage({
       leads={leads.map((l) => ({ ...l, createdAt: l.createdAt.toISOString(), metadata: (l.metadata as Record<string, unknown>) ?? null }))}
       stats={stats}
       clientId={client.id}
+      clientName={client.name}
       autoReplyActive={client.autoReplyActive}
     />
   );
