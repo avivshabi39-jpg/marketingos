@@ -5,21 +5,8 @@ import { Phone, MessageCircle, Search, Filter, Clock } from "lucide-react";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Tooltip } from "@/components/ui/Tooltip";
 import { classifyLeadHeat, HEAT_CONFIG } from "@/lib/leadHeat";
+import { getLeadSla, SLA_CONFIG } from "@/lib/leadSla";
 import toast from "react-hot-toast";
-
-// Time-ago helper (Hebrew)
-function timeAgo(dateStr: string): string {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "עכשיו";
-  if (mins < 60) return `לפני ${mins} דק׳`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `לפני ${hrs} שעות`;
-  const days = Math.floor(hrs / 24);
-  if (days === 1) return "אתמול";
-  if (days < 7) return `לפני ${days} ימים`;
-  return new Date(dateStr).toLocaleDateString("he-IL");
-}
 
 const SOURCE_LABELS: Record<string, string> = {
   facebook: "פייסבוק",
@@ -213,17 +200,20 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
         <div className="space-y-3">
           {filtered.map((lead) => {
             const isNew = lead.status === "NEW";
-            const isUrgent = isNew && (Date.now() - new Date(lead.createdAt).getTime()) < 24 * 3600000;
             const srcLabel = SOURCE_LABELS[(lead.source ?? "").toLowerCase()] ?? lead.source;
             const heat = classifyLeadHeat(lead);
             const heatStyle = HEAT_CONFIG[heat];
+            const sla = getLeadSla(lead);
+            const slaStyle = SLA_CONFIG[sla.level];
 
             return (
             <div
               key={lead.id}
               className={`bg-white rounded-xl shadow-sm p-4 transition-colors ${
-                isUrgent
-                  ? "border-2 border-blue-300 bg-blue-50/30"
+                sla.level === "critical"
+                  ? "border-2 border-red-200 bg-red-50/20"
+                  : sla.level === "warning"
+                  ? "border-2 border-amber-200 bg-amber-50/10"
                   : isNew
                   ? "border-2 border-blue-200"
                   : "border border-slate-100"
@@ -232,7 +222,9 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
               {/* Row 1: Name + Status + Time */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg flex-shrink-0 ${isNew ? "bg-blue-100" : "bg-slate-50"}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg flex-shrink-0 ${
+                    sla.level === "critical" ? "bg-red-100" : isNew ? "bg-blue-100" : "bg-slate-50"
+                  }`}>
                     {lead.gender === "male" ? "👨" : lead.gender === "female" ? "👩" : "👤"}
                   </div>
                   <div>
@@ -240,9 +232,10 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                       {lead.firstName} {lead.lastName}
                     </p>
                     <div className="flex items-center gap-2 text-xs text-slate-400 mt-0.5 flex-wrap">
-                      <span className="inline-flex items-center gap-1">
+                      <span className={`inline-flex items-center gap-1 ${sla.level !== "met" ? slaStyle.color : ""}`}>
+                        {sla.level !== "met" && slaStyle.icon && <span className="text-[10px]">{slaStyle.icon}</span>}
                         <Clock size={10} />
-                        {timeAgo(lead.createdAt)}
+                        {sla.label}
                       </span>
                       {srcLabel && (
                         <span className="bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded text-[10px]">
@@ -260,9 +253,14 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  {isUrgent && (
-                    <span className="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full animate-pulse">
-                      חדש!
+                  {sla.level === "critical" && (
+                    <span className="text-[10px] font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded-full animate-pulse">
+                      🚨 דחוף
+                    </span>
+                  )}
+                  {sla.level === "good" && isNew && (
+                    <span className="text-[10px] font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
+                      ⚡ חדש
                     </span>
                   )}
                   <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${heatStyle.badge}`}>
