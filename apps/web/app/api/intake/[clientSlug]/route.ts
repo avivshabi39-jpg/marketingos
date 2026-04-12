@@ -120,11 +120,11 @@ export async function POST(
     businessName?: string;
   };
 
-  // Create intake form record (businessName is required by schema)
+  // Create intake form record
   const intake = await prisma.intakeForm.create({
     data: {
       fullName,
-      email,
+      email: email || "",
       phone: phone ?? null,
       businessName: businessName ?? fullName,
       ...(restFields as Record<string, string | null | undefined>),
