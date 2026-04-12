@@ -3,6 +3,7 @@ import { getClientSession } from "@/lib/clientAuth";
 import { prisma } from "@/lib/prisma";
 import { BarChart2, Eye, Users, TrendingUp } from "lucide-react";
 import { getSourceLabel } from "@/lib/leadSource";
+import { computeSourceInsights, SOURCE_INSIGHT_STYLES, type SourceBreakdown } from "@/lib/sourceInsights";
 
 export default async function ClientAnalyticsPage({ params }: { params: { slug: string } }) {
   const session = await getClientSession();
@@ -58,7 +59,7 @@ export default async function ClientAnalyticsPage({ params }: { params: { slug: 
   const since = new Date();
   since.setDate(since.getDate() - 30);
 
-  const [totalViews, leadCount, pageViews] = await Promise.all([
+  const [totalViews, leadCount, pageViews, leadsBySourceRaw, totalLeadsAll] = await Promise.all([
     prisma.pageView.count({ where: { clientId: client.id } }),
     prisma.lead.count({ where: { clientId: client.id, createdAt: { gte: since } } }),
     prisma.pageView.findMany({
@@ -66,7 +67,29 @@ export default async function ClientAnalyticsPage({ params }: { params: { slug: 
       orderBy: { createdAt: "asc" },
       select: { createdAt: true, source: true },
     }),
+    // Leads grouped by source + status for source insights
+    prisma.lead.findMany({
+      where: { clientId: client.id },
+      select: { source: true, status: true },
+    }),
+    prisma.lead.count({ where: { clientId: client.id } }),
   ]);
+
+  // Compute source breakdown for insights
+  const sourceMap = new Map<string, { total: number; won: number; lost: number }>();
+  for (const lead of leadsBySourceRaw) {
+    const src = lead.source ?? "organic";
+    const entry = sourceMap.get(src) ?? { total: 0, won: 0, lost: 0 };
+    entry.total++;
+    if (lead.status === "WON") entry.won++;
+    if (lead.status === "LOST") entry.lost++;
+    sourceMap.set(src, entry);
+  }
+  const sourceBreakdown: SourceBreakdown[] = Array.from(sourceMap.entries()).map(([source, data]) => ({
+    source,
+    ...data,
+  }));
+  const sourceInsights = computeSourceInsights(sourceBreakdown, totalLeadsAll);
 
   // Group by day
   const byDay: Record<string, number> = {};
@@ -168,6 +191,22 @@ export default async function ClientAnalyticsPage({ params }: { params: { slug: 
           )}
         </div>
       </div>
+
+      {/* Source Insights */}
+      {sourceInsights.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-xs font-semibold text-slate-500 px-1">📊 תובנות מקורות</p>
+          {sourceInsights.map((insight, i) => {
+            const style = SOURCE_INSIGHT_STYLES[insight.level];
+            return (
+              <div key={i} className={`rounded-xl border px-4 py-2.5 flex items-center gap-2.5 ${style.bg} ${style.border}`}>
+                <span className="text-sm flex-shrink-0">{style.icon}</span>
+                <p className={`text-xs font-medium leading-relaxed ${style.text}`}>{insight.text}</p>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {monthViews === 0 && (
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800">
