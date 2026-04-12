@@ -6,16 +6,8 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Tooltip } from "@/components/ui/Tooltip";
 import { classifyLeadHeat, HEAT_CONFIG } from "@/lib/leadHeat";
 import { getLeadSla, SLA_CONFIG } from "@/lib/leadSla";
+import { getSourceLabel } from "@/lib/leadSource";
 import toast from "react-hot-toast";
-
-const SOURCE_LABELS: Record<string, string> = {
-  facebook: "פייסבוק",
-  google: "גוגל",
-  organic: "אורגני",
-  manual: "ידני",
-  landing_page: "דף נחיתה",
-  ai_agent: "סוכן AI",
-};
 
 interface Lead {
   id: string;
@@ -262,7 +254,7 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, client
         <div className="space-y-3">
           {filtered.map((lead) => {
             const isNew = lead.status === "NEW";
-            const srcLabel = SOURCE_LABELS[(lead.source ?? "").toLowerCase()] ?? lead.source;
+            const srcLabel = getSourceLabel(lead.source);
             const heat = classifyLeadHeat(lead);
             const heatStyle = HEAT_CONFIG[heat];
             const sla = getLeadSla(lead);

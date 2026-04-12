@@ -9,6 +9,7 @@ import { sendNewLeadEmail } from "@/lib/email";
 import { sanitizeText } from "@/lib/sanitize";
 import { computeLeadScore } from "@/lib/leadScoring";
 import { createNotification } from "@/lib/notifications";
+import { detectSourceFromUtm } from "@/lib/leadSource";
 
 const schema = z.object({
   // Honeypot — bots fill this, humans leave it empty
@@ -46,13 +47,7 @@ const schema = z.object({
   utm_term:     z.string().optional(),
 });
 
-function detectSource(utmSource?: string): string {
-  if (!utmSource) return "organic";
-  const src = utmSource.toLowerCase();
-  if (src.includes("facebook") || src.includes("fb")) return "facebook";
-  if (src.includes("google")) return "google";
-  return utmSource;
-}
+// detectSource replaced by centralized detectSourceFromUtm from lib/leadSource
 
 export async function POST(
   req: NextRequest,
@@ -110,7 +105,7 @@ export async function POST(
   const utmContent  = utm_content  ?? url.searchParams.get("utm_content")  ?? undefined;
   const utmTerm     = utm_term     ?? url.searchParams.get("utm_term")     ?? undefined;
 
-  const detectedSource = detectSource(utmSource);
+  const detectedSource = detectSourceFromUtm(utmSource, utmMedium);
 
   const [firstName = "", ...rest] = fullName.trim().split(" ");
   const lastName = rest.join(" ") || "-";
