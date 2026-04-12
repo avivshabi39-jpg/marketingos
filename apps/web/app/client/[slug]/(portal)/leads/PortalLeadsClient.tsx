@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Phone, MessageCircle, Search, Filter, Clock } from "lucide-react";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Tooltip } from "@/components/ui/Tooltip";
+import { classifyLeadHeat, HEAT_CONFIG } from "@/lib/leadHeat";
 import toast from "react-hot-toast";
 
 // Time-ago helper (Hebrew)
@@ -38,6 +39,7 @@ interface Lead {
   source: string | null;
   status: string;
   value: number | null;
+  leadScore: number;
   gender: string | null;
   ageRange: string | null;
   city: string | null;
@@ -213,6 +215,8 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
             const isNew = lead.status === "NEW";
             const isUrgent = isNew && (Date.now() - new Date(lead.createdAt).getTime()) < 24 * 3600000;
             const srcLabel = SOURCE_LABELS[(lead.source ?? "").toLowerCase()] ?? lead.source;
+            const heat = classifyLeadHeat(lead);
+            const heatStyle = HEAT_CONFIG[heat];
 
             return (
             <div
@@ -261,6 +265,9 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                       חדש!
                     </span>
                   )}
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${heatStyle.badge}`}>
+                    {heatStyle.emoji} {heatStyle.label}
+                  </span>
                   <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${STATUS_COLORS[lead.status] ?? "bg-slate-100 text-slate-600"}`}>
                     {STATUS_LABELS[lead.status] ?? lead.status}
                   </span>

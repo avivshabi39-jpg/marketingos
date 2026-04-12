@@ -39,6 +39,7 @@ export default async function ClientLeadsPage({
       source: true,
       status: true,
       value: true,
+      leadScore: true,
       gender: true,
       ageRange: true,
       city: true,
