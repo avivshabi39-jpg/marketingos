@@ -9,7 +9,7 @@ import { sendNewLeadEmail } from "@/lib/email";
 import { sanitizeText } from "@/lib/sanitize";
 import { computeLeadScore } from "@/lib/leadScoring";
 import { createNotification } from "@/lib/notifications";
-import { detectSourceFromUtm } from "@/lib/leadSource";
+import { normalizeAttribution } from "@/lib/leadSource";
 
 const schema = z.object({
   // Honeypot — bots fill this, humans leave it empty
@@ -99,13 +99,26 @@ export async function POST(
 
   // Also read UTM from URL query params (from landing page links)
   const url = new URL(req.url);
-  const utmSource   = utm_source   ?? url.searchParams.get("utm_source")   ?? undefined;
-  const utmMedium   = utm_medium   ?? url.searchParams.get("utm_medium")   ?? undefined;
-  const utmCampaign = utm_campaign ?? url.searchParams.get("utm_campaign") ?? undefined;
-  const utmContent  = utm_content  ?? url.searchParams.get("utm_content")  ?? undefined;
-  const utmTerm     = utm_term     ?? url.searchParams.get("utm_term")     ?? undefined;
+  const rawUtmSource   = utm_source   ?? url.searchParams.get("utm_source")   ?? undefined;
+  const rawUtmMedium   = utm_medium   ?? url.searchParams.get("utm_medium")   ?? undefined;
+  const rawUtmCampaign = utm_campaign ?? url.searchParams.get("utm_campaign") ?? undefined;
+  const rawUtmContent  = utm_content  ?? url.searchParams.get("utm_content")  ?? undefined;
+  const rawUtmTerm     = utm_term     ?? url.searchParams.get("utm_term")     ?? undefined;
 
-  const detectedSource = detectSourceFromUtm(utmSource, utmMedium);
+  // Normalize all attribution fields centrally
+  const attribution = normalizeAttribution({
+    utmSource: rawUtmSource,
+    utmMedium: rawUtmMedium,
+    utmCampaign: rawUtmCampaign,
+    utmContent: rawUtmContent,
+    utmTerm: rawUtmTerm,
+  });
+  const detectedSource = attribution.source;
+  const utmSource = rawUtmSource;
+  const utmMedium = attribution.medium ?? rawUtmMedium;
+  const utmCampaign = attribution.campaign;
+  const utmContent = attribution.utmContent;
+  const utmTerm = attribution.utmTerm;
 
   const [firstName = "", ...rest] = fullName.trim().split(" ");
   const lastName = rest.join(" ") || "-";

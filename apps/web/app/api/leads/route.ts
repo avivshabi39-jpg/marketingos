@@ -12,7 +12,7 @@ import { decrypt } from "@/lib/encrypt";
 import { sendAutoReply } from "@/lib/autoReply";
 import { sanitizeText } from "@/lib/sanitize";
 import { createNotification } from "@/lib/notifications";
-import { normalizeLeadSource } from "@/lib/leadSource";
+import { normalizeLeadSource, normalizeMedium, sanitizeCampaign } from "@/lib/leadSource";
 
 const VALID_STATUSES = ["NEW", "CONTACTED", "QUALIFIED", "PROPOSAL", "WON", "LOST"] as const;
 type LeadStatus = (typeof VALID_STATUSES)[number];
@@ -204,8 +204,12 @@ export async function POST(req: NextRequest) {
   const lead = await prisma.lead.create({
     data: {
       ...rest,
-      source:    normalizeLeadSource(rest.source ?? "landing_page"),
-      leadScore: rest.leadScore ?? autoScore,
+      source:      normalizeLeadSource(rest.source ?? "landing_page"),
+      utmMedium:   normalizeMedium(rest.utmMedium) ?? rest.utmMedium ?? undefined,
+      utmCampaign: sanitizeCampaign(rest.utmCampaign),
+      utmContent:  rest.utmContent?.trim().slice(0, 200) || undefined,
+      utmTerm:     rest.utmTerm?.trim().slice(0, 200) || undefined,
+      leadScore:   rest.leadScore ?? autoScore,
       ...(metadata ? { metadata: metadata as object } : {}),
     },
   });

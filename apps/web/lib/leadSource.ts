@@ -115,3 +115,76 @@ export function getSourceLabel(source: string | null | undefined): string {
   const normalized = normalizeLeadSource(source);
   return SOURCE_DISPLAY[normalized] ?? source;
 }
+
+// ── Medium normalization ─────────────────────────────────────────────────────
+
+export type NormalizedMedium = "cpc" | "social" | "organic" | "email" | "referral" | "direct" | "other";
+
+const MEDIUM_PATTERNS: [RegExp | string, NormalizedMedium][] = [
+  [/^cpc$|^ppc$|^paid$|^paidsocial$|^paid_social$/i, "cpc"],
+  [/^social$|^social-media$/i, "social"],
+  [/^organic$/i, "organic"],
+  [/^email$|^newsletter$/i, "email"],
+  [/^referral$|^affiliate$/i, "referral"],
+  [/^direct$|^none$/i, "direct"],
+];
+
+/**
+ * Normalize UTM medium to a clean value.
+ */
+export function normalizeMedium(raw: string | null | undefined): NormalizedMedium | null {
+  if (!raw || !raw.trim()) return null;
+  const input = raw.trim();
+  for (const [pattern, normalized] of MEDIUM_PATTERNS) {
+    if (typeof pattern === "string") {
+      if (input.toLowerCase() === pattern) return normalized;
+    } else {
+      if (pattern.test(input)) return normalized;
+    }
+  }
+  return "other";
+}
+
+// ── Campaign sanitization ────────────────────────────────────────────────────
+
+/**
+ * Sanitize UTM campaign name: trim, lowercase, truncate.
+ * Keeps the original wording but makes it consistent.
+ */
+export function sanitizeCampaign(raw: string | null | undefined): string | undefined {
+  if (!raw || !raw.trim()) return undefined;
+  return raw.trim().slice(0, 200);
+}
+
+// ── Attribution bundle helper ────────────────────────────────────────────────
+
+export interface NormalizedAttribution {
+  source: NormalizedSource;
+  medium: NormalizedMedium | null;
+  campaign: string | undefined;
+  utmContent: string | undefined;
+  utmTerm: string | undefined;
+}
+
+/**
+ * Normalize all attribution fields in one call.
+ * Use at lead creation to ensure consistency.
+ */
+export function normalizeAttribution(params: {
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
+  utmContent?: string | null;
+  utmTerm?: string | null;
+  sourceOverride?: string | null;
+}): NormalizedAttribution {
+  return {
+    source: params.sourceOverride
+      ? normalizeLeadSource(params.sourceOverride)
+      : detectSourceFromUtm(params.utmSource, params.utmMedium),
+    medium: normalizeMedium(params.utmMedium),
+    campaign: sanitizeCampaign(params.utmCampaign),
+    utmContent: params.utmContent?.trim().slice(0, 200) || undefined,
+    utmTerm: params.utmTerm?.trim().slice(0, 200) || undefined,
+  };
+}
