@@ -3,6 +3,7 @@ import { getClientSession } from "@/lib/clientAuth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Phone, Mail, Calendar } from "lucide-react";
+import { getSourceLabel } from "@/lib/leadSource";
 import Link from "next/link";
 import { CopyButton } from "./CopyButton";
 import { ClientAiTools } from "@/components/client/ClientAiTools";
@@ -386,8 +387,11 @@ export default async function ClientDashboardPage({
                     </div>
                   </div>
 
-                  {/* Date + status */}
+                  {/* Source + Date + status */}
                   <div className="hidden sm:flex items-center gap-2 flex-shrink-0">
+                    <span className="bg-slate-100 text-slate-500 text-[10px] font-medium px-1.5 py-0.5 rounded">
+                      {getSourceLabel(lead.source)}
+                    </span>
                     <span className="text-xs text-slate-400 flex items-center gap-1">
                       <Calendar size={11} />
                       {new Date(lead.createdAt).toLocaleDateString("he-IL")}

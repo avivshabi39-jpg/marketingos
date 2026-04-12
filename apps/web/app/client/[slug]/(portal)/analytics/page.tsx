@@ -2,6 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import { getClientSession } from "@/lib/clientAuth";
 import { prisma } from "@/lib/prisma";
 import { BarChart2, Eye, Users, TrendingUp } from "lucide-react";
+import { getSourceLabel } from "@/lib/leadSource";
 
 export default async function ClientAnalyticsPage({ params }: { params: { slug: string } }) {
   const session = await getClientSession();
@@ -86,10 +87,7 @@ export default async function ClientAnalyticsPage({ params }: { params: { slug: 
   const monthViews = pageViews.length;
   const convRate = monthViews > 0 ? Math.round((leadCount / monthViews) * 100 * 10) / 10 : 0;
 
-  const SOURCE_LABELS: Record<string, string> = {
-    facebook: "פייסבוק", google: "גוגל", whatsapp: "וואצאפ",
-    direct: "ישיר", organic: "אורגני",
-  };
+  // SOURCE_LABELS replaced by centralized getSourceLabel() from lib/leadSource
 
   return (
     <div className="space-y-6" dir="rtl">
@@ -155,7 +153,7 @@ export default async function ClientAnalyticsPage({ params }: { params: { slug: 
               {Object.entries(bySource).sort(([, a], [, b]) => b - a).slice(0, 6).map(([src, count]) => (
                 <div key={src}>
                   <div className="flex justify-between text-xs text-slate-600 mb-1">
-                    <span>{SOURCE_LABELS[src] ?? src}</span>
+                    <span>{getSourceLabel(src)}</span>
                     <span className="font-medium">{count}</span>
                   </div>
                   <div className="h-1.5 bg-slate-100 rounded-full">

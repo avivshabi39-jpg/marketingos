@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Loader2, TrendingUp, Eye, Users, Percent, type LucideIcon } from "lucide-react";
+import { getSourceLabel } from "@/lib/leadSource";
 
 type AnalyticsData = {
   totalViews: number;
@@ -58,13 +59,7 @@ export function ClientAnalyticsTab({ clientId }: { clientId: string }) {
   const sourceEntries = Object.entries(data.bySource).sort(([, a], [, b]) => b - a);
   const maxSource = Math.max(...sourceEntries.map(([, v]) => v), 1);
 
-  const SOURCE_LABELS: Record<string, string> = {
-    facebook: "פייסבוק",
-    google: "גוגל",
-    whatsapp: "וואצאפ",
-    direct: "ישיר",
-    organic: "אורגני",
-  };
+  // SOURCE_LABELS replaced by centralized getSourceLabel()
 
   return (
     <div className="space-y-6" dir="rtl">
@@ -126,7 +121,7 @@ export function ClientAnalyticsTab({ clientId }: { clientId: string }) {
               {sourceEntries.slice(0, 6).map(([src, count]) => (
                 <div key={src}>
                   <div className="flex justify-between text-xs text-slate-600 mb-1">
-                    <span>{SOURCE_LABELS[src] ?? src}</span>
+                    <span>{getSourceLabel(src)}</span>
                     <span className="font-medium">{count}</span>
                   </div>
                   <div className="h-1.5 bg-slate-100 rounded-full">
