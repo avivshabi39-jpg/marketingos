@@ -32,6 +32,7 @@ interface Lead {
   city: string | null;
   autoReplied: boolean;
   createdAt: string;
+  metadata: Record<string, unknown> | null;
 }
 
 interface Props {
@@ -59,11 +60,19 @@ const STATUS_COLORS: Record<string, string> = {
   LOST: "bg-red-100 text-red-700",
 };
 
+const LOST_REASONS = [
+  { key: "expensive", label: "מחיר גבוה" },
+  { key: "unavailable", label: "לא זמין" },
+  { key: "irrelevant", label: "לא רלוונטי" },
+  { key: "other", label: "אחר" },
+] as const;
+
 export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoReplyActive: initialAutoReply }: Props) {
   const [leads, setLeads] = useState(initialLeads);
   const [filter, setFilter] = useState("ALL");
   const [search, setSearch] = useState("");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [lostPickerLeadId, setLostPickerLeadId] = useState<string | null>(null);
   const [autoReply, setAutoReply] = useState(initialAutoReply);
 
   const filtered = leads.filter((lead) => {
@@ -89,6 +98,31 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
         toast.success("סטטוס עודכן");
       } else {
         toast.error("שגיאה בעדכון סטטוס");
+      }
+    } catch { toast.error("שגיאה בעדכון"); }
+    setUpdatingId(null);
+  }
+
+  async function markAsLost(leadId: string, reason: string) {
+    setLostPickerLeadId(null);
+    setUpdatingId(leadId);
+    try {
+      const res = await fetch(`/api/leads/${leadId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "LOST", lostReason: reason }),
+      });
+      if (res.ok) {
+        setLeads((prev) =>
+          prev.map((l) =>
+            l.id === leadId
+              ? { ...l, status: "LOST", metadata: { ...(l.metadata ?? {}), lostReason: reason } }
+              : l
+          )
+        );
+        toast.success("ליד סומן כלא רלוונטי");
+      } else {
+        toast.error("שגיאה בעדכון");
       }
     } catch { toast.error("שגיאה בעדכון"); }
     setUpdatingId(null);
@@ -309,12 +343,19 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                 )}
               </div>
 
+              {/* Lost reason display (if LOST) */}
+              {lead.status === "LOST" && lead.metadata?.lostReason && (
+                <div className="mt-2 text-[11px] text-red-500 bg-red-50 rounded-md px-2.5 py-1 inline-block">
+                  סיבה: {LOST_REASONS.find((r) => r.key === lead.metadata?.lostReason)?.label ?? (lead.metadata.lostReason as string)}
+                </div>
+              )}
+
               {/* Row 3: Status buttons */}
-              <div className="flex gap-1.5 mt-3 pt-3 border-t border-slate-50">
+              <div className="flex gap-1.5 mt-3 pt-3 border-t border-slate-50 flex-wrap relative">
                 {(["CONTACTED", "QUALIFIED", "PROPOSAL", "WON", "LOST"] as const).map((s) => (
                   <button
                     key={s}
-                    onClick={() => updateStatus(lead.id, s)}
+                    onClick={() => s === "LOST" ? setLostPickerLeadId(lead.id) : updateStatus(lead.id, s)}
                     disabled={lead.status === s || updatingId === lead.id}
                     className={`px-2.5 py-1 rounded-md text-[11px] font-medium border transition-colors ${
                       lead.status === s
@@ -329,6 +370,28 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, autoRe
                     {STATUS_LABELS[s]}
                   </button>
                 ))}
+
+                {/* Inline lost reason picker */}
+                {lostPickerLeadId === lead.id && (
+                  <div className="absolute bottom-full mb-1 right-0 bg-white border border-red-200 rounded-xl shadow-lg p-2 z-10 w-48">
+                    <p className="text-[10px] font-semibold text-red-600 px-2 py-1">למה הליד אבד?</p>
+                    {LOST_REASONS.map((r) => (
+                      <button
+                        key={r.key}
+                        onClick={() => markAsLost(lead.id, r.key)}
+                        className="w-full text-right px-2 py-1.5 text-xs text-slate-700 hover:bg-red-50 rounded-lg transition-colors"
+                      >
+                        {r.label}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => setLostPickerLeadId(null)}
+                      className="w-full text-right px-2 py-1 text-[10px] text-slate-400 hover:text-slate-600 mt-1"
+                    >
+                      ביטול
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
             );

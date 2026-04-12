@@ -15,6 +15,7 @@ const updateSchema = z.object({
   value:      z.number().optional(),
   followUpAt: z.string().datetime().optional(),
   closedAt:   z.string().datetime().optional(),
+  lostReason: z.string().max(200).optional(),
 });
 
 // GET /api/leads/:id
@@ -63,13 +64,20 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   }
 
   const statusChanged = parsed.data.status && parsed.data.status !== lead.status;
+  const { lostReason, ...updateFields } = parsed.data;
+
+  // Merge lostReason into metadata JSON (avoids schema migration)
+  const metadataUpdate = lostReason
+    ? { metadata: { ...((lead.metadata as Record<string, unknown>) ?? {}), lostReason } }
+    : {};
 
   const updated = await prisma.lead.update({
     where: { id: params.id },
     data: {
-      ...parsed.data,
-      ...(parsed.data.followUpAt ? { followUpAt: new Date(parsed.data.followUpAt) } : {}),
-      ...(parsed.data.closedAt ? { closedAt: new Date(parsed.data.closedAt) } : {}),
+      ...updateFields,
+      ...metadataUpdate,
+      ...(updateFields.followUpAt ? { followUpAt: new Date(updateFields.followUpAt) } : {}),
+      ...(updateFields.closedAt ? { closedAt: new Date(updateFields.closedAt) } : {}),
     },
   });
 
@@ -79,8 +87,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       data: {
         leadId: params.id,
         type: "status_change",
-        content: `${lead.status} → ${parsed.data.status}`,
-        meta: { from: lead.status, to: parsed.data.status },
+        content: lostReason
+          ? `${lead.status} → ${parsed.data.status} (${lostReason})`
+          : `${lead.status} → ${parsed.data.status}`,
+        meta: { from: lead.status, to: parsed.data.status, ...(lostReason ? { lostReason } : {}) },
       },
     }).catch(() => {});
   }

@@ -44,6 +44,7 @@ export default async function ClientLeadsPage({
       ageRange: true,
       city: true,
       autoReplied: true,
+      metadata: true,
       createdAt: true,
     },
   });
@@ -57,7 +58,7 @@ export default async function ClientLeadsPage({
 
   return (
     <PortalLeadsClient
-      leads={leads.map((l) => ({ ...l, createdAt: l.createdAt.toISOString() }))}
+      leads={leads.map((l) => ({ ...l, createdAt: l.createdAt.toISOString(), metadata: (l.metadata as Record<string, unknown>) ?? null }))}
       stats={stats}
       clientId={client.id}
       autoReplyActive={client.autoReplyActive}
