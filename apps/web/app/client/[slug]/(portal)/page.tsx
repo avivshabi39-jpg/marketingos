@@ -16,7 +16,9 @@ import { WhatsAppSetupGuide } from "@/components/client/WhatsAppSetupGuide";
 import { DashboardAiSection } from "@/components/client/DashboardAiSection";
 import { BusinessValueStrip } from "@/components/client/BusinessValueStrip";
 import { UntreatedLeadsAlert } from "@/components/client/UntreatedLeadsAlert";
+import { ConversionInsightsBlock } from "@/components/client/ConversionInsightsBlock";
 import { computeUntreatedStats } from "@/lib/untreatedLeads";
+import { computeConversionInsights } from "@/lib/conversionInsights";
 import { OnboardingTour } from "@/components/portal/OnboardingTour";
 
 const STATUS_HE: Record<string, string> = {
@@ -94,6 +96,8 @@ export default async function ClientDashboardPage({
     pipelineOpen,
     ,  // wonThisMonth (unused — kept for future)
     contactedCount,
+    lostCount,
+    proposalCount,
   ] = await Promise.all([
     prisma.lead.findMany({
       where: { clientId: client.id },
@@ -157,6 +161,12 @@ export default async function ClientDashboardPage({
     prisma.lead.count({
       where: { clientId: client.id, status: "CONTACTED" },
     }),
+    prisma.lead.count({
+      where: { clientId: client.id, status: "LOST" },
+    }),
+    prisma.lead.count({
+      where: { clientId: client.id, status: "PROPOSAL" },
+    }),
   ]);
 
   const conversionRate =
@@ -164,6 +174,20 @@ export default async function ClientDashboardPage({
 
   // Untreated leads stats (computed from recent leads with createdAt + status)
   const untreatedStats = computeUntreatedStats(recentLeads);
+
+  // Conversion insights
+  const conversionInsights = computeConversionInsights({
+    totalLeads,
+    newLeadsCount,
+    contactedCount,
+    proposalCount,
+    wonLeads,
+    lostCount,
+    conversionRate,
+    leadsThisWeek: leadsLast7Days,
+    untreatedCriticalCount: untreatedStats.criticalCount,
+    slug: params.slug,
+  });
 
   // AI proactive message type
   let aiMessageType: "no_page" | "no_leads" | "new_leads" | "performance_up" | null = null;
@@ -268,6 +292,9 @@ export default async function ClientDashboardPage({
           criticalCount={untreatedStats.criticalCount}
           slug={params.slug}
         />
+
+        {/* ── Conversion Insights ── */}
+        <ConversionInsightsBlock insights={conversionInsights} />
 
         {/* ── Secondary widgets: only show when page is published ── */}
         {client.pagePublished && (
