@@ -97,10 +97,10 @@ export async function POST(
     fullName: rawFullName, email: rawEmail, phone: rawPhone, ...intakeData
   } = parsed.data;
 
-  // Sanitize user-supplied text inputs
+  // Sanitize user-supplied text inputs (ensure required fields are never undefined)
   const fullName = sanitizeText(rawFullName, 200);
-  const email    = rawEmail ? sanitizeText(rawEmail, 254) : rawEmail;
-  const phone    = rawPhone ? sanitizeText(rawPhone, 30) : rawPhone;
+  const email    = rawEmail ? sanitizeText(rawEmail, 254) : "";
+  const phone    = rawPhone ? sanitizeText(rawPhone, 30) : undefined;
 
   // Also read UTM from URL query params (from landing page links)
   const url = new URL(req.url);
