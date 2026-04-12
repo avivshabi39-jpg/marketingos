@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { CreateLeadForm } from "@/components/admin/CreateLeadForm";
 
+export const dynamic = "force-dynamic";
+
 export default async function NewLeadPage() {
   const clients = await prisma.client.findMany({
     where: { isActive: true },
