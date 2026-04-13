@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession, isSuperAdmin } from "@/lib/auth";
+import { emitPagePublished } from "@/lib/automationHooks";
 
 const blockSchema = z.object({
   id: z.string(),
@@ -96,6 +97,11 @@ export async function PUT(
     data,
     select: { id: true, pageBlocks: true, pagePublished: true, pageBlocksB: true, pagePublishedB: true, abTestEnabled: true },
   });
+
+  // Emit page.published hook if page was just published
+  if (parsed.data.pagePublished === true) {
+    emitPagePublished(params.id);
+  }
 
   return NextResponse.json({ client });
 }

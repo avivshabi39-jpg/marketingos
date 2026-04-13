@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { checkAiRateLimit } from "@/lib/ai";
 import { rateLimit, getIp } from "@/lib/rateLimit";
 import { sanitizeText } from "@/lib/sanitize";
+import { emitPagePublished } from "@/lib/automationHooks";
 
 const INDUSTRY_HE: Record<string, string> = {
   ROOFING: "גגות", ALUMINUM: "אלומיניום", COSMETICS: "קוסמטיקה",
@@ -285,6 +286,7 @@ ${recentLeadsList}
                 : {}),
             },
           });
+          if (shouldAutoPublish) emitPagePublished(clientId);
         } else if (parsed?.action === "UPDATE_COLOR" && parsed.updates?.color) {
           await prisma.client.update({
             where: { id: clientId },
@@ -295,6 +297,7 @@ ${recentLeadsList}
           });
         } else if (parsed?.action === "PUBLISH") {
           await prisma.client.update({ where: { id: clientId }, data: { pagePublished: true } });
+          emitPagePublished(clientId);
         } else if (parsed?.action === "UPDATE_TITLE" && parsed.updates?.title) {
           await prisma.client.update({
             where: { id: clientId },
