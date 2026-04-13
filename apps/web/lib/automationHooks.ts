@@ -2,19 +2,28 @@
  * Automation Hooks — centralized event system for MarketingOS
  *
  * Emits lightweight events that can be consumed by:
- * - n8n webhooks (existing)
- * - internal notifications (existing)
- * - future automation rules
- * - future analytics/logging
+ * - Client webhook URL (n8nWebhookUrl on Client model)
+ * - Global n8n Railway instance
+ * - Internal notifications
+ * - Future: event store, analytics, queue
  *
  * All hooks are fire-and-forget (non-blocking).
  * Failures are logged but never crash the calling flow.
+ *
+ * Standard webhook payload (sent to ALL external receivers):
+ * {
+ *   event: "lead.created",
+ *   clientId: "...",
+ *   timestamp: "2026-04-13T10:00:00.000Z",
+ *   data: { leadId: "...", ... }
+ * }
  */
 
+import { createHmac } from "crypto";
 import { prisma } from "@/lib/prisma";
-import { triggerN8nWebhook } from "@/lib/webhooks";
 import { triggerN8nWebhook as triggerN8nDirect } from "@/lib/n8n";
 import { createNotification } from "@/lib/notifications";
+import { decrypt } from "@/lib/encrypt";
 
 // ── Event Types ──────────────────────────────────────────────────────────────
 
@@ -34,35 +43,104 @@ export interface AutomationPayload {
   data: Record<string, unknown>;
 }
 
+// ── Centralized webhook sender ───────────────────────────────────────────────
+
+/**
+ * Send a standardized webhook event to a URL. Never throws.
+ * Includes HMAC-SHA256 signature for verification on the receiving end.
+ */
+async function sendWebhookEvent(
+  url: string,
+  payload: AutomationPayload
+): Promise<boolean> {
+  try {
+    const body = JSON.stringify(payload);
+    const secret = process.env.WEBHOOK_SECRET ?? "";
+    const signature = secret
+      ? createHmac("sha256", secret).update(body).digest("hex")
+      : "";
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-webhook-event": payload.event,
+        ...(signature ? { "x-webhook-signature": signature } : {}),
+      },
+      body,
+      signal: AbortSignal.timeout(10_000),
+    });
+
+    if (res.ok) {
+      console.log(`[webhook] ✓ ${payload.event} → ${url.slice(0, 60)}...`);
+      return true;
+    }
+
+    console.warn(`[webhook] ✗ ${payload.event} → ${res.status} from ${url.slice(0, 60)}`);
+    return false;
+  } catch (err) {
+    console.error(`[webhook] ✗ ${payload.event} → error:`, err instanceof Error ? err.message : err);
+    return false;
+  }
+}
+
 // ── Core emit function ───────────────────────────────────────────────────────
 
 /**
  * Emit an automation event. Non-blocking, never throws.
- * Currently: logs activity + fires n8n webhooks + creates notifications.
- * Future: can add webhook queue, event store, analytics, etc.
+ * Sends to: client webhook URL + global n8n + in-app notifications.
  */
 export async function emitAutomationEvent(payload: AutomationPayload): Promise<void> {
   const { event, clientId, data } = payload;
 
   try {
-    // 1. Fire n8n webhooks (both legacy and direct)
-    triggerN8nWebhook(clientId, event, data)
-      .catch((err) => console.error(`[automation-hook] n8n failed for ${event}:`, err));
+    // 1. Send to client's configured webhook URL (n8nWebhookUrl)
+    sendClientWebhook(clientId, payload);
 
+    // 2. Send to global n8n Railway instance (if configured)
     triggerN8nDirect(event, { clientId, ...data, timestamp: payload.timestamp })
       .catch((err) => console.error(`[automation-hook] n8n-direct failed for ${event}:`, err));
 
-    // 2. Create in-app notification for relevant events
+    // 3. Create in-app notification for relevant events
     const notif = buildNotification(event, data);
     if (notif) {
       createNotification({ clientId, ...notif })
         .catch((err) => console.error(`[automation-hook] notification failed for ${event}:`, err));
     }
 
-    // 3. Log to console for debugging
+    // 4. Log for debugging
     console.log(`[automation-hook] ${event} | client=${clientId}`);
   } catch (err) {
     console.error(`[automation-hook] Unexpected error in ${event}:`, err);
+  }
+}
+
+/**
+ * Send webhook to client's configured URL (from Client.n8nWebhookUrl).
+ * Non-blocking, never throws.
+ */
+async function sendClientWebhook(clientId: string, payload: AutomationPayload): Promise<void> {
+  try {
+    const client = await prisma.client.findUnique({
+      where: { id: clientId },
+      select: { n8nWebhookUrl: true },
+    });
+
+    if (!client?.n8nWebhookUrl) return; // No webhook configured — skip silently
+
+    let url: string;
+    try {
+      url = decrypt(client.n8nWebhookUrl);
+    } catch {
+      console.error(`[webhook] Failed to decrypt webhook URL for client ${clientId}`);
+      return;
+    }
+
+    if (!url || !url.startsWith("http")) return;
+
+    sendWebhookEvent(url, payload);
+  } catch (err) {
+    console.error(`[webhook] Client webhook failed for ${clientId}:`, err);
   }
 }
 
