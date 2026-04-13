@@ -97,9 +97,37 @@ function buildNotification(
   }
 }
 
+// ── Dedup guard: prevents rapid re-emission of same event per client ─────────
+
+const recentEvents = new Map<string, number>();
+const DEDUP_WINDOW_MS = 5000; // 5 seconds
+
+function shouldEmit(event: AutomationEvent, clientId: string): boolean {
+  const key = `${event}:${clientId}`;
+  const last = recentEvents.get(key);
+  const now = Date.now();
+
+  if (last && now - last < DEDUP_WINDOW_MS) {
+    console.log(`[automation-hook] SKIPPED duplicate ${event} for client=${clientId} (within ${DEDUP_WINDOW_MS}ms)`);
+    return false;
+  }
+
+  recentEvents.set(key, now);
+
+  // Cleanup old entries every 100 events to prevent memory leak
+  if (recentEvents.size > 200) {
+    for (const [k, v] of recentEvents) {
+      if (now - v > 60000) recentEvents.delete(k);
+    }
+  }
+
+  return true;
+}
+
 // ── Convenience helpers for common events ────────────────────────────────────
 
 export function emitPagePublished(clientId: string, extra?: Record<string, unknown>): void {
+  if (!shouldEmit("page.published", clientId)) return;
   emitAutomationEvent({
     event: "page.published",
     clientId,
@@ -112,6 +140,7 @@ export function emitLeadCreated(
   clientId: string,
   lead: { id: string; firstName: string; lastName: string; phone?: string | null; source?: string | null }
 ): void {
+  if (!shouldEmit("lead.created", `${clientId}:${lead.id}`)) return;
   emitAutomationEvent({
     event: "lead.created",
     clientId,
@@ -132,6 +161,7 @@ export function emitLeadStatusChanged(
   newStatus: string,
   lostReason?: string
 ): void {
+  if (!shouldEmit("lead.status_changed", `${clientId}:${lead.id}:${newStatus}`)) return;
   emitAutomationEvent({
     event: newStatus === "LOST" ? "lead.lost" : "lead.status_changed",
     clientId,

@@ -295,7 +295,7 @@ ${recentLeadsList}
               primaryColor:     parsed.updates.color as string,
             },
           });
-        } else if (parsed?.action === "PUBLISH") {
+        } else if (parsed?.action === "PUBLISH" && !client.pagePublished) {
           await prisma.client.update({ where: { id: clientId }, data: { pagePublished: true } });
           emitPagePublished(clientId);
         } else if (parsed?.action === "UPDATE_TITLE" && parsed.updates?.title) {

@@ -85,6 +85,12 @@ export async function PUT(
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
+  // Fetch current state to detect real transitions (avoid duplicate triggers)
+  const currentClient = await prisma.client.findUnique({
+    where: { id: params.id },
+    select: { pagePublished: true },
+  });
+
   const data: Record<string, unknown> = {};
   if (parsed.data.pageBlocks !== undefined)     data.pageBlocks     = parsed.data.pageBlocks;
   if (parsed.data.pagePublished !== undefined)  data.pagePublished  = parsed.data.pagePublished;
@@ -98,8 +104,8 @@ export async function PUT(
     select: { id: true, pageBlocks: true, pagePublished: true, pageBlocksB: true, pagePublishedB: true, abTestEnabled: true },
   });
 
-  // Emit page.published hook if page was just published
-  if (parsed.data.pagePublished === true) {
+  // Emit page.published only on real transition: false → true
+  if (parsed.data.pagePublished === true && !currentClient?.pagePublished) {
     emitPagePublished(params.id);
   }
 
