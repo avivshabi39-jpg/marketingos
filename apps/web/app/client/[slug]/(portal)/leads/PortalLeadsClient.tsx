@@ -7,6 +7,7 @@ import { Tooltip } from "@/components/ui/Tooltip";
 import { classifyLeadHeat, HEAT_CONFIG } from "@/lib/leadHeat";
 import { getLeadSla, SLA_CONFIG } from "@/lib/leadSla";
 import { getSourceLabel } from "@/lib/leadSource";
+import { getLeadPriority, PRIORITY_STYLES } from "@/lib/conversionPriority";
 import toast from "react-hot-toast";
 
 interface Lead {
@@ -268,6 +269,20 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, client
         </div>
       </div>
 
+      {/* Urgency banner */}
+      {(() => {
+        const urgentCount = filtered.filter((l) => getLeadPriority(l).level === "urgent").length;
+        if (urgentCount === 0) return null;
+        return (
+          <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-2.5 flex items-center gap-2">
+            <span className="text-sm">🚨</span>
+            <p className="text-xs font-semibold text-red-800">
+              {urgentCount} {urgentCount === 1 ? "ליד דורש" : "לידים דורשים"} תגובה עכשיו
+            </p>
+          </div>
+        );
+      })()}
+
       {/* Leads */}
       {filtered.length === 0 ? (
         <div className="bg-white rounded-2xl border border-slate-100">
@@ -288,6 +303,8 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, client
             const heatStyle = HEAT_CONFIG[heat];
             const sla = getLeadSla(lead);
             const slaStyle = SLA_CONFIG[sla.level];
+            const priority = getLeadPriority(lead);
+            const prioStyle = PRIORITY_STYLES[priority.level];
 
             return (
             <div
@@ -336,14 +353,9 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, client
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  {sla.level === "critical" && (
-                    <span className="text-[10px] font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded-full animate-pulse">
-                      🚨 דחוף
-                    </span>
-                  )}
-                  {sla.level === "good" && isNew && (
-                    <span className="text-[10px] font-bold text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
-                      ⚡ חדש
+                  {priority.level !== "normal" && (
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${prioStyle.badge} ${priority.level === "urgent" ? "animate-pulse" : ""}`}>
+                      {prioStyle.label}
                     </span>
                   )}
                   <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${heatStyle.badge}`}>
