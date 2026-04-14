@@ -8,6 +8,7 @@ import { classifyLeadHeat, HEAT_CONFIG } from "@/lib/leadHeat";
 import { getLeadSla, SLA_CONFIG } from "@/lib/leadSla";
 import { getSourceLabel } from "@/lib/leadSource";
 import { getLeadPriority, PRIORITY_STYLES } from "@/lib/conversionPriority";
+import { getCloseInsight, getProbStyle } from "@/lib/closeProbability";
 import toast from "react-hot-toast";
 
 interface Lead {
@@ -305,6 +306,8 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, client
             const slaStyle = SLA_CONFIG[sla.level];
             const priority = getLeadPriority(lead);
             const prioStyle = PRIORITY_STYLES[priority.level];
+            const closeInsight = getCloseInsight(lead);
+            const probStyle = getProbStyle(closeInsight.probability);
 
             return (
             <div
@@ -350,12 +353,23 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, client
                         <span className="text-amber-600 font-medium">⏳ ממתין למענה</span>
                       )}
                     </div>
+                    {/* Suggestion line */}
+                    {lead.status !== "WON" && lead.status !== "LOST" && closeInsight.action !== "wait" && (
+                      <p className="text-[10px] text-blue-600 font-medium mt-1">
+                        💡 {closeInsight.suggestion}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
                   {priority.level !== "normal" && (
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${prioStyle.badge} ${priority.level === "urgent" ? "animate-pulse" : ""}`}>
                       {prioStyle.label}
+                    </span>
+                  )}
+                  {lead.status !== "WON" && lead.status !== "LOST" && (
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${probStyle.bg} ${probStyle.color}`}>
+                      📊 {closeInsight.probability}%
                     </span>
                   )}
                   <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${heatStyle.badge}`}>
@@ -401,6 +415,32 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, client
                   <span className="text-xs font-semibold text-amber-700 bg-amber-50 rounded-lg px-2.5 py-1">
                     ₪{lead.value.toLocaleString("he-IL")}
                   </span>
+                )}
+                {/* Suggested quick action */}
+                {lead.status !== "WON" && lead.status !== "LOST" && closeInsight.action !== "wait" && (
+                  closeInsight.action === "call" && lead.phone ? (
+                    <a
+                      href={`tel:${lead.phone}`}
+                      className="inline-flex items-center gap-1 text-[10px] font-semibold px-2.5 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                    >
+                      📞 {closeInsight.suggestion}
+                    </a>
+                  ) : closeInsight.action === "whatsapp" && lead.phone ? (
+                    <button
+                      onClick={() => openWhatsApp(lead)}
+                      className="inline-flex items-center gap-1 text-[10px] font-semibold px-2.5 py-1.5 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-colors"
+                    >
+                      💬 {closeInsight.suggestion}
+                    </button>
+                  ) : closeInsight.action === "followup" ? (
+                    <button
+                      onClick={() => leadAction(lead.id, "send_followup")}
+                      disabled={updatingId === lead.id}
+                      className="inline-flex items-center gap-1 text-[10px] font-semibold px-2.5 py-1.5 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition-colors disabled:opacity-40"
+                    >
+                      ⏱️ {closeInsight.suggestion}
+                    </button>
+                  ) : null
                 )}
               </div>
 
