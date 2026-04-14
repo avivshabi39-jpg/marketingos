@@ -51,6 +51,15 @@ export async function GET(req: NextRequest) {
       continue;
     }
 
+    // Respect manual pause
+    const meta = (lead.metadata && typeof lead.metadata === "object" && !Array.isArray(lead.metadata))
+      ? (lead.metadata as Record<string, unknown>) : {};
+    if (meta.followUpPaused === true) {
+      skipped++;
+      skippedReasons.push(`${lead.id}: follow-ups paused`);
+      continue;
+    }
+
     if (lead.activities.length > 0) {
       skipped++;
       skippedReasons.push(`${lead.id}: day1 already sent`);
@@ -126,6 +135,15 @@ export async function GET(req: NextRequest) {
     if (!lead.phone || !lead.client.greenApiInstanceId || !lead.client.greenApiToken) {
       skipped++;
       skippedReasons.push(`${lead.id}: missing config`);
+      continue;
+    }
+
+    // Respect manual pause
+    const meta3 = (lead.metadata && typeof lead.metadata === "object" && !Array.isArray(lead.metadata))
+      ? (lead.metadata as Record<string, unknown>) : {};
+    if (meta3.followUpPaused === true) {
+      skipped++;
+      skippedReasons.push(`${lead.id}: follow-ups paused`);
       continue;
     }
 

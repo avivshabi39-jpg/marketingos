@@ -137,6 +137,35 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, client
     setUpdatingId(null);
   }
 
+  async function leadAction(leadId: string, action: string) {
+    setUpdatingId(leadId);
+    try {
+      const res = await fetch(`/api/leads/${leadId}/actions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action }),
+      });
+      const data = await res.json();
+      if (res.status === 429) {
+        toast.error(data.error ?? "כבר נשלח לאחרונה");
+      } else if (res.ok) {
+        if (action === "resend_auto_reply") toast.success("חזרה אוטומטית נשלחה");
+        if (action === "send_followup") toast.success("מעקב נשלח");
+        if (action === "pause_followups") {
+          setLeads((prev) => prev.map((l) => l.id === leadId ? { ...l, metadata: { ...(l.metadata ?? {}), followUpPaused: true } } : l));
+          toast.success("מעקבים הושהו");
+        }
+        if (action === "resume_followups") {
+          setLeads((prev) => prev.map((l) => l.id === leadId ? { ...l, metadata: { ...(l.metadata ?? {}), followUpPaused: false } } : l));
+          toast.success("מעקבים חודשו");
+        }
+      } else {
+        toast.error(data.error ?? "שגיאה");
+      }
+    } catch { toast.error("שגיאת חיבור"); }
+    setUpdatingId(null);
+  }
+
   function openWhatsApp(lead: Lead) {
     if (!lead.phone) return;
     const phone = normalizePhoneForWa(lead.phone);
@@ -362,6 +391,43 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, client
                   </span>
                 )}
               </div>
+
+              {/* Automation actions */}
+              {lead.phone && lead.status !== "WON" && lead.status !== "LOST" && (
+                <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                  <button
+                    onClick={() => leadAction(lead.id, "resend_auto_reply")}
+                    disabled={updatingId === lead.id}
+                    className="text-[10px] font-medium px-2 py-1 rounded-md border border-blue-200 text-blue-600 hover:bg-blue-50 transition-colors disabled:opacity-40"
+                  >
+                    📩 שלח חזרה שוב
+                  </button>
+                  <button
+                    onClick={() => leadAction(lead.id, "send_followup")}
+                    disabled={updatingId === lead.id}
+                    className="text-[10px] font-medium px-2 py-1 rounded-md border border-purple-200 text-purple-600 hover:bg-purple-50 transition-colors disabled:opacity-40"
+                  >
+                    ⏱️ שלח מעקב עכשיו
+                  </button>
+                  {(lead.metadata?.followUpPaused === true) ? (
+                    <button
+                      onClick={() => leadAction(lead.id, "resume_followups")}
+                      disabled={updatingId === lead.id}
+                      className="text-[10px] font-medium px-2 py-1 rounded-md border border-green-200 text-green-600 hover:bg-green-50 transition-colors disabled:opacity-40"
+                    >
+                      ▶️ הפעל מעקבים
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => leadAction(lead.id, "pause_followups")}
+                      disabled={updatingId === lead.id}
+                      className="text-[10px] font-medium px-2 py-1 rounded-md border border-slate-200 text-slate-500 hover:bg-slate-50 transition-colors disabled:opacity-40"
+                    >
+                      ⏸️ עצור מעקבים
+                    </button>
+                  )}
+                </div>
+              )}
 
               {/* Lost reason display (if LOST) */}
               {lead.status === "LOST" && lead.metadata?.lostReason && (
