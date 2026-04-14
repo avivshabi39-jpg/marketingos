@@ -9,6 +9,7 @@ import { getLeadSla, SLA_CONFIG } from "@/lib/leadSla";
 import { getSourceLabel } from "@/lib/leadSource";
 import { getLeadPriority, PRIORITY_STYLES } from "@/lib/conversionPriority";
 import { getCloseInsight, getProbStyle } from "@/lib/closeProbability";
+import { getConversionAssistant } from "@/lib/conversionAssistant";
 import toast from "react-hot-toast";
 
 interface Lead {
@@ -270,16 +271,46 @@ export function PortalLeadsClient({ leads: initialLeads, stats, clientId, client
         </div>
       </div>
 
-      {/* Urgency banner */}
-      {(() => {
-        const urgentCount = filtered.filter((l) => getLeadPriority(l).level === "urgent").length;
-        if (urgentCount === 0) return null;
+      {/* Conversion Assistant */}
+      {filtered.length > 0 && (() => {
+        const assistant = getConversionAssistant(filtered);
+        const hasCards = assistant.urgentCount > 0 || assistant.highProbabilityCount > 0 || assistant.followupCount > 0;
+        if (!hasCards && assistant.tips.length === 0) return null;
         return (
-          <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-2.5 flex items-center gap-2">
-            <span className="text-sm">🚨</span>
-            <p className="text-xs font-semibold text-red-800">
-              {urgentCount} {urgentCount === 1 ? "ליד דורש" : "לידים דורשים"} תגובה עכשיו
-            </p>
+          <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-4 space-y-3">
+            <p className="text-sm font-bold text-slate-800">📈 איך לסגור יותר היום</p>
+            {hasCards && (
+              <div className="grid grid-cols-3 gap-2">
+                {assistant.urgentCount > 0 && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-center">
+                    <p className="text-lg font-bold text-red-700">{assistant.urgentCount}</p>
+                    <p className="text-[10px] text-red-600 font-medium">🚨 דורשים תגובה</p>
+                  </div>
+                )}
+                {assistant.highProbabilityCount > 0 && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg px-3 py-2 text-center">
+                    <p className="text-lg font-bold text-green-700">{assistant.highProbabilityCount}</p>
+                    <p className="text-[10px] text-green-600 font-medium">💰 סיכוי סגירה</p>
+                  </div>
+                )}
+                {assistant.followupCount > 0 && (
+                  <div className="bg-purple-50 border border-purple-200 rounded-lg px-3 py-2 text-center">
+                    <p className="text-lg font-bold text-purple-700">{assistant.followupCount}</p>
+                    <p className="text-[10px] text-purple-600 font-medium">⏱️ מחכים למעקב</p>
+                  </div>
+                )}
+              </div>
+            )}
+            {assistant.tips.length > 0 && (
+              <div className="space-y-1">
+                {assistant.tips.map((tip, i) => (
+                  <p key={i} className="text-[11px] text-slate-600 flex items-start gap-1.5">
+                    <span className="text-amber-500 flex-shrink-0">💡</span>
+                    {tip}
+                  </p>
+                ))}
+              </div>
+            )}
           </div>
         );
       })()}
