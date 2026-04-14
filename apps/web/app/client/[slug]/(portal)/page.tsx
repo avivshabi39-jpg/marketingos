@@ -19,6 +19,8 @@ import { BusinessValueStrip } from "@/components/client/BusinessValueStrip";
 import { UntreatedLeadsAlert } from "@/components/client/UntreatedLeadsAlert";
 import { ConversionInsightsBlock } from "@/components/client/ConversionInsightsBlock";
 import { TrafficActionBar } from "@/components/client/TrafficActionBar";
+import { AutomationStatusBar } from "@/components/client/AutomationStatusBar";
+import { computeAutomationStatus } from "@/lib/automationStatus";
 import { computeUntreatedStats } from "@/lib/untreatedLeads";
 import { computeConversionInsights } from "@/lib/conversionInsights";
 import { OnboardingTour } from "@/components/portal/OnboardingTour";
@@ -70,6 +72,9 @@ export default async function ClientDashboardPage({
       pagePublished: true,
       pageBlocks: true,
       whatsappNumber: true,
+      greenApiInstanceId: true,
+      greenApiToken: true,
+      autoReplyActive: true,
       landingPageTitle: true,
       landingPageCta: true,
       _count: {
@@ -306,6 +311,19 @@ export default async function ClientDashboardPage({
             hasLeads={hasLeads}
           />
         )}
+
+        {/* ── Automation Status Bar ── */}
+        <AutomationStatusBar
+          automations={computeAutomationStatus({
+            whatsappNumber: client.whatsappNumber,
+            greenApiInstanceId: client.greenApiInstanceId,
+            greenApiToken: client.greenApiToken,
+            autoReplyActive: client.autoReplyActive,
+            pagePublished: client.pagePublished,
+            n8nWebhookUrl: client.n8nWebhookUrl,
+          })}
+          slug={params.slug}
+        />
 
         {/* ── Secondary widgets: only show when page is published ── */}
         {client.pagePublished && (
